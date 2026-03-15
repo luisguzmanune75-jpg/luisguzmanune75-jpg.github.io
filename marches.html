@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Convertisseur de devises SNG Portal avec euro, dollar, DOP et de nombreuses monnaies pour simuler un envoi d'argent."
+    />
+    <meta
+      name="keywords"
+      content="SNG Portal change monnaie, convertisseur euro dop, dollar dop, envoi d'argent, taux de change live"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#4c3138" />
+    <meta property="og:title" content="Change et transfert - SNG Portal" />
+    <meta
+      property="og:description"
+      content="Calcule un envoi d'argent entre euro, dollar, DOP et d'autres devises avec taux charges dans la page."
+    />
+    <title>Change et transfert - SNG Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-page="marches">
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="container header-inner">
+          <a class="brand" href="./index.html" aria-label="Accueil SNG Portal">
+            <img class="brand-logo" src="./logo-sng.svg" alt="Logo SNG Portal" />
+            <span class="brand-copy">
+              <span class="brand-kicker">SNG Media</span>
+              <span class="brand-title">SNG Portal</span>
+            </span>
+          </a>
+          <button
+            class="menu-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="main-nav"
+          >
+            Menu
+          </button>
+          <nav id="main-nav" class="main-nav" aria-label="Navigation principale">
+            <a href="./index.html">Accueil</a>
+            <a href="./crypto.html">Crypto</a>
+            <a href="./actualites.html">Actualites</a>
+            <a href="./meteo.html">Meteo</a>
+            <a class="is-current" href="./marches.html">Marches</a>
+            <a href="./loterie.html">Loterie Monde</a>
+            <a href="./sports.html">Paris sportifs</a>
+            <a href="./jeux.html">Jeux</a>
+            <a href="./blog.html">Blog</a>
+            <a href="./satellites.html">Satellites</a>
+            <a href="./planetes.html">Planetes</a>
+            <a href="./scolaire.html">Scolaire</a>
+            <a href="./contact.html">Contact</a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero hero-crypto-page">
+          <div class="container hero-grid hero-grid-crypto">
+            <div class="hero-copy reveal">
+              <p class="search-logo-kicker">Change et transfert</p>
+              <h1>Vois le taux de change, convertis et simule un envoi d'argent.</h1>
+              <p class="hero-text">
+                Cette page sert maintenant de convertisseur live pour euro,
+                dollar, peso dominicain et beaucoup d'autres devises, avec une
+                lecture utile pour l'envoi d'argent.
+              </p>
+              <div class="hero-actions">
+                <a class="button button-solid" href="#transfer-zone">Convertir</a>
+                <a class="button button-outline" href="#rates-zone">Voir les taux</a>
+                <a class="button button-outline" href="./index.html">Retour accueil</a>
+              </div>
+            </div>
+
+            <aside class="hero-panel reveal reveal-delay">
+              <div class="panel-head">
+                <div>
+                  <p class="section-tag">Pulse</p>
+                  <h2>Vue rapide</h2>
+                </div>
+              </div>
+              <span id="market-status" class="status-pill status-neutral">Chargement...</span>
+              <div id="market-pulse" class="pulse-grid"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="transfer-zone" class="page-section">
+          <div class="container live-two-col">
+            <article class="module module-wide reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Simulation</p>
+                  <h2>Envoyer de l'argent entre devises</h2>
+                </div>
+              </div>
+              <form id="transfer-form" class="transfer-form">
+                <div class="transfer-grid">
+                  <label class="field-stack">
+                    <span>Montant envoye</span>
+                    <input
+                      id="transfer-amount"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value="100"
+                      inputmode="decimal"
+                    />
+                  </label>
+
+                  <label class="field-stack">
+                    <span>Depuis</span>
+                    <select id="transfer-from" class="control-select"></select>
+                  </label>
+
+                  <label class="field-stack">
+                    <span>Vers</span>
+                    <select id="transfer-to" class="control-select"></select>
+                  </label>
+
+                  <label class="field-stack">
+                    <span>Frais estimes (%)</span>
+                    <input
+                      id="transfer-fee"
+                      type="number"
+                      min="0"
+                      max="25"
+                      step="0.1"
+                      value="2"
+                      inputmode="decimal"
+                    />
+                  </label>
+                </div>
+
+                <div class="button-row">
+                  <button id="swap-transfer" class="ghost-button" type="button">Inverser</button>
+                  <button class="button button-solid" type="submit">Calculer</button>
+                </div>
+              </form>
+
+              <div id="transfer-quick-pairs" class="pill-row pill-row-spaced"></div>
+              <div id="transfer-summary" class="transfer-summary-grid"></div>
+            </article>
+
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Lecture</p>
+                  <h2>Resume du transfert</h2>
+                </div>
+              </div>
+              <div id="market-briefing" class="briefing-card"></div>
+              <div id="source-card" class="briefing-card briefing-card-accent"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="rates-zone" class="page-section">
+          <div class="container live-two-col">
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Taux live</p>
+                  <h2>Paires rapides</h2>
+                </div>
+              </div>
+              <div id="fx-board" class="fx-board"></div>
+            </article>
+
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Recherche</p>
+                  <h2>Toutes les monnaies</h2>
+                </div>
+              </div>
+              <label class="field-stack field-stack-search" for="currency-filter">
+                <span>Filtrer une devise</span>
+                <input
+                  id="currency-filter"
+                  type="search"
+                  placeholder="Exemple: DOP, euro, dollar canadien, peso..."
+                />
+              </label>
+              <div id="currency-directory-status" class="inline-actions"></div>
+              <div id="currency-directory" class="currency-directory"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="crypto-zone" class="page-section">
+          <div class="container live-two-col">
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Prix crypto</p>
+                  <h2>Selection suivie</h2>
+                </div>
+              </div>
+              <div id="market-board" class="market-list"></div>
+            </article>
+
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Explorer plus</p>
+                  <h2>Autres pages</h2>
+                </div>
+              </div>
+              <div class="mini-link-list">
+                <a href="./crypto.html">Ouvrir le dashboard crypto</a>
+                <a href="./meteo.html">Voir la meteo monde</a>
+                <a href="./loterie.html">Ouvrir la loterie monde</a>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-inner">
+          <p>(c) 2026 SNG Portal. Tous droits reserves.</p>
+          <p>Convertisseur de devises et simulation d'envoi d'argent.</p>
+        </div>
+      </footer>
+    </div>
+
+    <script src="./site.js"></script>
+    <script src="./markets.js"></script>
+  </body>
+</html>

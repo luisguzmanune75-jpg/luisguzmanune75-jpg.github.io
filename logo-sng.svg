@@ -1,0 +1,20 @@
+<svg width="240" height="240" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Logo SNG Portal</title>
+  <desc id="desc">Logo circulaire de SNG Portal avec monogramme SNG et etoile centrale.</desc>
+  <defs>
+    <linearGradient id="paint0" x1="34" y1="28" x2="208" y2="214" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD0DB"/>
+      <stop offset="1" stop-color="#FFB5C8"/>
+    </linearGradient>
+    <linearGradient id="paint1" x1="63" y1="56" x2="180" y2="189" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5E3942"/>
+      <stop offset="1" stop-color="#3B242B"/>
+    </linearGradient>
+  </defs>
+  <circle cx="120" cy="120" r="108" fill="url(#paint0)" fill-opacity="0.2"/>
+  <circle cx="120" cy="120" r="94" fill="url(#paint1)" stroke="#FFD0DB" stroke-opacity="0.35" stroke-width="2"/>
+  <circle cx="120" cy="120" r="68" fill="#FCEFF3" fill-opacity="0.08" stroke="#FFD0DB" stroke-opacity="0.16"/>
+  <path d="M120 72L126.18 91.82H147L130.41 103.86L136.59 123.68L120 111.64L103.41 123.68L109.59 103.86L93 91.82H113.82L120 72Z" fill="#FFD0DB"/>
+  <text x="120" y="153" text-anchor="middle" fill="#FCEFF3" font-family="Space Grotesk, Arial, sans-serif" font-size="46" font-weight="700" letter-spacing="6">SNG</text>
+  <text x="120" y="185" text-anchor="middle" fill="#FFD0DB" font-family="Manrope, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="4">PORTAL</text>
+</svg>

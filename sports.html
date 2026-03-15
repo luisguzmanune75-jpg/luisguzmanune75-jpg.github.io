@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Paris sportifs sur SNG Portal avec matchs, resultats recents et estimations de probabilite basees sur la forme recente."
+    />
+    <meta
+      name="keywords"
+      content="SNG Portal paris sportifs, probabilite victoire, matchs a venir, resultats football, nba, nfl, premier league"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#4c3138" />
+    <meta property="og:title" content="Paris sportifs - SNG Portal" />
+    <meta
+      property="og:description"
+      content="Suis les matchs a venir, les resultats recents et une estimation de probabilite informative."
+    />
+    <title>Paris sportifs - SNG Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-page="sports">
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="container header-inner">
+          <a class="brand" href="./index.html" aria-label="Accueil SNG Portal">
+            <img class="brand-logo" src="./logo-sng.svg" alt="Logo SNG Portal" />
+            <span class="brand-copy">
+              <span class="brand-kicker">SNG Media</span>
+              <span class="brand-title">SNG Portal</span>
+            </span>
+          </a>
+          <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">
+            Menu
+          </button>
+          <nav id="main-nav" class="main-nav" aria-label="Navigation principale">
+            <a href="./index.html">Accueil</a>
+            <a href="./crypto.html">Crypto</a>
+            <a href="./actualites.html">Actualites</a>
+            <a href="./meteo.html">Meteo</a>
+            <a href="./loterie.html">Loterie Monde</a>
+            <a class="is-current" href="./sports.html">Paris sportifs</a>
+            <a href="./jeux.html">Jeux</a>
+            <a href="./scolaire.html">Scolaire</a>
+            <a href="./satellites.html">Satellites</a>
+            <a href="./planetes.html">Planetes</a>
+            <a href="./contact.html">Contact</a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero hero-crypto-page">
+          <div class="container hero-grid hero-grid-crypto">
+            <div class="hero-copy reveal">
+              <p class="search-logo-kicker">Paris sportifs</p>
+              <h1>Recherche une equipe ou ouvre une ligue pour voir les matchs.</h1>
+              <p class="hero-text">
+                Cette page montre les matchs a venir, les resultats recents et un
+                contexte de forme. Elle ajoute aussi une estimation de
+                probabilite de victoire basee sur les matchs recents, sans
+                promettre un pari gagnant.
+              </p>
+              <div class="hero-actions">
+                <a class="button button-solid" href="#sports-search-zone">Chercher</a>
+                <a class="button button-outline" href="#sports-board-zone">Voir le board</a>
+              </div>
+            </div>
+
+            <aside class="hero-panel reveal reveal-delay">
+              <div class="panel-head">
+                <div>
+                  <p class="section-tag">Vue rapide</p>
+                  <h2>Etat du board</h2>
+                </div>
+              </div>
+              <span id="sports-status" class="status-pill status-neutral">Chargement des ligues...</span>
+              <div id="sports-pulse" class="pulse-grid"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="sports-search-zone" class="page-section">
+          <div class="container live-two-col">
+            <article class="module module-wide reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Trouver un match</p>
+                  <h2>Equipe ou ligue</h2>
+                </div>
+              </div>
+              <form id="sports-search-form" class="search-bar search-bar-panel" role="search">
+                <label class="sr-only" for="sports-query">Recherche sport</label>
+                <span class="search-icon" aria-hidden="true">S</span>
+                <input
+                  id="sports-query"
+                  type="search"
+                  placeholder="Exemple: Arsenal, NBA, Real Madrid, Premier League..."
+                />
+                <button type="submit">Chercher</button>
+              </form>
+              <div id="sports-quick-searches" class="pill-row pill-row-spaced"></div>
+              <div id="sports-search-results" class="result-list"></div>
+            </article>
+
+            <aside class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Important</p>
+                  <h2>Cadre de lecture</h2>
+                </div>
+              </div>
+              <div id="sports-briefing" class="briefing-card"></div>
+              <div id="sports-probability-note" class="briefing-card briefing-card-accent"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="sports-board-zone" class="page-section">
+          <div class="container live-two-col">
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">A venir</p>
+                  <h2>Prochains matchs</h2>
+                </div>
+              </div>
+              <div id="sports-next-list" class="match-list"></div>
+            </article>
+
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Recents</p>
+                  <h2>Derniers resultats</h2>
+                </div>
+              </div>
+              <div id="sports-past-list" class="match-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="page-section">
+          <div class="container live-two-col">
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Contexte</p>
+                  <h2>Fiche active</h2>
+                </div>
+              </div>
+              <div id="sports-detail" class="briefing-card"></div>
+            </article>
+
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Probabilites</p>
+                  <h2>Match actif</h2>
+                </div>
+              </div>
+              <div id="sports-probability" class="briefing-card"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="page-section">
+          <div class="container live-two-col">
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Explorer plus</p>
+                  <h2>Autres pages</h2>
+                </div>
+              </div>
+              <div class="mini-link-list">
+                <a href="./loterie.html">Retour loterie monde</a>
+                <a href="./jeux.html">Jeux les plus joues</a>
+                <a href="./actualites.html">Actualites</a>
+                <a href="./marches.html">Change et transfert</a>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-inner">
+          <p>(c) 2026 SNG Portal. Tous droits reserves.</p>
+          <p>Paris sportifs: matchs, resultats et contexte.</p>
+        </div>
+      </footer>
+    </div>
+
+    <script src="./site.js"></script>
+    <script src="./sports.js"></script>
+  </body>
+</html>

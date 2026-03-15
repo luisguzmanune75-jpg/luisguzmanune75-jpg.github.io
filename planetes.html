@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Planetes et systeme solaire sur SNG Portal avec NASA Eyes Orrery et Asteroids."
+    />
+    <meta
+      name="keywords"
+      content="SNG Portal planetes, systeme solaire, NASA Eyes Orrery, asteroids"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#4c3138" />
+    <meta property="og:title" content="Planetes - SNG Portal" />
+    <meta
+      property="og:description"
+      content="Explore les planetes, le systeme solaire et les asteroides avec des experiences NASA."
+    />
+    <title>Planetes - SNG Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-page="planetes">
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="container header-inner">
+          <a class="brand" href="./index.html" aria-label="Accueil SNG Portal">
+            <img class="brand-logo" src="./logo-sng.svg" alt="Logo SNG Portal" />
+            <span class="brand-copy">
+              <span class="brand-kicker">SNG Media</span>
+              <span class="brand-title">SNG Portal</span>
+            </span>
+          </a>
+          <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">
+            Menu
+          </button>
+          <nav id="main-nav" class="main-nav" aria-label="Navigation principale">
+            <a href="./index.html">Accueil</a>
+            <a href="./actualites.html">Actualites</a>
+            <a href="./meteo.html">Meteo</a>
+            <a href="./marches.html">Marches</a>
+            <a href="./loterie.html">Loterie Monde</a>
+            <a href="./sports.html">Paris sportifs</a>
+            <a href="./jeux.html">Jeux</a>
+            <a href="./blog.html">Blog</a>
+            <a href="./satellites.html">Satellites</a>
+            <a href="./scolaire.html">Scolaire</a>
+            <a class="is-current" href="./planetes.html">Planetes</a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero hero-crypto-page">
+          <div class="container hero-grid hero-grid-crypto">
+            <div class="hero-copy reveal">
+              <p class="search-logo-kicker">Planetes</p>
+              <h1>Explore le systeme solaire et les objets proches avec des vues NASA.</h1>
+              <p class="hero-text">
+                Cette page complete le mode espace avec une vue dynamique des
+                planetes, des orbites et des asteroides.
+              </p>
+              <div class="hero-actions">
+                <a class="button button-solid" href="#planet-views-zone">Voir les planetes</a>
+                <a class="button button-outline" href="./satellites.html">Voir les satellites</a>
+              </div>
+            </div>
+
+            <aside class="hero-panel reveal reveal-delay">
+              <div class="panel-head">
+                <div>
+                  <p class="section-tag">Solar system</p>
+                  <h2>Vue rapide</h2>
+                </div>
+              </div>
+              <div class="briefing-card">
+                <h3>Deux experiences</h3>
+                <p>Orrery pour le systeme solaire.</p>
+                <p>Asteroids pour suivre les objets proches.</p>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="planet-views-zone" class="page-section">
+          <div class="container space-grid">
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Orrery</p>
+                  <h2>Systeme solaire</h2>
+                </div>
+              </div>
+              <iframe
+                class="space-frame"
+                title="NASA Eyes Orrery"
+                src="https://eyes.nasa.gov/apps/orrery/index.html"
+                loading="lazy"
+              ></iframe>
+              <div class="button-row">
+                <a class="button button-solid" href="https://eyes.nasa.gov/apps/orrery/index.html" target="_blank" rel="noreferrer">Ouvrir Orrery</a>
+              </div>
+            </article>
+
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Asteroids</p>
+                  <h2>Objets proches</h2>
+                </div>
+              </div>
+              <iframe
+                class="space-frame"
+                title="NASA Eyes on Asteroids"
+                src="https://eyes.nasa.gov/apps/asteroids/"
+                loading="lazy"
+              ></iframe>
+              <div class="button-row">
+                <a class="button button-solid" href="https://eyes.nasa.gov/apps/asteroids/" target="_blank" rel="noreferrer">Ouvrir Asteroids</a>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="page-section">
+          <div class="container live-two-col">
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Lecture</p>
+                  <h2>Comment utiliser la page</h2>
+                </div>
+              </div>
+              <div class="briefing-card">
+                <p>Orrery aide a voir les positions relatives des planetes et leur mouvement dans le temps.</p>
+                <p>Asteroids permet de completer avec des objets plus petits et les trajectoires proches.</p>
+                <p>Si l'iframe ne charge pas, ouvre la vue officielle dans un nouvel onglet.</p>
+              </div>
+            </article>
+
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Explorer plus</p>
+                  <h2>Autres pages</h2>
+                </div>
+              </div>
+              <div class="mini-link-list">
+                <a href="./satellites.html">Retour satellites</a>
+                <a href="./actualites.html">Retour actualites</a>
+                <a href="./blog.html">Retour blog</a>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-inner">
+          <p>(c) 2026 SNG Portal. Tous droits reserves.</p>
+          <p>Planetes, systeme solaire et asteroides.</p>
+        </div>
+      </footer>
+    </div>
+
+    <script src="./site.js"></script>
+  </body>
+</html>

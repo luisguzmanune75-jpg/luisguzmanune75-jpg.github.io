@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Crypto Info, le hub detaille de SNG Portal avec suivi live, details sur les cryptos et pays d'adoption."
+    />
+    <meta
+      name="keywords"
+      content="SNG Portal crypto, bitcoin, ethereum, adoption crypto, pays crypto, tendances crypto"
+    />
+    <title>Crypto Info - SNG Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-page="crypto">
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="container header-inner">
+          <a class="brand" href="./index.html" aria-label="Accueil SNG Portal">
+            <img class="brand-logo" src="./logo-sng.svg" alt="Logo SNG Portal" />
+            <span class="brand-copy">
+              <span class="brand-kicker">SNG Media</span>
+              <span class="brand-title">SNG Portal</span>
+            </span>
+          </a>
+
+          <button
+            class="menu-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="main-nav"
+          >
+            Menu
+          </button>
+
+          <nav id="main-nav" class="main-nav" aria-label="Navigation principale">
+            <a href="./index.html">Accueil</a>
+            <a class="is-current" href="./crypto.html">Crypto Info</a>
+            <a href="./actualites.html">Actualites</a>
+            <a href="./meteo.html">Meteo</a>
+            <a href="./marches.html">Marches</a>
+            <a href="./loterie.html">Loterie Monde</a>
+            <a href="./blog.html">Blog</a>
+            <a href="./satellites.html">Satellites</a>
+            <a href="./planetes.html">Planetes</a>
+            <a href="./scolaire.html">Scolaire</a>
+            <a href="./contact.html">Contact</a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero hero-crypto-page">
+          <div class="container hero-grid hero-grid-crypto">
+            <div class="hero-copy reveal">
+              <p class="eyebrow">Crypto Info</p>
+              <h1>Le cote crypto a sa propre page, plus profonde et interactive.</h1>
+              <p class="hero-text">
+                Ici, on va plus loin que la home: actifs majeurs, details, pays
+                d'adoption, resume dynamique et rafraichissement direct.
+              </p>
+              <div class="hero-actions">
+                <a class="button button-solid" href="#crypto-explorer">Explorer le marche</a>
+                <a class="button button-outline" href="./index.html">Retour accueil</a>
+              </div>
+            </div>
+
+            <aside class="hero-panel reveal reveal-delay">
+              <div class="panel-head">
+                <div>
+                  <p class="section-tag">Etat du marche</p>
+                  <h2>Vue globale</h2>
+                </div>
+                <button id="refresh-crypto" class="ghost-button" type="button">
+                  Rafraichir
+                </button>
+              </div>
+              <span id="crypto-status" class="status-pill status-neutral">Chargement...</span>
+              <div id="global-overview" class="pulse-grid"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="crypto-explorer" class="page-section">
+          <div class="container crypto-layout">
+            <article class="module module-wide reveal">
+              <div class="module-head split-head">
+                <div>
+                  <p class="section-tag">Explorer</p>
+                  <h2>Cryptos majeures</h2>
+                </div>
+                <div id="crypto-filters" class="pill-row"></div>
+              </div>
+              <span id="market-status" class="status-pill status-neutral">Chargement...</span>
+              <div class="crypto-explorer-grid">
+                <div id="asset-list" class="asset-list"></div>
+                <aside id="asset-detail" class="detail-panel"></aside>
+              </div>
+            </article>
+
+            <aside class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Tendance</p>
+                  <h2>Ce qui bouge</h2>
+                </div>
+              </div>
+              <div id="trending-list" class="trend-list"></div>
+              <div id="market-briefing" class="briefing-card briefing-card-accent"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="country-zone" class="page-section">
+          <div class="container live-two-col">
+            <article class="module module-wide reveal">
+              <div class="module-head split-head">
+                <div>
+                  <p class="section-tag">Adoption</p>
+                  <h2>Pays ou la crypto avance fort</h2>
+                </div>
+                <div id="country-metrics" class="pill-row"></div>
+              </div>
+              <div class="country-board">
+                <div id="country-list" class="country-list"></div>
+                <aside id="country-detail" class="detail-panel"></aside>
+              </div>
+            </article>
+
+            <article id="learn-zone" class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Comprendre</p>
+                  <h2>Repers utiles</h2>
+                </div>
+              </div>
+              <div class="learning-grid">
+                <div class="info-card">
+                  <h3>Blockchain</h3>
+                  <p>
+                    Un registre partage qui garde les transactions et rend
+                    l'historique verifiable.
+                  </p>
+                </div>
+                <div class="info-card">
+                  <h3>Stablecoins</h3>
+                  <p>
+                    Des tokens plus stables, utiles pour transferer et conserver
+                    temporairement de la valeur.
+                  </p>
+                </div>
+                <div class="info-card">
+                  <h3>Tokenomics</h3>
+                  <p>
+                    Offre, emission, burn et utilite influencent la lecture de
+                    chaque actif.
+                  </p>
+                </div>
+                <div class="info-card">
+                  <h3>Risques</h3>
+                  <p>
+                    Volatilite, regulation, liquidite et securite doivent rester
+                    au centre de la lecture.
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-inner">
+          <p>(c) 2026 SNG Portal. Tous droits reserves.</p>
+          <p>Hub crypto detaille, distinct de la home.</p>
+        </div>
+      </footer>
+    </div>
+
+    <script src="./site.js"></script>
+    <script src="./crypto.js"></script>
+  </body>
+</html>

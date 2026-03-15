@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Meteo mondiale sur SNG Portal avec recherche par pays, ville ou zone, et details complets."
+    />
+    <meta
+      name="keywords"
+      content="SNG Portal meteo, meteo mondiale, previsions, pays, ville, recherche meteo"
+    />
+    <title>Meteo - SNG Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-page="meteo">
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="container header-inner">
+          <a class="brand" href="./index.html" aria-label="Accueil SNG Portal">
+            <img class="brand-logo" src="./logo-sng.svg" alt="Logo SNG Portal" />
+            <span class="brand-copy">
+              <span class="brand-kicker">SNG Media</span>
+              <span class="brand-title">SNG Portal</span>
+            </span>
+          </a>
+          <button
+            class="menu-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="main-nav"
+          >
+            Menu
+          </button>
+          <nav id="main-nav" class="main-nav" aria-label="Navigation principale">
+            <a href="./index.html">Accueil</a>
+            <a href="./crypto.html">Crypto</a>
+            <a href="./actualites.html">Actualites</a>
+            <a class="is-current" href="./meteo.html">Meteo</a>
+            <a href="./marches.html">Marches</a>
+            <a href="./loterie.html">Loterie Monde</a>
+            <a href="./blog.html">Blog</a>
+            <a href="./satellites.html">Satellites</a>
+            <a href="./planetes.html">Planetes</a>
+            <a href="./scolaire.html">Scolaire</a>
+            <a href="./contact.html">Contact</a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero hero-crypto-page">
+          <div class="container hero-grid hero-grid-crypto">
+            <div class="hero-copy reveal">
+              <p class="search-logo-kicker">Meteo mondiale</p>
+              <h1>Ecris un pays, une ville ou une zone. On te donne le detail.</h1>
+              <p class="hero-text">
+                Cette page n'est plus limitee a quelques villes fixes. Tu tapes
+                l'endroit, tu choisis le bon resultat, puis tu vois la meteo en
+                detail: temperature, vent, humidite, pression, visibilite, heures
+                a venir et prochains jours.
+              </p>
+              <div class="hero-actions">
+                <a class="button button-solid" href="#weather-zone">Rechercher un lieu</a>
+                <a class="button button-outline" href="./index.html">Retour accueil</a>
+              </div>
+            </div>
+
+            <aside class="hero-panel reveal reveal-delay">
+              <div class="panel-head">
+                <div>
+                  <p class="section-tag">Recherche</p>
+                  <h2>Vue rapide</h2>
+                </div>
+              </div>
+              <span id="weather-status" class="status-pill status-neutral">Recherche en attente...</span>
+              <div id="weather-pulse" class="pulse-grid"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="weather-zone" class="page-section">
+          <div class="container live-two-col">
+            <article class="module module-wide reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Recherche globale</p>
+                  <h2>Tape ou tu es</h2>
+                </div>
+              </div>
+
+              <form id="location-search-form" class="search-bar search-bar-panel" role="search">
+                <label class="sr-only" for="location-query">Lieu</label>
+                <span class="search-icon" aria-hidden="true">M</span>
+                <input
+                  id="location-query"
+                  type="search"
+                  placeholder="Exemple: France, Dakar, Santo Domingo, Tokyo..."
+                />
+                <button type="submit">Chercher</button>
+              </form>
+
+              <div id="quick-searches" class="pill-row pill-row-spaced"></div>
+              <div id="search-results" class="result-list"></div>
+            </article>
+
+            <aside class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Conditions</p>
+                  <h2>Detail du lieu</h2>
+                </div>
+              </div>
+              <div id="weather-card" class="weather-card"></div>
+              <div id="weather-details" class="detail-grid"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="page-section">
+          <div class="container live-two-col">
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Heures a venir</p>
+                  <h2>Prochaines heures</h2>
+                </div>
+              </div>
+              <div id="weather-hourly" class="forecast-strip"></div>
+            </article>
+
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Prochains jours</p>
+                  <h2>Tendance 7 jours</h2>
+                </div>
+              </div>
+              <div id="weather-daily" class="forecast-list"></div>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-inner">
+          <p>(c) 2026 SNG Portal. Tous droits reserves.</p>
+          <p>Recherche meteo mondiale par pays, ville ou zone.</p>
+        </div>
+      </footer>
+    </div>
+
+    <script src="./site.js"></script>
+    <script src="./weather.js"></script>
+  </body>
+</html>
