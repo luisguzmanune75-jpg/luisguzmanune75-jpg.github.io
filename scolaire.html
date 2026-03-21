@@ -63,15 +63,15 @@
           <div class="container hero-grid hero-grid-crypto">
             <div class="hero-copy reveal">
               <p class="search-logo-kicker">Mode scolaire</p>
-              <h1>Un espace pour aider ecole, college, lycee et universite.</h1>
+              <h1>Un espace scolaire plus detaille pour apprendre et chercher par theme.</h1>
               <p class="hero-text">
-                Cette page sert a organiser les devoirs, preparer les revisions,
-                trouver une methode de travail et garder un rythme plus solide
-                selon le niveau d'etudes.
+                Cette page aide a organiser les devoirs, reviser avec une vraie methode,
+                explorer plusieurs matieres et rechercher rapidement un theme scolaire
+                selon ton niveau.
               </p>
               <div class="hero-actions">
                 <a class="button button-solid" href="#school-level-zone">Choisir un niveau</a>
-                <a class="button button-outline" href="#school-tools-zone">Outils etudiants</a>
+                <a class="button button-outline" href="#school-search-zone">Rechercher un theme</a>
               </div>
             </div>
 
@@ -133,6 +133,77 @@
               </div>
               <div id="school-support" class="study-card-grid"></div>
             </article>
+          </div>
+        </section>
+
+        <section class="page-section">
+          <div class="container live-two-col">
+            <article class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Programme detaille</p>
+                  <h2>Feuille de route par matiere</h2>
+                </div>
+              </div>
+              <div id="school-roadmap" class="study-card-grid"></div>
+            </article>
+
+            <aside class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Progression</p>
+                  <h2>Competences a renforcer</h2>
+                </div>
+              </div>
+              <div id="school-milestones" class="briefing-card"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="school-search-zone" class="page-section">
+          <div class="container live-two-col">
+            <article class="module module-wide reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Recherche scolaire</p>
+                  <h2>Rechercher sur tous les themes</h2>
+                </div>
+              </div>
+              <form id="school-search-form" class="study-search-panel" role="search">
+                <label class="field-stack field-stack-span-2">
+                  <span>Theme ou mot-cle</span>
+                  <input id="school-search-input" type="search" placeholder="Exemple: fractions, poesie, energie, dissertation, statistiques" />
+                </label>
+                <label class="field-stack">
+                  <span>Niveau</span>
+                  <select id="school-search-level" class="control-select">
+                    <option value="all">Tous les niveaux</option>
+                  </select>
+                </label>
+                <label class="field-stack">
+                  <span>Matiere</span>
+                  <select id="school-search-subject" class="control-select">
+                    <option value="all">Toutes les matieres</option>
+                  </select>
+                </label>
+                <div class="button-row">
+                  <button class="button button-solid" type="submit">Lancer la recherche</button>
+                  <button id="school-search-reset" class="button button-outline" type="button">Reinitialiser</button>
+                </div>
+              </form>
+              <div id="school-search-summary" class="status-pill status-neutral"></div>
+              <div id="school-search-results" class="theme-results-grid"></div>
+            </article>
+
+            <aside class="module reveal">
+              <div class="module-head">
+                <div>
+                  <p class="section-tag">Zoom theme</p>
+                  <h2>Fiche de travail</h2>
+                </div>
+              </div>
+              <div id="school-theme-detail" class="briefing-card briefing-card-accent"></div>
+            </aside>
           </div>
         </section>
 
