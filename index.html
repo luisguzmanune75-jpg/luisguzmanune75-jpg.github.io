@@ -85,34 +85,27 @@
             <a href="./contact.html">Contact</a>
           </nav>
 
-          <section class="search-stage reveal">
-            <p class="search-logo-kicker">SNG Portal</p>
-            <img class="hero-logo-mark" src="./logo-sng.svg" alt="Logo central SNG Portal" />
-            <h1 class="search-logo">SNG Portal</h1>
+    <section class="search-stage reveal">
+  <p class="search-logo-kicker">SNG Portal</p>
+  <img class="hero-logo-mark" src="./logo-sng.svg" alt="Logo central SNG Portal" />
+  <h1 class="search-logo">SNG Portal</h1>
 
-            <form id="portal-search-form" class="search-bar" role="search">
-              <label class="sr-only" for="portal-search">Recherche</label>
-              <span class="search-icon" aria-hidden="true">S</span>
-              <input
-                id="portal-search"
-                type="search"
-                placeholder="Rechercher ou poser une question: meteo a Paris, comment reviser, news du jour..."
-              />
-              <button type="submit">Chercher</button>
-            </form>
+  <form id="portal-search-form" class="search-bar" role="search">
+    <label class="sr-only" for="portal-search">Recherche</label>
+    <span class="search-icon" aria-hidden="true">S</span>
+    <input
+      id="portal-search"
+      type="search"
+      placeholder="Rechercher une rubrique: scolaire, actualites, meteo, crypto, contact..."
+    />
+  </form>
+</section>
 
-            <section id="home-assistant-response" class="home-assistant-card reveal" aria-live="polite">
-              <p class="article-tag">Assistant accueil</p>
-              <h2>Recherche rapide et questions depuis l'accueil</h2>
-              <p>
-                Ecris un theme ou une question comme “Quelle page pour la meteo ?”,
-                “Comment reviser pour un controle ?” ou “Je veux les actualites du jour”.
-              </p>
-              <div class="inline-actions">
-                <button class="quick-chip" type="button" data-home-question="Quelle page pour la meteo locale ?">Question meteo</button>
-                <button class="quick-chip" type="button" data-home-question="Comment reviser pour un controle ?">Question scolaire</button>
-                <button class="quick-chip" type="button" data-home-question="Je veux les actualites du jour">Recherche news</button>
-              </div>
+<section id="home-search-guidance" class="home-search-guidance reveal" aria-live="polite">
+  <p class="article-tag">Recherche accueil</p>
+  <h2>Trouve vite la bonne page</h2>
+  <p>Recherche un theme simple pour ouvrir directement la rubrique adaptee du portail.</p>
+</section>
             </section>
 
             <div class="quick-actions">
@@ -148,159 +141,180 @@
               </div>
             </section>
 
-            <div class="shortcut-grid">
-              <a class="shortcut-card reveal" href="./crypto.html">
-                <span class="shortcut-icon">C</span>
-                <strong>Crypto</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./actualites.html">
-                <span class="shortcut-icon">A</span>
-                <strong>Actualites</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./meteo.html">
-                <span class="shortcut-icon">M</span>
-                <strong>Meteo</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./marches.html">
-                <span class="shortcut-icon">P</span>
-                <strong>Marches</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./crypto.html#country-zone">
-                <span class="shortcut-icon">G</span>
-                <strong>Adoption</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./crypto.html#learn-zone">
-                <span class="shortcut-icon">I</span>
-                <strong>Infos</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./loterie.html">
-                <span class="shortcut-icon">L</span>
-                <strong>Loterie</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./sports.html">
-                <span class="shortcut-icon">S</span>
-                <strong>Sports</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./jeux.html">
-                <span class="shortcut-icon">J</span>
-                <strong>Jeux</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./blog.html">
-                <span class="shortcut-icon">B</span>
-                <strong>Blog</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./scolaire.html">
-                <span class="shortcut-icon">E</span>
-                <strong>Scolaire</strong>
-              </a>
-              <a class="shortcut-card reveal" href="https://familialcanal.blogspot.com/" target="_blank" rel="noreferrer">
-                <span class="shortcut-icon">F</span>
-                <strong>Blogger</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./satellites.html">
-                <span class="shortcut-icon">T</span>
-                <strong>Satellites</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./planetes.html">
-                <span class="shortcut-icon">O</span>
-                <strong>Planetes</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./publicite.html">
-                <span class="shortcut-icon">A</span>
-                <strong>Ads</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./contact.html">
-                <span class="shortcut-icon">@</span>
-                <strong>Contact</strong>
-              </a>
-            </div>
+<button id="home-ai-trigger" class="home-ai-trigger" type="button" aria-controls="home-ai-bubble" aria-expanded="false">
+  Assistant IA
+</button>
 
-            <div class="home-bottom-card reveal">
-              <p>
-                Clique sur un rond pour ouvrir directement la page concernee.
-                La home reste simple, et chaque sujet important a sa propre page.
-              </p>
-            </div>
-
-            <section class="home-discovery reveal" aria-label="Decouvrir SNG Portal">
-              <article class="home-info-card">
-                <p class="article-tag">Tendances</p>
-                <h2>Ce qui attire le plus</h2>
-                <div class="mini-link-list">
-                  <a href="./crypto.html">Crypto qui monte</a>
-                  <a href="./actualites.html">News du jour</a>
-                  <a href="./blog.html">Articles recents</a>
-                  <a href="./loterie.html">Loterie Monde</a>
-                  <a href="./satellites.html">Mode espace</a>
-                </div>
-              </article>
-
-              <article class="home-info-card">
-                <p class="article-tag">Newsletter</p>
-                <h2>Recevoir les nouveautes</h2>
-                <form id="home-newsletter-form" class="newsletter-form">
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Ton email pour les news SNG"
-                    aria-label="Email newsletter"
-                    required
-                  />
-                  <button class="button button-solid" type="submit">S'inscrire</button>
-                </form>
-                <div id="home-newsletter-response" class="inline-actions"></div>
-              </article>
-
-              <article class="home-info-card">
-                <p class="article-tag">Reseaux</p>
-                <h2>Suivre le projet</h2>
-                <div class="social-grid social-grid-single">
-                  <a class="social-link" href="https://www.youtube.com/" target="_blank" rel="noreferrer">YouTube</a>
-                  <a class="social-link" href="https://www.tiktok.com/" target="_blank" rel="noreferrer">TikTok</a>
-                  <a class="social-link" href="https://www.instagram.com/" target="_blank" rel="noreferrer">Instagram</a>
-                  <a class="social-link" href="https://www.facebook.com/" target="_blank" rel="noreferrer">Facebook</a>
-                  <a class="social-link" href="https://familialcanal.blogspot.com/" target="_blank" rel="noreferrer">Blogger</a>
-                </div>
-              </article>
-
-              <article class="home-info-card">
-                <p class="article-tag">Officiel</p>
-                <h2>Pages importantes</h2>
-                <div class="mini-link-list">
-                  <a href="./contact.html">Contact</a>
-                  <a href="./scolaire.html">Scolaire</a>
-                  <a href="./publicite.html">Publicite</a>
-                  <a href="./mentions-legales.html">Mentions legales</a>
-                  <a href="./confidentialite.html">Confidentialite</a>
-                </div>
-              </article>
-            </section>
-          </section>
-        </div>
-      </main>
-
-      <footer class="site-footer">
-        <div class="container footer-inner">
-          <p>(c) 2026 SNG Portal. Tous droits reserves.</p>
-          <p>Accueil type Chrome, avec pages separees par sujet.</p>
-        </div>
-      </footer>
+<aside id="home-ai-bubble" class="home-ai-bubble" hidden aria-live="polite">
+  <div class="home-ai-bubble-head">
+    <div>
+      <p class="article-tag">Assistant IA</p>
+      <h2>Bulle separee</h2>
     </div>
+    <button id="home-ai-close" class="home-ai-close" type="button" aria-label="Fermer l'assistant IA">×</button>
+  </div>
+  <form id="home-ai-form" class="home-ai-form">
+    <label class="sr-only" for="home-ai-input">Question complexe</label>
+    <textarea id="home-ai-input" rows="4" placeholder="Pose ici une question complexe: explication, resume, aide detaillee..." spellcheck="true"></textarea>
+    <button type="submit" class="button button-solid">Demander a l'IA</button>
+  </form>
+  <div id="home-ai-panel" class="home-ai-panel"></div>
+</aside>
 
-    <script src="./site.js"></script>
-    <script src="./home.js"></script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "SNG Portal",
-        "url": "./index.html",
-        "publisher": {
-          "@type": "Organization",
-          "name": "SNG Portal",
-          "logo": "./logo-sng.svg"
-        }
-      }
-    </script>
-  </body>
+<div class="shortcut-grid">
+  <a class="shortcut-card reveal" href="./crypto.html">
+    <span class="shortcut-icon">C</span>
+    <strong>Crypto</strong>
+  </a>
+  <a class="shortcut-card reveal" href="./actualites.html">
+    <span class="shortcut-icon">A</span>
+    <strong>Actualites</strong>
+  </a>
+  <a class="shortcut-card reveal" href="./meteo.html">
+    <span class="shortcut-icon">M</span>
+    <strong>Meteo</strong>
+  </a>
+  <a class="shortcut-card reveal" href="./marches.html">
+    <span class="shortcut-icon">P</span>
+    <strong>Marches</strong>
+  </a>
+  <a class="shortcut-card reveal" href="./crypto.html#country-zone">
+    <span class="shortcut-icon">G</span>
+    <strong>Adoption</strong>
+  </a>
+  <a class="shortcut-card reveal" href="./crypto.html#learn-zone">
+    <span class="shortcut-icon">I</span>
+    <strong>Infos</strong>
+  </a>
+  <a class="shortcut-card reveal" href="./loterie.html">
+    <span class="shortcut-icon">L</span>
+    <strong>Loterie</strong>
+  </a>
+  <a class="shortcut-card reveal" href="./sports.html">
+    <span class="shortcut-icon">S</span>
+    <strong>Sports</strong>
+  </a>
+  <a class="shortcut-card reveal" href="./jeux.html">
+    <span class="shortcut-icon">J</span>
+    <strong>Jeux</strong>
+  </a>
+  <a class="shortcut-card reveal" href="./blog.html">
+    <span class="shortcut-icon">B</span>
+    <strong>Blog</strong>
+  </a>
+  <a class="shortcut-card reveal" href="./scolaire.html">
+    <span class="shortcut-icon">E</span>
+    <strong>Scolaire</strong>
+  </a>
+  <a class="shortcut-card reveal" href="https://familialcanal.blogspot.com/" target="_blank" rel="noreferrer">
+    <span class="shortcut-icon">F</span>
+    <strong>Blogger</strong>
+  </a>
+  <a class="shortcut-card reveal" href="./satellites.html">
+    <span class="shortcut-icon">T</span>
+    <strong>Satellites</strong>
+  </a>
+  <a class="shortcut-card reveal" href="./planetes.html">
+    <span class="shortcut-icon">O</span>
+    <strong>Planetes</strong>
+  </a>
+  <a class="shortcut-card reveal" href="./publicite.html">
+    <span class="shortcut-icon">A</span>
+    <strong>Ads</strong>
+  </a>
+  <a class="shortcut-card reveal" href="./contact.html">
+    <span class="shortcut-icon">@</span>
+    <strong>Contact</strong>
+  </a>
+</div>
+
+<div class="home-bottom-card reveal">
+  <p>
+    Clique sur un rond pour ouvrir directement la page concernee.
+    La home reste simple, et chaque sujet important a sa propre page.
+  </p>
+</div>
+
+<section class="home-discovery reveal" aria-label="Decouvrir SNG Portal">
+  <article class="home-info-card">
+    <p class="article-tag">Tendances</p>
+    <h2>Ce qui attire le plus</h2>
+    <div class="mini-link-list">
+      <a href="./crypto.html">Crypto qui monte</a>
+      <a href="./actualites.html">News du jour</a>
+      <a href="./blog.html">Articles recents</a>
+      <a href="./loterie.html">Loterie Monde</a>
+      <a href="./satellites.html">Mode espace</a>
+    </div>
+  </article>
+
+  <article class="home-info-card">
+    <p class="article-tag">Newsletter</p>
+    <h2>Recevoir les nouveautes</h2>
+    <form id="home-newsletter-form" class="newsletter-form">
+      <input
+        type="email"
+        name="email"
+        placeholder="Ton email pour les news SNG"
+        aria-label="Email newsletter"
+        required
+      />
+      <button class="button button-solid" type="submit">S'inscrire</button>
+    </form>
+    <div id="home-newsletter-response" class="inline-actions"></div>
+  </article>
+
+  <article class="home-info-card">
+    <p class="article-tag">Reseaux</p>
+    <h2>Suivre le projet</h2>
+    <div class="social-grid social-grid-single">
+      <a class="social-link" href="https://www.youtube.com/" target="_blank" rel="noreferrer">YouTube</a>
+      <a class="social-link" href="https://www.tiktok.com/" target="_blank" rel="noreferrer">TikTok</a>
+      <a class="social-link" href="https://www.instagram.com/" target="_blank" rel="noreferrer">Instagram</a>
+      <a class="social-link" href="https://www.facebook.com/" target="_blank" rel="noreferrer">Facebook</a>
+      <a class="social-link" href="https://familialcanal.blogspot.com/" target="_blank" rel="noreferrer">Blogger</a>
+    </div>
+  </article>
+
+  <article class="home-info-card">
+    <p class="article-tag">Officiel</p>
+    <h2>Pages importantes</h2>
+    <div class="mini-link-list">
+      <a href="./contact.html">Contact</a>
+      <a href="./scolaire.html">Scolaire</a>
+      <a href="./publicite.html">Publicite</a>
+      <a href="./mentions-legales.html">Mentions legales</a>
+      <a href="./confidentialite.html">Confidentialite</a>
+    </div>
+  </article>
+</section>
+</section>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p>(c) 2026 SNG Portal. Tous droits reserves.</p>
+    <p>Accueil type Chrome, avec pages separees par sujet.</p>
+  </div>
+</footer>
+</div>
+
+<script src="./site.js"></script>
+<script src="./home-ai-config.js"></script>
+<script src="./home.js"></script>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "SNG Portal",
+    "url": "./index.html",
+    "publisher": {
+      "@type": "Organization",
+      "name": "SNG Portal",
+      "logo": "./logo-sng.svg"
+    }
+  }
+</script>
+</body>
 </html>
