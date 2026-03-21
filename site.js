@@ -115,6 +115,8 @@ const SITE = (() => {
 
     try {
       const response = await fetch(url, {
+        method: options.method,
+        body: options.body,
         signal: controller.signal,
         headers: options.headers,
       });
