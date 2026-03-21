@@ -19,7 +19,6 @@ const homeWeatherLabels = {
   82: "Averses fortes",
   95: "Orage",
 };
-
 const homeWeatherState = {
   placeLabel: "Votre position",
   current: null,
@@ -187,7 +186,11 @@ function renderSearchGuidance(query = "", matches = []) {
     <p>${SITE.escapeHTML(bestMatch.answer)}</p>
     <div class="button-row">
       <a class="button button-solid" href="${bestMatch.href}">Ouvrir ${SITE.escapeHTML(bestMatch.label)}</a>
-      ${others[0] ? `<a class="button button-outline" href="${others[0].href}">Voir aussi ${SITE.escapeHTML(others[0].label)}</a>` : `<button class="button button-outline" type="button" data-open-ai-assistant="true">Question complexe ? Assistant IA</button>`}
+      ${
+        others[0]
+          ? `<a class="button button-outline" href="${others[0].href}">Voir aussi ${SITE.escapeHTML(others[0].label)}</a>`
+          : `<button class="button button-outline" type="button" data-open-ai-assistant="true">Question complexe ? Assistant IA</button>`
+      }
     </div>
   `;
   bindAssistantOpeners();
@@ -349,9 +352,18 @@ async function runAIAssistant(query) {
   try {
     const aiAnswer = await askHomeAssistantAI(trimmedQuery);
     const fallback = buildLocalAssistantFallback(trimmedQuery);
-    renderAssistantBubble({ query: trimmedQuery, aiAnswer: aiAnswer || fallback, fallback, error: !aiAnswer });
+    renderAssistantBubble({
+      query: trimmedQuery,
+      aiAnswer: aiAnswer || fallback,
+      fallback,
+      error: !aiAnswer,
+    });
   } catch (error) {
-    renderAssistantBubble({ query: trimmedQuery, fallback: buildLocalAssistantFallback(trimmedQuery), error: true });
+    renderAssistantBubble({
+      query: trimmedQuery,
+      fallback: buildLocalAssistantFallback(trimmedQuery),
+      error: true,
+    });
   } finally {
     homeAssistantState.loading = false;
   }
