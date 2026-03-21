@@ -47,7 +47,7 @@ const homeSearchTopics = [
   {
     href: "./meteo.html",
     label: "Meteo",
-    keywords: ["meteo", "temperature", "pluie", "temps", "orage", "soleil", "climat", "prevision"],
+    keywords: ["meteo", "temperature", "pluie", "temps", "orage", "soleil", "climat", "prevision", "localisation"],
     answer: "La page Meteo est la meilleure destination pour consulter le temps et les previsions.",
   },
   {
@@ -462,14 +462,7 @@ function setupAIAssistantBubble() {
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    const query = input.value.trim();
-
-    if (!query) {
-      input.focus();
-      return;
-    }
-
-    runAIAssistant(query);
+    runAIAssistant(input.value);
   });
 }
 
