@@ -29,6 +29,7 @@ const homeWeatherState = {
 const homeAssistantState = {
   loading: false,
   open: false,
+  messages: [],
 };
 
 const homeSearchTopics = [
@@ -193,6 +194,36 @@ function renderSearchGuidance(query = "", matches = []) {
   bindAssistantOpeners();
 }
 
+function getAssistantLinks(query) {
+  return findHomeMatches(query).map((item) => ({
+    label: item.label,
+    href: item.href,
+    answer: item.answer,
+  }));
+}
+
+function renderAssistantMessages() {
+  return homeAssistantState.messages
+    .map((message) => {
+      const links = message.links?.length
+        ? `
+          <div class="home-ai-links">
+            ${message.links.map((link) => `<a class="link-card" href="${SITE.safeUrl(link.href, './index.html')}">${SITE.escapeHTML(link.label)}</a>`).join("")}
+          </div>
+        `
+        : "";
+
+      return `
+        <article class="home-ai-message home-ai-message-${SITE.escapeHTML(message.role)}">
+          <span class="home-ai-message-role">${message.role === "user" ? "Toi" : "Assistant IA"}</span>
+          <p>${SITE.escapeHTML(message.content)}</p>
+          ${links}
+        </article>
+      `;
+    })
+    .join("");
+}
+
 function renderAssistantBubble(payload = {}) {
   const panel = document.querySelector("#home-ai-panel");
 
@@ -200,16 +231,16 @@ function renderAssistantBubble(payload = {}) {
     return;
   }
 
-  const { query = "", loading = false, aiAnswer = "", fallback = "", error = false } = payload;
+  const { query = "", loading = false, aiAnswer = "", fallback = "", error = false, links = [] } = payload;
 
-  if (!query) {
+  if (!query && !homeAssistantState.messages.length) {
     panel.innerHTML = `
       <p class="article-tag">Assistant IA</p>
-      <h2>Questions complexes uniquement</h2>
-      <p>Utilise cette bulle a part pour demander une explication, un resume ou une aide detaillee. La recherche normale de l'accueil reste dediee aux pages du site.</p>
+      <h2>Assistant de la page</h2>
+      <p>Pose une vraie question comme sur un mini ChatGPT de la page: explication, resume, methode, aide detaillee et liens utiles du site.</p>
       <div class="inline-actions">
         <button class="quick-chip" type="button" data-ai-prompt="Explique-moi comment bien reviser un controle important">Revision complexe</button>
-        <button class="quick-chip" type="button" data-ai-prompt="Explique-moi simplement la difference entre une idee principale et un argument">Question de culture</button>
+        <button class="quick-chip" type="button" data-ai-prompt="Donne-moi une methode simple pour preparer un expose scolaire">Expose scolaire</button>
       </div>
     `;
     bindAIPromptButtons();
@@ -220,15 +251,25 @@ function renderAssistantBubble(payload = {}) {
     panel.innerHTML = `
       <p class="article-tag">Assistant IA</p>
       <h2>Analyse en cours...</h2>
-      <p>Je prepare une reponse pour “${SITE.escapeHTML(query)}”.</p>
+      <div class="home-ai-chat-log">${renderAssistantMessages()}</div>
+      <p class="home-ai-status">Je prepare une reponse pour “${SITE.escapeHTML(query)}”.</p>
     `;
     return;
   }
 
+  if (query) {
+    homeAssistantState.messages.push({
+      role: "assistant",
+      content: aiAnswer || fallback || "Je n'ai pas encore de reponse pour cette question.",
+      links,
+      error,
+    });
+  }
+
   panel.innerHTML = `
     <p class="article-tag">Assistant IA</p>
-    <h2>${error ? "Reponse locale" : "Reponse intelligente"}</h2>
-    <p>${SITE.escapeHTML(aiAnswer || fallback || "Je n'ai pas encore de reponse pour cette question.")}</p>
+    <h2>Discussion</h2>
+    <div class="home-ai-chat-log">${renderAssistantMessages()}</div>
     <div class="button-row button-row-compact">
       <button class="button button-outline" type="button" data-close-ai-assistant="true">Fermer</button>
     </div>
@@ -306,7 +347,7 @@ async function askHomeAssistantAI(query) {
             {
               type: "input_text",
               text:
-                "Tu es un assistant IA separe de la recherche d'accueil de SNG Portal. Reponds uniquement aux questions complexes avec une explication claire, courte, en francais, sans parler de navigation ou de meteo locale sauf si la question l'exige vraiment.",
+                "Tu es l'assistant IA de la page d'accueil SNG Portal. Reponds en francais, de facon claire, utile et naturelle comme un mini ChatGPT de la page. Quand c'est pertinent, donne aussi de courtes pistes d'action et oriente vers les pages du site sans inventer de fonctionnalites.",
             },
           ],
         },
@@ -342,6 +383,13 @@ async function runAIAssistant(query) {
     return;
   }
 
+  const links = getAssistantLinks(trimmedQuery);
+
+  homeAssistantState.messages.push({
+    role: "user",
+    content: trimmedQuery,
+  });
+
   openAssistantBubble();
   homeAssistantState.loading = true;
   renderAssistantBubble({ query: trimmedQuery, loading: true });
@@ -349,9 +397,9 @@ async function runAIAssistant(query) {
   try {
     const aiAnswer = await askHomeAssistantAI(trimmedQuery);
     const fallback = buildLocalAssistantFallback(trimmedQuery);
-    renderAssistantBubble({ query: trimmedQuery, aiAnswer: aiAnswer || fallback, fallback, error: !aiAnswer });
+    renderAssistantBubble({ query: trimmedQuery, aiAnswer: aiAnswer || fallback, fallback, error: !aiAnswer, links });
   } catch (error) {
-    renderAssistantBubble({ query: trimmedQuery, fallback: buildLocalAssistantFallback(trimmedQuery), error: true });
+    renderAssistantBubble({ query: trimmedQuery, fallback: buildLocalAssistantFallback(trimmedQuery), error: true, links });
   } finally {
     homeAssistantState.loading = false;
   }
