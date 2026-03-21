@@ -96,10 +96,16 @@
               <input
                 id="portal-search"
                 type="search"
-                placeholder="Rechercher crypto, actualites, loterie, sports, jeux, scolaire, satellites..."
+                placeholder="Rechercher une rubrique: scolaire, actualites, meteo, crypto, contact..."
               />
-              <button type="submit">Aller</button>
+              <button type="submit">Chercher</button>
             </form>
+
+            <section id="home-search-guidance" class="home-search-guidance reveal" aria-live="polite">
+              <p class="article-tag">Recherche accueil</p>
+              <h2>Trouve vite la bonne page</h2>
+              <p>Recherche un theme simple pour ouvrir directement la rubrique adaptee du portail.</p>
+            </section>
 
             <div class="quick-actions">
               <a class="quick-chip quick-chip-strong" href="./crypto.html">Crypto Info</a>
@@ -116,6 +122,43 @@
               <a class="quick-chip" href="./planetes.html">Planetes</a>
               <a class="quick-chip" href="./contact.html">Contact</a>
             </div>
+
+            <section class="home-weather-card reveal" aria-label="Meteo locale rapide">
+              <div class="home-weather-copy">
+                <p class="article-tag">Meteo locale</p>
+                <h2>Temperature et temps autour de toi</h2>
+                <p id="home-weather-status" class="home-weather-note">
+                  Active la localisation pour voir rapidement la temperature et le temps chez toi.
+                </p>
+              </div>
+              <div id="home-weather-widget" class="home-weather-widget">
+                <div class="empty-state">La meteo locale apparaitra ici.</div>
+              </div>
+              <div class="home-weather-actions">
+                <button id="home-weather-locate" class="button button-solid" type="button">Voir ma meteo</button>
+                <a class="button button-outline" href="./meteo.html">Ouvrir la page meteo</a>
+              </div>
+            </section>
+
+            <button id="home-ai-trigger" class="home-ai-trigger" type="button" aria-controls="home-ai-bubble" aria-expanded="false">
+              Assistant IA
+            </button>
+
+            <aside id="home-ai-bubble" class="home-ai-bubble" hidden aria-live="polite">
+              <div class="home-ai-bubble-head">
+                <div>
+                  <p class="article-tag">Assistant IA</p>
+                  <h2>Bulle separee</h2>
+                </div>
+                <button id="home-ai-close" class="home-ai-close" type="button" aria-label="Fermer l'assistant IA">×</button>
+              </div>
+              <form id="home-ai-form" class="home-ai-form">
+                <label class="sr-only" for="home-ai-input">Question complexe</label>
+                <textarea id="home-ai-input" rows="4" placeholder="Pose ici une question complexe: explication, resume, aide detaillee..."></textarea>
+                <button type="submit" class="button button-solid">Demander a l'IA</button>
+              </form>
+              <div id="home-ai-panel" class="home-ai-panel"></div>
+            </aside>
 
             <div class="shortcut-grid">
               <a class="shortcut-card reveal" href="./crypto.html">
@@ -257,6 +300,7 @@
     </div>
 
     <script src="./site.js"></script>
+    <script src="./home-ai-config.js"></script>
     <script src="./home.js"></script>
     <script type="application/ld+json">
       {
