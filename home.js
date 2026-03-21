@@ -1,181 +1,537 @@
+const homeWeatherLabels = {
+  0: "Ciel clair",
+  1: "Plutot degage",
+  2: "Partiellement nuageux",
+  3: "Nuageux",
+  45: "Brouillard",
+  48: "Brouillard humide",
+  51: "Bruine legere",
+  53: "Bruine",
+  55: "Bruine dense",
+  61: "Pluie legere",
+  63: "Pluie",
+  65: "Pluie forte",
+  71: "Neige legere",
+  73: "Neige",
+  75: "Neige forte",
+  80: "Averses legeres",
+  81: "Averses",
+  82: "Averses fortes",
+  95: "Orage",
+};
+
+const homeWeatherState = {
+  placeLabel: "Votre position",
+  current: null,
+  loadedAt: null,
+};
+
+const homeAssistantState = {
+  loading: false,
+  open: false,
+  messages: [],
+};
+
+const homeSearchTopics = [
+  {
+    href: "./scolaire.html",
+    label: "Scolaire",
+    keywords: ["scolaire", "revision", "reviser", "controle", "examen", "cours", "college", "lycee", "universite", "devoir", "math", "francais", "science"],
+    answer: "La page Scolaire est la plus adaptee pour reviser, chercher un theme et organiser tes cours.",
+  },
+  {
+    href: "./actualites.html",
+    label: "Actualites",
+    keywords: ["actualite", "news", "jour", "monde", "politique", "guerre", "breaking"],
+    answer: "La page Actualites est la plus adaptee pour suivre les infos du moment.",
+  },
+  {
+    href: "./meteo.html",
+    label: "Meteo",
+    keywords: ["meteo", "temperature", "pluie", "temps", "orage", "soleil", "climat", "prevision", "localisation"],
+    answer: "La page Meteo est la meilleure destination pour consulter le temps et les previsions.",
+  },
+  {
+    href: "./crypto.html",
+    label: "Crypto",
+    keywords: ["crypto", "bitcoin", "ethereum", "blockchain", "btc"],
+    answer: "La page Crypto regroupe les infos et reperes utiles sur le marche crypto.",
+  },
+  {
+    href: "./marches.html",
+    label: "Marches",
+    keywords: ["marche", "dollar", "euro", "devise", "prix", "change", "transfert", "bourse"],
+    answer: "La page Marches centralise les devises, prix et tendances a suivre.",
+  },
+  {
+    href: "./sports.html",
+    label: "Sports",
+    keywords: ["sport", "pari", "football", "nba", "match", "nfl", "score"],
+    answer: "La page Sports est la meilleure entree pour les matchs et paris sportifs.",
+  },
+  {
+    href: "./jeux.html",
+    label: "Jeux",
+    keywords: ["jeu", "gaming", "games", "steam", "playstation", "xbox", "switch"],
+    answer: "La page Jeux regroupe le contenu gaming du portail.",
+  },
+  {
+    href: "./blog.html",
+    label: "Blog",
+    keywords: ["blog", "article", "seo", "tendance", "viral"],
+    answer: "La page Blog est adaptee pour lire des contenus expliques et des tendances.",
+  },
+  {
+    href: "./satellites.html",
+    label: "Satellites",
+    keywords: ["satellite", "satellites", "espace", "orbite", "nasa"],
+    answer: "La page Satellites est faite pour l'espace, les orbites et les satellites.",
+  },
+  {
+    href: "./planetes.html",
+    label: "Planetes",
+    keywords: ["planete", "planetes", "systeme solaire", "asteroide"],
+    answer: "La page Planetes est la bonne destination pour le systeme solaire.",
+  },
+  {
+    href: "./contact.html",
+    label: "Contact",
+    keywords: ["contact", "email", "partenariat", "youtube", "instagram", "tiktok"],
+    answer: "La page Contact permet de joindre facilement SNG Portal.",
+  },
+];
+
+function normalizeHomeText(value) {
+  return String(value ?? "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function findHomeMatches(query, topics = homeSearchTopics) {
+  const normalizedQuery = normalizeHomeText(query);
+
+  return topics
+    .map((topic) => ({
+      ...topic,
+      score: topic.keywords.reduce((count, keyword) => count + Number(normalizedQuery.includes(normalizeHomeText(keyword))), 0),
+    }))
+    .filter((topic) => topic.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
+}
+
+function getHomeAIConfig() {
+  const config = window.SNG_AI_CONFIG ?? {};
+  return {
+    apiKey: config.apiKey || localStorage.getItem("sng_openai_api_key") || "",
+    model: config.model || "gpt-4.1-mini",
+    endpoint: config.endpoint || "https://api.openai.com/v1/responses",
+  };
+}
+
+function isComplexQuestion(query) {
+  const normalized = normalizeHomeText(query);
+  const complexityMarkers = [
+    "pourquoi",
+    "comment",
+    "explique",
+    "difference",
+    "analyse",
+    "resume",
+    "strategie",
+    "aide moi",
+    "peux tu",
+    "peut tu",
+    "donne moi",
+    "quelles sont",
+    "quel est",
+    "quelle est",
+  ];
+
+  return normalized.length >= 25 || complexityMarkers.some((marker) => normalized.includes(marker));
+}
+
+function renderSearchGuidance(query = "", matches = []) {
+  const root = document.querySelector("#home-search-guidance");
+
+  if (!root) {
+    return;
+  }
+
+  if (!query) {
+    root.innerHTML = `
+      <p class="article-tag">Recherche accueil</p>
+      <h2>Trouve vite la bonne page</h2>
+      <p>Recherche un theme simple comme scolaire, actualites, meteo, crypto ou contact pour ouvrir directement la bonne rubrique.</p>
+    `;
+    return;
+  }
+
+  if (!matches.length) {
+    root.innerHTML = `
+      <p class="article-tag">Recherche accueil</p>
+      <h2>Aucune page detectee</h2>
+      <p>Je n'ai pas trouve de rubrique exacte pour “${SITE.escapeHTML(query)}”. Essaie un mot-cle plus simple ou utilise l'assistant IA pour une question complexe.</p>
+      <div class="button-row">
+        <button class="button button-outline" type="button" data-open-ai-assistant="true">Ouvrir l'assistant IA</button>
+      </div>
+    `;
+    bindAssistantOpeners();
+    return;
+  }
+
+  const [bestMatch, ...others] = matches;
+  root.innerHTML = `
+    <p class="article-tag">Recherche accueil</p>
+    <h2>${SITE.escapeHTML(bestMatch.label)} - page conseillee</h2>
+    <p>${SITE.escapeHTML(bestMatch.answer)}</p>
+    <div class="button-row">
+      <a class="button button-solid" href="${bestMatch.href}">Ouvrir ${SITE.escapeHTML(bestMatch.label)}</a>
+      ${others[0] ? `<a class="button button-outline" href="${others[0].href}">Voir aussi ${SITE.escapeHTML(others[0].label)}</a>` : `<button class="button button-outline" type="button" data-open-ai-assistant="true">Question complexe ? Assistant IA</button>`}
+    </div>
+  `;
+  bindAssistantOpeners();
+}
+
+function getAssistantLinks(query) {
+  return findHomeMatches(query).map((item) => ({
+    label: item.label,
+    href: item.href,
+    answer: item.answer,
+  }));
+}
+
+function renderAssistantMessages() {
+  return homeAssistantState.messages
+    .map((message) => {
+      const links = message.links?.length
+        ? `
+          <div class="home-ai-links">
+            ${message.links.map((link) => `<a class="link-card" href="${SITE.safeUrl(link.href, './index.html')}">${SITE.escapeHTML(link.label)}</a>`).join("")}
+          </div>
+        `
+        : "";
+
+      return `
+        <article class="home-ai-message home-ai-message-${SITE.escapeHTML(message.role)}">
+          <span class="home-ai-message-role">${message.role === "user" ? "Toi" : "Assistant IA"}</span>
+          <p>${SITE.escapeHTML(message.content)}</p>
+          ${links}
+        </article>
+      `;
+    })
+    .join("");
+}
+
+function renderAssistantBubble(payload = {}) {
+  const panel = document.querySelector("#home-ai-panel");
+
+  if (!panel) {
+    return;
+  }
+
+  const { query = "", loading = false, aiAnswer = "", fallback = "", error = false, links = [] } = payload;
+
+  if (!query && !homeAssistantState.messages.length) {
+    panel.innerHTML = `
+      <p class="article-tag">Assistant IA</p>
+      <h2>Assistant de la page</h2>
+      <p>Pose une vraie question comme sur un mini ChatGPT de la page: explication, resume, methode, aide detaillee et liens utiles du site.</p>
+      <div class="inline-actions">
+        <button class="quick-chip" type="button" data-ai-prompt="Explique-moi comment bien reviser un controle important">Revision complexe</button>
+        <button class="quick-chip" type="button" data-ai-prompt="Donne-moi une methode simple pour preparer un expose scolaire">Expose scolaire</button>
+      </div>
+    `;
+    bindAIPromptButtons();
+    return;
+  }
+
+  if (loading) {
+    panel.innerHTML = `
+      <p class="article-tag">Assistant IA</p>
+      <h2>Analyse en cours...</h2>
+      <div class="home-ai-chat-log">${renderAssistantMessages()}</div>
+      <p class="home-ai-status">Je prepare une reponse pour “${SITE.escapeHTML(query)}”.</p>
+    `;
+    return;
+  }
+
+  if (query) {
+    homeAssistantState.messages.push({
+      role: "assistant",
+      content: aiAnswer || fallback || "Je n'ai pas encore de reponse pour cette question.",
+      links,
+      error,
+    });
+  }
+
+  panel.innerHTML = `
+    <p class="article-tag">Assistant IA</p>
+    <h2>Discussion</h2>
+    <div class="home-ai-chat-log">${renderAssistantMessages()}</div>
+    <div class="button-row button-row-compact">
+      <button class="button button-outline" type="button" data-close-ai-assistant="true">Fermer</button>
+    </div>
+  `;
+  bindAssistantClosers();
+}
+
+function bindAIPromptButtons() {
+  document.querySelectorAll("[data-ai-prompt]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const input = document.querySelector("#home-ai-input");
+      const prompt = button.dataset.aiPrompt ?? "";
+      if (input) {
+        input.value = prompt;
+      }
+      openAssistantBubble();
+      runAIAssistant(prompt);
+    });
+  });
+}
+
+function bindAssistantOpeners() {
+  document.querySelectorAll("[data-open-ai-assistant='true']").forEach((button) => {
+    button.addEventListener("click", () => {
+      openAssistantBubble();
+      document.querySelector("#home-ai-input")?.focus();
+    });
+  });
+}
+
+function bindAssistantClosers() {
+  document.querySelectorAll("[data-close-ai-assistant='true']").forEach((button) => {
+    button.addEventListener("click", () => {
+      closeAssistantBubble();
+    });
+  });
+}
+
+function extractAIText(data) {
+  if (typeof data.output_text === "string" && data.output_text.trim()) {
+    return data.output_text.trim();
+  }
+
+  const texts = [];
+  (data.output || []).forEach((item) => {
+    (item.content || []).forEach((content) => {
+      if (typeof content.text === "string") {
+        texts.push(content.text.trim());
+      }
+    });
+  });
+
+  return texts.filter(Boolean).join("\n\n");
+}
+
+async function askHomeAssistantAI(query) {
+  const { apiKey, model, endpoint } = getHomeAIConfig();
+
+  if (!apiKey) {
+    return "";
+  }
+
+  const response = await SITE.fetchJSON(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model,
+      input: [
+        {
+          role: "system",
+          content: [
+            {
+              type: "input_text",
+              text:
+                "Tu es l'assistant IA de la page d'accueil SNG Portal. Reponds en francais, de facon claire, utile et naturelle comme un mini ChatGPT de la page. Quand c'est pertinent, donne aussi de courtes pistes d'action et oriente vers les pages du site sans inventer de fonctionnalites.",
+            },
+          ],
+        },
+        {
+          role: "user",
+          content: [
+            {
+              type: "input_text",
+              text: query,
+            },
+          ],
+        },
+      ],
+      max_output_tokens: 220,
+    }),
+  });
+
+  return extractAIText(response);
+}
+
+function buildLocalAssistantFallback(query) {
+  const matches = findHomeMatches(query);
+  if (matches[0]?.label === "Scolaire") {
+    return "Pour une question scolaire complexe, commence par definir le theme, le niveau, les notions a comprendre, puis fais un plan de revision avec exemples, exercices et resume final.";
+  }
+  return "Je peux surtout aider sur des questions complexes si une cle API est configuree. Sans cle, formule une demande detaillee ou utilise la recherche normale pour ouvrir la bonne page du site.";
+}
+
+async function runAIAssistant(query) {
+  const trimmedQuery = query.trim();
+
+  if (!trimmedQuery || homeAssistantState.loading) {
+    return;
+  }
+
+  const links = getAssistantLinks(trimmedQuery);
+
+  homeAssistantState.messages.push({
+    role: "user",
+    content: trimmedQuery,
+  });
+
+  openAssistantBubble();
+  homeAssistantState.loading = true;
+  renderAssistantBubble({ query: trimmedQuery, loading: true });
+
+  try {
+    const aiAnswer = await askHomeAssistantAI(trimmedQuery);
+    const fallback = buildLocalAssistantFallback(trimmedQuery);
+    renderAssistantBubble({ query: trimmedQuery, aiAnswer: aiAnswer || fallback, fallback, error: !aiAnswer, links });
+  } catch (error) {
+    renderAssistantBubble({ query: trimmedQuery, fallback: buildLocalAssistantFallback(trimmedQuery), error: true, links });
+  } finally {
+    homeAssistantState.loading = false;
+  }
+}
+
+function openAssistantBubble() {
+  const bubble = document.querySelector("#home-ai-bubble");
+  const trigger = document.querySelector("#home-ai-trigger");
+  if (!bubble) {
+    return;
+  }
+  bubble.hidden = false;
+  bubble.classList.add("is-open");
+  if (trigger) {
+    trigger.setAttribute("aria-expanded", "true");
+  }
+  homeAssistantState.open = true;
+}
+
+function closeAssistantBubble() {
+  const bubble = document.querySelector("#home-ai-bubble");
+  const trigger = document.querySelector("#home-ai-trigger");
+  if (!bubble) {
+    return;
+  }
+  bubble.classList.remove("is-open");
+  bubble.hidden = true;
+  if (trigger) {
+    trigger.setAttribute("aria-expanded", "false");
+  }
+  homeAssistantState.open = false;
+}
+
+function dedupeHomeNodes(selector, keep = 1) {
+  const nodes = document.querySelectorAll(selector);
+  nodes.forEach((node, index) => {
+    if (index >= keep) {
+      node.remove();
+    }
+  });
+}
+
+function dedupeHomeLayout() {
+  dedupeHomeNodes("#home-search-guidance");
+  dedupeHomeNodes(".quick-actions");
+  dedupeHomeNodes(".home-weather-card");
+  dedupeHomeNodes("#home-ai-trigger");
+  dedupeHomeNodes("#home-ai-bubble");
+  dedupeHomeNodes(".shortcut-grid");
+  dedupeHomeNodes(".home-bottom-card");
+  dedupeHomeNodes(".home-discovery");
+  dedupeHomeNodes(".home-info-card", 4);
+}
+
 function setupSearch() {
   const form = document.querySelector("#portal-search-form");
   const input = document.querySelector("#portal-search");
 
+  if (!form || !input) {
+    return;
+  }
+
+  renderSearchGuidance();
+
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-
-    const query = input.value.trim().toLowerCase();
-    const normalizedQuery = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const query = input.value.trim();
 
     if (!query) {
       input.focus();
+      renderSearchGuidance();
       return;
     }
 
-    if (query.includes("crypto") || query.includes("bitcoin") || query.includes("ethereum")) {
-      window.location.href = "./crypto.html";
+    const matches = findHomeMatches(query);
+    renderSearchGuidance(query, matches);
+
+    if (matches[0]) {
+      window.setTimeout(() => {
+        window.location.href = matches[0].href;
+      }, 500);
       return;
     }
 
-    if (query.includes("contact") || query.includes("email") || query.includes("partenariat")) {
-      window.location.href = "./contact.html";
-      return;
+    if (isComplexQuestion(query)) {
+      openAssistantBubble();
+      const aiInput = document.querySelector("#home-ai-input");
+      if (aiInput) {
+        aiInput.value = query;
+      }
     }
+  });
+}
 
-    if (
-      normalizedQuery.includes("scolaire") ||
-      normalizedQuery.includes("ecole") ||
-      normalizedQuery.includes("college") ||
-      normalizedQuery.includes("lycee") ||
-      normalizedQuery.includes("universite") ||
-      normalizedQuery.includes("etudiant") ||
-      normalizedQuery.includes("eleve") ||
-      normalizedQuery.includes("devoir") ||
-      normalizedQuery.includes("revision") ||
-      normalizedQuery.includes("examen") ||
-      normalizedQuery.includes("cours") ||
-      normalizedQuery.includes("memoire") ||
-      normalizedQuery.includes("bac")
-    ) {
-      window.location.href = "./scolaire.html";
-      return;
+function setupAIAssistantBubble() {
+  const trigger = document.querySelector("#home-ai-trigger");
+  const close = document.querySelector("#home-ai-close");
+  const form = document.querySelector("#home-ai-form");
+  const input = document.querySelector("#home-ai-input");
+  const bubble = document.querySelector("#home-ai-bubble");
+
+  if (!trigger || !close || !form || !input || !bubble) {
+    return;
+  }
+
+  renderAssistantBubble();
+  bindAssistantOpeners();
+
+  trigger.addEventListener("click", () => {
+    openAssistantBubble();
+    input.focus();
+  });
+
+  close.addEventListener("click", () => {
+    closeAssistantBubble();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && homeAssistantState.open) {
+      closeAssistantBubble();
     }
+  });
 
-    if (query.includes("blog") || query.includes("article") || query.includes("seo")) {
-      window.location.href = "./blog.html";
-      return;
+  bubble.addEventListener("click", (event) => {
+    if (event.target === bubble) {
+      closeAssistantBubble();
     }
+  });
 
-    if (query.includes("blogger") || query.includes("familial canal")) {
-      window.location.href = "https://familialcanal.blogspot.com/";
-      return;
-    }
-
-    if (query.includes("tendance") || query.includes("viral") || query.includes("artiste")) {
-      window.location.href = "./blog.html#tendances-zone";
-      return;
-    }
-
-    if (
-      query.includes("actualite") ||
-      query.includes("news") ||
-      query.includes("breaking") ||
-      query.includes("aujourd") ||
-      query.includes("monde") ||
-      query.includes("guerre") ||
-      query.includes("politique")
-    ) {
-      window.location.href = "./actualites.html";
-      return;
-    }
-
-    if (query.includes("meteo") || query.includes("temperature") || query.includes("pluie")) {
-      window.location.href = "./meteo.html";
-      return;
-    }
-
-    if (
-      query.includes("sport") ||
-      query.includes("pari") ||
-      query.includes("football") ||
-      query.includes("nba") ||
-      query.includes("nfl") ||
-      query.includes("match")
-    ) {
-      window.location.href = "./sports.html";
-      return;
-    }
-
-    if (
-      query.includes("loterie") ||
-      query.includes("quiniela") ||
-      query.includes("tripleta") ||
-      query.includes("powerball") ||
-      query.includes("mega millions") ||
-      query.includes("euromillions") ||
-      query.includes("lotto max") ||
-      query.includes("superenalotto")
-    ) {
-      window.location.href = "./loterie.html";
-      return;
-    }
-
-    if (
-      query.includes("jeu") ||
-      query.includes("games") ||
-      query.includes("steam") ||
-      query.includes("counter") ||
-      query.includes("dota") ||
-      query.includes("mobile") ||
-      query.includes("playstation") ||
-      query.includes("xbox") ||
-      query.includes("switch")
-    ) {
-      window.location.href = "./jeux.html";
-      return;
-    }
-
-    if (
-      query.includes("satellite") ||
-      query.includes("satellites") ||
-      query.includes("espace") ||
-      query.includes("orbite") ||
-      query.includes("nasa")
-    ) {
-      window.location.href = "./satellites.html";
-      return;
-    }
-
-    if (
-      query.includes("planete") ||
-      query.includes("planetes") ||
-      query.includes("systeme solaire") ||
-      query.includes("asteroide")
-    ) {
-      window.location.href = "./planetes.html";
-      return;
-    }
-
-    if (query.includes("pub") || query.includes("adsense") || query.includes("amazon")) {
-      window.location.href = "./publicite.html";
-      return;
-    }
-
-    if (query.includes("youtube") || query.includes("tiktok") || query.includes("instagram")) {
-      window.location.href = "./contact.html";
-      return;
-    }
-
-    if (query.includes("cookie") || query.includes("confidentialite") || query.includes("rgpd")) {
-      window.location.href = "./confidentialite.html";
-      return;
-    }
-
-    if (query.includes("mentions") || query.includes("legal")) {
-      window.location.href = "./mentions-legales.html";
-      return;
-    }
-
-    if (
-      query.includes("marche") ||
-      query.includes("prix") ||
-      query.includes("dollar") ||
-      query.includes("euro") ||
-      query.includes("dop") ||
-      query.includes("peso dominicain") ||
-      query.includes("change") ||
-      query.includes("monnaie") ||
-      query.includes("devise") ||
-      query.includes("transfert") ||
-      query.includes("envoi d'argent") ||
-      query.includes("envoi argent")
-    ) {
-      window.location.href = "./marches.html";
-      return;
-    }
-
-    window.location.href = "./actualites.html";
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    runAIAssistant(input.value);
   });
 }
 
@@ -201,9 +557,135 @@ function setupHomeNewsletter() {
   });
 }
 
+function formatHomeWeatherLabel(code) {
+  return homeWeatherLabels[code] || "Conditions variables";
+}
+
+function renderHomeWeather() {
+  const widget = document.querySelector("#home-weather-widget");
+
+  if (!widget) {
+    return;
+  }
+
+  if (!homeWeatherState.current) {
+    widget.innerHTML = '<div class="empty-state">La meteo locale apparaitra ici.</div>';
+    return;
+  }
+
+  const current = homeWeatherState.current;
+
+  widget.innerHTML = `
+    <div class="home-weather-main">
+      <div>
+        <p class="article-tag">${SITE.escapeHTML(homeWeatherState.placeLabel)}</p>
+        <h3>${SITE.escapeHTML(formatHomeWeatherLabel(current.weather_code))}</h3>
+        <p class="home-weather-note">Maj ${SITE.escapeHTML(SITE.formatRelativeTime(homeWeatherState.loadedAt))}</p>
+      </div>
+      <strong class="home-weather-temp">${Math.round(current.temperature_2m)}°C</strong>
+    </div>
+    <div class="home-weather-stats">
+      <div class="summary-card">
+        <span>Ressenti</span>
+        <strong>${Math.round(current.apparent_temperature)}°C</strong>
+      </div>
+      <div class="summary-card">
+        <span>Vent</span>
+        <strong>${Math.round(current.wind_speed_10m)} km/h</strong>
+      </div>
+      <div class="summary-card">
+        <span>Humidite</span>
+        <strong>${Math.round(current.relative_humidity_2m)}%</strong>
+      </div>
+    </div>
+  `;
+}
+
+async function reverseGeocode(latitude, longitude) {
+  try {
+    const data = await SITE.fetchJSON(
+      `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${latitude}&longitude=${longitude}&language=fr&format=json`,
+    );
+    const place = data.results?.[0];
+
+    if (!place) {
+      return null;
+    }
+
+    return [place.name, place.admin1, place.country].filter(Boolean).join(", ");
+  } catch (error) {
+    return null;
+  }
+}
+
+async function loadLocalWeather() {
+  const status = document.querySelector("#home-weather-status");
+  const button = document.querySelector("#home-weather-locate");
+
+  if (!status || !button) {
+    return;
+  }
+
+  if (!("geolocation" in navigator)) {
+    status.textContent = "La geolocalisation n'est pas disponible sur cet appareil.";
+    return;
+  }
+
+  button.disabled = true;
+  status.textContent = "Localisation en cours...";
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      try {
+        const { latitude, longitude } = position.coords;
+        const weather = await SITE.fetchJSON(
+          `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto`,
+        );
+
+        homeWeatherState.current = weather.current;
+        homeWeatherState.loadedAt = new Date().toISOString();
+        homeWeatherState.placeLabel =
+          (await reverseGeocode(latitude, longitude)) || `Lat ${latitude.toFixed(2)}, Lon ${longitude.toFixed(2)}`;
+
+        status.textContent = "Meteo locale chargee.";
+        renderHomeWeather();
+      } catch (error) {
+        status.textContent = "Impossible de charger la meteo locale pour le moment.";
+      } finally {
+        button.disabled = false;
+      }
+    },
+    () => {
+      status.textContent = "Autorise la localisation pour afficher la temperature autour de toi.";
+      button.disabled = false;
+    },
+    {
+      enableHighAccuracy: false,
+      timeout: 10000,
+      maximumAge: 600000,
+    },
+  );
+}
+
+function setupHomeWeather() {
+  const button = document.querySelector("#home-weather-locate");
+
+  if (!button) {
+    return;
+  }
+
+  renderHomeWeather();
+  button.addEventListener("click", () => {
+    loadLocalWeather();
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  dedupeHomeLayout();
   SITE.setupMenu();
   SITE.observeReveals();
   setupSearch();
+  setupAIAssistantBubble();
   setupHomeNewsletter();
+  setupHomeWeather();
 });
