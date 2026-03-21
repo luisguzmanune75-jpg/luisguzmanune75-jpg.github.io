@@ -403,6 +403,7 @@ function dedupeHomeLayout() {
   dedupeHomeNodes(".shortcut-grid");
   dedupeHomeNodes(".home-bottom-card");
   dedupeHomeNodes(".home-discovery");
+  dedupeHomeNodes(".home-info-card", 4);
 }
 
 function setupSearch() {
