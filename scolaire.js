@@ -469,6 +469,26 @@ function renderSearchResults() {
   renderThemeDetail();
 }
 
+function buildYouTubeSearchUrl(query) {
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+}
+
+function getThemeVideoLinks(theme) {
+  const levelLabel = schoolLevels.find((level) => level.id === theme.level)?.label ?? theme.level;
+  const base = `${theme.theme} ${theme.subject} ${levelLabel}`;
+
+  return [
+    {
+      label: `Cours video ${theme.theme}`,
+      href: buildYouTubeSearchUrl(`${base} explication`),
+    },
+    {
+      label: `Exercices corriges ${theme.theme}`,
+      href: buildYouTubeSearchUrl(`${base} exercices corriges`),
+    },
+  ];
+}
+
 function renderThemeDetail() {
   const root = document.querySelector("#school-theme-detail");
   const theme = activeTheme();
@@ -483,6 +503,7 @@ function renderThemeDetail() {
 
   const levelLabel = schoolLevels.find((level) => level.id === theme.level)?.label ?? theme.level;
   const detail = schoolThemeDetails[theme.id] ?? {};
+  const videoLinks = getThemeVideoLinks(theme);
 
   root.innerHTML = `
     <p class="article-tag">${SITE.escapeHTML(levelLabel)} - ${SITE.escapeHTML(theme.subject)}</p>
@@ -528,6 +549,12 @@ function renderThemeDetail() {
         </ul>
       </div>
     ` : ""}
+    <div class="theme-detail-block theme-detail-videos">
+      <strong>Videos YouTube explicatives</strong>
+      <div class="theme-video-links">
+        ${videoLinks.map((video) => `<a class="link-card" href="${SITE.safeUrl(video.href, 'https://www.youtube.com/')}" target="_blank" rel="noreferrer">${SITE.escapeHTML(video.label)}</a>`).join("")}
+      </div>
+    </div>
     <p><strong>Mots-cles utiles:</strong> ${SITE.escapeHTML(theme.keywords.join(", "))}</p>
   `;
 }

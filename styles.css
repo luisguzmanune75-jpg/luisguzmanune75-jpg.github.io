@@ -2139,3 +2139,16 @@ body[data-page="home"] .shortcut-card {
 .theme-step-list li + li {
   margin-top: 8px;
 }
+
+
+.theme-video-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.theme-detail-videos .link-card {
+  min-height: 44px;
+  background: rgba(255, 255, 255, 0.06);
+}

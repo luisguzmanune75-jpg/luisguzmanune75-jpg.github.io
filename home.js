@@ -19,6 +19,7 @@ const homeWeatherLabels = {
   82: "Averses fortes",
   95: "Orage",
 };
+
 const homeWeatherState = {
   placeLabel: "Votre position",
   current: null,
@@ -186,11 +187,7 @@ function renderSearchGuidance(query = "", matches = []) {
     <p>${SITE.escapeHTML(bestMatch.answer)}</p>
     <div class="button-row">
       <a class="button button-solid" href="${bestMatch.href}">Ouvrir ${SITE.escapeHTML(bestMatch.label)}</a>
-      ${
-        others[0]
-          ? `<a class="button button-outline" href="${others[0].href}">Voir aussi ${SITE.escapeHTML(others[0].label)}</a>`
-          : `<button class="button button-outline" type="button" data-open-ai-assistant="true">Question complexe ? Assistant IA</button>`
-      }
+      ${others[0] ? `<a class="button button-outline" href="${others[0].href}">Voir aussi ${SITE.escapeHTML(others[0].label)}</a>` : `<button class="button button-outline" type="button" data-open-ai-assistant="true">Question complexe ? Assistant IA</button>`}
     </div>
   `;
   bindAssistantOpeners();
@@ -203,7 +200,7 @@ function renderAssistantBubble(payload = {}) {
     return;
   }
 
-  const { query = "", loading = false, aiAnswer = "", fallback = "", error = false } = payload;;
+  const { query = "", loading = false, aiAnswer = "", fallback = "", error = false } = payload;
 
   if (!query) {
     panel.innerHTML = `
@@ -352,18 +349,9 @@ async function runAIAssistant(query) {
   try {
     const aiAnswer = await askHomeAssistantAI(trimmedQuery);
     const fallback = buildLocalAssistantFallback(trimmedQuery);
-    renderAssistantBubble({
-      query: trimmedQuery,
-      aiAnswer: aiAnswer || fallback,
-      fallback,
-      error: !aiAnswer,
-    });
+    renderAssistantBubble({ query: trimmedQuery, aiAnswer: aiAnswer || fallback, fallback, error: !aiAnswer });
   } catch (error) {
-    renderAssistantBubble({
-      query: trimmedQuery,
-      fallback: buildLocalAssistantFallback(trimmedQuery),
-      error: true,
-    });
+    renderAssistantBubble({ query: trimmedQuery, fallback: buildLocalAssistantFallback(trimmedQuery), error: true });
   } finally {
     homeAssistantState.loading = false;
   }
@@ -395,6 +383,26 @@ function closeAssistantBubble() {
     trigger.setAttribute("aria-expanded", "false");
   }
   homeAssistantState.open = false;
+}
+
+function dedupeHomeNodes(selector, keep = 1) {
+  const nodes = document.querySelectorAll(selector);
+  nodes.forEach((node, index) => {
+    if (index >= keep) {
+      node.remove();
+    }
+  });
+}
+
+function dedupeHomeLayout() {
+  dedupeHomeNodes("#home-search-guidance");
+  dedupeHomeNodes(".quick-actions");
+  dedupeHomeNodes(".home-weather-card");
+  dedupeHomeNodes("#home-ai-trigger");
+  dedupeHomeNodes("#home-ai-bubble");
+  dedupeHomeNodes(".shortcut-grid");
+  dedupeHomeNodes(".home-bottom-card");
+  dedupeHomeNodes(".home-discovery");
 }
 
 function setupSearch() {
@@ -624,6 +632,7 @@ function setupHomeWeather() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  dedupeHomeLayout();
   SITE.setupMenu();
   SITE.observeReveals();
   setupSearch();
