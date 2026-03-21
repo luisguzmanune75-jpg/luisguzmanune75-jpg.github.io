@@ -209,7 +209,7 @@ function renderAssistantBubble(payload = {}) {
       <p>Utilise cette bulle a part pour demander une explication, un resume ou une aide detaillee. La recherche normale de l'accueil reste dediee aux pages du site.</p>
       <div class="inline-actions">
         <button class="quick-chip" type="button" data-ai-prompt="Explique-moi comment bien reviser un controle important">Revision complexe</button>
-        <button class="quick-chip" type="button" data-ai-prompt="Resume-moi simplement la difference entre meteo et climat">Question de culture</button>
+        <button class="quick-chip" type="button" data-ai-prompt="Explique-moi simplement la difference entre une idee principale et un argument">Question de culture</button>
       </div>
     `;
     bindAIPromptButtons();
@@ -446,6 +446,18 @@ function setupAIAssistantBubble() {
 
   close.addEventListener("click", () => {
     closeAssistantBubble();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && homeAssistantState.open) {
+      closeAssistantBubble();
+    }
+  });
+
+  bubble.addEventListener("click", (event) => {
+    if (event.target === bubble) {
+      closeAssistantBubble();
+    }
   });
 
   form.addEventListener("submit", (event) => {
