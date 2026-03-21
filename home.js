@@ -203,7 +203,7 @@ function renderAssistantBubble(payload = {}) {
     return;
   }
 
-  const { query = "", loading = false, aiAnswer = "", fallback = "", error = false } = payload;
+  const { query = "", loading = false, aiAnswer = "", fallback = "", error = false } = payload;;
 
   if (!query) {
     panel.innerHTML = `
