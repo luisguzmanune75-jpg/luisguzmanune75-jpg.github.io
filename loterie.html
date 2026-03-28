@@ -1,271 +1,640 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3338685171783718"
-     crossorigin="anonymous"></script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Recherche loterie mondiale sur SNG Portal par pays ou nom de loterie, avec annuaire, liens officiels et mode live."
-    />
-    <meta
-      name="keywords"
-      content="SNG Portal loterie mondiale, resultats loterie, powerball, euromillions, lotto max, mega millions"
-    />
-    <meta name="robots" content="index,follow" />
-    <meta name="theme-color" content="#4c3138" />
-    <meta property="og:title" content="Loterie Monde - SNG Portal" />
-    <meta
-      property="og:description"
-      content="Tape un pays ou le nom d'une loterie pour retrouver la bonne fiche et charger les tirages quand le mode live est configure."
-    />
-    <title>Loterie Monde - SNG Portal</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
-  <body data-page="loterie">
-    <div class="site-shell">
-      <header class="site-header">
-        <div class="container header-inner">
-          <a class="brand" href="./index.html" aria-label="Accueil SNG Portal">
-            <img class="brand-logo" src="./logo-sng.svg" alt="Logo SNG Portal" />
-            <span class="brand-copy">
-              <span class="brand-kicker">SNG Media</span>
-              <span class="brand-title">SNG Portal</span>
-            </span>
-          </a>
-          <button
-            class="menu-toggle"
-            type="button"
-            aria-expanded="false"
-            aria-controls="main-nav"
-          >
-            Menu
-          </button>
-          <nav id="main-nav" class="main-nav" aria-label="Navigation principale">
-            <a href="./index.html">Accueil</a>
-            <a href="./crypto.html">Crypto</a>
-            <a href="./actualites.html">Actualites</a>
-            <a href="./meteo.html">Meteo</a>
-            <a href="./marches.html">Marches</a>
-            <a class="is-current" href="./loterie.html">Loterie Monde</a>
-            <a href="./sports.html">Paris sportifs</a>
-            <a href="./jeux.html">Jeux</a>
-            <a href="./blog.html">Blog</a>
-            <a href="./satellites.html">Satellites</a>
-            <a href="./planetes.html">Planetes</a>
-            <a href="./scolaire.html">Scolaire</a>
-            <a href="./contact.html">Contact</a>
-          </nav>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SNG Portal — Loterie Monde</title>
+  <style>
+    :root {
+      --bg: #07111c;
+      --panel: rgba(8, 14, 24, 0.72);
+      --panel-soft: rgba(255,255,255,0.08);
+      --line: rgba(255,255,255,0.10);
+      --text: #ffffff;
+      --muted: rgba(255,255,255,0.78);
+      --accent: #ff5f8f;
+      --accent2: #ff7fa5;
+      --radius: 24px;
+      --shadow: 0 20px 40px rgba(0,0,0,0.28);
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Inter, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background-image:
+        linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.25)),
+        url('https://luisguzmanune75-jpg.github.io/fond-loterie.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(6, 11, 18, 0.72);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .topbar-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.16);
+      font-size: 14px;
+    }
+
+    .brand-text small {
+      display: block;
+      color: rgba(255,255,255,0.7);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .brand-text span {
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .menu a {
+      color: rgba(255,255,255,0.88);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .menu a.active { color: #fff; }
+
+    .page {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 26px 20px 50px;
+    }
+
+    .hero {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      padding: 30px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.85);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(34px, 6vw, 62px);
+      line-height: 0.96;
+      letter-spacing: -0.04em;
+      max-width: 760px;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    .search-box {
+      margin-top: 24px;
+      display: flex;
+      gap: 12px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      padding: 12px;
+    }
+
+    .search-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: #fff;
+      font-size: 18px;
+      padding: 12px 14px;
+    }
+
+    .search-box input::placeholder { color: rgba(255,255,255,0.58); }
+
+    .search-box button {
+      border: none;
+      border-radius: 18px;
+      padding: 16px 24px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      cursor: pointer;
+      box-shadow: 0 12px 24px rgba(255,95,143,0.28);
+    }
+
+    .quick-list {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .quick-chip {
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 12px 0 16px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-title span {
+      color: rgba(255,255,255,0.75);
+      font-weight: 600;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .result-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      padding: 22px;
+    }
+
+    .place {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .place h3 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .mini-tag {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.10);
+      font-size: 12px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.88);
+    }
+
+    .lottery-name {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      min-height: 44px;
+    }
+
+    .label {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 800;
+      color: rgba(255,255,255,0.68);
+      margin-bottom: 8px;
+    }
+
+    .balls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .ball {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      color: #09111c;
+      font-weight: 900;
+      box-shadow: inset 0 -6px 10px rgba(0,0,0,0.08), 0 10px 18px rgba(0,0,0,0.18);
+    }
+
+    .ball.special {
+      background: linear-gradient(135deg, #ffd45b, #ffac35);
+      color: #2e1700;
+    }
+
+    .meta {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .meta-row span:first-child {
+      color: rgba(255,255,255,0.72);
+      font-weight: 700;
+    }
+
+    .meta-row strong {
+      text-align: right;
+      font-size: 14px;
+    }
+
+    .direct-links {
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 14px;
+      color: rgba(255,255,255,0.92);
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .footer {
+      max-width: var(--max);
+      margin: 22px auto 0;
+      padding: 0 20px 28px;
+      color: rgba(255,255,255,0.68);
+      font-size: 14px;
+    }
+
+    @media (max-width: 1024px) {
+      .results-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      .menu { display: none; }
+      .results-grid { grid-template-columns: 1fr; }
+      .hero { padding: 22px; }
+      .search-box { flex-direction: column; }
+      .search-box button { width: 100%; }
+      h1 { font-size: 42px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="logo">SNG</div>
+        <div class="brand-text">
+          <small>SNG Media</small>
+          <span>Portal</span>
         </div>
-      </header>
+      </div>
 
-      <main>
-        <section class="hero hero-crypto-page">
-          <div class="container hero-grid hero-grid-crypto">
-            <div class="hero-copy reveal">
-              <p class="search-logo-kicker">Loterie mondiale</p>
-              <h1>Ecris un pays ou le nom d'une loterie. On retrouve la bonne fiche.</h1>
-              <p class="hero-text">
-                Cette page sert maintenant de moteur mondial: recherche par pays,
-                nom de loterie, annuaire officiel et chargement des tirages si le
-                mode live est active avec un token compatible.
-              </p>
-              <div class="hero-actions">
-                <a class="button button-solid" href="#lottery-search-zone">Rechercher</a>
-                <a class="button button-outline" href="#lottery-results-zone">Voir les tirages</a>
-              </div>
-            </div>
+      <nav class="menu">
+        <a href="#">Accueil</a>
+        <a href="#">Crypto</a>
+        <a href="#">Actualités</a>
+        <a href="#">Météo</a>
+        <a href="#" class="active">Loterie</a>
+        <a href="#">Jeux</a>
+        <a href="#">Blog</a>
+        <a href="#">Contact</a>
+      </nav>
+    </div>
+  </header>
 
-            <aside class="hero-panel reveal reveal-delay">
-              <div class="panel-head">
-                <div>
-                  <p class="section-tag">Recherche mondiale</p>
-                  <h2>Vue rapide</h2>
-                </div>
-              </div>
-              <span id="lottery-status" class="status-pill status-neutral">Annuaire mondial charge</span>
-              <div id="lottery-pulse" class="pulse-grid"></div>
-            </aside>
-          </div>
-        </section>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">Loterie mondiale</div>
+      <h1>Choisis un endroit et vois le dernier résultat tout de suite.</h1>
+      <p>
+        J’ai simplifié la page : une recherche, quelques choix rapides, puis les derniers résultats
+        visibles directement pour chaque endroit.
+      </p>
 
-        <section id="lottery-search-zone" class="page-section">
-          <div class="container live-two-col">
-            <article class="module module-wide reveal">
-              <div class="module-head">
-                <div>
-                  <p class="section-tag">Trouver une loterie</p>
-                  <h2>Pays, ville, marque ou jeu</h2>
-                </div>
-              </div>
+      <div class="search-box">
+        <input type="text" placeholder="Ex: République dominicaine, New York Loterie, Italie" />
+        <button>Chercher</button>
+      </div>
 
-              <form id="lottery-search-form" class="search-bar search-bar-panel" role="search">
-                <label class="sr-only" for="lottery-query">Recherche loterie</label>
-                <span class="search-icon" aria-hidden="true">L</span>
-                <input
-                  id="lottery-query"
-                  type="search"
-                  placeholder="Exemple: Powerball, EuroMillions, Italie, Republique dominicaine..."
-                />
-                <button type="submit">Chercher</button>
-              </form>
+      <div class="quick-list">
+        <button class="quick-chip">République dominicaine</button>
+        <button class="quick-chip">New York Loterie</button>
+        <button class="quick-chip">EuroMillions</button>
+        <button class="quick-chip">France</button>
+        <button class="quick-chip">Italie</button>
+        <button class="quick-chip">Brésil</button>
+      </div>
+    </section>
 
-              <div id="lottery-quick-searches" class="pill-row pill-row-spaced"></div>
-              <div id="lottery-search-results" class="result-list"></div>
-            </article>
-
-            <aside class="module reveal">
-              <div class="module-head">
-                <div>
-                  <p class="section-tag">Mode live</p>
-                  <h2>Token local</h2>
-                </div>
-              </div>
-              <div class="briefing-card">
-                <h3>Resultats reels dans la page</h3>
-                <p>
-                  La recherche fonctionne sans token pour retrouver la bonne
-                  loterie et ouvrir ses liens officiels. Pour charger les
-                  tirages directement ici, ajoute un token/API key compatible
-                  Lottery Results Feed dans ce navigateur.
-                </p>
-              </div>
-              <form id="lottery-token-form" class="newsletter-form">
-                <input
-                  id="lottery-token-input"
-                  type="password"
-                  placeholder="Token ou API key Lottery Results Feed"
-                  autocomplete="off"
-                />
-                <div class="button-row button-row-compact">
-                  <button class="button button-solid" type="submit">Enregistrer</button>
-                  <button id="clear-lottery-token" class="ghost-button" type="button">
-                    Effacer
-                  </button>
-                </div>
-              </form>
-              <div id="lottery-token-status" class="inline-actions"></div>
-            </aside>
-          </div>
-        </section>
-
-        <section id="lottery-results-zone" class="page-section">
-          <div class="container live-two-col">
-            <article class="module module-wide reveal">
-              <div class="module-head split-head">
-                <div>
-                  <p class="section-tag">Derniers tirages</p>
-                  <h2>Resultats et historique</h2>
-                </div>
-                <div class="toolbar-inline">
-                  <label class="sr-only" for="lottery-year-select">Annee</label>
-                  <select id="lottery-year-select" class="control-select" disabled>
-                    <option value="">Annee</option>
-                  </select>
-                  <button id="refresh-lottery-results" class="ghost-button" type="button">
-                    Rafraichir
-                  </button>
-                </div>
-              </div>
-              <span id="lottery-results-status" class="status-pill status-neutral">
-                Choisis une loterie
-              </span>
-              <div id="lottery-results-list" class="draw-list"></div>
-            </article>
-
-            <aside class="module reveal">
-              <div class="module-head">
-                <div>
-                  <p class="section-tag">Fiche</p>
-                  <h2>Resume de la loterie</h2>
-                </div>
-              </div>
-              <div id="lottery-detail"></div>
-              <div id="official-links" class="link-stack"></div>
-              <div id="lottery-odds-panel" class="briefing-card"></div>
-            </aside>
-          </div>
-        </section>
-
-        <section class="page-section">
-          <div class="container live-two-col">
-            <article class="module reveal">
-              <div class="module-head">
-                <div>
-                  <p class="section-tag">Combinaison demo</p>
-                  <h2>Generer une grille</h2>
-                </div>
-              </div>
-              <div id="generated-balls" class="generated-panel"></div>
-              <div class="button-row">
-                <button id="generate-lottery" class="button button-solid" type="button">
-                  Generer
-                </button>
-                <button id="copy-lottery" class="ghost-button" type="button">
-                  Copier
-                </button>
-              </div>
-              <div id="generator-status" class="inline-actions"></div>
-            </article>
-
-            <article class="module reveal">
-              <div class="module-head">
-                <div>
-                  <p class="section-tag">Tendances</p>
-                  <h2>Numeros chauds</h2>
-                </div>
-              </div>
-              <div id="lottery-hot-numbers" class="briefing-card"></div>
-            </article>
-          </div>
-        </section>
-
-        <section class="page-section">
-          <div class="container live-two-col">
-            <article class="module reveal">
-              <div class="module-head">
-                <div>
-                  <p class="section-tag">Lecture</p>
-                  <h2>Format et conseils</h2>
-                </div>
-              </div>
-              <div id="lottery-format-note" class="briefing-card"></div>
-            </article>
-
-            <article class="module reveal">
-              <div class="module-head">
-                <div>
-                  <p class="section-tag">Explorer plus</p>
-                  <h2>Autres univers</h2>
-                </div>
-              </div>
-              <div class="mini-link-list">
-                <a href="./sports.html">Voir les paris sportifs</a>
-                <a href="./jeux.html">Voir les jeux les plus joues</a>
-                <a href="./blog.html">Voir le blog SNG</a>
-                <a href="./satellites.html">Voir le mode espace</a>
-              </div>
-            </article>
-          </div>
-        </section>
-      </main>
-
-      <footer class="site-footer">
-        <div class="container footer-inner">
-          <p>(c) 2026 SNG Portal. Tous droits reserves.</p>
-          <p>Recherche loterie mondiale par pays ou nom de jeu.</p>
-        </div>
-      </footer>
+    <div class="section-title">
+      <h2>Derniers résultats par endroit</h2>
+      <span>simple et visible</span>
     </div>
 
-    <script src="./site.js"></script>
-    <script src="./lottery.js"></script>
-  </body>
+    <section class="results-grid">
+      <article class="result-card">
+        <div class="place">
+          <h3>République dominicaine</h3>
+          <span class="mini-tag">RD</span>
+        </div>
+        <div class="lottery-name">Lotería Nacional Dominicana</div>
+        <span class="label">Derniers numéros</span>
+        <div class="balls">
+          <div class="ball">12</div>
+          <div class="ball">34</div>
+          <div class="ball">56</div>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span>Date</span><strong>28 mars 2026</strong></div>
+          <div class="meta-row"><span>Jackpot</span><strong>Non communiqué</strong></div>
+        </div>
+        <div class="direct-links">
+          Site officiel visible: www.loterianacional.gob.do
+        </div>
+      </article>
+
+      <article class="result-card">
+        <div class="place">
+          <h3>New York</h3>
+          <span class="mini-tag">USA</span>
+        </div>
+        <div class="lottery-name">New York Lottery (Lotto / Numbers)</div>
+        <span class="label">Derniers numéros</span>
+        <div class="balls">
+          <div class="ball">08</div>
+          <div class="ball">17</div>
+          <div class="ball">29</div>
+          <div class="ball">41</div>
+          <div class="ball">61</div>
+          <div class="ball special">14</div>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span>Date</span><strong>28 mars 2026</strong></div>
+          <div class="meta-row"><span>Jackpot</span><strong>$12M</strong></div>
+        </div>
+        <div class="direct-links">
+          Site officiel visible: www.nylottery.ny.gov
+        </div>
+      </article>
+
+      <article class="result-card">
+        <div class="place">
+          <h3>EuroMillions</h3>
+          <span class="mini-tag">EU</span>
+        </div>
+        <div class="lottery-name">Dernier tirage EuroMillions</div>
+        <span class="label">Derniers numéros</span>
+        <div class="balls">
+          <div class="ball">05</div>
+          <div class="ball">19</div>
+          <div class="ball">27</div>
+          <div class="ball">38</div>
+          <div class="ball">44</div>
+          <div class="ball special">03</div>
+          <div class="ball special">11</div>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span>Date</span><strong>28 mars 2026</strong></div>
+          <div class="meta-row"><span>Jackpot</span><strong>€67M</strong></div>
+        </div>
+        <div class="direct-links">
+          Site officiel visible: www.euro-millions.com
+        </div>
+      </article>
+
+      <article class="result-card">
+        <div class="place">
+          <h3>France</h3>
+          <span class="mini-tag">FR</span>
+        </div>
+        <div class="lottery-name">Loto France</div>
+        <span class="label">Derniers numéros</span>
+        <div class="balls">
+          <div class="ball">03</div>
+          <div class="ball">14</div>
+          <div class="ball">22</div>
+          <div class="ball">37</div>
+          <div class="ball">45</div>
+          <div class="ball special">07</div>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span>Date</span><strong>28 mars 2026</strong></div>
+          <div class="meta-row"><span>Jackpot</span><strong>€8M</strong></div>
+        </div>
+        <div class="direct-links">
+          Site officiel visible: www.fdj.fr
+        </div>
+      </article>
+
+      <article class="result-card">
+        <div class="place">
+          <h3>Italie</h3>
+          <span class="mini-tag">IT</span>
+        </div>
+        <div class="lottery-name">SuperEnalotto</div>
+        <span class="label">Derniers numéros</span>
+        <div class="balls">
+          <div class="ball">09</div>
+          <div class="ball">18</div>
+          <div class="ball">26</div>
+          <div class="ball">48</div>
+          <div class="ball">72</div>
+          <div class="ball">81</div>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span>Date</span><strong>28 mars 2026</strong></div>
+          <div class="meta-row"><span>Jackpot</span><strong>€22M</strong></div>
+        </div>
+        <div class="direct-links">
+          Site officiel visible: www.superenalotto.it
+        </div>
+      </article>
+
+      <article class="result-card">
+        <div class="place">
+          <h3>Brésil</h3>
+          <span class="mini-tag">BR</span>
+        </div>
+        <div class="lottery-name">Mega-Sena</div>
+        <span class="label">Derniers numéros</span>
+        <div class="balls">
+          <div class="ball">04</div>
+          <div class="ball">12</div>
+          <div class="ball">21</div>
+          <div class="ball">33</div>
+          <div class="ball">46</div>
+          <div class="ball">58</div>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span>Date</span><strong>28 mars 2026</strong></div>
+          <div class="meta-row"><span>Jackpot</span><strong>R$35M</strong></div>
+        </div>
+        <div class="direct-links">
+          Site officiel visible: www.loterias.caixa.gov.br
+        </div>
+      </article>
+
+      <article class="result-card">
+        <div class="place">
+          <h3>Canada</h3>
+          <span class="mini-tag">CA</span>
+        </div>
+        <div class="lottery-name">Lotto Max</div>
+        <span class="label">Derniers numéros</span>
+        <div class="balls">
+          <div class="ball">07</div>
+          <div class="ball">13</div>
+          <div class="ball">20</div>
+          <div class="ball">31</div>
+          <div class="ball">39</div>
+          <div class="ball">44</div>
+          <div class="ball">49</div>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span>Date</span><strong>28 mars 2026</strong></div>
+          <div class="meta-row"><span>Jackpot</span><strong>CA$25M</strong></div>
+        </div>
+        <div class="direct-links">
+          Site officiel visible: www.olg.ca
+        </div>
+      </article>
+
+      <article class="result-card">
+        <div class="place">
+          <h3>Royaume-Uni</h3>
+          <span class="mini-tag">UK</span>
+        </div>
+        <div class="lottery-name">UK Lotto</div>
+        <span class="label">Derniers numéros</span>
+        <div class="balls">
+          <div class="ball">02</div>
+          <div class="ball">16</div>
+          <div class="ball">28</div>
+          <div class="ball">40</div>
+          <div class="ball">53</div>
+          <div class="ball">58</div>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span>Date</span><strong>28 mars 2026</strong></div>
+          <div class="meta-row"><span>Jackpot</span><strong>£9M</strong></div>
+        </div>
+        <div class="direct-links">
+          Site officiel visible: www.national-lottery.co.uk
+        </div>
+      </article>
+
+      <article class="result-card">
+        <div class="place">
+          <h3>Allemagne</h3>
+          <span class="mini-tag">DE</span>
+        </div>
+        <div class="lottery-name">Lotto 6aus49</div>
+        <span class="label">Derniers numéros</span>
+        <div class="balls">
+          <div class="ball">04</div>
+          <div class="ball">15</div>
+          <div class="ball">23</div>
+          <div class="ball">37</div>
+          <div class="ball">42</div>
+          <div class="ball">49</div>
+          <div class="ball special">08</div>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span>Date</span><strong>28 mars 2026</strong></div>
+          <div class="meta-row"><span>Jackpot</span><strong>€12M</strong></div>
+        </div>
+        <div class="direct-links">
+          Site officiel visible: www.lotto.de
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <div class="footer">
+    SNG Portal — Version simplifiée avec fond visible et derniers résultats affichés par endroit.
+  </div>
+</body>
 </html>
