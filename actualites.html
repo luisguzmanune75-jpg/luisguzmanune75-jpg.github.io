@@ -4,22 +4,8 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3338685171783718"
      crossorigin="anonymous"></script>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Actualites du jour en temps reel sur SNG Portal avec recherche monde, themes et rafraichissement du direct."
-    />
-    <meta
-      name="keywords"
-      content="SNG Portal actualites du jour, direct monde, news live, politique, economie, tech, climat"
-    />
-    <meta name="robots" content="index,follow" />
-    <meta name="theme-color" content="#4c3138" />
-    <meta property="og:title" content="Actualites du jour - SNG Portal" />
-    <meta
-      property="og:description"
-      content="Recherche un pays, un sujet ou suis le flux mondial d'aujourd'hui avec actualisation reguliere."
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Actualites auto (sans API), style Google News, sources visibles, resume et direct BFM TV." />
     <title>Actualites du jour - SNG Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -67,72 +53,43 @@
       </header>
 
       <main>
-        <section class="hero hero-crypto-page">
-          <div class="container hero-grid hero-grid-crypto">
-            <div class="hero-copy reveal">
-              <p class="search-logo-kicker">Actualites du jour</p>
-              <h1>Vois ce qui se passe dans le monde aujourd'hui, presque en direct.</h1>
-              <p class="hero-text">
-                Recherche un pays, un sujet, un conflit, une entreprise ou un
-                artiste, puis recharge le flux mondial sans surcharger l'accueil.
-              </p>
-              <div class="hero-actions">
-                <a class="button button-solid" href="#news-feed-zone">Voir le flux</a>
-                <a class="button button-outline" href="#news-feed-zone">Chercher un sujet</a>
-                <a class="button button-outline" href="./index.html">Retour accueil</a>
-              </div>
-            </div>
-
-            <aside class="hero-panel reveal reveal-delay">
-              <div class="panel-head">
-                <div>
-                  <p class="section-tag">Flux</p>
-                  <h2>Etat du direct</h2>
-                </div>
-              </div>
-              <span id="news-status" class="status-pill status-neutral">Chargement...</span>
-              <div id="news-pulse" class="pulse-grid"></div>
-            </aside>
-          </div>
-        </section>
-
         <section id="news-feed-zone" class="page-section">
           <div class="container live-two-col">
             <article class="module module-wide reveal">
               <div class="module-head split-head">
                 <div>
-                  <p class="section-tag">Flux mondial</p>
-                  <h2>Actualites a suivre maintenant</h2>
+                  <p class="section-tag">Actualites auto</p>
+                  <h1>Google News en direct</h1>
                 </div>
                 <div class="toolbar-inline">
-                  <button id="refresh-news" class="ghost-button" type="button">Rafraichir</button>
+                  <span id="news-status" class="status-pill status-neutral">Chargement...</span>
                 </div>
               </div>
-              <form id="news-search-form" class="search-bar search-bar-panel" role="search">
-                <label class="sr-only" for="news-query">Recherche actualites monde</label>
-                <span class="search-icon" aria-hidden="true">N</span>
-                <input
-                  id="news-query"
-                  type="search"
-                  placeholder="Exemple: Haiti, guerre, IA, Republique dominicaine, Trump, Tesla..."
-                />
-                <button type="submit">Chercher</button>
-              </form>
 
-              <div id="news-topics" class="pill-row pill-row-spaced"></div>
-              <div id="news-timespans" class="pill-row pill-row-spaced"></div>
-              <div id="news-feed" class="article-list news-list"></div>
+              <div id="news-pulse" class="pulse-grid"></div>
+              <div id="news-lead" class="news-lead-card"></div>
+              <div id="newsResults" class="article-list news-list"></div>
             </article>
 
-            <aside class="module reveal">
+            <aside class="module reveal side-stack">
               <div class="module-head">
                 <div>
-                  <p class="section-tag">Lecture</p>
-                  <h2>Resume rapide</h2>
+                  <p class="section-tag">Resume</p>
+                  <h2>Lecture rapide</h2>
                 </div>
               </div>
-              <div id="news-briefing" class="briefing-card"></div>
-              <div id="news-sources" class="briefing-card briefing-card-accent"></div>
+
+              <div class="briefing-card">
+                <h3 id="resumeTitre">Chargement...</h3>
+                <p id="resumeTexte">Le resume des actualites apparait ici.</p>
+              </div>
+
+              <div class="briefing-card briefing-card-accent">
+                <h3>Sources visibles</h3>
+                <div id="sourcesList" class="source-pill-list">
+                  <span class="source-pill">Chargement...</span>
+                </div>
+              </div>
             </aside>
           </div>
         </section>
@@ -141,9 +98,17 @@
       <footer class="site-footer">
         <div class="container footer-inner">
           <p>(c) 2026 SNG Portal. Tous droits reserves.</p>
-          <p>Actualites du jour et recherche monde en direct.</p>
+          <p>news auto, resume automatique et BFM TV en direct.</p>
         </div>
       </footer>
+    </div>
+
+    <div class="bfm-live">
+      <iframe
+        src="https://www.youtube.com/embed/6c7aJxN6F4k?autoplay=1&mute=1"
+        allow="autoplay"
+        allowfullscreen>
+      </iframe>
     </div>
 
     <script src="./site.js"></script>
