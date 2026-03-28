@@ -1458,11 +1458,23 @@ h4,
 }
 
 body[data-page="loterie"] {
+  --bg: #0c3356;
+  --panel: rgba(13, 47, 77, 0.82);
+  --panel-strong: rgba(9, 34, 58, 0.92);
+  --line: rgba(221, 245, 255, 0.2);
+  --text: #eff8ff;
+  --muted: #b8d5ea;
+  --muted-strong: #d9edfb;
+  --accent: #7ed0ff;
+  --accent-soft: #b8e7ff;
+  background-color: #0a2f50;
   background-image:
-    linear-gradient(180deg, rgba(5, 16, 33, 0.82), rgba(4, 13, 27, 0.92)),
-    url("https://images.unsplash.com/photo-1532968961962-8a0cb3a2d4f5?auto=format&fit=crop&w=1600&q=80");
-  background-size: cover;
-  background-position: center;
+    radial-gradient(circle at 18% 22%, rgba(57, 170, 255, 0.3) 0 56px, transparent 57px),
+    radial-gradient(circle at 72% 28%, rgba(107, 197, 255, 0.28) 0 70px, transparent 71px),
+    radial-gradient(circle at 38% 64%, rgba(66, 184, 255, 0.26) 0 62px, transparent 63px),
+    radial-gradient(circle at 84% 72%, rgba(90, 195, 255, 0.24) 0 78px, transparent 79px),
+    radial-gradient(circle at 8% 84%, rgba(53, 164, 247, 0.24) 0 64px, transparent 65px),
+    linear-gradient(180deg, #0d3c66 0%, #0a2f50 55%, #082541 100%);
   background-attachment: fixed;
 }
 
