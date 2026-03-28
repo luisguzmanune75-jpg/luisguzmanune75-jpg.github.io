@@ -109,19 +109,19 @@
                 </div>
               </div>
               <form id="news-search-form" class="search-bar search-bar-panel" role="search">
-                <label class="sr-only" for="news-query">Recherche actualites monde</label>
+                <label class="sr-only" for="searchInput">Recherche actualites monde</label>
                 <span class="search-icon" aria-hidden="true">N</span>
                 <input
-                  id="news-query"
+                  id="searchInput"
                   type="search"
                   placeholder="Exemple: Haiti, guerre, IA, Republique dominicaine, Trump, Tesla..."
                 />
-                <button type="submit">Chercher</button>
+                <button id="searchBtn" type="submit">Chercher</button>
               </form>
 
               <div id="news-topics" class="pill-row pill-row-spaced"></div>
               <div id="news-timespans" class="pill-row pill-row-spaced"></div>
-              <div id="news-feed" class="article-list news-list"></div>
+              <div id="newsResults" class="article-list news-list"></div>
             </article>
 
             <aside class="module reveal">
@@ -131,7 +131,10 @@
                   <h2>Resume rapide</h2>
                 </div>
               </div>
-              <div id="news-briefing" class="briefing-card"></div>
+              <div id="news-briefing" class="briefing-card">
+                <h3 id="resumeTitre">Chargement...</h3>
+                <p id="resumeTexte">Les actualités sont en cours de chargement.</p>
+              </div>
               <div id="news-sources" class="briefing-card briefing-card-accent"></div>
             </aside>
           </div>
