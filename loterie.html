@@ -1,640 +1,562 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <script
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3338685171783718"
-      crossorigin="anonymous"
-    ></script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Recherche loterie mondiale sur SNG Portal par pays ou nom de loterie, avec annuaire, liens officiels et tirages live."
-    />
-    <title>SNG Portal — Loterie Monde</title>
-    <style>
-      :root {
-        --bg: #0f1720;
-        --card: rgba(24, 30, 40, 0.78);
-        --card-2: rgba(255, 255, 255, 0.08);
-        --text: #fff;
-        --muted: rgba(255, 255, 255, 0.74);
-        --accent: #ff5f8f;
-        --accent-2: #ff7aa2;
-        --ok: #2ed8a3;
-        --warn: #ffc861;
-        --danger: #ff7171;
-        --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
-        --radius: 24px;
-        --max: 1150px;
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        min-height: 100%;
-        font-family: Inter, Arial, Helvetica, sans-serif;
-        color: var(--text);
-        background: var(--bg);
-      }
-
-      body {
-        background-image:
-          linear-gradient(rgba(7, 11, 18, 0.5), rgba(7, 11, 18, 0.78)),
-          url("./fond-loterie.jpg");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-      }
-
-      .topbar {
-        position: sticky;
-        top: 0;
-        z-index: 20;
-        backdrop-filter: blur(14px);
-        background: rgba(10, 14, 20, 0.62);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.09);
-      }
-
-      .topbar-inner,
-      .page,
-      .footer {
-        max-width: var(--max);
-        margin: 0 auto;
-        padding-left: 20px;
-        padding-right: 20px;
-      }
-
-      .topbar-inner {
-        padding-top: 14px;
-        padding-bottom: 14px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 16px;
-      }
-
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        color: #fff;
-        text-decoration: none;
-      }
-
-      .logo {
-        width: 46px;
-        height: 46px;
-        border-radius: 50%;
-        display: grid;
-        place-items: center;
-        font-size: 13px;
-        font-weight: 800;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.14);
-      }
-
-      .brand-text small {
-        display: block;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.16em;
-        color: var(--muted);
-      }
-
-      .brand-text span {
-        font-size: 28px;
-        font-weight: 800;
-      }
-
-      .menu {
-        display: flex;
-        gap: 16px;
-        flex-wrap: wrap;
-      }
-
-      .menu a {
-        color: rgba(255, 255, 255, 0.86);
-        text-decoration: none;
-        font-weight: 600;
-      }
-
-      .menu a.active,
-      .menu a:hover {
-        color: #fff;
-      }
-
-      .page {
-        padding-top: 30px;
-        padding-bottom: 48px;
-      }
-
-      .panel {
-        background: var(--card);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        backdrop-filter: blur(14px);
-      }
-
-      .hero {
-        display: grid;
-        grid-template-columns: 1.16fr 0.84fr;
-        gap: 24px;
-      }
-
-      .hero-main,
-      .hero-side,
-      .result-card,
-      .draw-card {
-        padding: 28px;
-      }
-
-      .eyebrow {
-        display: inline-flex;
-        padding: 8px 12px;
-        border-radius: 999px;
-        font-size: 12px;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        font-weight: 700;
-        color: var(--muted);
-        background: rgba(255, 255, 255, 0.08);
-      }
-
-      h1 {
-        margin: 14px 0 12px;
-        font-size: clamp(36px, 5vw, 62px);
-        line-height: 1;
-        letter-spacing: -0.03em;
-      }
-
-      .hero-main > p {
-        margin: 0;
-        color: var(--muted);
-        font-size: 18px;
-        line-height: 1.55;
-      }
-
-      .search-card {
-        margin-top: 22px;
-        padding: 12px;
-        border-radius: 24px;
-        display: flex;
-        gap: 10px;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.11);
-      }
-
-      .search-card input {
-        flex: 1;
-        padding: 11px 14px;
-        color: #fff;
-        background: transparent;
-        border: none;
-        outline: none;
-        font-size: 17px;
-      }
-
-      .search-btn,
-      .primary-btn,
-      .secondary-btn,
-      .chip {
-        border: none;
-        border-radius: 16px;
-        font-weight: 800;
-        cursor: pointer;
-      }
-
-      .search-btn,
-      .primary-btn {
-        color: #fff;
-        background: linear-gradient(135deg, var(--accent), var(--accent-2));
-        box-shadow: 0 12px 24px rgba(255, 95, 143, 0.28);
-      }
-
-      .search-btn {
-        padding: 14px 20px;
-        font-size: 15px;
-      }
-
-      .quick-list {
-        margin-top: 16px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 9px;
-      }
-
-      .chip {
-        color: #fff;
-        padding: 10px 14px;
-        background: rgba(255, 255, 255, 0.07);
-        border: 1px solid rgba(255, 255, 255, 0.14);
-      }
-
-      .hero-side {
-        display: grid;
-        gap: 14px;
-        align-content: start;
-      }
-
-      .mini-card {
-        border-radius: 16px;
-        padding: 16px;
-        background: var(--card-2);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-      }
-
-      .mini-card h3 {
-        margin: 0 0 8px;
-        color: var(--muted);
-        font-size: 13px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .mini-card .big {
-        margin: 0 0 6px;
-        font-size: 32px;
-        font-weight: 800;
-      }
-
-      .mini-card p {
-        margin: 0;
-        color: var(--muted);
-        line-height: 1.4;
-      }
-
-      .status-pill {
-        display: inline-flex;
-        margin-top: 6px;
-        padding: 8px 12px;
-        border-radius: 999px;
-        font-size: 12px;
-        font-weight: 700;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        background: rgba(255, 255, 255, 0.08);
-      }
-
-      .status-live {
-        color: #07110d;
-        background: color-mix(in srgb, var(--ok) 80%, white 20%);
-      }
-
-      .status-error {
-        color: #2f0808;
-        background: color-mix(in srgb, var(--danger) 82%, white 18%);
-      }
-
-      .content-grid {
-        display: grid;
-        grid-template-columns: 1.1fr 0.9fr;
-        gap: 24px;
-        margin-top: 24px;
-      }
-
-      .section-title {
-        margin-bottom: 16px;
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
-        align-items: center;
-      }
-
-      .section-title h2 {
-        margin: 0;
-        font-size: 24px;
-      }
-
-      .section-title span {
-        color: var(--muted);
-      }
-
-      .card-soft {
-        border-radius: 18px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        background: rgba(255, 255, 255, 0.06);
-      }
-
-      #lottery-search-results {
-        margin-top: 14px;
-        display: grid;
-        gap: 12px;
-      }
-
-      .lottery-result {
-        display: grid;
-        gap: 16px;
-      }
-
-      .result-main {
-        padding: 16px;
-        display: grid;
-        grid-template-columns: auto 1fr;
-        gap: 14px;
-      }
-
-      .result-badge {
-        width: 62px;
-        height: 62px;
-        border-radius: 16px;
-        display: grid;
-        place-items: center;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.06));
-        font-size: 28px;
-      }
-
-      .result-actions,
-      .button-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      .primary-btn,
-      .secondary-btn {
-        text-decoration: none;
-        padding: 12px 16px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .secondary-btn {
-        color: #fff;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-      }
-
-      #lottery-detail,
-      #official-links,
-      #lottery-results-list,
-      #lottery-hot-numbers,
-      #lottery-odds-panel,
-      #lottery-format-note,
-      #lottery-token-status,
-      #generator-status {
-        margin-top: 12px;
-      }
-
-      #generated-balls {
-        margin-bottom: 12px;
-      }
-
-      .draw-top {
-        display: grid;
-        gap: 14px;
-      }
-
-      .draw-box {
-        padding: 16px;
-      }
-
-      .label {
-        display: block;
-        font-size: 12px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--muted);
-        margin-bottom: 6px;
-      }
-
-      .value {
-        font-size: 24px;
-        font-weight: 800;
-      }
-
-      .balls {
-        margin-top: 8px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      .ball {
-        width: 50px;
-        height: 50px;
-        border-radius: 999px;
-        display: grid;
-        place-items: center;
-        color: #0d1722;
-        background: #fff;
-        font-weight: 900;
-      }
-
-      .ball.special {
-        background: linear-gradient(135deg, #ffcc4d, #ff9e2c);
-      }
-
-      .toolbar {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 12px;
-      }
-
-      #lottery-year-select,
-      #lottery-token-input {
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        background: rgba(0, 0, 0, 0.2);
-        color: #fff;
-        padding: 10px 12px;
-      }
-
-      .footer {
-        padding-bottom: 30px;
-        color: rgba(255, 255, 255, 0.65);
-      }
-
-      @media (max-width: 980px) {
-        .hero,
-        .content-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .menu {
-          display: none;
-        }
-      }
-
-      @media (max-width: 640px) {
-        .hero-main,
-        .hero-side,
-        .result-card,
-        .draw-card {
-          padding: 20px;
-        }
-
-        .search-card {
-          flex-direction: column;
-        }
-
-        .search-btn {
-          width: 100%;
-        }
-
-        .result-main {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
-  </head>
-  <body data-page="loterie">
-    <header class="topbar">
-      <div class="topbar-inner">
-        <a class="brand" href="./index.html" aria-label="Accueil SNG Portal">
-          <div class="logo">SNG</div>
-          <div class="brand-text">
-            <small>SNG Media</small>
-            <span>Portal</span>
-          </div>
-        </a>
-
-        <nav class="menu">
-          <a href="./index.html">Accueil</a>
-          <a href="./crypto.html">Crypto</a>
-          <a href="./actualites.html">Actualités</a>
-          <a href="./meteo.html">Météo</a>
-          <a href="./loterie.html" class="active">Loterie</a>
-          <a href="./jeux.html">Jeux</a>
-          <a href="./blog.html">Blog</a>
-          <a href="./contact.html">Contact</a>
-        </nav>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SNG Portal — Loterie Monde</title>
+  <style>
+    :root {
+      --bg: #07111c;
+      --panel: rgba(8, 14, 24, 0.72);
+      --panel-soft: rgba(255,255,255,0.08);
+      --line: rgba(255,255,255,0.10);
+      --text: #ffffff;
+      --muted: rgba(255,255,255,0.78);
+      --accent: #ff5f8f;
+      --accent2: #ff7fa5;
+      --radius: 24px;
+      --shadow: 0 20px 40px rgba(0,0,0,0.28);
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Inter, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    body {
+      min-height: 100vh;
+      position: relative;
+      background:
+        linear-gradient(rgba(4, 10, 18, 0.45), rgba(4, 10, 18, 0.62)),
+        url('https://luisguzmanune75-jpg.github.io/fond-loterie.jpg') center/cover fixed no-repeat;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(6, 11, 18, 0.72);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .topbar-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.16);
+      font-size: 14px;
+    }
+
+    .brand-text small {
+      display: block;
+      color: rgba(255,255,255,0.7);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .brand-text span {
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .menu a {
+      color: rgba(255,255,255,0.88);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .menu a.active { color: #fff; }
+
+    .page {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 26px 20px 50px;
+    }
+
+    .hero {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      padding: 30px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.85);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(34px, 6vw, 62px);
+      line-height: 0.96;
+      letter-spacing: -0.04em;
+      max-width: 760px;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    .search-box {
+      margin-top: 24px;
+      display: flex;
+      gap: 12px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      padding: 12px;
+    }
+
+    .search-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: #fff;
+      font-size: 18px;
+      padding: 12px 14px;
+    }
+
+    .search-box input::placeholder { color: rgba(255,255,255,0.58); }
+
+    .search-box button {
+      border: none;
+      border-radius: 18px;
+      padding: 16px 24px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      cursor: pointer;
+      box-shadow: 0 12px 24px rgba(255,95,143,0.28);
+    }
+
+    .quick-list {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .quick-chip {
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 12px 0 16px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-title span {
+      color: rgba(255,255,255,0.75);
+      font-weight: 600;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .result-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      padding: 22px;
+    }
+
+    .place {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .place h3 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .mini-tag {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.10);
+      font-size: 12px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.88);
+    }
+
+    .lottery-name {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      min-height: 44px;
+    }
+
+    .label {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 800;
+      color: rgba(255,255,255,0.68);
+      margin-bottom: 8px;
+    }
+
+    .balls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .ball {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      color: #09111c;
+      font-weight: 900;
+      box-shadow: inset 0 -6px 10px rgba(0,0,0,0.08), 0 10px 18px rgba(0,0,0,0.18);
+    }
+
+    .ball.special {
+      background: linear-gradient(135deg, #ffd45b, #ffac35);
+      color: #2e1700;
+    }
+
+    .meta {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .meta-row span:first-child {
+      color: rgba(255,255,255,0.72);
+      font-weight: 700;
+    }
+
+    .meta-row strong {
+      text-align: right;
+      font-size: 14px;
+    }
+
+    .direct-links {
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 14px;
+      color: rgba(255,255,255,0.92);
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .footer {
+      max-width: var(--max);
+      margin: 22px auto 0;
+      padding: 0 20px 28px;
+      color: rgba(255,255,255,0.68);
+      font-size: 14px;
+    }
+
+    @media (max-width: 1024px) {
+      .results-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      .menu { display: none; }
+      .results-grid { grid-template-columns: 1fr; }
+      .hero { padding: 22px; }
+      .search-box { flex-direction: column; }
+      .search-box button { width: 100%; }
+      h1 { font-size: 42px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="logo">SNG</div>
+        <div class="brand-text">
+          <small>SNG Media</small>
+          <span>Portal</span>
+        </div>
       </div>
-    </header>
 
-    <main class="page">
-      <section class="hero">
-        <article class="panel hero-main">
-          <div class="eyebrow">Loterie mondiale</div>
-          <h1>Trouve une loterie en quelques secondes.</h1>
-          <p>
-            Cherche un pays, une ville ou le nom d’un jeu. L’interface est simple,
-            lisible et garde le résultat principal sous tes yeux.
-          </p>
+      <nav class="menu">
+        <a href="#">Accueil</a>
+        <a href="#">Crypto</a>
+        <a href="#">Actualités</a>
+        <a href="#">Météo</a>
+        <a href="#" class="active">Loterie</a>
+        <a href="#">Jeux</a>
+        <a href="#">Blog</a>
+        <a href="#">Contact</a>
+      </nav>
+    </div>
+  </header>
 
-          <form id="lottery-search-form" class="search-card" role="search">
-            <input
-              id="lottery-query"
-              type="search"
-              placeholder="Ex: République dominicaine, Powerball, Italie"
-            />
-            <button class="search-btn" type="submit">Chercher</button>
-          </form>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">Loterie mondiale</div>
+      <h1>Choisis un endroit et vois le dernier résultat tout de suite.</h1>
+      <p>
+        J’ai simplifié la page : une recherche, quelques choix rapides, puis les derniers résultats
+        visibles directement pour chaque endroit.
+      </p>
 
-          <div id="lottery-quick-searches" class="quick-list"></div>
-          <span id="lottery-status" class="status-pill">Annuaire mondial chargé</span>
-          <div id="lottery-pulse" class="quick-list"></div>
-          <div id="lottery-search-results"></div>
-        </article>
+      <div class="search-box">
+        <input type="text" placeholder="Ex: République dominicaine, Powerball, Italie" />
+        <button>Chercher</button>
+      </div>
 
-        <aside class="panel hero-side">
-          <div class="mini-card">
-            <h3>Vue rapide</h3>
-            <p class="big">Simple</p>
-            <p>Une recherche, un résultat clair, et un accès direct vers la source officielle.</p>
-          </div>
-          <div class="mini-card">
-            <h3>Mode live</h3>
-            <p class="big">Optionnel</p>
-            <p>Tu peux enregistrer ton token API localement pour afficher les tirages réels.</p>
-          </div>
-          <div class="mini-card">
-            <h3>Token/API</h3>
-            <form id="lottery-token-form" class="toolbar">
-              <input
-                id="lottery-token-input"
-                type="password"
-                placeholder="Token Lottery Results Feed"
-                autocomplete="off"
-              />
-              <button type="submit" class="primary-btn">Enregistrer</button>
-              <button id="clear-lottery-token" type="button" class="secondary-btn">
-                Effacer
-              </button>
-            </form>
-            <div id="lottery-token-status"></div>
-          </div>
-        </aside>
-      </section>
+      <div class="quick-list">
+        <button class="quick-chip">République dominicaine</button>
+        <button class="quick-chip">Powerball</button>
+        <button class="quick-chip">EuroMillions</button>
+        <button class="quick-chip">France</button>
+        <button class="quick-chip">Italie</button>
+        <button class="quick-chip">Brésil</button>
+      </div>
+    </section>
 
-      <section id="lottery-results-zone" class="content-grid">
-        <article class="panel result-card">
-          <div class="section-title">
-            <h2>Résultat trouvé</h2>
-            <span>Annuaire + live</span>
-          </div>
+    <div class="section-title">
+      <h2>Derniers résultats par endroit</h2>
+      <span>simple et visible</span>
+    </div>
 
-          <div class="lottery-result">
-            <div class="result-main card-soft">
-              <div class="result-badge">🎰</div>
-              <div>
-                <div id="lottery-detail"></div>
-                <div id="official-links"></div>
-                <div id="lottery-format-note" class="card-soft" style="padding: 12px"></div>
-              </div>
-            </div>
+    <section class="results-grid">
+      <article class="result-card">
+        <div class="place">
+          <h3>République dominicaine</h3>
+          <span class="mini-tag">RD</span>
+        </div>
+        <div class="lottery-name">Lotería Nacional Dominicana</div>
+        <span class="label">Derniers numéros</span>
+        <div class="balls">
+          <div class="ball">12</div>
+          <div class="ball">34</div>
+          <div class="ball">56</div>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span>Date</span><strong>28 mars 2026</strong></div>
+          <div class="meta-row"><span>Jackpot</span><strong>Non communiqué</strong></div>
+        </div>
+        <div class="direct-links">
+          Site officiel visible: www.loterianacional.gob.do
+        </div>
+      </article>
 
-            <div class="result-actions">
-              <button id="generate-lottery" class="primary-btn" type="button">Générer</button>
-              <button id="copy-lottery" class="secondary-btn" type="button">Copier</button>
-            </div>
-            <div id="generated-balls" class="card-soft" style="padding: 12px"></div>
-            <div id="generator-status"></div>
-          </div>
-        </article>
+      <article class="result-card">
+        <div class="place">
+          <h3>Powerball</h3>
+          <span class="mini-tag">USA</span>
+        </div>
+        <div class="lottery-name">Résultat principal Powerball</div>
+        <span class="label">Derniers numéros</span>
+        <div class="balls">
+          <div class="ball">08</div>
+          <div class="ball">17</div>
+          <div class="ball">29</div>
+          <div class="ball">41</div>
+          <div class="ball">63</div>
+          <div class="ball special">14</div>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span>Date</span><strong>28 mars 2026</strong></div>
+          <div class="meta-row"><span>Jackpot</span><strong>$415M</strong></div>
+        </div>
+        <div class="direct-links">
+          Site officiel visible: www.powerball.com
+        </div>
+      </article>
 
-        <aside class="panel draw-card">
-          <div class="section-title">
-            <h2>Derniers tirages</h2>
-            <span>Zone claire</span>
-          </div>
+      <article class="result-card">
+        <div class="place">
+          <h3>EuroMillions</h3>
+          <span class="mini-tag">EU</span>
+        </div>
+        <div class="lottery-name">Dernier tirage EuroMillions</div>
+        <span class="label">Derniers numéros</span>
+        <div class="balls">
+          <div class="ball">05</div>
+          <div class="ball">19</div>
+          <div class="ball">27</div>
+          <div class="ball">38</div>
+          <div class="ball">44</div>
+          <div class="ball special">03</div>
+          <div class="ball special">11</div>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span>Date</span><strong>28 mars 2026</strong></div>
+          <div class="meta-row"><span>Jackpot</span><strong>€67M</strong></div>
+        </div>
+        <div class="direct-links">
+          Site officiel visible: www.euro-millions.com
+        </div>
+      </article>
 
-          <div class="draw-top">
-            <div class="draw-box card-soft">
-              <span class="label">Date</span>
-              <div class="value">28 mars 2026</div>
-            </div>
-            <div class="draw-box card-soft">
-              <span class="label">Numéros (démo)</span>
-              <div class="balls">
-                <div class="ball">03</div>
-                <div class="ball">11</div>
-                <div class="ball">24</div>
-                <div class="ball">31</div>
-                <div class="ball">46</div>
-                <div class="ball special">09</div>
-              </div>
-            </div>
-          </div>
+      <article class="result-card">
+        <div class="place">
+          <h3>France</h3>
+          <span class="mini-tag">FR</span>
+        </div>
+        <div class="lottery-name">Loto France</div>
+        <span class="label">Derniers numéros</span>
+        <div class="balls">
+          <div class="ball">03</div>
+          <div class="ball">14</div>
+          <div class="ball">22</div>
+          <div class="ball">37</div>
+          <div class="ball">45</div>
+          <div class="ball special">07</div>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span>Date</span><strong>28 mars 2026</strong></div>
+          <div class="meta-row"><span>Jackpot</span><strong>€8M</strong></div>
+        </div>
+        <div class="direct-links">
+          Site officiel visible: www.fdj.fr
+        </div>
+      </article>
 
-          <div class="toolbar">
-            <select id="lottery-year-select" disabled>
-              <option value="">Année</option>
-            </select>
-            <button id="refresh-lottery-results" type="button" class="secondary-btn">
-              Rafraîchir
-            </button>
-          </div>
+      <article class="result-card">
+        <div class="place">
+          <h3>Italie</h3>
+          <span class="mini-tag">IT</span>
+        </div>
+        <div class="lottery-name">SuperEnalotto</div>
+        <span class="label">Derniers numéros</span>
+        <div class="balls">
+          <div class="ball">09</div>
+          <div class="ball">18</div>
+          <div class="ball">26</div>
+          <div class="ball">48</div>
+          <div class="ball">72</div>
+          <div class="ball">81</div>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span>Date</span><strong>28 mars 2026</strong></div>
+          <div class="meta-row"><span>Jackpot</span><strong>€22M</strong></div>
+        </div>
+        <div class="direct-links">
+          Site officiel visible: www.superenalotto.it
+        </div>
+      </article>
 
-          <span id="lottery-results-status" class="status-pill">Choisis une loterie</span>
-          <div id="lottery-results-list"></div>
-          <div id="lottery-hot-numbers" class="card-soft" style="padding: 12px"></div>
-          <div id="lottery-odds-panel" class="card-soft" style="padding: 12px"></div>
-        </aside>
-      </section>
-    </main>
+      <article class="result-card">
+        <div class="place">
+          <h3>Brésil</h3>
+          <span class="mini-tag">BR</span>
+        </div>
+        <div class="lottery-name">Mega-Sena</div>
+        <span class="label">Derniers numéros</span>
+        <div class="balls">
+          <div class="ball">04</div>
+          <div class="ball">12</div>
+          <div class="ball">21</div>
+          <div class="ball">33</div>
+          <div class="ball">46</div>
+          <div class="ball">58</div>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span>Date</span><strong>28 mars 2026</strong></div>
+          <div class="meta-row"><span>Jackpot</span><strong>R$35M</strong></div>
+        </div>
+        <div class="direct-links">
+          Site officiel visible: www.loterias.caixa.gov.br
+        </div>
+      </article>
+    </section>
+  </main>
 
-    <footer class="footer">SNG Portal — Interface loterie simplifiée et moderne.</footer>
-
-    <script src="./site.js"></script>
-    <script src="./lottery.js"></script>
-  </body>
+  <div class="footer">
+    SNG Portal — Version simplifiée avec fond visible et derniers résultats affichés par endroit.
+  </div>
+</body>
 </html>
