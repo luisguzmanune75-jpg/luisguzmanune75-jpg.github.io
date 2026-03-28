@@ -3,34 +3,30 @@ const PROXY = "https://api.allorigins.win/get?url=";
 
 function setStatus(text) {
   const el = document.getElementById("news-status");
-  if (el) {
-    el.textContent = text;
-  }
+  if (el) el.textContent = text;
 }
 
 function parseRSS(xml) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(xml, "text/xml");
 
-  return [...doc.querySelectorAll("item")].map((item) => ({
+  return [...doc.querySelectorAll("item")].map(item => ({
     title: item.querySelector("title")?.textContent || "",
     link: item.querySelector("link")?.textContent || "",
-    source: item.querySelector("source")?.textContent || "Google News",
+    source: item.querySelector("source")?.textContent || "Google News"
   }));
 }
 
-function renderLead(a) {
+function renderLead(article) {
   const root = document.getElementById("news-lead");
-  if (!root || !a) {
-    return;
-  }
+  if (!root || !article) return;
 
   root.innerHTML = `
     <article class="lead-story">
-      <a href="${a.link}" target="_blank" rel="noreferrer">
+      <a href="${article.link}" target="_blank">
         <div class="lead-story-body">
-          <span class="lead-story-source">${a.source}</span>
-          <h3>${a.title}</h3>
+          <span class="lead-story-source">${article.source}</span>
+          <h3>${article.title}</h3>
         </div>
       </a>
     </article>
@@ -39,59 +35,54 @@ function renderLead(a) {
 
 function renderCards(list) {
   const root = document.getElementById("newsResults");
-  if (!root) {
-    return;
-  }
+  if (!root) return;
 
-  root.innerHTML = list
-    .slice(1)
-    .map(
-      (a) => `
+  root.innerHTML = list.slice(1).map(a => `
     <article class="news-card">
-      <a href="${a.link}" target="_blank" rel="noreferrer">
+      <a href="${a.link}" target="_blank">
         <div class="news-card-body">
           <span class="news-source">${a.source}</span>
           <h3>${a.title}</h3>
         </div>
       </a>
     </article>
-  `,
-    )
-    .join("");
+  `).join("");
 }
 
-function renderBrief(a) {
-  const titre = document.getElementById("resumeTitre");
-  const texte = document.getElementById("resumeTexte");
+function renderBrief(article) {
+  const t = document.getElementById("resumeTitre");
+  const p = document.getElementById("resumeTexte");
 
-  if (titre) {
-    titre.textContent = a.title;
-  }
+  if (!article) return;
 
-  if (texte) {
-    texte.textContent = "Clique pour lire l’actualité complète.";
-  }
+  t.textContent = article.title;
+  p.textContent = "Clique pour lire l’actualité complète.";
 }
 
 function renderSources(list) {
   const root = document.getElementById("sourcesList");
-  if (!root) {
-    return;
-  }
+  if (!root) return;
 
-  const unique = [...new Set(list.map((a) => a.source))];
-  root.innerHTML = unique.map((s) => `<span class="source-pill">${s}</span>`).join("");
+  const unique = [...new Set(list.map(a => a.source))];
+
+  root.innerHTML = unique.map(s => `
+    <span class="source-pill">${s}</span>
+  `).join("");
 }
 
 function renderPulse(list) {
   const root = document.getElementById("news-pulse");
-  if (!root) {
-    return;
-  }
+  if (!root) return;
 
   root.innerHTML = `
-    <div class="pulse-card"><small>Articles</small><strong>${list.length}</strong></div>
-    <div class="pulse-card"><small>Sources</small><strong>${new Set(list.map((a) => a.source)).size}</strong></div>
+    <div class="pulse-card">
+      <small>Articles</small>
+      <strong>${list.length}</strong>
+    </div>
+    <div class="pulse-card">
+      <small>Sources</small>
+      <strong>${new Set(list.map(a => a.source)).size}</strong>
+    </div>
   `;
 }
 
@@ -123,8 +114,13 @@ async function chargerActualites() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  SITE.setupMenu();
-  SITE.observeReveals();
+  if (typeof SITE?.setupMenu === "function") {
+    SITE.setupMenu();
+  }
+
+  if (typeof SITE?.observeReveals === "function") {
+    SITE.observeReveals();
+  }
 
   chargerActualites();
 
