@@ -1,271 +1,242 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3338685171783718"
-     crossorigin="anonymous"></script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Recherche loterie mondiale sur SNG Portal par pays ou nom de loterie, avec annuaire, liens officiels et mode live."
-    />
-    <meta
-      name="keywords"
-      content="SNG Portal loterie mondiale, resultats loterie, powerball, euromillions, lotto max, mega millions"
-    />
-    <meta name="robots" content="index,follow" />
-    <meta name="theme-color" content="#4c3138" />
-    <meta property="og:title" content="Loterie Monde - SNG Portal" />
-    <meta
-      property="og:description"
-      content="Tape un pays ou le nom d'une loterie pour retrouver la bonne fiche et charger les tirages quand le mode live est configure."
-    />
-    <title>Loterie Monde - SNG Portal</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
-  <body data-page="loterie">
-    <div class="site-shell">
-      <header class="site-header">
-        <div class="container header-inner">
-          <a class="brand" href="./index.html" aria-label="Accueil SNG Portal">
-            <img class="brand-logo" src="./logo-sng.svg" alt="Logo SNG Portal" />
-            <span class="brand-copy">
-              <span class="brand-kicker">SNG Media</span>
-              <span class="brand-title">SNG Portal</span>
-            </span>
-          </a>
-          <button
-            class="menu-toggle"
-            type="button"
-            aria-expanded="false"
-            aria-controls="main-nav"
-          >
-            Menu
-          </button>
-          <nav id="main-nav" class="main-nav" aria-label="Navigation principale">
-            <a href="./index.html">Accueil</a>
-            <a href="./crypto.html">Crypto</a>
-            <a href="./actualites.html">Actualites</a>
-            <a href="./meteo.html">Meteo</a>
-            <a href="./marches.html">Marches</a>
-            <a class="is-current" href="./loterie.html">Loterie Monde</a>
-            <a href="./sports.html">Paris sportifs</a>
-            <a href="./jeux.html">Jeux</a>
-            <a href="./blog.html">Blog</a>
-            <a href="./satellites.html">Satellites</a>
-            <a href="./planetes.html">Planetes</a>
-            <a href="./scolaire.html">Scolaire</a>
-            <a href="./contact.html">Contact</a>
-          </nav>
-        </div>
-      </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SNG Portal — Loterie Monde</title>
 
-      <main>
-        <section class="hero hero-crypto-page">
-          <div class="container hero-grid hero-grid-crypto">
-            <div class="hero-copy reveal">
-              <p class="search-logo-kicker">Loterie mondiale</p>
-              <h1>Ecris un pays ou le nom d'une loterie. On retrouve la bonne fiche.</h1>
-              <p class="hero-text">
-                Cette page sert maintenant de moteur mondial: recherche par pays,
-                nom de loterie, annuaire officiel et chargement des tirages si le
-                mode live est active avec un token compatible.
-              </p>
-              <div class="hero-actions">
-                <a class="button button-solid" href="#lottery-search-zone">Rechercher</a>
-                <a class="button button-outline" href="#lottery-results-zone">Voir les tirages</a>
-              </div>
-            </div>
+  <style>
+    :root {
+      --bg: #06101a;
+      --panel: rgba(8, 14, 24, 0.62);
+      --line: rgba(255,255,255,0.12);
+      --text: #ffffff;
+      --muted: rgba(255,255,255,0.80);
+      --accent: #ff5f8f;
+      --accent2: #ff83ab;
+      --shadow: 0 20px 40px rgba(0,0,0,0.28);
+      --max: 1240px;
+    }
 
-            <aside class="hero-panel reveal reveal-delay">
-              <div class="panel-head">
-                <div>
-                  <p class="section-tag">Recherche mondiale</p>
-                  <h2>Vue rapide</h2>
-                </div>
-              </div>
-              <span id="lottery-status" class="status-pill status-neutral">Annuaire mondial charge</span>
-              <div id="lottery-pulse" class="pulse-grid"></div>
-            </aside>
-          </div>
-        </section>
+    * { box-sizing: border-box; }
 
-        <section id="lottery-search-zone" class="page-section">
-          <div class="container live-two-col">
-            <article class="module module-wide reveal">
-              <div class="module-head">
-                <div>
-                  <p class="section-tag">Trouver une loterie</p>
-                  <h2>Pays, ville, marque ou jeu</h2>
-                </div>
-              </div>
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family: Inter, Arial, sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
+      background: var(--bg);
+    }
 
-              <form id="lottery-search-form" class="search-bar search-bar-panel" role="search">
-                <label class="sr-only" for="lottery-query">Recherche loterie</label>
-                <span class="search-icon" aria-hidden="true">L</span>
-                <input
-                  id="lottery-query"
-                  type="search"
-                  placeholder="Exemple: Powerball, EuroMillions, Italie, Republique dominicaine..."
-                />
-                <button type="submit">Chercher</button>
-              </form>
+    body {
+      min-height: 100vh;
+      background:
+        linear-gradient(rgba(4,10,18,0.16), rgba(4,10,18,0.30)),
+        url('https://luisguzmanune75-jpg.github.io/fond-loterie.jpg') center/cover no-repeat fixed;
+      position: relative;
+    }
 
-              <div id="lottery-quick-searches" class="pill-row pill-row-spaced"></div>
-              <div id="lottery-search-results" class="result-list"></div>
-            </article>
+    body::after {
+      content:"";
+      position:fixed;
+      inset:-4%;
+      background:url('https://luisguzmanune75-jpg.github.io/fond-loterie.jpg') center/cover;
+      opacity:.2;
+      animation:bgFloat 30s ease-in-out infinite alternate;
+      z-index:0;
+    }
 
-            <aside class="module reveal">
-              <div class="module-head">
-                <div>
-                  <p class="section-tag">Mode live</p>
-                  <h2>Token local</h2>
-                </div>
-              </div>
-              <div class="briefing-card">
-                <h3>Resultats reels dans la page</h3>
-                <p>
-                  La recherche fonctionne sans token pour retrouver la bonne
-                  loterie et ouvrir ses liens officiels. Pour charger les
-                  tirages directement ici, ajoute un token/API key compatible
-                  Lottery Results Feed dans ce navigateur.
-                </p>
-              </div>
-              <form id="lottery-token-form" class="newsletter-form">
-                <input
-                  id="lottery-token-input"
-                  type="password"
-                  placeholder="Token ou API key Lottery Results Feed"
-                  autocomplete="off"
-                />
-                <div class="button-row button-row-compact">
-                  <button class="button button-solid" type="submit">Enregistrer</button>
-                  <button id="clear-lottery-token" class="ghost-button" type="button">
-                    Effacer
-                  </button>
-                </div>
-              </form>
-              <div id="lottery-token-status" class="inline-actions"></div>
-            </aside>
-          </div>
-        </section>
+    @keyframes bgFloat {
+      0% { transform:scale(1.05); }
+      100% { transform:scale(1.1) translate(-10px,6px); }
+    }
 
-        <section id="lottery-results-zone" class="page-section">
-          <div class="container live-two-col">
-            <article class="module module-wide reveal">
-              <div class="module-head split-head">
-                <div>
-                  <p class="section-tag">Derniers tirages</p>
-                  <h2>Resultats et historique</h2>
-                </div>
-                <div class="toolbar-inline">
-                  <label class="sr-only" for="lottery-year-select">Annee</label>
-                  <select id="lottery-year-select" class="control-select" disabled>
-                    <option value="">Annee</option>
-                  </select>
-                  <button id="refresh-lottery-results" class="ghost-button" type="button">
-                    Rafraichir
-                  </button>
-                </div>
-              </div>
-              <span id="lottery-results-status" class="status-pill status-neutral">
-                Choisis une loterie
-              </span>
-              <div id="lottery-results-list" class="draw-list"></div>
-            </article>
+    @keyframes glow {
+      0%,100% { box-shadow:0 20px 40px rgba(0,0,0,0.3);}
+      50% { box-shadow:0 20px 40px rgba(0,0,0,0.3),0 0 25px rgba(255,95,143,0.2);}
+    }
 
-            <aside class="module reveal">
-              <div class="module-head">
-                <div>
-                  <p class="section-tag">Fiche</p>
-                  <h2>Resume de la loterie</h2>
-                </div>
-              </div>
-              <div id="lottery-detail"></div>
-              <div id="official-links" class="link-stack"></div>
-              <div id="lottery-odds-panel" class="briefing-card"></div>
-            </aside>
-          </div>
-        </section>
+    .topbar,.page,.footer { position:relative; z-index:2; }
 
-        <section class="page-section">
-          <div class="container live-two-col">
-            <article class="module reveal">
-              <div class="module-head">
-                <div>
-                  <p class="section-tag">Combinaison demo</p>
-                  <h2>Generer une grille</h2>
-                </div>
-              </div>
-              <div id="generated-balls" class="generated-panel"></div>
-              <div class="button-row">
-                <button id="generate-lottery" class="button button-solid" type="button">
-                  Generer
-                </button>
-                <button id="copy-lottery" class="ghost-button" type="button">
-                  Copier
-                </button>
-              </div>
-              <div id="generator-status" class="inline-actions"></div>
-            </article>
+    .topbar {
+      position:sticky;
+      top:0;
+      background:rgba(4,9,15,0.7);
+      backdrop-filter:blur(10px);
+      padding:15px;
+    }
 
-            <article class="module reveal">
-              <div class="module-head">
-                <div>
-                  <p class="section-tag">Tendances</p>
-                  <h2>Numeros chauds</h2>
-                </div>
-              </div>
-              <div id="lottery-hot-numbers" class="briefing-card"></div>
-            </article>
-          </div>
-        </section>
+    .topbar-inner {
+      max-width:var(--max);
+      margin:auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
 
-        <section class="page-section">
-          <div class="container live-two-col">
-            <article class="module reveal">
-              <div class="module-head">
-                <div>
-                  <p class="section-tag">Lecture</p>
-                  <h2>Format et conseils</h2>
-                </div>
-              </div>
-              <div id="lottery-format-note" class="briefing-card"></div>
-            </article>
+    .menu a {
+      margin:0 10px;
+      color:#fff;
+      text-decoration:none;
+      font-weight:bold;
+    }
 
-            <article class="module reveal">
-              <div class="module-head">
-                <div>
-                  <p class="section-tag">Explorer plus</p>
-                  <h2>Autres univers</h2>
-                </div>
-              </div>
-              <div class="mini-link-list">
-                <a href="./sports.html">Voir les paris sportifs</a>
-                <a href="./jeux.html">Voir les jeux les plus joues</a>
-                <a href="./blog.html">Voir le blog SNG</a>
-                <a href="./satellites.html">Voir le mode espace</a>
-              </div>
-            </article>
-          </div>
-        </section>
-      </main>
+    .hero {
+      background:rgba(7,13,22,0.55);
+      border-radius:25px;
+      padding:30px;
+      animation:glow 6s infinite;
+      margin-bottom:25px;
+    }
 
-      <footer class="site-footer">
-        <div class="container footer-inner">
-          <p>(c) 2026 SNG Portal. Tous droits reserves.</p>
-          <p>Recherche loterie mondiale par pays ou nom de jeu.</p>
-        </div>
-      </footer>
-    </div>
+    h1 { font-size:42px; }
 
-    <script src="./site.js"></script>
-    <script src="./lottery.js"></script>
-  </body>
+    .search-box {
+      display:flex;
+      margin-top:20px;
+      gap:10px;
+    }
+
+    .search-box input {
+      flex:1;
+      padding:12px;
+      border-radius:15px;
+      border:none;
+      background:rgba(255,255,255,0.1);
+      color:white;
+    }
+
+    .search-box button {
+      padding:12px 20px;
+      border:none;
+      border-radius:15px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:white;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .quick-chip {
+      margin:5px;
+      padding:8px 12px;
+      border-radius:20px;
+      background:rgba(255,255,255,0.1);
+      border:1px solid rgba(255,255,255,0.1);
+      color:white;
+      cursor:pointer;
+    }
+
+    .results-grid {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:20px;
+    }
+
+    .result-card {
+      background:var(--panel);
+      border-radius:20px;
+      padding:20px;
+      transition:.3s;
+    }
+
+    .result-card:hover {
+      transform:translateY(-5px);
+      box-shadow:0 25px 45px rgba(0,0,0,0.4);
+    }
+
+    .ball {
+      width:45px;
+      height:45px;
+      border-radius:50%;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background:white;
+      color:black;
+      font-weight:bold;
+      margin:5px;
+    }
+
+    .ball.special {
+      background:gold;
+    }
+
+    @media(max-width:800px){
+      .results-grid{ grid-template-columns:1fr; }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <strong>SNG Portal</strong>
+    <nav class="menu">
+      <a href="#">Accueil</a>
+      <a href="#">Crypto</a>
+      <a href="#">Actualités</a>
+      <a href="#">Loterie</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page">
+
+<section class="hero">
+  <h1>Choisis un endroit et vois le résultat</h1>
+
+  <div class="search-box">
+    <input placeholder="Ex: New York Lottery, France..." />
+    <button>Chercher</button>
+  </div>
+
+  <div>
+    <span class="quick-chip">République dominicaine</span>
+    <span class="quick-chip">New York Lottery</span>
+    <span class="quick-chip">EuroMillions</span>
+    <span class="quick-chip">France</span>
+  </div>
+</section>
+
+<section class="results-grid">
+
+<article class="result-card">
+<h3>New York</h3>
+<div>New York Lottery</div>
+<div>
+  <span class="ball">08</span>
+  <span class="ball">17</span>
+  <span class="ball">29</span>
+  <span class="ball">41</span>
+  <span class="ball">61</span>
+  <span class="ball special">14</span>
+</div>
+</article>
+
+<article class="result-card">
+<h3>France</h3>
+<div>Loto</div>
+<div>
+  <span class="ball">03</span>
+  <span class="ball">14</span>
+  <span class="ball">22</span>
+  <span class="ball">37</span>
+  <span class="ball">45</span>
+  <span class="ball special">07</span>
+</div>
+</article>
+
+</section>
+
+</main>
+
+<div class="footer">
+SNG Portal — version premium 🔥
+</div>
+
+</body>
 </html>
