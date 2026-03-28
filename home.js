@@ -40,12 +40,6 @@ const homeSearchTopics = [
     answer: "La page Scolaire est la plus adaptee pour reviser, chercher un theme et organiser tes cours.",
   },
   {
-    href: "./actualites.html",
-    label: "Actualites",
-    keywords: ["actualite", "news", "jour", "monde", "politique", "guerre", "breaking"],
-    answer: "La page Actualites est la plus adaptee pour suivre les infos du moment.",
-  },
-  {
     href: "./meteo.html",
     label: "Meteo",
     keywords: ["meteo", "temperature", "pluie", "temps", "orage", "soleil", "climat", "prevision", "localisation"],
@@ -163,7 +157,7 @@ function renderSearchGuidance(query = "", matches = []) {
     root.innerHTML = `
       <p class="article-tag">Recherche accueil</p>
       <h2>Trouve vite la bonne page</h2>
-      <p>Recherche un theme simple comme scolaire, actualites, meteo, crypto ou contact pour ouvrir directement la bonne rubrique.</p>
+      <p>Recherche un theme simple comme scolaire, meteo, crypto ou contact pour ouvrir directement la bonne rubrique.</p>
     `;
     return;
   }
