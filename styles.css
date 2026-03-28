@@ -933,13 +933,11 @@ body[data-page="loterie"] .hero-actions {
   .social-grid {
     grid-template-columns: 1fr;
   }
-
-  body[data-page="old-news"] .pulse-grid,
-  body[data-page="old-news"] .live-two-col,
-  body[data-page="old-news"] .hero-grid,
-  body[data-page="old-news"] .news-list {
-    grid-template-columns: 1fr;
-  }
+body[data-page="old-news"] .pulse-grid,
+body[data-page="old-news"] .live-two-col,
+body[data-page="old-news"] .hero-grid,
+body[data-page="old-news"] .news-list {
+  grid-template-columns: 1fr;
 }
 
 @media (max-width: 920px) {
@@ -968,7 +966,6 @@ body[data-page="loterie"] .hero-actions {
     align-items: center;
     justify-content: center;
   }
-
   body[data-page="old-news"] .main-nav {
     position: absolute;
     top: calc(100% + 10px);
@@ -2095,7 +2092,6 @@ body[data-page="old-news"] .footer-inner {
 }
 
 /* ---------- LOTERIE : on garde le style isolé ---------- */
-
 body[data-page="loterie"] .hero-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
@@ -2125,10 +2121,10 @@ body[data-page="loterie"] .hero-actions {
 /* ---------- RESPONSIVE ---------- */
 
 @media (max-width: 1120px) {
-  body[data-page="old-news"] .pulse-grid,
-  body[data-page="old-news"] .live-two-col,
-  body[data-page="old-news"] .hero-grid,
-  body[data-page="old-news"] .news-list,
+body[data-page="old-news"] .pulse-grid,
+body[data-page="old-news"] .live-two-col,
+body[data-page="old-news"] .hero-grid,
+body[data-page="old-news"] .news-list,
   body[data-page="loterie"] .hero-grid,
   .crypto-layout,
   .crypto-explorer-grid,
@@ -2220,7 +2216,6 @@ body[data-page="home"] .site-header-minimal {
   background: transparent;
   border-bottom: 0;
 }
-
 body[data-page="home"] .search-home-inner {
   min-height: calc(100vh - 190px);
   display: flex;
