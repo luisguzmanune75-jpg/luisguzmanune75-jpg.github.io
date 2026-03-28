@@ -1217,6 +1217,27 @@ h4,
   margin-top: 16px;
 }
 
+.draw-number-row-highlight {
+  gap: 14px;
+}
+
+.ranked-ball {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  min-width: 52px;
+}
+
+.ranked-ball small {
+  font-size: 0.85rem;
+  color: var(--muted-strong);
+  font-weight: 600;
+}
+
+.ranked-ball-bonus small {
+  color: #f5d0dc;
+}
+
 .number-ball-small {
   width: 46px;
   height: 46px;
@@ -1434,6 +1455,36 @@ h4,
 
 .hero-crypto-page {
   padding: 42px 0 22px;
+}
+
+body[data-page="loterie"] {
+  --bg: #0c3356;
+  --panel: rgba(13, 47, 77, 0.82);
+  --panel-strong: rgba(9, 34, 58, 0.92);
+  --line: rgba(221, 245, 255, 0.2);
+  --text: #eff8ff;
+  --muted: #b8d5ea;
+  --muted-strong: #d9edfb;
+  --accent: #7ed0ff;
+  --accent-soft: #b8e7ff;
+  background-color: #0a2f50;
+  background-image:
+    radial-gradient(circle at 18% 22%, rgba(57, 170, 255, 0.3) 0 56px, transparent 57px),
+    radial-gradient(circle at 72% 28%, rgba(107, 197, 255, 0.28) 0 70px, transparent 71px),
+    radial-gradient(circle at 38% 64%, rgba(66, 184, 255, 0.26) 0 62px, transparent 63px),
+    radial-gradient(circle at 84% 72%, rgba(90, 195, 255, 0.24) 0 78px, transparent 79px),
+    radial-gradient(circle at 8% 84%, rgba(53, 164, 247, 0.24) 0 64px, transparent 65px),
+    linear-gradient(180deg, #0d3c66 0%, #0a2f50 55%, #082541 100%);
+  background-attachment: fixed;
+}
+
+body[data-page="loterie"] .page-section .panel,
+body[data-page="loterie"] .hero-panel,
+body[data-page="loterie"] .briefing-card,
+body[data-page="loterie"] .draw-card,
+body[data-page="loterie"] .result-card {
+  background: rgba(7, 20, 42, 0.74);
+  backdrop-filter: blur(5px);
 }
 
 .hero-grid {
