@@ -1,4 +1,5 @@
 const RSS_URL = "https://news.google.com/rss?hl=fr&gl=FR&ceid=FR:fr";
+const PROXY = "https://api.allorigins.win/get?url=";
 
 function setStatus(text) {
   const el = document.getElementById("news-status");
@@ -7,18 +8,29 @@ function setStatus(text) {
   }
 }
 
-function renderLead(a) {
+function parseRSS(xml) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(xml, "text/xml");
+
+  return [...doc.querySelectorAll("item")].map((item) => ({
+    title: item.querySelector("title")?.textContent || "",
+    link: item.querySelector("link")?.textContent || "",
+    source: item.querySelector("source")?.textContent || "Google News",
+  }));
+}
+
+function renderLead(article) {
   const root = document.getElementById("news-lead");
-  if (!root || !a) {
+  if (!root || !article) {
     return;
   }
 
   root.innerHTML = `
     <article class="lead-story">
-      <a href="${a.link}" target="_blank" rel="noreferrer">
+      <a href="${article.link}" target="_blank" rel="noreferrer">
         <div class="lead-story-body">
-          <span class="lead-story-source">${a.source}</span>
-          <h3>${a.title}</h3>
+          <span class="lead-story-source">${article.source}</span>
+          <h3>${article.title}</h3>
         </div>
       </a>
     </article>
@@ -34,26 +46,30 @@ function renderCards(list) {
   root.innerHTML = list
     .slice(1)
     .map(
-      (a) => `
-    <article class="news-card">
-      <a href="${a.link}" target="_blank" rel="noreferrer">
-        <div class="news-card-body">
-          <span class="news-source">${a.source}</span>
-          <h3>${a.title}</h3>
-        </div>
-      </a>
-    </article>
-  `,
+      (article) => `
+        <article class="news-card">
+          <a href="${article.link}" target="_blank" rel="noreferrer">
+            <div class="news-card-body">
+              <span class="news-source">${article.source}</span>
+              <h3>${article.title}</h3>
+            </div>
+          </a>
+        </article>
+      `
     )
     .join("");
 }
 
-function renderBrief(a) {
+function renderBrief(article) {
   const titre = document.getElementById("resumeTitre");
   const texte = document.getElementById("resumeTexte");
 
+  if (!article) {
+    return;
+  }
+
   if (titre) {
-    titre.textContent = a?.title || "Aucun titre";
+    titre.textContent = article.title || "Aucun titre";
   }
 
   if (texte) {
@@ -67,8 +83,11 @@ function renderSources(list) {
     return;
   }
 
-  const unique = [...new Set(list.map((a) => a.source))];
-  root.innerHTML = unique.map((s) => `<span class="source-pill">${s}</span>`).join("");
+  const unique = [...new Set(list.map((article) => article.source))];
+
+  root.innerHTML = unique
+    .map((source) => `<span class="source-pill">${source}</span>`)
+    .join("");
 }
 
 function renderPulse(list) {
@@ -78,8 +97,14 @@ function renderPulse(list) {
   }
 
   root.innerHTML = `
-    <div class="pulse-card"><small>Articles</small><strong>${list.length}</strong></div>
-    <div class="pulse-card"><small>Sources</small><strong>${new Set(list.map((a) => a.source)).size}</strong></div>
+    <div class="pulse-card">
+      <small>Articles</small>
+      <strong>${list.length}</strong>
+    </div>
+    <div class="pulse-card">
+      <small>Sources</small>
+      <strong>${new Set(list.map((article) => article.source)).size}</strong>
+    </div>
   `;
 }
 
@@ -87,22 +112,17 @@ async function chargerActualites() {
   setStatus("Chargement...");
 
   try {
-    const res = await fetch(RSS_URL);
-    const text = await res.text();
+    const res = await fetch(PROXY + encodeURIComponent(RSS_URL));
+    const data = await res.json();
 
-    const parser = new DOMParser();
-    const xml = parser.parseFromString(text, "text/xml");
+    if (!data || !data.contents) {
+      throw new Error("Flux RSS vide ou inaccessible");
+    }
 
-    const items = [...xml.querySelectorAll("item")];
-
-    const articles = items.map((item) => ({
-      title: item.querySelector("title")?.textContent,
-      link: item.querySelector("link")?.textContent,
-      source: item.querySelector("source")?.textContent || "Google News",
-    }));
+    const articles = parseRSS(data.contents);
 
     if (!articles.length) {
-      setStatus("Aucun résultat");
+      setStatus("Aucun resultat");
       return;
     }
 
@@ -114,16 +134,26 @@ async function chargerActualites() {
 
     setStatus("EN DIRECT 🔴");
   } catch (e) {
-    console.error(e);
+    console.error("Erreur chargement actualites :", e);
     setStatus("Erreur");
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  SITE.setupMenu();
-  SITE.observeReveals();
+  if (typeof SITE !== "undefined" && typeof SITE.setupMenu === "function") {
+    SITE.setupMenu();
+  }
+
+  if (typeof SITE !== "undefined" && typeof SITE.observeReveals === "function") {
+    SITE.observeReveals();
+  }
 
   chargerActualites();
+
+  const refreshBtn = document.getElementById("refresh-news");
+  if (refreshBtn) {
+    refreshBtn.addEventListener("click", chargerActualites);
+  }
 
   setInterval(() => {
     chargerActualites();
