@@ -143,9 +143,10 @@
     }
 
     .menu a {
-      color: rgba(255,255,255,0.88);
+      color: rgba(255,255,255,0.96);
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 800;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.35);
     }
 
     .menu a.active { color: #fff; }
@@ -186,14 +187,17 @@
       line-height: 0.96;
       letter-spacing: -0.04em;
       max-width: 860px;
+      color: #ffffff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.55);
     }
 
     .hero p {
       margin: 0;
       max-width: 760px;
-      color: var(--muted);
+      color: rgba(255,255,255,0.96);
       font-size: 18px;
       line-height: 1.55;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.42);
     }
 
     .search-box {
@@ -259,11 +263,14 @@
       margin: 0;
       font-size: 28px;
       letter-spacing: -0.02em;
+      color: #ffffff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.55);
     }
 
     .section-title span {
-      color: rgba(255,255,255,0.75);
-      font-weight: 600;
+      color: rgba(255,255,255,0.92);
+      font-weight: 700;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.35);
     }
 
     .results-grid {
@@ -273,8 +280,8 @@
     }
 
     .result-card {
-      background: rgba(6, 12, 20, 0.54);
-      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(5, 10, 18, 0.78);
+      border: 1px solid rgba(255,255,255,0.18);
       border-radius: 24px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
@@ -299,6 +306,8 @@
     .place h3 {
       margin: 0;
       font-size: 24px;
+      color: #ffffff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.55);
     }
 
     .mini-tag {
@@ -312,7 +321,7 @@
     }
 
     .lottery-name {
-      color: var(--muted);
+      color: rgba(255,255,255,0.94);
       font-size: 15px;
       line-height: 1.5;
       margin-bottom: 16px;
@@ -324,8 +333,8 @@
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      font-weight: 800;
-      color: rgba(255,255,255,0.68);
+      font-weight: 900;
+      color: rgba(255,255,255,0.88);
       margin-bottom: 8px;
     }
 
@@ -371,22 +380,23 @@
     }
 
     .meta-row span:first-child {
-      color: rgba(255,255,255,0.72);
-      font-weight: 700;
+      color: rgba(255,255,255,0.92);
+      font-weight: 800;
     }
 
     .meta-row strong {
       text-align: right;
       font-size: 14px;
+      color: #ffffff;
     }
 
     .direct-links {
       border-radius: 16px;
       padding: 12px 14px;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.10);
       font-size: 14px;
-      color: rgba(255,255,255,0.92);
+      color: rgba(255,255,255,0.96);
       line-height: 1.45;
       word-break: break-word;
     }
@@ -425,7 +435,7 @@
       </div>
 
       <nav class="menu">
-        <a href="#">Accueil</a>
+        <a href="https://luisguzmanune75-jpg.github.io/">Accueil</a>
         <a href="#">Crypto</a>
         <a href="#">Actualités</a>
         <a href="#">Météo</a>
@@ -468,6 +478,14 @@
     </div>
 
     <section class="results-grid">
+      <article class="result-card">
+        <div class="place"><h3>New York</h3><span class="mini-tag">NY</span></div>
+        <div class="lottery-name">New York Lotto</div>
+        <span class="label">Derniers numéros</span>
+        <div class="balls"><div class="ball">06</div><div class="ball">12</div><div class="ball">19</div><div class="ball">27</div><div class="ball">38</div><div class="ball">51</div></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong>28 mars 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>$7.2M</strong></div></div>
+        <div class="direct-links">Site officiel visible: nylottery.ny.gov</div>
+      </article>
       <article class="result-card">
         <div class="place"><h3>République dominicaine</h3><span class="mini-tag">RD</span></div>
         <div class="lottery-name">Lotería Nacional Dominicana</div>
