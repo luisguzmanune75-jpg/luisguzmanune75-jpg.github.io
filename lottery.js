@@ -660,7 +660,15 @@ function getSearchResults(query) {
   const normalizedQuery = normalizeValue(query);
 
   if (!normalizedQuery) {
-    return lotteryDirectory.filter((entry) => entry.featured).slice(0, 10);
+    const featuredEntries = lotteryDirectory.filter((entry) => entry.featured);
+    const dominicanRepublicEntries = featuredEntries.filter(
+      (entry) => normalizeValue(entry.countryName) === "republique dominicaine",
+    );
+    const otherEntries = featuredEntries.filter(
+      (entry) => normalizeValue(entry.countryName) !== "republique dominicaine",
+    );
+
+    return [...dominicanRepublicEntries, ...otherEntries].slice(0, 10);
   }
 
   const queryTokens = normalizedQuery.split(" ").filter(Boolean);
@@ -938,6 +946,11 @@ function collectBallValues(draw) {
   return { mainValues, bonusValues };
 }
 
+function ballRankLabel(index) {
+  const labels = ["1er", "2do", "3er"];
+  return labels[index] ?? `${index + 1}e`;
+}
+
 function latestDrawCandidate(entry) {
   if (lotteryState.liveEntryId !== entry.id) {
     return null;
@@ -974,14 +987,21 @@ function latestDrawMarkup(draw, entry) {
       Dernier tirage visible:
       <strong>${SITE.escapeHTML(formatDateLabel(draw.draw_date ?? draw.drawTime ?? draw.last_draw_date))}</strong>
     </p>
-    <div class="draw-number-row">
+    <div class="draw-number-row draw-number-row-highlight">
       ${mainValues
-        .map((value) => `<span class="number-ball number-ball-small">${SITE.escapeHTML(value)}</span>`)
+        .map(
+          (value, index) => `
+            <div class="ranked-ball">
+              <span class="number-ball number-ball-small">${SITE.escapeHTML(value)}</span>
+              <small>${SITE.escapeHTML(ballRankLabel(index))}</small>
+            </div>
+          `,
+        )
         .join("")}
       ${bonusValues
         .map(
           (value) =>
-            `<span class="number-ball number-ball-small number-ball-bonus">${SITE.escapeHTML(value)}</span>`,
+            `<div class="ranked-ball ranked-ball-bonus"><span class="number-ball number-ball-small number-ball-bonus">${SITE.escapeHTML(value)}</span><small>Bonus</small></div>`,
         )
         .join("")}
     </div>
@@ -1025,16 +1045,23 @@ function renderDrawResults() {
               <span>${SITE.escapeHTML(draw.name ?? entry.name)}</span>
             </div>
           </div>
-          <div class="draw-number-row">
+          <div class="draw-number-row draw-number-row-highlight">
             ${mainValues
-              .map((value) => `<span class="number-ball number-ball-small">${SITE.escapeHTML(value)}</span>`)
+              .map(
+                (value, position) => `
+                  <div class="ranked-ball">
+                    <span class="number-ball number-ball-small">${SITE.escapeHTML(value)}</span>
+                    <small>${SITE.escapeHTML(ballRankLabel(position))}</small>
+                  </div>
+                `,
+              )
               .join("")}
             ${
               bonusValues.length
                 ? bonusValues
                     .map(
                       (value) =>
-                        `<span class="number-ball number-ball-small number-ball-bonus">${SITE.escapeHTML(value)}</span>`,
+                        `<div class="ranked-ball ranked-ball-bonus"><span class="number-ball number-ball-small number-ball-bonus">${SITE.escapeHTML(value)}</span><small>Bonus</small></div>`,
                     )
                     .join("")
                 : ""

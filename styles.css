@@ -1217,6 +1217,27 @@ h4,
   margin-top: 16px;
 }
 
+.draw-number-row-highlight {
+  gap: 14px;
+}
+
+.ranked-ball {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  min-width: 52px;
+}
+
+.ranked-ball small {
+  font-size: 0.85rem;
+  color: var(--muted-strong);
+  font-weight: 600;
+}
+
+.ranked-ball-bonus small {
+  color: #f5d0dc;
+}
+
 .number-ball-small {
   width: 46px;
   height: 46px;
@@ -1434,6 +1455,24 @@ h4,
 
 .hero-crypto-page {
   padding: 42px 0 22px;
+}
+
+body[data-page="loterie"] {
+  background-image:
+    linear-gradient(180deg, rgba(5, 16, 33, 0.82), rgba(4, 13, 27, 0.92)),
+    url("https://images.unsplash.com/photo-1532968961962-8a0cb3a2d4f5?auto=format&fit=crop&w=1600&q=80");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+body[data-page="loterie"] .page-section .panel,
+body[data-page="loterie"] .hero-panel,
+body[data-page="loterie"] .briefing-card,
+body[data-page="loterie"] .draw-card,
+body[data-page="loterie"] .result-card {
+  background: rgba(7, 20, 42, 0.74);
+  backdrop-filter: blur(5px);
 }
 
 .hero-grid {
