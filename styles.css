@@ -2368,3 +2368,36 @@ body[data-page="home"] .shortcut-card:focus-visible {
     font-size: 0.78rem;
   }
 }
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background: linear-gradient(180deg, #101827, #0f1624 52%, #0b1320) !important;
+  color: #f5f7fb;
+  font-family: "Space Grotesk", Arial, sans-serif;
+}
+
+body[data-page="home"] {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(66, 133, 244, 0.28), transparent 36%),
+    radial-gradient(circle at 78% 10%, rgba(234, 67, 53, 0.2), transparent 28%),
+    radial-gradient(circle at 15% 78%, rgba(251, 188, 5, 0.18), transparent 30%),
+    radial-gradient(circle at 82% 82%, rgba(52, 168, 83, 0.2), transparent 36%),
+    linear-gradient(180deg, #101827, #0f1624 52%, #0b1320) !important;
+  background-attachment: fixed;
+  color: #f5f7fb;
+}
+
+.site-header-minimal,
+.search-home,
+.search-home-inner,
+.search-stage {
+  background: transparent;
+}
+
+a {
+  color: #dbe7ff;
+}
