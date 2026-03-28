@@ -11,18 +11,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Actualites du jour en temps reel sur SNG Portal avec recherche monde, tendances, sources et resume rapide."
+      content="Actualites auto sans API sur SNG Portal avec flux direct, resume rapide, sources visibles et BFM TV en direct."
     />
     <meta
       name="keywords"
-      content="SNG Portal actualites, news monde, tendances, sources, recherche actualites"
+      content="SNG Portal actualites, google news, news direct, BFM TV direct, resume actualites"
     />
     <meta name="robots" content="index,follow" />
     <meta name="theme-color" content="#4c3138" />
     <meta property="og:title" content="Actualites du jour - SNG Portal" />
     <meta
       property="og:description"
-      content="Page style Google Actualites: flux en direct, recherche, tendances et resume rapide."
+      content="Actualites automatiques style Google News avec resume, sources visibles et live BFM TV."
     />
 
     <title>Actualites du jour - SNG Portal</title>
@@ -79,13 +79,13 @@
 
               <p class="hero-copy">
                 Une page style Google Actualites pour SNG Portal, avec les news
-                visibles des l'ouverture, recherche en option, tendances,
-                sources et resume rapide.
+                visibles des l'ouverture, sans cle API, avec sources visibles,
+                resume rapide et direct video.
               </p>
 
               <div class="hero-meta-row">
                 <span class="hero-chip">Infos en direct</span>
-                <span class="hero-chip">Recherche optionnelle</span>
+                <span class="hero-chip">Sans API</span>
                 <span class="hero-chip">Mise a jour rapide</span>
               </div>
             </div>
@@ -98,9 +98,9 @@
                 </div>
               </div>
 
-              <span id="news-status" class="status-pill status-neutral"
-                >Chargement...</span
-              >
+              <span id="news-status" class="status-pill status-neutral">
+                Chargement...
+              </span>
               <div id="news-pulse" class="pulse-grid"></div>
             </aside>
           </div>
@@ -111,16 +111,12 @@
             <article class="module module-wide reveal">
               <div class="module-head split-head">
                 <div>
-                  <p class="section-tag">Actualites</p>
-                  <h1>Toutes les actualites directement</h1>
+                  <p class="section-tag">Actualites auto</p>
+                  <h1>Google News en direct</h1>
                 </div>
 
                 <div class="toolbar-inline">
-                  <button
-                    id="refresh-news"
-                    class="ghost-button"
-                    type="button"
-                  >
+                  <button id="refresh-news" class="ghost-button" type="button">
                     Rafraichir
                   </button>
                 </div>
@@ -131,9 +127,9 @@
                 class="search-bar search-bar-panel"
                 role="search"
               >
-                <label class="sr-only" for="searchInput"
-                  >Recherche actualites monde</label
-                >
+                <label class="sr-only" for="searchInput">
+                  Recherche actualites
+                </label>
                 <span class="search-icon" aria-hidden="true">N</span>
                 <input
                   id="searchInput"
@@ -143,9 +139,6 @@
                 <button id="searchBtn" type="submit">Chercher</button>
               </form>
 
-              <div id="news-topics" class="pill-row pill-row-spaced"></div>
-              <div id="news-timespans" class="pill-row pill-row-spaced"></div>
-
               <div id="news-lead" class="news-lead-card"></div>
               <div id="newsResults" class="article-list news-list"></div>
             </article>
@@ -153,28 +146,17 @@
             <aside class="module reveal side-stack">
               <div class="module-head">
                 <div>
-                  <p class="section-tag">Lecture</p>
-                  <h2>Resume rapide</h2>
+                  <p class="section-tag">Resume</p>
+                  <h2>Lecture rapide</h2>
                 </div>
               </div>
 
-              <div id="news-briefing" class="briefing-card">
+              <div class="briefing-card">
                 <h3 id="resumeTitre">Chargement...</h3>
-                <p id="resumeTexte">
-                  Les actualites sont en cours de chargement.
-                </p>
+                <p id="resumeTexte">Le resume des actualites apparait ici.</p>
               </div>
 
-              <div id="news-trends" class="briefing-card">
-                <h3>Tendances</h3>
-                <div id="trendsList" class="trend-list">
-                  <div class="briefing-line">
-                    Chargement des tendances...
-                  </div>
-                </div>
-              </div>
-
-              <div id="news-sources" class="briefing-card briefing-card-accent">
+              <div class="briefing-card briefing-card-accent">
                 <h3>Sources visibles</h3>
                 <div id="sourcesList" class="source-pill-list">
                   <span class="source-pill">Chargement...</span>
@@ -188,9 +170,19 @@
       <footer class="site-footer">
         <div class="container footer-inner">
           <p>(c) 2026 SNG Portal. Tous droits reserves.</p>
-          <p>Actualites du jour en direct.</p>
+          <p>News auto, resume automatique et BFM TV en direct.</p>
         </div>
       </footer>
+    </div>
+
+    <div class="bfm-live">
+      <iframe
+        src="https://www.youtube.com/embed/8Qd0tT0ZP8k"
+        title="BFM TV en direct"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
     </div>
 
     <script src="./site.js"></script>
