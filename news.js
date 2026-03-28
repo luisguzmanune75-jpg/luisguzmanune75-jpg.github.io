@@ -1,4 +1,4 @@
-const GNEWS_API_KEY = "TA_CLE_API";
+const GNEWS_API_KEY = "852b17e691e70d2688d4fc92361e95c5";
 const GNEWS_API_BASE = "https://gnews.io/api/v4";
 
 const newsTopics = [
@@ -34,16 +34,18 @@ function activeTimespan() {
 
 function setStatus(message, tone = "neutral") {
   const status = document.getElementById("news-status");
+  if (!status) return;
 
   status.textContent = message;
   status.classList.remove("status-neutral", "status-success", "status-warning", "status-danger");
 
-  const toneClass = {
-    neutral: "status-neutral",
-    success: "status-success",
-    warning: "status-warning",
-    danger: "status-danger",
-  }[tone] || "status-neutral";
+  const toneClass =
+    {
+      neutral: "status-neutral",
+      success: "status-success",
+      warning: "status-warning",
+      danger: "status-danger",
+    }[tone] || "status-neutral";
 
   status.classList.add(toneClass);
 }
@@ -87,10 +89,7 @@ function countTopValues(items, getter, limit = 4) {
 
   items.forEach((item) => {
     const key = String(getter(item) || "").trim();
-    if (!key) {
-      return;
-    }
-
+    if (!key) return;
     counts.set(key, (counts.get(key) || 0) + 1);
   });
 
@@ -101,6 +100,7 @@ function countTopValues(items, getter, limit = 4) {
 
 function renderTopicButtons() {
   const root = document.getElementById("news-topics");
+  if (!root) return;
 
   root.innerHTML = newsTopics
     .map(
@@ -120,13 +120,18 @@ function renderTopicButtons() {
     button.addEventListener("click", () => {
       newsState.topicId = button.dataset.topic || newsState.topicId;
       renderTopicButtons();
-      chargerActualites(activeTopic().value, activeTimespan().value, document.getElementById("searchInput")?.value || "");
+      chargerActualites(
+        activeTopic().value,
+        activeTimespan().value,
+        document.getElementById("searchInput")?.value || "",
+      );
     });
   });
 }
 
 function renderTimespans() {
   const root = document.getElementById("news-timespans");
+  if (!root) return;
 
   root.innerHTML = newsTimespans
     .map(
@@ -146,13 +151,19 @@ function renderTimespans() {
     button.addEventListener("click", () => {
       newsState.timespanId = button.dataset.timespan || newsState.timespanId;
       renderTimespans();
-      chargerActualites(activeTopic().value, activeTimespan().value, document.getElementById("searchInput")?.value || "");
+      chargerActualites(
+        activeTopic().value,
+        activeTimespan().value,
+        document.getElementById("searchInput")?.value || "",
+      );
     });
   });
 }
 
 function renderPulse(items, recherche = "") {
   const root = document.getElementById("news-pulse");
+  if (!root) return;
+
   const uniqueSources = new Set(items.map(toSource)).size;
 
   root.innerHTML = `
@@ -177,6 +188,8 @@ function renderPulse(items, recherche = "") {
 
 function renderLead(items) {
   const root = document.getElementById("news-lead");
+  if (!root) return;
+
   const lead = items[0];
 
   if (!lead) {
@@ -188,12 +201,16 @@ function renderLead(items) {
     <article class="lead-story">
       <a class="lead-story-link" href="${SITE.safeUrl(lead.url, "#")}" target="_blank" rel="noreferrer">
         <div class="lead-story-media">
-          ${lead.image ? `<img src="${SITE.safeUrl(lead.image, "")}" alt="${SITE.escapeHTML(lead.title || "Actualite")}" loading="lazy" />` : ""}
+          ${
+            lead.image
+              ? `<img src="${SITE.safeUrl(lead.image, "")}" alt="${SITE.escapeHTML(lead.title || "Actualite")}" loading="lazy" />`
+              : ""
+          }
         </div>
         <div class="lead-story-body">
           <span class="lead-story-source">${SITE.escapeHTML(toSource(lead))} - ${SITE.escapeHTML(formatAge(lead.publishedAt))}</span>
           <h3>${SITE.escapeHTML(lead.title || "Sans titre")}</h3>
-          <p>${SITE.escapeHTML(lead.description || "Pas de résumé disponible.")}</p>
+          <p>${SITE.escapeHTML(lead.description || "Pas de resume disponible.")}</p>
         </div>
       </a>
     </article>
@@ -202,24 +219,34 @@ function renderLead(items) {
 
 function renderCards(items) {
   const root = document.getElementById("newsResults");
+  if (!root) return;
 
   if (!items.length) {
-    root.innerHTML = '<div class="news-empty">Aucun article chargé.</div>';
+    root.innerHTML = '<div class="news-empty">Aucun article charge.</div>';
     return;
   }
 
   const rest = items.slice(1);
+
+  if (!rest.length) {
+    root.innerHTML = "";
+    return;
+  }
 
   root.innerHTML = rest
     .map(
       (article) => `
         <article class="news-card">
           <a href="${SITE.safeUrl(article.url, "#")}" target="_blank" rel="noreferrer">
-            ${article.image ? `<img src="${SITE.safeUrl(article.image, "")}" alt="${SITE.escapeHTML(article.title || "Actualite")}" loading="lazy" />` : ""}
+            ${
+              article.image
+                ? `<img src="${SITE.safeUrl(article.image, "")}" alt="${SITE.escapeHTML(article.title || "Actualite")}" loading="lazy" />`
+                : ""
+            }
             <div class="news-card-body">
               <span class="news-source">${SITE.escapeHTML(toSource(article))} - ${SITE.escapeHTML(formatAge(article.publishedAt))}</span>
               <h3>${SITE.escapeHTML(article.title || "Sans titre")}</h3>
-              <p>${SITE.escapeHTML(article.description || "Pas de résumé disponible.")}</p>
+              <p>${SITE.escapeHTML(article.description || "Pas de resume disponible.")}</p>
             </div>
           </a>
         </article>
@@ -231,6 +258,8 @@ function renderCards(items) {
 function renderBriefing(items) {
   const resumeTitre = document.getElementById("resumeTitre");
   const resumeTexte = document.getElementById("resumeTexte");
+  if (!resumeTitre || !resumeTexte) return;
+
   const top = items[0];
 
   resumeTitre.textContent = top?.title || "Aucun titre charge";
@@ -239,6 +268,8 @@ function renderBriefing(items) {
 
 function renderTrends(items) {
   const trendsList = document.getElementById("trendsList");
+  if (!trendsList) return;
+
   const words = new Map();
 
   items.forEach((article) => {
@@ -267,17 +298,20 @@ function renderTrends(items) {
           `,
         )
         .join("")
-    : '<div class="briefing-line">Pas assez de données pour afficher les tendances.</div>';
+    : '<div class="briefing-line">Pas assez de donnees pour afficher les tendances.</div>';
 }
 
 function renderSources(items) {
   const sourcesList = document.getElementById("sourcesList");
+  if (!sourcesList) return;
+
   const topSources = countTopValues(items, (item) => toSource(item), 8);
 
   sourcesList.innerHTML = topSources.length
     ? topSources
         .map(
-          ([source, count]) => `<span class="source-pill">${SITE.escapeHTML(source)} (${SITE.escapeHTML(String(count))})</span>`,
+          ([source, count]) =>
+            `<span class="source-pill">${SITE.escapeHTML(source)} (${SITE.escapeHTML(String(count))})</span>`,
         )
         .join("")
     : '<span class="source-pill">Aucune source</span>';
@@ -285,7 +319,10 @@ function renderSources(items) {
 
 async function chargerActualites(theme = "world", duree = "6h", recherche = "") {
   const resultats = document.getElementById("newsResults");
-  resultats.innerHTML = "<div class='news-empty'>Chargement des actualités...</div>";
+  if (resultats) {
+    resultats.innerHTML = "<div class='news-empty'>Chargement des actualites...</div>";
+  }
+
   setStatus(`Chargement ${recherche || activeTopic().label}...`, "neutral");
 
   try {
@@ -315,6 +352,7 @@ async function chargerActualites(theme = "world", duree = "6h", recherche = "") 
     renderPulse(newsState.lastArticles, recherche);
     setStatus(`Mis a jour ${SITE.formatRelativeTime(new Date().toISOString())}`, "success");
   } catch (error) {
+    console.error(error);
     renderLead([]);
     renderCards([]);
     renderBriefing([]);
@@ -326,7 +364,13 @@ async function chargerActualites(theme = "world", duree = "6h", recherche = "") 
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  SITE.observeReveals();
+  if (typeof SITE?.setupMenu === "function") {
+    SITE.setupMenu();
+  }
+
+  if (typeof SITE?.observeReveals === "function") {
+    SITE.observeReveals();
+  }
 
   const form = document.getElementById("news-search-form");
   const inputRecherche = document.getElementById("searchInput");
@@ -336,22 +380,22 @@ document.addEventListener("DOMContentLoaded", () => {
   renderTopicButtons();
   renderTimespans();
 
-  boutonRecherche.addEventListener("click", () => {
-    chargerActualites(activeTopic().value, activeTimespan().value, inputRecherche.value);
+  boutonRecherche?.addEventListener("click", () => {
+    chargerActualites(activeTopic().value, activeTimespan().value, inputRecherche?.value || "");
   });
 
-  form.addEventListener("submit", (event) => {
+  form?.addEventListener("submit", (event) => {
     event.preventDefault();
-    chargerActualites(activeTopic().value, activeTimespan().value, inputRecherche.value);
+    chargerActualites(activeTopic().value, activeTimespan().value, inputRecherche?.value || "");
   });
 
-  refreshButton.addEventListener("click", () => {
-    chargerActualites(activeTopic().value, activeTimespan().value, inputRecherche.value);
+  refreshButton?.addEventListener("click", () => {
+    chargerActualites(activeTopic().value, activeTimespan().value, inputRecherche?.value || "");
   });
 
   chargerActualites(activeTopic().value, activeTimespan().value);
 
   window.setInterval(() => {
-    chargerActualites(activeTopic().value, activeTimespan().value, inputRecherche.value);
+    chargerActualites(activeTopic().value, activeTimespan().value, inputRecherche?.value || "");
   }, 180000);
 });
