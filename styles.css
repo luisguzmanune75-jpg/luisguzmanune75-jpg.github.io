@@ -2240,3 +2240,38 @@ body[data-page="home"] .shortcut-card {
 .home-ai-status {
   color: var(--muted);
 }
+
+.bfm-live {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 320px;
+  height: 180px;
+  z-index: 9999;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.bfm-live iframe {
+  width: 100%;
+  height: 100%;
+}
+
+.news-card {
+  padding: 15px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  margin-bottom: 10px;
+}
+
+.news-card h3 {
+  font-size: 16px;
+}
+
+.lead-story {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  margin-bottom: 15px;
+}
