@@ -311,175 +311,172 @@
         cursor: pointer;
       }
 
+.news-home {
+  padding: 10px 0 70px;
+}
 
+.news-top {
+  margin-bottom: 18px;
+}
 
-      .news-home {
-        padding: 10px 0 70px;
-      }
+.news-breaking {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
 
-      .news-top {
-        margin-bottom: 18px;
-      }
+.breaking-badge {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff4d6d, #ff758f);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
 
-      .news-breaking {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 14px 18px;
-        border-radius: 18px;
-        background: rgba(255, 255, 255, 0.07);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: var(--shadow);
-        overflow: hidden;
-      }
+.news-breaking marquee {
+  color: var(--muted);
+  font-weight: 600;
+}
 
-      .breaking-badge {
-        flex-shrink: 0;
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: linear-gradient(135deg, #ff4d6d, #ff758f);
-        color: #fff;
-        font-size: 0.9rem;
-        font-weight: 800;
-      }
+.news-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
 
-      .news-breaking marquee {
-        color: var(--muted);
-        font-weight: 600;
-      }
+.news-header h2 {
+  font-size: 1.7rem;
+  font-weight: 900;
+}
 
-      .news-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        margin-bottom: 18px;
-      }
+.news-header a {
+  color: #fff;
+  font-weight: 700;
+  opacity: 0.85;
+}
 
-      .news-header h2 {
-        font-size: 1.7rem;
-        font-weight: 900;
-      }
+.news-header a:hover {
+  opacity: 1;
+}
 
-      .news-header a {
-        color: #fff;
-        font-weight: 700;
-        opacity: 0.85;
-      }
+.news-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 0.85fr;
+  gap: 20px;
+}
 
-      .news-header a:hover {
-        opacity: 1;
-      }
+.headline-card {
+  overflow: hidden;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow);
+}
 
-      .news-grid {
-        display: grid;
-        grid-template-columns: 1.35fr 0.85fr;
-        gap: 20px;
-      }
+.headline-image {
+  height: 320px;
+  overflow: hidden;
+}
 
-      .headline-card {
-        overflow: hidden;
-        border-radius: 28px;
-        background: rgba(255, 255, 255, 0.07);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: var(--shadow);
-      }
+.headline-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 
-      .headline-image {
-        height: 320px;
-        overflow: hidden;
-      }
+.headline-content {
+  padding: 24px;
+}
 
-      .headline-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-      }
+.news-tag {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 95, 143, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffd3df;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
 
-      .headline-content {
-        padding: 24px;
-      }
+.headline-content h3 {
+  font-size: 1.7rem;
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
 
-      .news-tag {
-        display: inline-block;
-        margin-bottom: 12px;
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: rgba(255, 95, 143, 0.16);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: #ffd3df;
-        font-size: 0.85rem;
-        font-weight: 800;
-      }
+.headline-content p {
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
 
-      .headline-content h3 {
-        font-size: 1.7rem;
-        line-height: 1.25;
-        margin-bottom: 12px;
-      }
+.news-btn {
+  display: inline-block;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), #ff8fab);
+  color: white;
+  font-weight: 800;
+  box-shadow: 0 10px 25px rgba(255, 95, 143, 0.35);
+}
 
-      .headline-content p {
-        color: var(--muted);
-        line-height: 1.7;
-        margin-bottom: 18px;
-      }
+.side-news {
+  display: grid;
+  gap: 16px;
+}
 
-      .news-btn {
-        display: inline-block;
-        padding: 12px 18px;
-        border-radius: 999px;
-        background: linear-gradient(135deg, var(--accent), #ff8fab);
-        color: white;
-        font-weight: 800;
-        box-shadow: 0 10px 25px rgba(255, 95, 143, 0.35);
-      }
+.mini-news-card {
+  padding: 20px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow);
+  transition: 0.25s ease;
+}
 
-      .side-news {
-        display: grid;
-        gap: 16px;
-      }
+.mini-news-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.1);
+}
 
-      .mini-news-card {
-        padding: 20px;
-        border-radius: 24px;
-        background: rgba(255, 255, 255, 0.07);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: var(--shadow);
-        transition: 0.25s ease;
-      }
+.mini-tag {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #8ed8ff;
+}
 
-      .mini-news-card:hover {
-        transform: translateY(-4px);
-        background: rgba(255, 255, 255, 0.1);
-      }
+.mini-news-card h4 {
+  font-size: 1.08rem;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
 
-      .mini-tag {
-        display: inline-block;
-        margin-bottom: 10px;
-        font-size: 0.82rem;
-        font-weight: 800;
-        color: #8ed8ff;
-      }
+.mini-news-card p {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
 
-      .mini-news-card h4 {
-        font-size: 1.08rem;
-        line-height: 1.4;
-        margin-bottom: 10px;
-      }
-
-      .mini-news-card p {
-        color: var(--muted);
-        font-size: 0.95rem;
-        line-height: 1.6;
-        margin-bottom: 12px;
-      }
-
-      .mini-news-card a {
-        font-weight: 700;
-        color: #fff;
-      }
-
+.mini-news-card a {
+  font-weight: 700;
+  color: #fff;
+}
       .site-footer {
         padding: 24px 0 40px;
         text-align: center;
@@ -496,22 +493,20 @@
         }
       }
 
+@media (max-width: 900px) {
+  .news-grid {
+    grid-template-columns: 1fr;
+  }
 
-      @media (max-width: 900px) {
-        .news-grid {
-          grid-template-columns: 1fr;
-        }
+  .headline-image {
+    height: 240px;
+  }
 
-        .headline-image {
-          height: 240px;
-        }
-
-        .news-header {
-          flex-direction: column;
-          align-items: flex-start;
-        }
-      }
-
+  .news-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
       @media (max-width: 700px) {
         .search-box {
           flex-direction: column;
@@ -614,91 +609,92 @@
             <div>
               <p class="article-tag">Google News FR</p>
               <h2>Actualites en direct</h2>
-            </div>
-            <button id="home-news-close" class="home-news-close" type="button" aria-label="Fermer les actualites">×</button>
-          </div>
-          <p id="home-news-status" class="home-news-status">Chargement des titres...</p>
-          <div id="home-news-panel" class="home-news-panel"></div>
-          <div class="home-news-actions">
-            <button id="home-news-refresh" class="button" type="button">Actualiser</button>
-          </div>
-        </aside>
+</div>
+<button id="home-news-close" class="home-news-close" type="button" aria-label="Fermer les actualites">×</button>
+</div>
+<p id="home-news-status" class="home-news-status">Chargement des titres...</p>
+<div id="home-news-panel" class="home-news-panel"></div>
+<div class="home-news-actions">
+  <button id="home-news-refresh" class="button" type="button">Actualiser</button>
+</div>
+</aside>
 
-        <aside id="home-ai-bubble" class="home-ai-bubble" hidden aria-live="polite">
-          <div class="home-ai-bubble-head">
-            <div>
-              <p class="article-tag">Assistant IA</p>
-              <h2>Bulle separee</h2>
-            </div>
-            <button id="home-ai-close" class="home-ai-close" type="button" aria-label="Fermer l'assistant IA">×</button>
-          </div>
-          <form id="home-ai-form" class="home-ai-form">
-            <label class="sr-only" for="home-ai-input">Question complexe</label>
-            <textarea id="home-ai-input" rows="4" placeholder="Pose ici une question complexe..." spellcheck="true"></textarea>
-            <button type="submit" class="button">Demander a l'IA</button>
-          </form>
-          <div id="home-ai-panel" class="home-ai-panel"></div>
-        </aside>
-      </section>
+<aside id="home-ai-bubble" class="home-ai-bubble" hidden aria-live="polite">
+  <div class="home-ai-bubble-head">
+    <div>
+      <p class="article-tag">Assistant IA</p>
+      <h2>Bulle separee</h2>
+    </div>
+    <button id="home-ai-close" class="home-ai-close" type="button" aria-label="Fermer l'assistant IA">×</button>
+  </div>
 
+  <form id="home-ai-form" class="home-ai-form">
+    <label class="sr-only" for="home-ai-input">Question complexe</label>
+    <textarea id="home-ai-input" rows="4" placeholder="Pose ici une question complexe..." spellcheck="true"></textarea>
+    <button type="submit" class="button">Demander a l'IA</button>
+  </form>
 
+  <div id="home-ai-panel" class="home-ai-panel"></div>
+</aside>
+</section>
 
-      <section class="news-home container">
-        <div class="news-top">
-          <div class="news-breaking">
-            <span class="breaking-badge">🔴 Derniere minute</span>
-            <marquee behavior="scroll" direction="left" scrollamount="5">
-              Bitcoin rebondit • Les marches restent sous tension • La meteo change dans plusieurs regions • Les news virales explosent sur SNG Portal
-            </marquee>
-          </div>
-        </div>
+<!-- 🔥 SECTION ACTUALITÉS -->
+<section class="news-home container">
+  <div class="news-top">
+    <div class="news-breaking">
+      <span class="breaking-badge">🔴 Derniere minute</span>
+      <marquee behavior="scroll" direction="left" scrollamount="5">
+        Bitcoin rebondit • Les marches restent sous tension • La meteo change dans plusieurs regions • Les news virales explosent sur SNG Portal
+      </marquee>
+    </div>
+  </div>
 
-        <div class="news-header">
-          <h2>Actualites a la une</h2>
-          <a href="actualites.html">Voir toutes les actualites →</a>
-        </div>
+  <div class="news-header">
+    <h2>Actualites a la une</h2>
+    <a href="actualites.html">Voir toutes les actualites →</a>
+  </div>
 
-        <div class="news-grid">
-          <article class="headline-card">
-            <div class="headline-image">
-              <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80" alt="actualite principale" />
-            </div>
-            <div class="headline-content">
-              <span class="news-tag">A LA UNE</span>
-              <h3>Les grandes tendances du jour bouleversent deja le web et les marches</h3>
-              <p>
-                Retrouve ici les informations les plus importantes du moment :
-                actualites mondiales, crypto, economie, meteo et sujets viraux.
-              </p>
-              <a href="actualites.html" class="news-btn">Lire l'article</a>
-            </div>
-          </article>
+  <div class="news-grid">
+    <article class="headline-card">
+      <div class="headline-image">
+        <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80" alt="actualite principale">
+      </div>
 
-          <div class="side-news">
-            <article class="mini-news-card">
-              <span class="mini-tag">Crypto</span>
-              <h4>Bitcoin attire encore tous les regards cette semaine</h4>
-              <p>Hausse, correction, reactions des investisseurs et tendance du jour.</p>
-              <a href="actualites.html">Lire plus</a>
-            </article>
+      <div class="headline-content">
+        <span class="news-tag">A LA UNE</span>
+        <h3>Les grandes tendances du jour bouleversent deja le web et les marches</h3>
+        <p>
+          Retrouve ici les informations les plus importantes du moment :
+          actualites mondiales, crypto, economie, meteo et sujets viraux.
+        </p>
+        <a href="actualites.html" class="news-btn">Lire l'article</a>
+      </div>
+    </article>
 
-            <article class="mini-news-card">
-              <span class="mini-tag">Monde</span>
-              <h4>Les sujets internationaux les plus suivis aujourd'hui</h4>
-              <p>Les evenements qui font parler sur les reseaux et dans les medias.</p>
-              <a href="actualites.html">Lire plus</a>
-            </article>
+    <div class="side-news">
+      <article class="mini-news-card">
+        <span class="mini-tag">Crypto</span>
+        <h4>Bitcoin attire encore tous les regards cette semaine</h4>
+        <p>Hausse, correction, reactions des investisseurs et tendance du jour.</p>
+        <a href="actualites.html">Lire plus</a>
+      </article>
 
-            <article class="mini-news-card">
-              <span class="mini-tag">Viral</span>
-              <h4>Les contenus les plus viraux du moment a decouvrir</h4>
-              <p>Buzz, videos, sujets brulants et tendances du jour.</p>
-              <a href="actualites.html">Lire plus</a>
-            </article>
-          </div>
-        </div>
-      </section>
+      <article class="mini-news-card">
+        <span class="mini-tag">Monde</span>
+        <h4>Les sujets internationaux les plus suivis aujourd'hui</h4>
+        <p>Les evenements qui font parler sur les reseaux et dans les medias.</p>
+        <a href="actualites.html">Lire plus</a>
+      </article>
 
+      <article class="mini-news-card">
+        <span class="mini-tag">Viral</span>
+        <h4>Les contenus les plus viraux du moment a decouvrir</h4>
+        <p>Buzz, videos, sujets brulants et tendances du jour.</p>
+        <a href="actualites.html">Lire plus</a>
+      </article>
+    </div>
+  </div>
+</section>
       <section class="section container">
         <h2 class="section-title">Explorer le portail</h2>
         <div class="cards">
