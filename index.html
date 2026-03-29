@@ -1,329 +1,489 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3338685171783718"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3338685171783718" crossorigin="anonymous"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="SNG Portal, une home type Google Chrome avec raccourcis ronds vers chaque univers du site."
-    />
-    <meta
-      name="keywords"
-      content="SNG Portal, crypto, meteo, marches, loterie mondiale, blog, publicite, newsletter"
-    />
+    <meta name="description" content="SNG Portal, une home type Google Chrome avec raccourcis vers chaque univers du site." />
+    <meta name="keywords" content="SNG Portal, crypto, meteo, marches, loterie mondiale, blog, publicite, newsletter" />
     <meta name="robots" content="index,follow" />
     <meta name="theme-color" content="#4c3138" />
     <meta property="og:title" content="SNG Portal" />
-    <meta
-      property="og:description"
-      content="Une home type Google Chrome pour ouvrir les univers de SNG Portal depuis des raccourcis cliquables."
-    />
+    <meta property="og:description" content="Une home type Google Chrome pour ouvrir les univers de SNG Portal depuis des raccourcis cliquables." />
     <title>SNG Portal</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="./styles.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      :root {
+        --bg-1: #07111c;
+        --bg-2: #0f1d33;
+        --panel: rgba(255, 255, 255, 0.08);
+        --line: rgba(255, 255, 255, 0.12);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.72);
+        --accent: #ff5f8f;
+        --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+        --radius: 24px;
+        --max: 1180px;
+      }
+
+      body {
+        min-height: 100vh;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(255, 95, 143, 0.18), transparent 30%),
+          radial-gradient(circle at top right, rgba(97, 218, 251, 0.16), transparent 28%),
+          radial-gradient(circle at bottom center, rgba(255, 209, 102, 0.1), transparent 25%),
+          linear-gradient(135deg, var(--bg-1), var(--bg-2));
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .container {
+        width: min(100% - 28px, var(--max));
+        margin: 0 auto;
+      }
+
+      .header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: blur(14px);
+        background: rgba(5, 12, 22, 0.55);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .header-inner {
+        min-height: 78px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 800;
+      }
+
+      .brand-logo {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(255, 95, 143, 0.9), rgba(97, 218, 251, 0.75));
+        display: grid;
+        place-items: center;
+        box-shadow: var(--shadow);
+        font-size: 14px;
+        font-weight: 900;
+        border: 2px solid rgba(255, 255, 255, 0.15);
+      }
+
+      .brand-text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.05;
+      }
+
+      .brand-text span {
+        font-size: 0.82rem;
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      .nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      .nav a,
+      .top-link-button {
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid transparent;
+        color: var(--muted);
+        transition: 0.25s ease;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .nav a:hover,
+      .nav a.active,
+      .top-link-button:hover {
+        color: white;
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.14);
+      }
+
+      .hero {
+        padding: 72px 0 40px;
+        text-align: center;
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.92rem;
+        font-weight: 700;
+        margin-bottom: 18px;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.7rem, 6vw, 5rem);
+        line-height: 1;
+        margin-bottom: 16px;
+        font-weight: 900;
+      }
+
+      .hero h1 span:nth-child(1) {
+        color: #70a1ff;
+      }
+      .hero h1 span:nth-child(2) {
+        color: #ff7aa2;
+      }
+
+      .hero p {
+        max-width: 760px;
+        margin: 0 auto 28px;
+        color: var(--muted);
+        font-size: 1.08rem;
+        line-height: 1.7;
+      }
+
+      .search-box {
+        width: min(760px, 100%);
+        margin: 0 auto 26px;
+        padding: 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.09);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .search-box input {
+        flex: 1;
+        min-width: 0;
+        height: 60px;
+        border: none;
+        outline: none;
+        background: transparent;
+        color: white;
+        padding: 0 18px;
+        font-size: 1rem;
+      }
+
+      .search-box button,
+      .button {
+        border: none;
+        height: 60px;
+        padding: 0 28px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--accent), #ff8fab);
+        color: white;
+        font-size: 1rem;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .quick-links,
+      .top-links,
+      .quick-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+      }
+
+      .quick-links a,
+      .quick-chip {
+        padding: 10px 15px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font-weight: 600;
+      }
+
+      .section {
+        padding: 26px 0 70px;
+      }
+
+      .section-title {
+        font-size: 1.55rem;
+        font-weight: 900;
+        margin-bottom: 22px;
+        text-align: center;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 18px;
+      }
+
+      .card {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.05));
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius);
+        padding: 22px 16px;
+        text-align: center;
+        min-height: 170px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 12px;
+      }
+
+      .card-icon {
+        width: 58px;
+        height: 58px;
+        margin: 0 auto;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 1.25rem;
+      }
+
+      .card p,
+      .home-weather-note,
+      .home-news-status {
+        color: var(--muted);
+      }
+
+      .home-search-guidance,
+      .home-weather-card,
+      .home-news-bubble,
+      .home-ai-bubble,
+      .info-box {
+        margin-top: 18px;
+        padding: 18px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .info-strip {
+        margin-top: 28px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      .home-news-bubble-head,
+      .home-ai-bubble-head,
+      .home-weather-actions,
+      .button-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .home-news-close,
+      .home-ai-close {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: transparent;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .site-footer {
+        padding: 24px 0 40px;
+        text-align: center;
+        color: var(--muted);
+      }
+
+      @media (max-width: 980px) {
+        .header-inner {
+          flex-direction: column;
+          padding: 14px 0;
+        }
+        .info-strip {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 700px) {
+        .search-box {
+          flex-direction: column;
+          border-radius: 26px;
+        }
+        .search-box input,
+        .search-box button,
+        .button {
+          width: 100%;
+        }
+      }
+    </style>
   </head>
   <body data-page="home">
-    <div class="site-shell site-shell-search">
-      <header class="site-header site-header-minimal">
-        <div class="container header-inner">
-          <a class="brand" href="./index.html" aria-label="Accueil SNG Portal">
-            <img class="brand-logo" src="./logo-sng.svg" alt="Logo SNG Portal" />
-            <span class="brand-copy">
-              <span class="brand-kicker">SNG Media</span>
-              <span class="brand-title">SNG Portal</span>
-            </span>
-          </a>
+    <header class="header">
+      <div class="container header-inner">
+        <a href="./index.html" class="brand" aria-label="Accueil">
+          <div class="brand-logo">SNG</div>
+          <div class="brand-text">
+            <strong>SNG Portal</strong>
+            <span>Media • Infos • Crypto • Monde</span>
+          </div>
+        </a>
 
-          <button
-            class="menu-toggle"
-            type="button"
-            aria-expanded="false"
-            aria-controls="main-nav"
-          >
-            Menu
-          </button>
+        <nav class="nav" id="main-nav" aria-label="Navigation principale">
+          <a href="./index.html" class="active">Accueil</a>
+          <a href="./crypto.html">Crypto</a>
+          <a href="./meteo.html">Meteo</a>
+          <a href="./marches.html">Marches</a>
+          <a href="./loterie.html">Loterie</a>
+          <a href="./sports.html">Sports</a>
+          <a href="./jeux.html">Jeux</a>
+          <a href="./blog.html">Blog</a>
+          <a href="./contact.html">Contact</a>
+        </nav>
+      </div>
+    </header>
 
-          <nav id="main-nav" class="main-nav" aria-label="Navigation principale">
-            <a class="is-current" href="./index.html">Accueil</a>
-            <a href="./crypto.html">Crypto</a>
-            <a href="./meteo.html">Meteo</a>
-            <a href="./marches.html">Marches</a>
-            <a href="./loterie.html">Loterie Monde</a>
-            <a href="./sports.html">Paris sportifs</a>
-            <a href="./jeux.html">Jeux</a>
-            <a href="./blog.html">Blog</a>
-            <a href="./satellites.html">Satellites</a>
-            <a href="./planetes.html">Planetes</a>
-            <a href="./scolaire.html">Scolaire</a>
-            <a href="./contact.html">Contact</a>
-          </nav>
+    <main>
+      <section class="hero container">
+        <div class="hero-badge">🔥 Ton portail d'infos nouvelle generation</div>
+        <h1><span>SNG</span><span> Portal</span></h1>
+
+        <p>
+          Toute l'actualite, les cryptos, les marches, la meteo, les loteries,
+          les jeux et les infos virales reunis dans une seule plateforme elegante,
+          rapide et moderne.
+        </p>
+
+        <nav class="top-links" aria-label="Liens rapides">
+          <button id="home-news-trigger" class="top-link-button" type="button" aria-controls="home-news-bubble" aria-expanded="false">Actualites</button>
+          <a href="./crypto.html">Crypto</a>
+          <a href="./meteo.html">Meteo</a>
+          <a href="./marches.html">Marches</a>
+          <a href="./loterie.html">Loterie</a>
+          <a href="./sports.html">Sports</a>
+          <a href="./jeux.html">Jeux</a>
+          <a href="./blog.html">Blog</a>
+          <a href="./scolaire.html">Scolaire</a>
+        </nav>
+
+        <form id="portal-search-form" class="search-box" role="search">
+          <label class="sr-only" for="portal-search">Rechercher</label>
+          <input id="portal-search" type="search" placeholder="Rechercher une rubrique, une news, une crypto..." />
+          <button type="submit">Chercher</button>
+        </form>
+
+        <section id="home-search-guidance" class="home-search-guidance" aria-live="polite">
+          <p class="article-tag">Recherche accueil</p>
+          <h2>Trouve vite la bonne page</h2>
+          <p>Recherche un theme simple pour ouvrir directement la rubrique adaptee du portail.</p>
+        </section>
+
+        <div class="quick-links quick-actions">
+          <a href="./crypto.html">Bitcoin</a>
+          <a href="./marches.html">Dollar / Euro</a>
+          <a href="https://news.google.com/home?hl=fr&gl=FR&ceid=FR%3Afr" target="_blank" rel="noreferrer">News virales</a>
+          <a href="./loterie.html">Resultats loterie</a>
+          <a href="./sports.html">Sports</a>
+          <a href="https://familialcanal.blogspot.com/" target="_blank" rel="noreferrer">Blogger</a>
         </div>
-      </header>
 
-      <main class="search-home">
-        <div class="container search-home-inner">
-          <nav class="top-links" aria-label="Liens rapides">
-            <button id="home-news-trigger" class="top-link-button" type="button" aria-controls="home-news-bubble" aria-expanded="false">Actualites</button>
-            <a href="./crypto.html">Crypto</a>
-            <a href="./meteo.html">Meteo</a>
-            <a href="./marches.html">Marches</a>
-            <a href="./loterie.html">Loterie Monde</a>
-            <a href="./sports.html">Paris</a>
-            <a href="./jeux.html">Jeux</a>
-            <a href="./blog.html">Blog</a>
-            <a href="./satellites.html">Satellites</a>
-            <a href="./planetes.html">Planetes</a>
-            <a href="./scolaire.html">Scolaire</a>
-            <a href="./contact.html">Contact</a>
-          </nav>
+        <section class="home-weather-card" aria-label="Meteo locale rapide">
+          <div class="home-weather-copy">
+            <p class="article-tag">Meteo locale</p>
+            <h2>Temperature et temps autour de toi</h2>
+            <p id="home-weather-status" class="home-weather-note">Active la localisation pour voir rapidement la temperature et le temps chez toi.</p>
+          </div>
+          <div id="home-weather-widget" class="home-weather-widget"><div class="empty-state">La meteo locale apparaitra ici.</div></div>
+          <div class="home-weather-actions">
+            <button id="home-weather-locate" class="button" type="button">Voir ma meteo</button>
+            <a class="button" href="./meteo.html">Ouvrir la page meteo</a>
+          </div>
+        </section>
 
-    <section class="search-stage reveal">
-  <p class="search-logo-kicker">SNG Portal</p>
-  <img class="hero-logo-mark" src="./logo-sng.svg" alt="Logo central SNG Portal" />
-  <h1 class="search-logo" aria-label="SNG Portal">
-    <span class="logo-blue">S</span><span class="logo-red">N</span><span class="logo-yellow">G</span>
-    <span class="logo-blue">P</span><span class="logo-green">o</span><span class="logo-red">r</span><span class="logo-yellow">t</span><span class="logo-blue">a</span><span class="logo-green">l</span>
-  </h1>
+        <button id="home-ai-trigger" class="button" type="button" aria-controls="home-ai-bubble" aria-expanded="false">Assistant IA</button>
 
-            <form id="portal-search-form" class="search-bar" role="search">
-              <label class="sr-only" for="portal-search">Recherche</label>
-              <span class="search-icon" aria-hidden="true">S</span>
-              <input
-                id="portal-search"
-                type="search"
-                placeholder="Rechercher une rubrique: scolaire, meteo, crypto, contact..."
-              />
-              <button type="submit">Chercher</button>
-            </form>
-
-            <section id="home-search-guidance" class="home-search-guidance reveal" aria-live="polite">
-              <p class="article-tag">Recherche accueil</p>
-              <h2>Trouve vite la bonne page</h2>
-              <p>Recherche un theme simple pour ouvrir directement la rubrique adaptee du portail.</p>
-            </section>
-
-            <div class="quick-actions">
-              <a class="quick-chip quick-chip-strong" href="./crypto.html">Crypto Info</a>
-              <a class="quick-chip" href="./meteo.html">Meteo</a>
-              <a class="quick-chip" href="./marches.html">Marches</a>
-              <a class="quick-chip" href="./loterie.html">Loterie Monde</a>
-              <a class="quick-chip" href="./sports.html">Paris sportifs</a>
-              <a class="quick-chip" href="./jeux.html">Jeux</a>
-              <a class="quick-chip" href="./blog.html">Blog</a>
-              <a class="quick-chip" href="./scolaire.html">Scolaire</a>
-              <a class="quick-chip" href="https://familialcanal.blogspot.com/" target="_blank" rel="noreferrer">Blogger</a>
-              <a class="quick-chip" href="./satellites.html">Satellites</a>
-              <a class="quick-chip" href="./planetes.html">Planetes</a>
-              <a class="quick-chip" href="./contact.html">Contact</a>
+        <aside id="home-news-bubble" class="home-news-bubble" hidden aria-live="polite">
+          <div class="home-news-bubble-head">
+            <div>
+              <p class="article-tag">Google News FR</p>
+              <h2>Actualites en direct</h2>
             </div>
+            <button id="home-news-close" class="home-news-close" type="button" aria-label="Fermer les actualites">×</button>
+          </div>
+          <p id="home-news-status" class="home-news-status">Chargement des titres...</p>
+          <div id="home-news-panel" class="home-news-panel"></div>
+          <div class="home-news-actions">
+            <button id="home-news-refresh" class="button" type="button">Actualiser</button>
+          </div>
+        </aside>
 
-            <section class="home-weather-card reveal" aria-label="Meteo locale rapide">
-              <div class="home-weather-copy">
-                <p class="article-tag">Meteo locale</p>
-                <h2>Temperature et temps autour de toi</h2>
-                <p id="home-weather-status" class="home-weather-note">
-                  Active la localisation pour voir rapidement la temperature et le temps chez toi.
-                </p>
-              </div>
-              <div id="home-weather-widget" class="home-weather-widget">
-                <div class="empty-state">La meteo locale apparaitra ici.</div>
-              </div>
-              <div class="home-weather-actions">
-                <button id="home-weather-locate" class="button button-solid" type="button">Voir ma meteo</button>
-                <a class="button button-outline" href="./meteo.html">Ouvrir la page meteo</a>
-              </div>
-            </section>
-
-            <button id="home-ai-trigger" class="home-ai-trigger" type="button" aria-controls="home-ai-bubble" aria-expanded="false">
-              Assistant IA
-            </button>
-
-            <aside id="home-news-bubble" class="home-news-bubble" hidden aria-live="polite">
-              <div class="home-news-bubble-head">
-                <div>
-                  <p class="article-tag">Google News FR</p>
-                  <h2>Actualites en direct</h2>
-                </div>
-                <button id="home-news-close" class="home-news-close" type="button" aria-label="Fermer les actualites">×</button>
-              </div>
-              <p id="home-news-status" class="home-news-status">Chargement des titres...</p>
-              <div id="home-news-panel" class="home-news-panel"></div>
-              <div class="home-news-actions">
-                <button id="home-news-refresh" class="button button-outline" type="button">Actualiser</button>
-                <a class="button button-solid" href="https://news.google.com/home?hl=fr&gl=FR&ceid=FR%3Afr" target="_blank" rel="noreferrer">Ouvrir Google News</a>
-              </div>
-            </aside>
-
-            <aside id="home-ai-bubble" class="home-ai-bubble" hidden aria-live="polite">
-              <div class="home-ai-bubble-head">
-                <div>
-                  <p class="article-tag">Assistant IA</p>
-                  <h2>Bulle separee</h2>
-                </div>
-                <button id="home-ai-close" class="home-ai-close" type="button" aria-label="Fermer l'assistant IA">×</button>
-              </div>
-              <form id="home-ai-form" class="home-ai-form">
-                <label class="sr-only" for="home-ai-input">Question complexe</label>
-                <textarea id="home-ai-input" rows="4" placeholder="Pose ici une question complexe: explication, resume, aide detaillee..." spellcheck="true"></textarea>
-                <button type="submit" class="button button-solid">Demander a l'IA</button>
-              </form>
-              <div id="home-ai-panel" class="home-ai-panel"></div>
-            </aside>
-
-            <div class="shortcut-grid">
-              <a class="shortcut-card reveal" href="./crypto.html">
-                <span class="shortcut-icon">C</span>
-                <strong>Crypto</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./meteo.html">
-                <span class="shortcut-icon">M</span>
-                <strong>Meteo</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./marches.html">
-                <span class="shortcut-icon">P</span>
-                <strong>Marches</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./crypto.html#country-zone">
-                <span class="shortcut-icon">G</span>
-                <strong>Adoption</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./crypto.html#learn-zone">
-                <span class="shortcut-icon">I</span>
-                <strong>Infos</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./loterie.html">
-                <span class="shortcut-icon">L</span>
-                <strong>Loterie</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./sports.html">
-                <span class="shortcut-icon">S</span>
-                <strong>Sports</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./jeux.html">
-                <span class="shortcut-icon">J</span>
-                <strong>Jeux</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./blog.html">
-                <span class="shortcut-icon">B</span>
-                <strong>Blog</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./scolaire.html">
-                <span class="shortcut-icon">E</span>
-                <strong>Scolaire</strong>
-              </a>
-              <a class="shortcut-card reveal" href="https://familialcanal.blogspot.com/" target="_blank" rel="noreferrer">
-                <span class="shortcut-icon">F</span>
-                <strong>Blogger</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./satellites.html">
-                <span class="shortcut-icon">T</span>
-                <strong>Satellites</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./planetes.html">
-                <span class="shortcut-icon">O</span>
-                <strong>Planetes</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./publicite.html">
-                <span class="shortcut-icon">A</span>
-                <strong>Ads</strong>
-              </a>
-              <a class="shortcut-card reveal" href="./contact.html">
-                <span class="shortcut-icon">@</span>
-                <strong>Contact</strong>
-              </a>
+        <aside id="home-ai-bubble" class="home-ai-bubble" hidden aria-live="polite">
+          <div class="home-ai-bubble-head">
+            <div>
+              <p class="article-tag">Assistant IA</p>
+              <h2>Bulle separee</h2>
             </div>
+            <button id="home-ai-close" class="home-ai-close" type="button" aria-label="Fermer l'assistant IA">×</button>
+          </div>
+          <form id="home-ai-form" class="home-ai-form">
+            <label class="sr-only" for="home-ai-input">Question complexe</label>
+            <textarea id="home-ai-input" rows="4" placeholder="Pose ici une question complexe..." spellcheck="true"></textarea>
+            <button type="submit" class="button">Demander a l'IA</button>
+          </form>
+          <div id="home-ai-panel" class="home-ai-panel"></div>
+        </aside>
+      </section>
 
-<div class="home-bottom-card reveal">
-  <p>
-    Clique sur un rond pour ouvrir directement la page concernee.
-    La home reste simple, et chaque sujet important a sa propre page.
-  </p>
-</div>
+      <section class="section container">
+        <h2 class="section-title">Explorer le portail</h2>
+        <div class="cards">
+          <a href="./crypto.html" class="card"><div class="card-icon">₿</div><h3>Crypto</h3><p>Bitcoin, Ethereum, altcoins, prix en direct et tendances.</p></a>
+          <a href="./meteo.html" class="card"><div class="card-icon">☁</div><h3>Meteo</h3><p>Consulte la meteo du jour et les previsions rapidement.</p></a>
+          <a href="./marches.html" class="card"><div class="card-icon">📈</div><h3>Marches</h3><p>Dollar, euro, petrole, or et infos economiques utiles.</p></a>
+          <a href="./loterie.html" class="card"><div class="card-icon">🎱</div><h3>Loterie Monde</h3><p>Resultats, grilles et jeux populaires de plusieurs pays.</p></a>
+          <a href="./sports.html" class="card"><div class="card-icon">⚽</div><h3>Sports</h3><p>Foot, basket, matchs, scores et infos du moment.</p></a>
+          <a href="./jeux.html" class="card"><div class="card-icon">🎮</div><h3>Jeux</h3><p>Univers gaming, nouveautes, fun et rubriques interactives.</p></a>
+          <a href="./blog.html" class="card"><div class="card-icon">📰</div><h3>Blog</h3><p>Articles viraux, analyses, guides et contenus tendances.</p></a>
+          <a href="./contact.html" class="card"><div class="card-icon">✉</div><h3>Contact</h3><p>Contacte SNG Portal pour pub, infos ou collaboration.</p></a>
+        </div>
 
-<section class="home-discovery reveal" aria-label="Decouvrir SNG Portal">
-  <article class="home-info-card">
-    <p class="article-tag">Tendances</p>
-    <h2>Ce qui attire le plus</h2>
-    <div class="mini-link-list">
-      <a href="./crypto.html">Crypto qui monte</a>
-      <a href="./blog.html">Articles recents</a>
-      <a href="./loterie.html">Loterie Monde</a>
-      <a href="./satellites.html">Mode espace</a>
-    </div>
-  </article>
+        <div class="info-strip">
+          <div class="info-box"><strong>+10 rubriques</strong><span>Un portail riche et organise</span></div>
+          <div class="info-box"><strong>Design premium</strong><span>Lisible sur PC et mobile</span></div>
+          <div class="info-box"><strong>Style SNG</strong><span>Moderne, fort et elegant</span></div>
+        </div>
+      </section>
+    </main>
 
-  <article class="home-info-card">
-    <p class="article-tag">Newsletter</p>
-    <h2>Recevoir les nouveautes</h2>
-    <form id="home-newsletter-form" class="newsletter-form">
-      <input
-        type="email"
-        name="email"
-        placeholder="Ton email pour les news SNG"
-        aria-label="Email newsletter"
-        required
-      />
-      <button class="button button-solid" type="submit">S'inscrire</button>
-    </form>
-    <div id="home-newsletter-response" class="inline-actions"></div>
-  </article>
-
-  <article class="home-info-card">
-    <p class="article-tag">Reseaux</p>
-    <h2>Suivre le projet</h2>
-    <div class="social-grid social-grid-single">
-      <a class="social-link" href="https://www.youtube.com/" target="_blank" rel="noreferrer">YouTube</a>
-      <a class="social-link" href="https://www.tiktok.com/" target="_blank" rel="noreferrer">TikTok</a>
-      <a class="social-link" href="https://www.instagram.com/" target="_blank" rel="noreferrer">Instagram</a>
-      <a class="social-link" href="https://www.facebook.com/" target="_blank" rel="noreferrer">Facebook</a>
-      <a class="social-link" href="https://familialcanal.blogspot.com/" target="_blank" rel="noreferrer">Blogger</a>
-    </div>
-  </article>
-
-  <article class="home-info-card">
-    <p class="article-tag">Officiel</p>
-    <h2>Pages importantes</h2>
-    <div class="mini-link-list">
-      <a href="./contact.html">Contact</a>
-      <a href="./scolaire.html">Scolaire</a>
-      <a href="./publicite.html">Publicite</a>
-      <a href="./mentions-legales.html">Mentions legales</a>
-      <a href="./confidentialite.html">Confidentialite</a>
-    </div>
-  </article>
-</section>
-</div>
-</main>
-
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <p>(c) 2026 SNG Portal. Tous droits reserves.</p>
-    <p>Accueil type Chrome, avec pages separees par sujet.</p>
-  </div>
-</footer>
-</div>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>(c) 2026 SNG Portal. Tous droits reserves.</p>
+      </div>
+    </footer>
 
     <script src="./site.js"></script>
     <script src="./home.js"></script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "SNG Portal",
-        "url": "./index.html",
-        "publisher": {
-          "@type": "Organization",
-          "name": "SNG Portal",
-          "logo": "./logo-sng.svg"
-        }
-      }
-    </script>
   </body>
 </html>
