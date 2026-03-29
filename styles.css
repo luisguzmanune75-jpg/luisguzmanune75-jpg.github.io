@@ -721,11 +721,7 @@
 }
 
 .match-card.is-active,
-.match-card-button.is-active {
-  border-color: rgba(255, 181, 200, 0.32);
-  background: rgba(255, 181, 200, 0.08);
-}
-
+.match-card-button.is-active,
 .game-card.is-active {
   border-color: rgba(255, 181, 200, 0.32);
   background: rgba(255, 181, 200, 0.08);
@@ -917,6 +913,10 @@ body[data-page="loterie"] .hero-actions {
   transform: translateY(0);
 }
 
+/* =========================
+   RESPONSIVE FIXÉS
+   ========================= */
+
 @media (max-width: 1120px) {
   .pulse-grid,
   .live-two-col,
@@ -930,14 +930,13 @@ body[data-page="loterie"] .hero-actions {
   .blog-grid,
   .trend-grid,
   .ad-grid,
-  .social-grid {
+  .social-grid,
+  body[data-page="old-news"] .pulse-grid,
+  body[data-page="old-news"] .live-two-col,
+  body[data-page="old-news"] .hero-grid,
+  body[data-page="old-news"] .news-list {
     grid-template-columns: 1fr;
   }
-body[data-page="old-news"] .pulse-grid,
-body[data-page="old-news"] .live-two-col,
-body[data-page="old-news"] .hero-grid,
-body[data-page="old-news"] .news-list {
-  grid-template-columns: 1fr;
 }
 
 @media (max-width: 920px) {
@@ -966,6 +965,7 @@ body[data-page="old-news"] .news-list {
     align-items: center;
     justify-content: center;
   }
+
   body[data-page="old-news"] .main-nav {
     position: absolute;
     top: calc(100% + 10px);
@@ -1072,6 +1072,7 @@ body[data-page="old-news"] .news-list {
     flex-direction: column;
     align-items: flex-start;
   }
+}
 
 .theme-result-card:hover,
 .theme-result-card:focus-visible,
@@ -1264,6 +1265,8 @@ body[data-page="old-news"] .news-list {
 @media (max-width: 860px) {
   .study-search-panel {
     grid-template-columns: 1fr;
+  }
+
   body[data-page="old-news"] .top-links,
   body[data-page="old-news"] .panel-head,
   body[data-page="old-news"] .module-head,
@@ -1674,10 +1677,7 @@ body[data-page="old-news"] .news-list {
 
 /* =========================================================
    PATCH GLOBAL SNG PORTAL
-   A COLLER TOUT EN BAS DE styles.css
    ========================================================= */
-
-/* ---------- ACCUEIL : on protège la home ---------- */
 
 body[data-page="home"] .module,
 body[data-page="home"] .hero-copy,
@@ -1791,8 +1791,6 @@ body[data-page="home"] .news-card,
 body[data-page="home"] .lead-story {
   all: unset;
 }
-
-/* ---------- NEWS : style isolé ---------- */
 
 body[data-page="old-news"] {
   background:
@@ -2182,40 +2180,11 @@ body[data-page="old-news"] .footer-inner {
   font-size: 0.92rem;
 }
 
-/* ---------- LOTERIE : on garde le style isolé ---------- */
-body[data-page="loterie"] .hero-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
-  gap: 20px;
-}
-
-body[data-page="loterie"] .hero-copy h1 {
-  margin: 14px 0 0;
-  max-width: 11ch;
-  font-size: clamp(2.3rem, 5.8vw, 4.6rem);
-  line-height: 1.03;
-  letter-spacing: -0.05em;
-}
-
-body[data-page="loterie"] .hero-text {
-  max-width: 60ch;
-  margin-top: 20px;
-}
-
-body[data-page="loterie"] .hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 22px;
-}
-
-/* ---------- RESPONSIVE ---------- */
-
 @media (max-width: 1120px) {
-body[data-page="old-news"] .pulse-grid,
-body[data-page="old-news"] .live-two-col,
-body[data-page="old-news"] .hero-grid,
-body[data-page="old-news"] .news-list,
+  body[data-page="old-news"] .pulse-grid,
+  body[data-page="old-news"] .live-two-col,
+  body[data-page="old-news"] .hero-grid,
+  body[data-page="old-news"] .news-list,
   body[data-page="loterie"] .hero-grid,
   .crypto-layout,
   .crypto-explorer-grid,
@@ -2293,7 +2262,6 @@ body[data-page="old-news"] .news-list,
   }
 }
 
-/* ---------- HOME GOOGLE COLOR REFRESH ---------- */
 body[data-page="home"] {
   background:
     radial-gradient(circle at 18% 12%, rgba(66, 133, 244, 0.28), transparent 36%),
@@ -2307,6 +2275,7 @@ body[data-page="home"] .site-header-minimal {
   background: transparent;
   border-bottom: 0;
 }
+
 body[data-page="home"] .search-home-inner {
   min-height: calc(100vh - 190px);
   display: flex;
@@ -2367,11 +2336,7 @@ body[data-page="home"] .top-links {
   opacity: 0.95;
 }
 
-body[data-page="home"] .top-links a {
-  font-size: 0.95rem;
-  color: #d9e2f2;
-}
-
+body[data-page="home"] .top-links a,
 body[data-page="home"] .top-link-button {
   font-size: 0.95rem;
   color: #d9e2f2;
@@ -2472,16 +2437,18 @@ body[data-page="home"] .shortcut-card:focus-visible {
     font-size: 0.78rem;
   }
 }
-html, body {
+
+html,
+body {
   margin: 0;
   padding: 0;
   min-height: 100%;
 }
 
 body {
-  background: linear-gradient(180deg, #101827, #0f1624 52%, #0b1320) !important;
   color: #f5f7fb;
   font-family: "Space Grotesk", Arial, sans-serif;
+  background: linear-gradient(180deg, #101827, #0f1624 52%, #0b1320);
 }
 
 body[data-page="home"] {
