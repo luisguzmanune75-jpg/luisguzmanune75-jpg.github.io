@@ -70,6 +70,7 @@
       <main class="search-home">
         <div class="container search-home-inner">
           <nav class="top-links" aria-label="Liens rapides">
+            <button id="home-news-trigger" class="top-link-button" type="button" aria-controls="home-news-bubble" aria-expanded="false">Actualites</button>
             <a href="./crypto.html">Crypto</a>
             <a href="./meteo.html">Meteo</a>
             <a href="./marches.html">Marches</a>
@@ -143,6 +144,22 @@
             <button id="home-ai-trigger" class="home-ai-trigger" type="button" aria-controls="home-ai-bubble" aria-expanded="false">
               Assistant IA
             </button>
+
+            <aside id="home-news-bubble" class="home-news-bubble" hidden aria-live="polite">
+              <div class="home-news-bubble-head">
+                <div>
+                  <p class="article-tag">Google News FR</p>
+                  <h2>Actualites en direct</h2>
+                </div>
+                <button id="home-news-close" class="home-news-close" type="button" aria-label="Fermer les actualites">×</button>
+              </div>
+              <p id="home-news-status" class="home-news-status">Chargement des titres...</p>
+              <div id="home-news-panel" class="home-news-panel"></div>
+              <div class="home-news-actions">
+                <button id="home-news-refresh" class="button button-outline" type="button">Actualiser</button>
+                <a class="button button-solid" href="https://news.google.com/home?hl=fr&gl=FR&ceid=FR%3Afr" target="_blank" rel="noreferrer">Ouvrir Google News</a>
+              </div>
+            </aside>
 
             <aside id="home-ai-bubble" class="home-ai-bubble" hidden aria-live="polite">
               <div class="home-ai-bubble-head">
