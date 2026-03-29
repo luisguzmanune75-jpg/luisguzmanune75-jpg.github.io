@@ -32,6 +32,16 @@ const homeAssistantState = {
   messages: [],
 };
 
+const homeNewsState = {
+  open: false,
+  loading: false,
+  loadedAt: null,
+  items: [],
+  error: "",
+};
+
+const googleNewsFeedURL = "https://news.google.com/rss?hl=fr&gl=FR&ceid=FR:fr";
+
 const homeSearchTopics = [
   {
     href: "./scolaire.html",
@@ -439,6 +449,7 @@ function dedupeHomeNodes(selector, keep = 1) {
 function dedupeHomeLayout() {
   dedupeHomeNodes("#home-search-guidance");
   dedupeHomeNodes(".quick-actions");
+  dedupeHomeNodes("#home-news-bubble");
   dedupeHomeNodes(".home-weather-card");
   dedupeHomeNodes("#home-ai-trigger");
   dedupeHomeNodes("#home-ai-bubble");
@@ -674,11 +685,204 @@ function setupHomeWeather() {
   });
 }
 
+function safeNewsDate(value) {
+  if (!value) {
+    return "Date inconnue";
+  }
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return "Date inconnue";
+  }
+
+  return parsed.toLocaleString("fr-FR", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+}
+
+function parseGoogleNewsXML(payload) {
+  const doc = new DOMParser().parseFromString(payload, "application/xml");
+  const parseError = doc.querySelector("parsererror");
+  if (parseError) {
+    throw new Error("Flux RSS invalide");
+  }
+
+  return Array.from(doc.querySelectorAll("item"))
+    .slice(0, 14)
+    .map((item) => {
+      const title = item.querySelector("title")?.textContent?.trim() || "Sans titre";
+      const link = item.querySelector("link")?.textContent?.trim() || "https://news.google.com/home?hl=fr&gl=FR&ceid=FR%3Afr";
+      const source = item.querySelector("source")?.textContent?.trim() || "Google News";
+      const pubDate = item.querySelector("pubDate")?.textContent?.trim() || "";
+
+      return {
+        title,
+        link,
+        source,
+        pubDate,
+      };
+    });
+}
+
+async function fetchGoogleNewsItems() {
+  const encodedFeed = encodeURIComponent(googleNewsFeedURL);
+  const attempts = [
+    googleNewsFeedURL,
+    `https://api.allorigins.win/raw?url=${encodedFeed}`,
+    `https://api.allorigins.win/get?url=${encodedFeed}`,
+  ];
+
+  let lastError = null;
+
+  for (const url of attempts) {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          Accept: "application/rss+xml, application/xml, text/xml, text/plain",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      if (url.includes("/get?")) {
+        const payload = await response.json();
+        return parseGoogleNewsXML(payload.contents || "");
+      }
+
+      const payload = await response.text();
+      return parseGoogleNewsXML(payload);
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError || new Error("Impossible de recuperer le flux Google News");
+}
+
+function renderHomeNews() {
+  const panel = document.querySelector("#home-news-panel");
+  const status = document.querySelector("#home-news-status");
+
+  if (!panel || !status) {
+    return;
+  }
+
+  if (homeNewsState.loading) {
+    status.textContent = "Chargement des actualites Google News...";
+    return;
+  }
+
+  if (homeNewsState.error) {
+    status.textContent = homeNewsState.error;
+    panel.innerHTML = "";
+    return;
+  }
+
+  if (!homeNewsState.items.length) {
+    status.textContent = "Aucune actualite disponible pour le moment.";
+    panel.innerHTML = "";
+    return;
+  }
+
+  status.textContent = `Derniere mise a jour ${SITE.formatRelativeTime(homeNewsState.loadedAt)}. Source: Google News FR.`;
+  panel.innerHTML = homeNewsState.items
+    .map(
+      (item) => `
+      <article class="home-news-item">
+        <a href="${SITE.safeUrl(item.link, "https://news.google.com/home?hl=fr&gl=FR&ceid=FR%3Afr")}" target="_blank" rel="noreferrer">${SITE.escapeHTML(item.title)}</a>
+        <p class="home-news-meta">${SITE.escapeHTML(item.source)} · ${SITE.escapeHTML(safeNewsDate(item.pubDate))}</p>
+      </article>
+    `,
+    )
+    .join("");
+}
+
+async function refreshHomeNews() {
+  if (homeNewsState.loading) {
+    return;
+  }
+
+  homeNewsState.loading = true;
+  homeNewsState.error = "";
+  renderHomeNews();
+
+  try {
+    const items = await fetchGoogleNewsItems();
+    homeNewsState.items = items;
+    homeNewsState.loadedAt = new Date().toISOString();
+  } catch (error) {
+    homeNewsState.error = "Impossible de charger Google News en direct pour le moment. Clique sur le bouton ci-dessous pour ouvrir Google News.";
+  } finally {
+    homeNewsState.loading = false;
+    renderHomeNews();
+  }
+}
+
+function openNewsBubble() {
+  const bubble = document.querySelector("#home-news-bubble");
+  const trigger = document.querySelector("#home-news-trigger");
+
+  if (!bubble || !trigger) {
+    return;
+  }
+
+  bubble.hidden = false;
+  bubble.classList.add("is-open");
+  trigger.setAttribute("aria-expanded", "true");
+  homeNewsState.open = true;
+
+  if (!homeNewsState.items.length && !homeNewsState.loading) {
+    refreshHomeNews();
+  }
+}
+
+function closeNewsBubble() {
+  const bubble = document.querySelector("#home-news-bubble");
+  const trigger = document.querySelector("#home-news-trigger");
+
+  if (!bubble || !trigger) {
+    return;
+  }
+
+  bubble.classList.remove("is-open");
+  bubble.hidden = true;
+  trigger.setAttribute("aria-expanded", "false");
+  homeNewsState.open = false;
+}
+
+function setupHomeNewsBubble() {
+  const trigger = document.querySelector("#home-news-trigger");
+  const close = document.querySelector("#home-news-close");
+  const refresh = document.querySelector("#home-news-refresh");
+  const bubble = document.querySelector("#home-news-bubble");
+
+  if (!trigger || !close || !refresh || !bubble) {
+    return;
+  }
+
+  renderHomeNews();
+
+  trigger.addEventListener("click", () => {
+    openNewsBubble();
+  });
+
+  close.addEventListener("click", () => {
+    closeNewsBubble();
+  });
+
+  refresh.addEventListener("click", () => {
+    refreshHomeNews();
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   dedupeHomeLayout();
   SITE.setupMenu();
   SITE.observeReveals();
   setupSearch();
+  setupHomeNewsBubble();
   setupAIAssistantBubble();
   setupHomeNewsletter();
   setupHomeWeather();

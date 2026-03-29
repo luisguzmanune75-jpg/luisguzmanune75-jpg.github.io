@@ -1417,6 +1417,90 @@ body[data-page="old-news"] .news-list {
   line-height: 1.75;
 }
 
+.top-link-button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.home-news-bubble {
+  position: fixed;
+  top: 88px;
+  right: 22px;
+  z-index: 76;
+  width: min(560px, calc(100vw - 28px));
+  max-height: min(78vh, 760px);
+  overflow: auto;
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 24px;
+  background: rgba(8, 17, 40, 0.96);
+  box-shadow: var(--shadow);
+}
+
+.home-news-bubble.is-open {
+  display: grid;
+}
+
+.home-news-bubble-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.home-news-bubble-head h2 {
+  margin: 8px 0 0;
+}
+
+.home-news-close {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+
+.home-news-status {
+  margin: 0;
+  color: var(--muted);
+}
+
+.home-news-panel {
+  display: grid;
+  gap: 10px;
+}
+
+.home-news-item {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 12px;
+}
+
+.home-news-item a {
+  color: #eff4ff;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.home-news-meta {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  color: #c7d5f1;
+}
+
+.home-news-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 @media (max-width: 900px) {
   .home-ai-trigger {
     right: 14px;
@@ -1427,6 +1511,13 @@ body[data-page="old-news"] .news-list {
     right: 12px;
     bottom: 78px;
     width: min(420px, calc(100vw - 24px));
+  }
+
+  .home-news-bubble {
+    top: 74px;
+    right: 12px;
+    width: min(560px, calc(100vw - 24px));
+    max-height: min(80vh, 760px);
   }
 }
 
@@ -2279,6 +2370,19 @@ body[data-page="home"] .top-links {
 body[data-page="home"] .top-links a {
   font-size: 0.95rem;
   color: #d9e2f2;
+}
+
+body[data-page="home"] .top-link-button {
+  font-size: 0.95rem;
+  color: #d9e2f2;
+}
+
+body[data-page="home"] .top-link-button:hover,
+body[data-page="home"] .top-link-button:focus-visible,
+body[data-page="home"] .top-links a:hover,
+body[data-page="home"] .top-links a:focus-visible {
+  color: #ffffff;
+  text-decoration: underline;
 }
 
 body[data-page="home"] .search-bar {
