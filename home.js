@@ -728,7 +728,6 @@ function parseGoogleNewsXML(payload) {
 async function fetchGoogleNewsItems() {
   const encodedFeed = encodeURIComponent(googleNewsFeedURL);
   const attempts = [
-    googleNewsFeedURL,
     `https://api.allorigins.win/raw?url=${encodedFeed}`,
     `https://api.allorigins.win/get?url=${encodedFeed}`,
   ];
@@ -762,8 +761,8 @@ async function fetchGoogleNewsItems() {
 }
 
 function renderHomeNews() {
-  const panel = document.querySelector("#home-news-panel");
-  const status = document.querySelector("#home-news-status");
+  const panel = document.querySelector("#news-container");
+  const status = document.querySelector("#news-status");
 
   if (!panel || !status) {
     return;
