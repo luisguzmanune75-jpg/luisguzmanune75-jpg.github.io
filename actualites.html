@@ -440,27 +440,9 @@
     </section>
 
     <section class="layout">
-      <div class="main-column" id="news-main">
-        <div class="status-box">Chargement des articles...</div>
-      </div>
-
-      <aside class="side-column">
-        <section class="side-card">
-          <h3>En direct</h3>
-          <div class="mini-list" id="news-live">
-            <div class="mini-item">
-              <strong>Chargement...</strong>
-              <span>Les titres arrivent</span>
-            </div>
-          </div>
-        </section>
-
-        <section class="side-card">
-          <h3>Infos flux</h3>
-          <p id="feed-info">Source en cours : Google Actualites France.</p>
-        </section>
-      </aside>
+      <div id="news-container"></div>
     </section>
+
   </main>
 
   <footer class="footer">
@@ -468,190 +450,39 @@
   </footer>
 
   <script>
-    const FEEDS = {
-      top: {
-        label: "A la une",
-        rss: "https://news.google.com/rss?hl=fr&gl=FR&ceid=FR:fr"
-      },
-      world: {
-        label: "Monde",
-        rss: "https://news.google.com/rss/headlines/section/topic/WORLD?hl=fr&gl=FR&ceid=FR:fr"
-      },
-      business: {
-        label: "Business",
-        rss: "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=fr&gl=FR&ceid=FR:fr"
-      },
-      sports: {
-        label: "Sports",
-        rss: "https://news.google.com/rss/headlines/section/topic/SPORTS?hl=fr&gl=FR&ceid=FR:fr"
-      }
-    };
+    const RSS_URL = "https://news.google.com/rss?hl=fr&gl=FR&ceid=FR:fr";
+    const PROXY = "https://api.allorigins.win/raw?url=" + encodeURIComponent(RSS_URL);
 
-    function rssToJsonUrl(rssUrl) {
-      const encoded = encodeURIComponent(rssUrl);
-      return `https://api.allorigins.win/raw?url=${encoded}`;
-    }
+    fetch(PROXY)
+      .then(response => response.text())
+      .then(str => {
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(str, "text/xml");
 
-    function stripHtml(html) {
-      const div = document.createElement("div");
-      div.innerHTML = html || "";
-      return (div.textContent || div.innerText || "").trim();
-    }
+        const items = Array.from(xml.querySelectorAll("item")).slice(0, 6);
 
-    function shorten(text, max = 180) {
-      if (!text) return "Resume non disponible.";
-      return text.length > max ? text.slice(0, max).trim() + "..." : text;
-    }
+        const container = document.getElementById("news-container");
+        container.innerHTML = "";
 
-    function extractImageFromItem(item) {
-      const mediaContent = item.querySelector('media\\:content');
-      if (mediaContent?.getAttribute('url')) {
-        return mediaContent.getAttribute('url');
-      }
+        items.forEach(item => {
+          const title = item.querySelector("title")?.textContent || "";
+          const link = item.querySelector("link")?.textContent || "";
 
-      const mediaThumb = item.querySelector('media\\:thumbnail');
-      if (mediaThumb?.getAttribute('url')) {
-        return mediaThumb.getAttribute('url');
-      }
+          const card = document.createElement("div");
+          card.className = "news-card";
 
-      const enclosure = item.querySelector('enclosure');
-      if (enclosure?.getAttribute('url')) {
-        return enclosure.getAttribute('url');
-      }
+          card.innerHTML = `
+            <h3><a href="${link}" target="_blank">${title}</a></h3>
+          `;
 
-      return '';
-    }
-
-    function mapItem(item) {
-      return {
-        title: item.querySelector("title")?.textContent?.trim() || "Sans titre",
-        link: item.querySelector("link")?.textContent?.trim() || "https://news.google.com/home?hl=fr&gl=FR&ceid=FR%3Afr",
-        source: item.querySelector("source")?.textContent?.trim() || "Google Actualites",
-        pubDate: item.querySelector("pubDate")?.textContent?.trim() || "",
-        description: item.querySelector("description")?.textContent || "",
-      };
-    }
-
-    function renderTicker(items) {
-      const ticker = document.getElementById("ticker");
-      const titles = items.slice(0, 8).map(item => item.title).join(" • ");
-      ticker.textContent = titles || "Aucun titre disponible.";
-    }
-
-    function renderLive(items) {
-      const live = document.getElementById("news-live");
-      live.innerHTML = items.slice(0, 6).map(item => `
-        <div class="mini-item">
-          <a href="${item.link}" target="_blank" rel="noopener noreferrer">
-            <strong>${item.title}</strong>
-            <span>${item.pubDate ? new Date(item.pubDate).toLocaleString("fr-FR") : "Date indisponible"}</span>
-          </a>
-        </div>
-      `).join("");
-    }
-
-    function renderMain(items, label) {
-      const main = document.getElementById("news-main");
-
-      if (!items.length) {
-        main.innerHTML = '<div class="status-box">Aucun article trouve.</div>';
-        return;
-      }
-
-      const first = mapItem(items[0]);
-      const firstImage = extractImageFromItem(items[0]);
-      const firstDesc = shorten(stripHtml(first.description), 220);
-
-      const lead = `
-        <article class="lead-card">
-          ${firstImage ? `<img src="${firstImage}" alt="${first.title}" loading="lazy" referrerpolicy="no-referrer">` : ""}
-          <div class="lead-content">
-            <span class="tag">${label.toUpperCase()}</span>
-            <h2><a href="${first.link}" target="_blank" rel="noopener noreferrer">${first.title}</a></h2>
-            <p>${firstDesc}</p>
-            <div class="meta">
-              <span>${first.source}</span>
-              <span>•</span>
-              <span>${first.pubDate ? new Date(first.pubDate).toLocaleString("fr-FR") : "Date indisponible"}</span>
-            </div>
-          </div>
-        </article>
-      `;
-
-      const cards = items.slice(1, 9).map(item => {
-        const parsed = mapItem(item);
-        const title = parsed.title;
-        const link = parsed.link;
-        const source = parsed.source;
-        const date = parsed.pubDate ? new Date(parsed.pubDate).toLocaleString("fr-FR") : "Date indisponible";
-        const description = shorten(stripHtml(parsed.description), 170);
-        const imageUrl = extractImageFromItem(item);
-        return `
-          <article class="news-card">
-            ${imageUrl ? `<img class="news-card-image" src="${imageUrl}" alt="${title}" loading="lazy" referrerpolicy="no-referrer" />` : ""}
-            <div class="news-card-body">
-              <span class="tag tag-blue">NEWS</span>
-              <h3><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></h3>
-              <p>${description}</p>
-              <div class="meta">${source} • ${date}</div>
-            </div>
-          </article>
-        `;
-      }).join("");
-
-      main.innerHTML = lead + cards;
-    }
-
-    async function loadFeed(key) {
-      const info = document.getElementById("feed-info");
-      const feed = FEEDS[key];
-
-      document.getElementById("news-main").innerHTML = '<div class="status-box">Chargement des articles...</div>';
-      document.getElementById("news-live").innerHTML = `
-        <div class="mini-item">
-          <strong>Chargement...</strong>
-          <span>Les titres arrivent</span>
-        </div>
-      `;
-      document.getElementById("ticker").textContent = "Chargement des actualites en direct...";
-      info.textContent = "Source en cours : " + feed.label + " - Google Actualites France.";
-
-      try {
-        const response = await fetch(rssToJsonUrl(feed.rss));
-        const payload = await response.text();
-        const xml = new DOMParser().parseFromString(payload, "application/xml");
-        const parseError = xml.querySelector("parsererror");
-        if (parseError) {
-          throw new Error("Flux RSS invalide");
-        }
-        const items = Array.from(xml.querySelectorAll("item"));
-
-        if (!items.length) {
-          document.getElementById("news-main").innerHTML = '<div class="status-box">Aucun article disponible pour ce flux.</div>';
-          document.getElementById("ticker").textContent = "Aucun titre disponible.";
-          return;
-        }
-
-        const normalized = items.map(mapItem);
-        renderTicker(normalized);
-        renderLive(normalized);
-        renderMain(items, feed.label);
-      } catch (error) {
-        document.getElementById("news-main").innerHTML = '<div class="status-box">Impossible de charger le flux RSS.</div>';
-        document.getElementById("ticker").textContent = "Erreur de chargement du flux.";
+          container.appendChild(card);
+        });
+      })
+      .catch(error => {
         console.error(error);
-      }
-    }
-
-    document.querySelectorAll(".feed-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".feed-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        loadFeed(btn.dataset.feed);
+        document.getElementById("news-container").innerHTML =
+          "<p>Erreur chargement RSS</p>";
       });
-    });
-
-    loadFeed("top");
   </script>
 </body>
 </html>
