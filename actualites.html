@@ -493,50 +493,22 @@
     }
 
     function extractImageFromItem(item) {
-      const mediaContent = item.querySelector('media\\:content, content');
+      const mediaContent = item.querySelector('media\\:content');
       if (mediaContent?.getAttribute('url')) {
         return mediaContent.getAttribute('url');
       }
 
-      const mediaThumb = item.querySelector('media\\:thumbnail, thumbnail');
+      const mediaThumb = item.querySelector('media\\:thumbnail');
       if (mediaThumb?.getAttribute('url')) {
         return mediaThumb.getAttribute('url');
       }
 
-      const enclosure = item.querySelector('enclosure[url][type^="image/"]');
+      const enclosure = item.querySelector('enclosure');
       if (enclosure?.getAttribute('url')) {
         return enclosure.getAttribute('url');
       }
 
-      const description =
-        item.querySelector('description')?.textContent ||
-        item.querySelector('content\\:encoded, encoded')?.textContent ||
-        '';
-
-      const doc = new DOMParser().parseFromString(description, 'text/html');
-      const img = doc.querySelector('img');
-      if (img?.src) {
-        return img.src;
-      }
-
       return '';
-    }
-
-    function getFallbackImage(link) {
-      try {
-        const url = new URL(link);
-        return `https://www.google.com/s2/favicons?sz=256&domain=${url.hostname}`;
-      } catch {
-        return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-          <svg xmlns="http://www.w3.org/2000/svg" width="800" height="500">
-            <rect width="100%" height="100%" fill="#122033"/>
-            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-              font-family="Arial, sans-serif" font-size="42" fill="white">
-              ACTUALITE
-            </text>
-          </svg>
-        `);
-      }
     }
 
     function mapItem(item) {
@@ -576,12 +548,12 @@
       }
 
       const first = mapItem(items[0]);
-      const firstImage = extractImageFromItem(items[0]) || getFallbackImage(first.link);
+      const firstImage = extractImageFromItem(items[0]);
       const firstDesc = shorten(stripHtml(first.description), 220);
 
       const lead = `
         <article class="lead-card">
-          <img src="${firstImage}" alt="${first.title}">
+          ${firstImage ? `<img src="${firstImage}" alt="${first.title}" loading="lazy" referrerpolicy="no-referrer">` : ""}
           <div class="lead-content">
             <span class="tag">${label.toUpperCase()}</span>
             <h2><a href="${first.link}" target="_blank" rel="noopener noreferrer">${first.title}</a></h2>
@@ -602,17 +574,10 @@
         const source = parsed.source;
         const date = parsed.pubDate ? new Date(parsed.pubDate).toLocaleString("fr-FR") : "Date indisponible";
         const description = shorten(stripHtml(parsed.description), 170);
-        const imageUrl = extractImageFromItem(item) || getFallbackImage(link);
+        const imageUrl = extractImageFromItem(item);
         return `
           <article class="news-card">
-            <img
-              class="news-card-image"
-              src="${imageUrl}"
-              alt="${title}"
-              loading="lazy"
-              referrerpolicy="no-referrer"
-              onerror="this.onerror=null;this.src='${getFallbackImage(link)}';"
-            />
+            ${imageUrl ? `<img class="news-card-image" src="${imageUrl}" alt="${title}" loading="lazy" referrerpolicy="no-referrer" />` : ""}
             <div class="news-card-body">
               <span class="tag tag-blue">NEWS</span>
               <h3><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></h3>
