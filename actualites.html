@@ -1,587 +1,255 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Actualités SNG Portal connectées à Google Actualités via flux RSS." />
-  <title>Actualités - SNG Portal</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    :root {
-      --bg-1: #07111c;
-      --bg-2: #0f1d33;
-      --panel: rgba(255,255,255,0.07);
-      --panel-strong: rgba(255,255,255,0.10);
-      --line: rgba(255,255,255,0.10);
-      --text: #ffffff;
-      --muted: rgba(255,255,255,0.72);
-      --accent: #ff5f8f;
-      --accent-2: #7dd3fc;
-      --shadow: 0 20px 60px rgba(0,0,0,0.35);
-      --radius: 24px;
-      --max: 1240px;
-    }
-
-    body {
-      min-height: 100vh;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(255,95,143,0.18), transparent 30%),
-        radial-gradient(circle at top right, rgba(97,218,251,0.16), transparent 28%),
-        radial-gradient(circle at bottom center, rgba(255,209,102,0.10), transparent 25%),
-        linear-gradient(135deg, var(--bg-1), var(--bg-2));
-    }
-
-    a { color: inherit; text-decoration: none; }
-
-    .container {
-      width: min(100% - 28px, var(--max));
-      margin: 0 auto;
-    }
-
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(14px);
-      background: rgba(5, 12, 22, 0.55);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .header-inner {
-      min-height: 78px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
-      padding: 12px 0;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 800;
-    }
-
-    .brand-logo {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, rgba(255,95,143,0.9), rgba(97,218,251,0.75));
-      display: grid;
-      place-items: center;
-      font-size: 14px;
-      font-weight: 900;
-      border: 2px solid rgba(255,255,255,0.15);
-      box-shadow: var(--shadow);
-    }
-
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.05;
-    }
-
-    .brand-text span {
-      font-size: 0.82rem;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .nav a {
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid transparent;
-      color: var(--muted);
-      font-size: 0.95rem;
-      font-weight: 600;
-      transition: 0.25s ease;
-    }
-
-    .nav a:hover,
-    .nav a.active {
-      color: white;
-      background: rgba(255,255,255,0.12);
-      border-color: rgba(255,255,255,0.14);
-    }
-
-    .hero {
-      padding: 40px 0 24px;
-    }
-
-    .hero-top {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-    }
-
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      margin-bottom: 10px;
-      font-weight: 900;
-    }
-
-    .hero p {
-      color: var(--muted);
-      max-width: 760px;
-      line-height: 1.7;
-    }
-
-    .source-badge {
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.10);
-      color: #fff;
-      font-size: 0.92rem;
-      font-weight: 700;
-    }
-
-    .hero-news-image {
-      width: min(100%, 820px);
-      display: block;
-      margin: 8px auto 0;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.14);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.28);
-    }
-
-    .toolbar {
-      margin-top: 20px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .toolbar button {
-      border: none;
-      padding: 12px 16px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-      border: 1px solid rgba(255,255,255,0.10);
-      transition: 0.25s ease;
-    }
-
-    .toolbar button:hover,
-    .toolbar button.active {
-      background: linear-gradient(135deg, var(--accent), #ff8fab);
-      border-color: transparent;
-    }
-
-    .ticker {
-      margin-top: 22px;
-      padding: 14px 18px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.10);
-      overflow: hidden;
-      color: var(--muted);
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .ticker-inner {
-      display: inline-block;
-      animation: ticker-scroll 40s linear infinite;
-    }
-
-    @keyframes ticker-scroll {
-      0%   { transform: translateX(100vw); }
-      100% { transform: translateX(-100%); }
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 1.45fr 0.8fr;
-      gap: 22px;
-      padding: 22px 0 70px;
-    }
-
-    .main-column {
-      display: grid;
-      gap: 18px;
-      align-content: start;
-    }
-
-    .side-column {
-      display: grid;
-      gap: 18px;
-      align-content: start;
-    }
-
-    .lead-card,
-    .news-card,
-    .side-card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 26px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .news-card {
-      display: grid;
-      grid-template-columns: 1fr;
-    }
-
-    .news-card-body {
-      padding: 22px;
-    }
-
-    .news-card-body h3 {
-      font-size: 1.1rem;
-      line-height: 1.45;
-      margin-bottom: 10px;
-    }
-
-    .news-card-body p {
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 0.95rem;
-    }
-
-    .meta {
-      margin-top: 14px;
-      color: var(--muted);
-      font-size: 0.88rem;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 5px 10px;
-      border-radius: 999px;
-      background: rgba(255,95,143,0.16);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: #ffd6e1;
-      font-size: 0.78rem;
-      font-weight: 800;
-    }
-
-    .tag-blue {
-      background: rgba(125,211,252,0.15);
-      color: #c9f0ff;
-    }
-
-    .side-card {
-      padding: 22px;
-    }
-
-    .side-card h3 {
-      font-size: 1.05rem;
-      margin-bottom: 16px;
-      color: var(--accent-2);
-    }
-
-    .mini-list {
-      display: grid;
-      gap: 14px;
-    }
-
-    .mini-item {
-      padding-bottom: 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .mini-item:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .mini-item a {
-      display: block;
-    }
-
-    .mini-item strong {
-      display: block;
-      line-height: 1.45;
-      margin-bottom: 5px;
-      font-size: 0.95rem;
-    }
-
-    .mini-item strong:hover {
-      color: var(--accent-2);
-    }
-
-    .mini-item span {
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-
-    .loading-msg {
-      padding: 40px;
-      text-align: center;
-      color: var(--muted);
-      grid-column: 1 / -1;
-    }
-
-    .error-msg {
-      padding: 24px;
-      border-radius: 18px;
-      background: rgba(255,95,143,0.10);
-      border: 1px solid rgba(255,95,143,0.25);
-      color: #ffd6e1;
-      grid-column: 1 / -1;
-    }
-
-    .footer {
-      padding: 24px 0 40px;
-      text-align: center;
-      color: var(--muted);
-    }
-
-    @media (max-width: 980px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .hero { padding-top: 26px; }
-    }
-  </style>
-</head>
-<body>
-  <header class="header">
-    <div class="container header-inner">
-      <a href="./index.html" class="brand" aria-label="Accueil">
-        <div class="brand-logo">SNG</div>
-        <div class="brand-text">
-          <strong>SNG Portal</strong>
-          <span>Media • Infos • Crypto • Monde</span>
-        </div>
-      </a>
-      <nav class="nav">
-        <a href="./index.html">Accueil</a>
-        <a href="./actualites.html" class="active">Actualites</a>
-        <a href="./crypto.html">Crypto</a>
-        <a href="./meteo.html">Meteo</a>
-        <a href="./marches.html">Marches</a>
-        <a href="./loterie.html">Loterie</a>
-        <a href="./sports.html">Sports</a>
-        <a href="./blog.html">Blog</a>
-        <a href="./contact.html">Contact</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container">
-    <section class="hero">
-      <div class="hero-top">
-        <div>
-          <h1>Actualites SNG Portal</h1>
-          <p>Les titres se chargent automatiquement depuis Google Actualites en version France.</p>
-        </div>
-        <div class="source-badge">Google Actualites RSS</div>
-      </div>
-
-      <img src="sng-news.png" class="hero-news-image" alt="Banniere SNG News" loading="lazy">
-
-      <div class="toolbar">
-        <button class="feed-btn active" data-feed="top">A la une</button>
-        <button class="feed-btn" data-feed="world">Monde</button>
-        <button class="feed-btn" data-feed="business">Business</button>
-        <button class="feed-btn" data-feed="sports">Sports</button>
-      </div>
-
-      <div class="ticker" id="ticker">
-        <span class="ticker-inner" id="ticker-inner">Chargement des actualites en direct...</span>
-      </div>
-    </section>
-
-    <section class="layout">
-      <div class="main-column" id="main-col">
-        <div class="loading-msg">Chargement des actualités...</div>
-      </div>
-      <div class="side-column" id="side-col"></div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container">&copy; 2026 SNG Portal. Tous droits reservés.</div>
-  </footer>
-
-  <script>
-    // Flux RSS par catégorie
-    const FEEDS = {
-      top:      "https://news.google.com/rss?hl=fr&gl=FR&ceid=FR:fr",
-      world:    "https://news.google.com/rss/headlines/section/topic/WORLD?hl=fr&gl=FR&ceid=FR:fr",
-      business: "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=fr&gl=FR&ceid=FR:fr",
-      sports:   "https://news.google.com/rss/headlines/section/topic/SPORTS?hl=fr&gl=FR&ceid=FR:fr",
-    };
-
-    const LABELS = {
-      top: "À la une",
-      world: "Monde",
-      business: "Business",
-      sports: "Sports",
-    };
-
-    const PROXY_BASE = "https://api.allorigins.win/raw?url=";
-
-    let currentFeed = "top";
-
-    function proxyUrl(url) {
-      return PROXY_BASE + encodeURIComponent(url);
-    }
-
-    function parseDate(str) {
-      if (!str) return "";
-      const d = new Date(str);
-      return isNaN(d) ? str : d.toLocaleDateString("fr-FR", {
-        day: "numeric", month: "long", hour: "2-digit", minute: "2-digit"
-      });
-    }
-
-    function getSource(item) {
-      // Google RSS met la source dans <source> ou dans le titre après " - "
-      const src = item.querySelector("source");
-      if (src) return src.textContent.trim();
-      const title = item.querySelector("title")?.textContent || "";
-      const parts = title.split(" - ");
-      return parts.length > 1 ? parts[parts.length - 1].trim() : "";
-    }
-
-    function getCleanTitle(item) {
-      const title = item.querySelector("title")?.textContent || "";
-      // Retire le nom de la source à la fin (après le dernier " - ")
-      const parts = title.split(" - ");
-      if (parts.length > 1) parts.pop();
-      return parts.join(" - ").trim();
-    }
-
-    function loadFeed(feedKey) {
-      const mainCol = document.getElementById("main-col");
-      const sideCol = document.getElementById("side-col");
-      mainCol.innerHTML = '<div class="loading-msg">Chargement des actualités...</div>';
-      sideCol.innerHTML = "";
-
-      const url = proxyUrl(FEEDS[feedKey]);
-
-      fetch(url)
-        .then(r => {
-          if (!r.ok) throw new Error("Erreur réseau : " + r.status);
-          return r.text();
-        })
-        .then(str => {
-          const parser = new DOMParser();
-          const xml = parser.parseFromString(str, "text/xml");
-          const parseError = xml.querySelector("parsererror");
-          if (parseError) throw new Error("Erreur de parsing XML");
-
-          const items = Array.from(xml.querySelectorAll("item"));
-          if (items.length === 0) throw new Error("Aucun article trouvé dans le flux.");
-
-          // Ticker : tous les titres
-          const tickerInner = document.getElementById("ticker-inner");
-          tickerInner.textContent = items
-            .map(i => getCleanTitle(i))
-            .join("   ·   ");
-
-          // Articles principaux (les 5 premiers)
-          const mainItems = items.slice(0, 5);
-          // Articles secondaires (les 5 suivants)
-          const sideItems = items.slice(5, 10);
-
-          mainCol.innerHTML = "";
-          mainItems.forEach(item => {
-            const title = getCleanTitle(item);
-            const link  = item.querySelector("link")?.textContent?.trim() || "#";
-            const date  = parseDate(item.querySelector("pubDate")?.textContent);
-            const source = getSource(item);
-            const desc  = item.querySelector("description")?.textContent || "";
-            // Nettoie le HTML du description
-            const cleanDesc = desc.replace(/<[^>]*>/g, "").slice(0, 160);
-
-            const card = document.createElement("div");
-            card.className = "news-card";
-            card.innerHTML = `
-              <div class="news-card-body">
-                <span class="tag">${LABELS[feedKey]}</span>
-                <h3><a href="${link}" target="_blank" rel="noopener">${title}</a></h3>
-                ${cleanDesc ? `<p>${cleanDesc}…</p>` : ""}
-                <div class="meta">
-                  ${source ? `<span>${source}</span>` : ""}
-                  ${date   ? `<span>${date}</span>` : ""}
-                </div>
-              </div>
-            `;
-            mainCol.appendChild(card);
-          });
-
-          // Colonne latérale
-          if (sideItems.length > 0) {
-            const sideCard = document.createElement("div");
-            sideCard.className = "side-card";
-            sideCard.innerHTML = `<h3>Autres titres</h3><div class="mini-list" id="mini-list"></div>`;
-            sideCol.appendChild(sideCard);
-
-            const miniList = sideCard.querySelector("#mini-list");
-            sideItems.forEach(item => {
-              const title  = getCleanTitle(item);
-              const link   = item.querySelector("link")?.textContent?.trim() || "#";
-              const source = getSource(item);
-              const el = document.createElement("div");
-              el.className = "mini-item";
-              el.innerHTML = `
-                <a href="${link}" target="_blank" rel="noopener">
-                  <strong>${title}</strong>
-                  ${source ? `<span>${source}</span>` : ""}
-                </a>
-              `;
-              miniList.appendChild(el);
-            });
-          }
-        })
-        .catch(err => {
-          console.error(err);
-          mainCol.innerHTML = `
-            <div class="error-msg">
-              <strong>Impossible de charger les actualités.</strong><br>
-              ${err.message}<br><br>
-              Vérifiez votre connexion ou réessayez plus tard.<br>
-              <small style="opacity:0.7">Le proxy allorigins.win peut parfois être temporairement indisponible.</small>
-            </div>`;
-          document.getElementById("ticker-inner").textContent = "Chargement impossible — réessayez plus tard.";
+<script>
+  const FEEDS = {
+    top: "https://news.google.com/rss?hl=fr&gl=FR&ceid=FR:fr",
+    world: "https://news.google.com/rss/headlines/section/topic/WORLD?hl=fr&gl=FR&ceid=FR:fr",
+    business: "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=fr&gl=FR&ceid=FR:fr",
+    sports: "https://news.google.com/rss/headlines/section/topic/SPORTS?hl=fr&gl=FR&ceid=FR:fr",
+  };
+
+  const LABELS = {
+    top: "À la une",
+    world: "Monde",
+    business: "Business",
+    sports: "Sports",
+  };
+
+  let currentFeed = "top";
+
+  function parseDate(str) {
+    if (!str) return "";
+    const d = new Date(str);
+    return isNaN(d)
+      ? str
+      : d.toLocaleDateString("fr-FR", {
+          day: "numeric",
+          month: "long",
+          hour: "2-digit",
+          minute: "2-digit"
         });
-    }
+  }
 
-    // Boutons de filtre
-    document.querySelectorAll(".feed-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".feed-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        currentFeed = btn.dataset.feed;
-        loadFeed(currentFeed);
-      });
+  function getSourceFromTitle(title) {
+    const parts = title.split(" - ");
+    return parts.length > 1 ? parts[parts.length - 1].trim() : "";
+  }
+
+  function getCleanTitle(title) {
+    const parts = title.split(" - ");
+    if (parts.length > 1) parts.pop();
+    return parts.join(" - ").trim();
+  }
+
+  async function fetchXmlWithFallback(feedUrl) {
+    const allOriginsUrl =
+      "https://api.allorigins.win/raw?url=" + encodeURIComponent(feedUrl);
+
+    try {
+      const res = await fetch(allOriginsUrl);
+      if (!res.ok) throw new Error("AllOrigins indisponible");
+      const text = await res.text();
+      if (!text || !text.includes("<rss")) throw new Error("Flux XML invalide");
+      return text;
+    } catch (err) {
+      const rss2jsonUrl =
+        "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(feedUrl);
+
+      const res = await fetch(rss2jsonUrl);
+      if (!res.ok) throw new Error("RSS2JSON indisponible");
+      const data = await res.json();
+      if (!data.items || !data.items.length) {
+        throw new Error("Aucun article trouvé");
+      }
+
+      return data;
+    }
+  }
+
+  function renderFromXml(xmlText, feedKey) {
+    const mainCol = document.getElementById("main-col");
+    const sideCol = document.getElementById("side-col");
+    const tickerInner = document.getElementById("ticker-inner");
+
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(xmlText, "text/xml");
+    const parseError = xml.querySelector("parsererror");
+    if (parseError) throw new Error("Erreur de parsing XML");
+
+    const items = Array.from(xml.querySelectorAll("item"));
+    if (!items.length) throw new Error("Aucun article trouvé dans le flux");
+
+    tickerInner.textContent = items
+      .map((item) => getCleanTitle(item.querySelector("title")?.textContent || ""))
+      .join("   ·   ");
+
+    const mainItems = items.slice(0, 5);
+    const sideItems = items.slice(5, 10);
+
+    mainCol.innerHTML = "";
+    sideCol.innerHTML = "";
+
+    mainItems.forEach((item) => {
+      const rawTitle = item.querySelector("title")?.textContent || "";
+      const title = getCleanTitle(rawTitle);
+      const link = item.querySelector("link")?.textContent?.trim() || "#";
+      const date = parseDate(item.querySelector("pubDate")?.textContent || "");
+      const sourceNode = item.querySelector("source");
+      const source = sourceNode?.textContent?.trim() || getSourceFromTitle(rawTitle);
+      const desc = item.querySelector("description")?.textContent || "";
+      const cleanDesc = desc.replace(/<[^>]*>/g, "").trim().slice(0, 160);
+
+      const card = document.createElement("div");
+      card.className = "news-card";
+      card.innerHTML = `
+        <div class="news-card-body">
+          <span class="tag">${LABELS[feedKey]}</span>
+          <h3><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></h3>
+          ${cleanDesc ? `<p>${cleanDesc}…</p>` : ""}
+          <div class="meta">
+            ${source ? `<span>${source}</span>` : ""}
+            ${date ? `<span>${date}</span>` : ""}
+          </div>
+        </div>
+      `;
+      mainCol.appendChild(card);
     });
 
-    // Chargement initial
-    loadFeed(currentFeed);
-  </script>
-</body>
-</html>
+    if (sideItems.length) {
+      const sideCard = document.createElement("div");
+      sideCard.className = "side-card";
+      sideCard.innerHTML = `<h3>Autres titres</h3><div class="mini-list" id="mini-list"></div>`;
+      sideCol.appendChild(sideCard);
+
+      const miniList = sideCard.querySelector("#mini-list");
+
+      sideItems.forEach((item) => {
+        const rawTitle = item.querySelector("title")?.textContent || "";
+        const title = getCleanTitle(rawTitle);
+        const link = item.querySelector("link")?.textContent?.trim() || "#";
+        const sourceNode = item.querySelector("source");
+        const source = sourceNode?.textContent?.trim() || getSourceFromTitle(rawTitle);
+
+        const el = document.createElement("div");
+        el.className = "mini-item";
+        el.innerHTML = `
+          <a href="${link}" target="_blank" rel="noopener noreferrer">
+            <strong>${title}</strong>
+            ${source ? `<span>${source}</span>` : ""}
+          </a>
+        `;
+        miniList.appendChild(el);
+      });
+    }
+  }
+
+  function renderFromJson(data, feedKey) {
+    const mainCol = document.getElementById("main-col");
+    const sideCol = document.getElementById("side-col");
+    const tickerInner = document.getElementById("ticker-inner");
+
+    const items = data.items || [];
+    if (!items.length) throw new Error("Aucun article trouvé");
+
+    tickerInner.textContent = items
+      .map((item) => getCleanTitle(item.title || ""))
+      .join("   ·   ");
+
+    const mainItems = items.slice(0, 5);
+    const sideItems = items.slice(5, 10);
+
+    mainCol.innerHTML = "";
+    sideCol.innerHTML = "";
+
+    mainItems.forEach((item) => {
+      const rawTitle = item.title || "";
+      const title = getCleanTitle(rawTitle);
+      const link = item.link || "#";
+      const date = parseDate(item.pubDate || "");
+      const source = getSourceFromTitle(rawTitle);
+      const cleanDesc = (item.description || "")
+        .replace(/<[^>]*>/g, "")
+        .trim()
+        .slice(0, 160);
+
+      const card = document.createElement("div");
+      card.className = "news-card";
+      card.innerHTML = `
+        <div class="news-card-body">
+          <span class="tag">${LABELS[feedKey]}</span>
+          <h3><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></h3>
+          ${cleanDesc ? `<p>${cleanDesc}…</p>` : ""}
+          <div class="meta">
+            ${source ? `<span>${source}</span>` : ""}
+            ${date ? `<span>${date}</span>` : ""}
+          </div>
+        </div>
+      `;
+      mainCol.appendChild(card);
+    });
+
+    if (sideItems.length) {
+      const sideCard = document.createElement("div");
+      sideCard.className = "side-card";
+      sideCard.innerHTML = `<h3>Autres titres</h3><div class="mini-list" id="mini-list"></div>`;
+      sideCol.appendChild(sideCard);
+
+      const miniList = sideCard.querySelector("#mini-list");
+
+      sideItems.forEach((item) => {
+        const rawTitle = item.title || "";
+        const title = getCleanTitle(rawTitle);
+        const link = item.link || "#";
+        const source = getSourceFromTitle(rawTitle);
+
+        const el = document.createElement("div");
+        el.className = "mini-item";
+        el.innerHTML = `
+          <a href="${link}" target="_blank" rel="noopener noreferrer">
+            <strong>${title}</strong>
+            ${source ? `<span>${source}</span>` : ""}
+          </a>
+        `;
+        miniList.appendChild(el);
+      });
+    }
+  }
+
+  async function loadFeed(feedKey) {
+    const mainCol = document.getElementById("main-col");
+    const sideCol = document.getElementById("side-col");
+    const tickerInner = document.getElementById("ticker-inner");
+
+    mainCol.innerHTML = '<div class="loading-msg">Chargement des actualités...</div>';
+    sideCol.innerHTML = "";
+    tickerInner.textContent = "Chargement des actualités en direct...";
+
+    try {
+      const result = await fetchXmlWithFallback(FEEDS[feedKey]);
+
+      if (typeof result === "string") {
+        renderFromXml(result, feedKey);
+      } else {
+        renderFromJson(result, feedKey);
+      }
+    } catch (err) {
+      console.error(err);
+      mainCol.innerHTML = `
+        <div class="error-msg">
+          <strong>Impossible de charger les actualités.</strong><br>
+          ${err.message}
+        </div>
+      `;
+      tickerInner.textContent = "Chargement impossible — réessayez plus tard.";
+    }
+  }
+
+  document.querySelectorAll(".feed-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".feed-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentFeed = btn.dataset.feed;
+      loadFeed(currentFeed);
+    });
+  });
+
+  loadFeed(currentFeed);
+</script>
