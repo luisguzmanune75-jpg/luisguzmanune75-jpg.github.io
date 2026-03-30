@@ -217,8 +217,7 @@
       overflow: hidden;
     }
 
-    .lead-card img,
-    .news-card img {
+    .lead-card img {
       width: 100%;
       display: block;
       object-fit: cover;
@@ -231,18 +230,22 @@
 
     .news-card {
       display: grid;
-      grid-template-columns: 240px 1fr;
-      min-height: 210px;
+      grid-template-columns: 270px 1fr;
+      overflow: hidden;
     }
 
-    .news-card img {
-      width: 240px;
-      min-width: 240px;
+    .news-card-image {
+      width: 100%;
       height: 100%;
+      min-height: 220px;
+      object-fit: cover;
+      display: block;
+      background: #0f1b2b;
     }
 
     .lead-content,
     .news-content,
+    .news-card-body,
     .side-card {
       padding: 22px;
     }
@@ -270,7 +273,8 @@
       margin-bottom: 12px;
     }
 
-    .news-content h3 {
+    .news-content h3,
+    .news-card-body h3 {
       font-size: 1.24rem;
       line-height: 1.35;
       margin-bottom: 10px;
@@ -278,6 +282,7 @@
 
     .lead-content p,
     .news-content p,
+    .news-card-body p,
     .side-card p {
       color: var(--muted);
       line-height: 1.7;
@@ -350,9 +355,8 @@
         grid-template-columns: 1fr;
       }
 
-      .news-card img {
+      .news-card-image {
         width: 100%;
-        min-width: 100%;
         height: 240px;
       }
 
@@ -370,7 +374,8 @@
         font-size: 1.45rem;
       }
 
-      .news-content h3 {
+      .news-content h3,
+      .news-card-body h3 {
         font-size: 1.08rem;
       }
     }
@@ -471,10 +476,9 @@
       }
     };
 
-    const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1400&q=80";
-
     function rssToJsonUrl(rssUrl) {
-      return "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(rssUrl);
+      const encoded = encodeURIComponent(rssUrl);
+      return `https://api.allorigins.win/raw?url=${encoded}`;
     }
 
     function stripHtml(html) {
@@ -488,11 +492,61 @@
       return text.length > max ? text.slice(0, max).trim() + "..." : text;
     }
 
-    function pickImage(item) {
-      if (item.thumbnail) return item.thumbnail;
-      const html = item.description || "";
-      const match = html.match(/<img[^>]+src="([^">]+)"/i);
-      return match ? match[1] : FALLBACK_IMAGE;
+    function extractImageFromItem(item) {
+      const mediaContent = item.querySelector('media\\:content, content');
+      if (mediaContent?.getAttribute('url')) {
+        return mediaContent.getAttribute('url');
+      }
+
+      const mediaThumb = item.querySelector('media\\:thumbnail, thumbnail');
+      if (mediaThumb?.getAttribute('url')) {
+        return mediaThumb.getAttribute('url');
+      }
+
+      const enclosure = item.querySelector('enclosure[url][type^="image/"]');
+      if (enclosure?.getAttribute('url')) {
+        return enclosure.getAttribute('url');
+      }
+
+      const description =
+        item.querySelector('description')?.textContent ||
+        item.querySelector('content\\:encoded, encoded')?.textContent ||
+        '';
+
+      const doc = new DOMParser().parseFromString(description, 'text/html');
+      const img = doc.querySelector('img');
+      if (img?.src) {
+        return img.src;
+      }
+
+      return '';
+    }
+
+    function getFallbackImage(link) {
+      try {
+        const url = new URL(link);
+        return `https://www.google.com/s2/favicons?sz=256&domain=${url.hostname}`;
+      } catch {
+        return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+          <svg xmlns="http://www.w3.org/2000/svg" width="800" height="500">
+            <rect width="100%" height="100%" fill="#122033"/>
+            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+              font-family="Arial, sans-serif" font-size="42" fill="white">
+              ACTUALITE
+            </text>
+          </svg>
+        `);
+      }
+    }
+
+    function mapItem(item) {
+      return {
+        title: item.querySelector("title")?.textContent?.trim() || "Sans titre",
+        link: item.querySelector("link")?.textContent?.trim() || "https://news.google.com/home?hl=fr&gl=FR&ceid=FR%3Afr",
+        source: item.querySelector("source")?.textContent?.trim() || "Google Actualites",
+        pubDate: item.querySelector("pubDate")?.textContent?.trim() || "",
+        description: item.querySelector("description")?.textContent || "",
+      };
     }
 
     function renderTicker(items) {
@@ -521,8 +575,8 @@
         return;
       }
 
-      const first = items[0];
-      const firstImage = pickImage(first);
+      const first = mapItem(items[0]);
+      const firstImage = extractImageFromItem(items[0]) || getFallbackImage(first.link);
       const firstDesc = shorten(stripHtml(first.description), 220);
 
       const lead = `
@@ -533,7 +587,7 @@
             <h2><a href="${first.link}" target="_blank" rel="noopener noreferrer">${first.title}</a></h2>
             <p>${firstDesc}</p>
             <div class="meta">
-              <span>Google Actualites</span>
+              <span>${first.source}</span>
               <span>•</span>
               <span>${first.pubDate ? new Date(first.pubDate).toLocaleString("fr-FR") : "Date indisponible"}</span>
             </div>
@@ -542,20 +596,28 @@
       `;
 
       const cards = items.slice(1, 9).map(item => {
-        const image = pickImage(item);
-        const desc = shorten(stripHtml(item.description), 170);
+        const parsed = mapItem(item);
+        const title = parsed.title;
+        const link = parsed.link;
+        const source = parsed.source;
+        const date = parsed.pubDate ? new Date(parsed.pubDate).toLocaleString("fr-FR") : "Date indisponible";
+        const description = shorten(stripHtml(parsed.description), 170);
+        const imageUrl = extractImageFromItem(item) || getFallbackImage(link);
         return `
           <article class="news-card">
-            <img src="${image}" alt="${item.title}">
-            <div class="news-content">
+            <img
+              class="news-card-image"
+              src="${imageUrl}"
+              alt="${title}"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              onerror="this.onerror=null;this.src='${getFallbackImage(link)}';"
+            />
+            <div class="news-card-body">
               <span class="tag tag-blue">NEWS</span>
-              <h3><a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a></h3>
-              <p>${desc}</p>
-              <div class="meta">
-                <span>Google Actualites</span>
-                <span>•</span>
-                <span>${item.pubDate ? new Date(item.pubDate).toLocaleString("fr-FR") : "Date indisponible"}</span>
-              </div>
+              <h3><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></h3>
+              <p>${description}</p>
+              <div class="meta">${source} • ${date}</div>
             </div>
           </article>
         `;
@@ -580,17 +642,24 @@
 
       try {
         const response = await fetch(rssToJsonUrl(feed.rss));
-        const data = await response.json();
+        const payload = await response.text();
+        const xml = new DOMParser().parseFromString(payload, "application/xml");
+        const parseError = xml.querySelector("parsererror");
+        if (parseError) {
+          throw new Error("Flux RSS invalide");
+        }
+        const items = Array.from(xml.querySelectorAll("item"));
 
-        if (!data.items || !data.items.length) {
+        if (!items.length) {
           document.getElementById("news-main").innerHTML = '<div class="status-box">Aucun article disponible pour ce flux.</div>';
           document.getElementById("ticker").textContent = "Aucun titre disponible.";
           return;
         }
 
-        renderTicker(data.items);
-        renderLive(data.items);
-        renderMain(data.items, feed.label);
+        const normalized = items.map(mapItem);
+        renderTicker(normalized);
+        renderLive(normalized);
+        renderMain(items, feed.label);
       } catch (error) {
         document.getElementById("news-main").innerHTML = '<div class="status-box">Impossible de charger le flux RSS.</div>';
         document.getElementById("ticker").textContent = "Erreur de chargement du flux.";
