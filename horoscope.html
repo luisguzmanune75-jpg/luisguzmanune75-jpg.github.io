@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Horoscope du jour - SNG Portal</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(90deg, #151515, #062c2f);
+      color: white;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 40px 20px 20px;
+    }
+
+    .hero h1 {
+      font-size: 2.3rem;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: #d7d7d7;
+      font-size: 1.05rem;
+    }
+
+    .horoscope-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 22px;
+      padding: 30px;
+      max-width: 1300px;
+      margin: auto;
+    }
+
+    .sign-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+
+    .sign-card h2 {
+      margin-top: 0;
+      margin-bottom: 14px;
+      font-size: 1.4rem;
+    }
+
+    .sign-card p {
+      margin: 8px 0;
+      color: #e8e8e8;
+      line-height: 1.5;
+    }
+
+    .top-sign {
+      max-width: 900px;
+      margin: 0 auto 10px;
+      padding: 0 30px 20px;
+    }
+
+    .top-box {
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 24px;
+      padding: 22px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <h1>🔮 Horoscope du jour</h1>
+    <p>Découvrez votre énergie, votre chance, l’amour et le travail pour aujourd’hui.</p>
+  </section>
+
+  <section class="top-sign">
+    <div class="top-box">
+      <h2>✨ Signe du jour : Lion</h2>
+      <p>Le Lion brille aujourd’hui avec une énergie forte, une belle confiance et de bonnes opportunités.</p>
+    </div>
+  </section>
+
+  <section class="horoscope-grid">
+
+    <article class="sign-card">
+      <h2>♈ Bélier</h2>
+      <p><strong>Amour :</strong> Une discussion importante peut faire avancer les choses.</p>
+      <p><strong>Travail :</strong> Bonne énergie pour prendre une initiative.</p>
+      <p><strong>Chance :</strong> Journée positive.</p>
+      <p><strong>Conseil :</strong> Reste confiant.</p>
+    </article>
+
+    <article class="sign-card">
+      <h2>♉ Taureau</h2>
+      <p><strong>Amour :</strong> Le calme et la douceur seront vos meilleurs atouts.</p>
+      <p><strong>Travail :</strong> Avancez lentement mais sûrement.</p>
+      <p><strong>Chance :</strong> Stable.</p>
+      <p><strong>Conseil :</strong> Ne force pas les choses.</p>
+    </article>
+
+    <article class="sign-card">
+      <h2>♊ Gémeaux</h2>
+      <p><strong>Amour :</strong> Une surprise ou un message peut vous faire sourire.</p>
+      <p><strong>Travail :</strong> Bonne journée pour communiquer.</p>
+      <p><strong>Chance :</strong> Correcte.</p>
+      <p><strong>Conseil :</strong> Sois clair dans tes mots.</p>
+    </article>
+
+    <article class="sign-card">
+      <h2>♋ Cancer</h2>
+      <p><strong>Amour :</strong> Sensibilité forte, écoute ton cœur.</p>
+      <p><strong>Travail :</strong> Garde ton rythme sans te disperser.</p>
+      <p><strong>Chance :</strong> Moyenne.</p>
+      <p><strong>Conseil :</strong> Fais confiance à ton intuition.</p>
+    </article>
+
+    <article class="sign-card">
+      <h2>♌ Lion</h2>
+      <p><strong>Amour :</strong> Ton charme attire les bonnes énergies.</p>
+      <p><strong>Travail :</strong> Tu peux te démarquer aujourd’hui.</p>
+      <p><strong>Chance :</strong> Forte.</p>
+      <p><strong>Conseil :</strong> Ose avancer.</p>
+    </article>
+
+    <article class="sign-card">
+      <h2>♍ Vierge</h2>
+      <p><strong>Amour :</strong> Une mise au point peut être utile.</p>
+      <p><strong>Travail :</strong> Journée productive si tu restes organisé.</p>
+      <p><strong>Chance :</strong> Bonne.</p>
+      <p><strong>Conseil :</strong> Concentre-toi sur l’essentiel.</p>
+    </article>
+
+    <article class="sign-card">
+      <h2>♎ Balance</h2>
+      <p><strong>Amour :</strong> Recherche d’équilibre et de tendresse.</p>
+      <p><strong>Travail :</strong> Diplomatie gagnante aujourd’hui.</p>
+      <p><strong>Chance :</strong> Douce.</p>
+      <p><strong>Conseil :</strong> Reste patient.</p>
+    </article>
+
+    <article class="sign-card">
+      <h2>♏ Scorpion</h2>
+      <p><strong>Amour :</strong> Les émotions seront intenses.</p>
+      <p><strong>Travail :</strong> Tu avances bien si tu restes discret.</p>
+      <p><strong>Chance :</strong> Intéressante.</p>
+      <p><strong>Conseil :</strong> Garde le contrôle.</p>
+    </article>
+
+    <article class="sign-card">
+      <h2>♐ Sagittaire</h2>
+      <p><strong>Amour :</strong> Envie de liberté et de nouveauté.</p>
+      <p><strong>Travail :</strong> Bonne journée pour lancer une idée.</p>
+      <p><strong>Chance :</strong> Haute.</p>
+      <p><strong>Conseil :</strong> Va de l’avant.</p>
+    </article>
+
+    <article class="sign-card">
+      <h2>♑ Capricorne</h2>
+      <p><strong>Amour :</strong> La stabilité sera rassurante.</p>
+      <p><strong>Travail :</strong> Tes efforts commencent à payer.</p>
+      <p><strong>Chance :</strong> Solide.</p>
+      <p><strong>Conseil :</strong> Continue sans lâcher.</p>
+    </article>
+
+    <article class="sign-card">
+      <h2>♒ Verseau</h2>
+      <p><strong>Amour :</strong> Besoin d’espace mais aussi de sincérité.</p>
+      <p><strong>Travail :</strong> Bonne créativité aujourd’hui.</p>
+      <p><strong>Chance :</strong> Variable.</p>
+      <p><strong>Conseil :</strong> Reste original.</p>
+    </article>
+
+    <article class="sign-card">
+      <h2>♓ Poissons</h2>
+      <p><strong>Amour :</strong> Journée douce et romantique.</p>
+      <p><strong>Travail :</strong> Évite le stress inutile.</p>
+      <p><strong>Chance :</strong> Positive.</p>
+      <p><strong>Conseil :</strong> Protège ton énergie.</p>
+    </article>
+
+  </section>
+
+</body>
+</html>
