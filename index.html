@@ -477,6 +477,259 @@
   font-weight: 700;
   color: #fff;
 }
+
+.sng-travel-section{
+  position:relative;
+  margin:50px auto;
+  padding:50px 20px;
+  border-radius:28px;
+  overflow:hidden;
+  background:
+    linear-gradient(135deg, rgba(2,10,20,0.92), rgba(7,30,60,0.90)),
+    radial-gradient(circle at top left, rgba(0,200,255,0.18), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(0,255,170,0.14), transparent 30%);
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+.sng-travel-bg{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg, rgba(255,255,255,0.03), rgba(255,255,255,0.00));
+  pointer-events:none;
+}
+
+.sng-travel-content{
+  position:relative;
+  z-index:2;
+  max-width:1250px;
+  margin:0 auto;
+}
+
+.sng-travel-head{
+  margin-bottom:24px;
+}
+
+.sng-travel-badge{
+  display:inline-block;
+  padding:8px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.10);
+  color:#9ee7ff;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:0.5px;
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+
+.sng-travel-head h2{
+  color:#fff;
+  font-size:42px;
+  line-height:1.1;
+  margin:0 0 10px;
+  font-weight:800;
+}
+
+.sng-travel-head p{
+  color:rgba(255,255,255,0.75);
+  font-size:17px;
+  margin:0;
+  max-width:760px;
+}
+
+.sng-travel-tabs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin:28px 0 20px;
+}
+
+.sng-tab{
+  background:rgba(255,255,255,0.08);
+  color:#fff;
+  border:1px solid rgba(255,255,255,0.08);
+  padding:14px 18px;
+  border-radius:16px;
+  cursor:pointer;
+  font-weight:700;
+  font-size:15px;
+  transition:0.25s ease;
+}
+
+.sng-tab.active,
+.sng-tab:hover{
+  background:#fff;
+  color:#0b1730;
+}
+
+.sng-trip-options{
+  display:flex;
+  flex-wrap:wrap;
+  gap:18px;
+  margin-bottom:22px;
+  color:#fff;
+  font-size:15px;
+}
+
+.sng-trip-options label{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(255,255,255,0.05);
+  padding:10px 14px;
+  border-radius:14px;
+}
+
+.sng-travel-form{
+  display:grid;
+  grid-template-columns: 1.2fr 1.2fr 1fr 1fr 0.7fr auto;
+  gap:14px;
+  align-items:end;
+}
+
+.sng-field{
+  display:flex;
+  flex-direction:column;
+}
+
+.sng-field label{
+  color:rgba(255,255,255,0.86);
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:8px;
+}
+
+.sng-field input,
+.sng-field select{
+  height:58px;
+  border:none;
+  outline:none;
+  border-radius:18px;
+  padding:0 18px;
+  font-size:15px;
+  background:rgba(255,255,255,0.96);
+  color:#111;
+}
+
+.sng-travel-button{
+  height:58px;
+  border:none;
+  border-radius:18px;
+  padding:0 26px;
+  font-weight:800;
+  font-size:15px;
+  cursor:pointer;
+  color:#fff;
+  background:linear-gradient(135deg, #1db954, #0f8a3a);
+  transition:0.25s ease;
+  white-space:nowrap;
+}
+
+.sng-travel-button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 28px rgba(29,185,84,0.35);
+}
+
+.sng-travel-result{
+  display:none;
+  margin-top:22px;
+  padding:18px;
+  border-radius:18px;
+  background:rgba(255,255,255,0.08);
+  color:#fff;
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+.sng-travel-result.show{
+  display:block;
+}
+
+.travel-explore-section{
+  margin-top:40px;
+  padding:20px 0 10px;
+}
+
+.travel-explore-header{
+  text-align:center;
+  margin-bottom:28px;
+}
+
+.travel-explore-header h2{
+  color:#fff;
+  font-size:52px;
+  font-weight:800;
+  margin:0 0 10px;
+}
+
+.travel-explore-header p{
+  color:rgba(255,255,255,0.75);
+  font-size:18px;
+  margin:0;
+}
+
+.travel-explore-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:22px;
+}
+
+.travel-explore-card{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:28px;
+  padding:36px 24px;
+  text-align:center;
+  color:#fff;
+  min-height:240px;
+  backdrop-filter:blur(12px);
+  transition:0.25s ease;
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+
+.travel-explore-card:hover{
+  transform:translateY(-6px);
+  background:rgba(255,255,255,0.09);
+  box-shadow:0 18px 35px rgba(0,0,0,0.22);
+}
+
+.travel-explore-icon{
+  font-size:30px;
+  margin-bottom:18px;
+}
+
+.travel-explore-card h3{
+  font-size:24px;
+  margin:0 0 14px;
+  font-weight:800;
+}
+
+.travel-explore-card p{
+  font-size:15px;
+  line-height:1.5;
+  color:rgba(255,255,255,0.78);
+  margin:0;
+}
+
+.travel-explore-bottom{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:18px;
+  margin-top:26px;
+}
+
+.travel-info-pill{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  color:#fff;
+  border-radius:22px;
+  padding:18px 22px;
+  font-size:15px;
+}
+
+.travel-info-pill strong{
+  margin-right:6px;
+}
+
       .site-footer {
         padding: 24px 0 40px;
         text-align: center;
@@ -492,6 +745,20 @@
           grid-template-columns: 1fr;
         }
       }
+
+@media (max-width: 1100px){
+  .sng-travel-form{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .travel-explore-grid{
+    grid-template-columns:repeat(2, 1fr);
+  }
+
+  .travel-explore-bottom{
+    grid-template-columns:1fr;
+  }
+}
 
 @media (max-width: 900px) {
   .news-grid {
@@ -517,6 +784,26 @@
         .button {
           width: 100%;
         }
+
+  .sng-travel-head h2{
+    font-size:30px;
+  }
+
+  .sng-travel-form{
+    grid-template-columns:1fr;
+  }
+
+  .sng-trip-options{
+    flex-direction:column;
+  }
+
+  .travel-explore-header h2{
+    font-size:34px;
+  }
+
+  .travel-explore-grid{
+    grid-template-columns:1fr;
+  }
       }
     </style>
   </head>
@@ -540,6 +827,7 @@
           <a href="./sports.html">Sports</a>
           <a href="./jeux.html">Jeux</a>
           <a href="./blog.html">Blog</a>
+          <a href="#voyages">Voyages</a>
           <a href="./contact.html">Contact</a>
         </nav>
       </div>
@@ -695,6 +983,119 @@
     </div>
   </div>
 </section>
+
+<section class="sng-travel-section" id="voyages">
+  <div class="sng-travel-bg"></div>
+
+  <div class="sng-travel-content">
+    <div class="sng-travel-head">
+      <span class="sng-travel-badge">SNG Travel</span>
+      <h2>Vols pas chers • Comparez votre voyage</h2>
+      <p>Trouvez rapidement un vol selon votre ville de départ, destination, dates et nombre de passagers.</p>
+    </div>
+
+    <div class="sng-travel-tabs">
+      <button class="sng-tab active" type="button">✈️ Vols</button>
+      <button class="sng-tab" type="button">🏨 Hôtels</button>
+      <button class="sng-tab" type="button">🌍 Vol + Hôtel</button>
+      <button class="sng-tab" type="button">🚗 Location</button>
+    </div>
+
+    <div class="sng-trip-options">
+      <label><input type="radio" name="tripType" value="roundtrip" checked> Aller-retour</label>
+      <label><input type="radio" name="tripType" value="oneway"> Aller simple</label>
+      <label><input type="checkbox" id="directOnly"> Vols directs</label>
+    </div>
+
+    <form class="sng-travel-form" id="sngTravelForm">
+      <div class="sng-field large">
+        <label for="origin">Origine</label>
+        <input type="text" id="origin" placeholder="D'où partez-vous ?" required>
+      </div>
+
+      <div class="sng-field large">
+        <label for="destination">Destination</label>
+        <input type="text" id="destination" placeholder="Où allez-vous ?" required>
+      </div>
+
+      <div class="sng-field">
+        <label for="departureDate">Départ le</label>
+        <input type="date" id="departureDate" required>
+      </div>
+
+      <div class="sng-field">
+        <label for="returnDate">Retour le</label>
+        <input type="date" id="returnDate">
+      </div>
+
+      <div class="sng-field small">
+        <label for="passengers">Passagers</label>
+        <select id="passengers">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+
+      <button type="submit" class="sng-travel-button">Rechercher des vols</button>
+    </form>
+
+    <div id="sngTravelResult" class="sng-travel-result"></div>
+
+    <section class="travel-explore-section">
+      <div class="travel-explore-header">
+        <h2>Explorer les voyages</h2>
+        <p>Découvre les meilleures rubriques voyage de SNG Portal.</p>
+      </div>
+
+      <div class="travel-explore-grid">
+        <div class="travel-explore-card">
+          <div class="travel-explore-icon">✈️</div>
+          <h3>Vols</h3>
+          <p>Compare les vols, dates, départs, retours et destinations populaires.</p>
+        </div>
+
+        <div class="travel-explore-card">
+          <div class="travel-explore-icon">🏨</div>
+          <h3>Hôtels</h3>
+          <p>Découvre des hôtels, séjours, vacances et hébergements à prix intéressants.</p>
+        </div>
+
+        <div class="travel-explore-card">
+          <div class="travel-explore-icon">🌍</div>
+          <h3>Vol + Hôtel</h3>
+          <p>Combine transport et hébergement pour trouver des offres complètes.</p>
+        </div>
+
+        <div class="travel-explore-card">
+          <div class="travel-explore-icon">🚗</div>
+          <h3>Location voiture</h3>
+          <p>Réserve une voiture pour tes déplacements, vacances et voyages en toute liberté.</p>
+        </div>
+
+        <div class="travel-explore-card">
+          <div class="travel-explore-icon">🏝️</div>
+          <h3>Destinations soleil</h3>
+          <p>République Dominicaine, Caraïbes, plages, soleil et escapades inoubliables.</p>
+        </div>
+
+        <div class="travel-explore-card">
+          <div class="travel-explore-icon">🧳</div>
+          <h3>Bons plans voyage</h3>
+          <p>Retrouve des idées de départs pas chers, astuces et offres du moment.</p>
+        </div>
+      </div>
+
+      <div class="travel-explore-bottom">
+        <div class="travel-info-pill"><strong>+6 rubriques</strong> Voyage pratique et moderne</div>
+        <div class="travel-info-pill"><strong>Design premium</strong> Clair sur PC et mobile</div>
+        <div class="travel-info-pill"><strong>Style SNG</strong> Élégant, fort et utile</div>
+      </div>
+    </section>
+  </div>
+</section>
       <section class="section container">
         <h2 class="section-title">Explorer le portail</h2>
         <div class="cards">
@@ -723,6 +1124,33 @@
       </div>
     </footer>
 
+    <script>
+document.getElementById("sngTravelForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const origin = document.getElementById("origin").value.trim();
+  const destination = document.getElementById("destination").value.trim();
+  const departureDate = document.getElementById("departureDate").value;
+  const returnDate = document.getElementById("returnDate").value;
+  const passengers = document.getElementById("passengers").value;
+  const directOnly = document.getElementById("directOnly").checked;
+  const tripType = document.querySelector('input[name="tripType"]:checked').value;
+
+  const result = document.getElementById("sngTravelResult");
+
+  result.innerHTML = `
+    <strong>Recherche prête :</strong><br><br>
+    <strong>Origine :</strong> ${origin}<br>
+    <strong>Destination :</strong> ${destination}<br>
+    <strong>Départ :</strong> ${departureDate}<br>
+    <strong>Retour :</strong> ${returnDate || "Non défini"}<br>
+    <strong>Passagers :</strong> ${passengers}<br>
+    <strong>Type :</strong> ${tripType === "roundtrip" ? "Aller-retour" : "Aller simple"}<br>
+    <strong>Vol direct :</strong> ${directOnly ? "Oui" : "Non"}
+  `;
+  result.classList.add("show");
+});
+</script>
     <script src="./site.js"></script>
     <script src="./home.js"></script>
   </body>
