@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="SNG Travel - comparez des vols et explorez vos prochaines destinations." />
+    <title>Voyages | SNG Portal</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #081326;
+        color: #fff;
+      }
+      .travel-topbar {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 20px;
+        background: rgba(4, 10, 21, 0.88);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .travel-topbar a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 999px;
+        padding: 8px 14px;
+      }
+
+      .sng-travel-hero{
+        position: relative;
+        padding: 70px 20px 60px;
+        margin: 0 auto;
+        background:
+          linear-gradient(120deg, rgba(8,16,30,0.72), rgba(10,33,72,0.58)),
+          url("https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
+        overflow: hidden;
+      }
+      .sng-travel-hero-overlay{ position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.20), rgba(0,0,0,0.12)); }
+      .sng-travel-hero-inner{ position:relative; z-index:2; max-width:1240px; margin:0 auto; }
+      .sng-travel-title-box{ margin-bottom: 24px; }
+      .sng-travel-title-box h1{ color:#fff; font-size:58px; font-weight:800; margin:0 0 10px; }
+      .sng-travel-title-box p{ color:rgba(255,255,255,0.86); font-size:18px; margin:0; }
+      .sng-travel-search-shell{ max-width: 1080px; }
+      .sng-travel-top-tabs{ display:flex; flex-wrap:wrap; gap:0; overflow:hidden; border-radius:20px 20px 0 0; width:fit-content; background:rgba(36,40,46,0.93); }
+      .sng-travel-top-tab{ border:none; background:transparent; color:#fff; padding:18px 26px; font-size:17px; font-weight:700; cursor:pointer; }
+      .sng-travel-top-tab.active{ background:#f4f4f4; color:#1b1b1b; }
+      .sng-travel-search-box{ background:#fff; border-radius:0 24px 24px 24px; padding:28px; box-shadow:0 18px 40px rgba(0,0,0,0.22); }
+      .sng-travel-options-row{ display:flex; flex-wrap:wrap; gap:24px; margin-bottom:22px; color:#313131; font-size:15px; font-weight:600; }
+      .sng-travel-options-row label{ display:flex; align-items:center; gap:8px; }
+      .sng-travel-form-real{ display:grid; grid-template-columns: 1.4fr 1.4fr 1fr 1fr 0.7fr auto; gap:16px; align-items:end; }
+      .sng-travel-input-group{ display:flex; flex-direction:column; gap:8px; }
+      .sng-label{ color:#6b6b6b; font-size:14px; font-weight:700; }
+      .sng-travel-input-group input, .sng-travel-input-group select{ height:68px; border:1px solid #d9d9d9; border-radius:16px; padding:0 18px; font-size:16px; color:#1d1d1d; background:#fff; outline:none; }
+      .sng-travel-input-group input:focus, .sng-travel-input-group select:focus{ border-color:#77b255; box-shadow:0 0 0 3px rgba(119,178,85,0.12); }
+      .sng-travel-submit-real{ height:68px; border:none; border-radius:18px; padding:0 28px; background:#18a63d; color:#fff; font-size:18px; font-weight:800; cursor:pointer; white-space:nowrap; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.15); }
+      .sng-travel-submit-real:hover{ transform:translateY(-1px); background:#149337; }
+      .travel-explore-section.go-style{ margin-top:54px; }
+      .travel-explore-header{ text-align:center; margin-bottom:28px; }
+      .travel-explore-header h2{ color:#fff; font-size:54px; font-weight:800; margin:0 0 8px; }
+      .travel-explore-header p{ color:rgba(255,255,255,0.82); font-size:18px; margin:0; }
+      .travel-explore-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:22px; }
+      .travel-explore-card{ background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.10); border-radius:28px; padding:34px 24px; text-align:center; color:#fff; min-height:240px; backdrop-filter:blur(8px); cursor:pointer; transition:0.25s ease; }
+      .travel-explore-card:hover{ transform:translateY(-5px); background:rgba(255,255,255,0.12); }
+      .travel-explore-icon{ font-size:32px; margin-bottom:16px; }
+      .travel-explore-card h3{ font-size:22px; margin:0 0 12px; font-weight:800; }
+      .travel-explore-card p{ font-size:15px; line-height:1.5; color:rgba(255,255,255,0.82); margin:0; }
+      @media (max-width: 1200px){ .sng-travel-form-real{ grid-template-columns:1fr 1fr; } }
+      @media (max-width: 900px){ .travel-explore-grid{ grid-template-columns:1fr 1fr; } .sng-travel-title-box h1{ font-size:44px; } }
+      @media (max-width: 700px){
+        .sng-travel-top-tabs{ width:100%; border-radius:20px; }
+        .sng-travel-top-tab{ flex:1 1 100%; }
+        .sng-travel-search-box{ border-radius:24px; padding:20px; }
+        .sng-travel-form-real{ grid-template-columns:1fr; }
+        .travel-explore-grid{ grid-template-columns:1fr; }
+        .travel-explore-header h2{ font-size:34px; }
+        .sng-travel-title-box h1{ font-size:34px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="travel-topbar">
+      <strong>SNG Portal • Voyages</strong>
+      <a href="./index.html">← Retour à l'accueil</a>
+    </header>
+
+    <section class="sng-travel-hero" id="voyages">
+      <div class="sng-travel-hero-overlay"></div>
+      <div class="sng-travel-hero-inner">
+        <div class="sng-travel-title-box">
+          <h1>Vol pas cher</h1>
+          <p>Comparez les vols, choisissez vos dates et partez au meilleur prix.</p>
+        </div>
+
+        <div class="sng-travel-search-shell">
+          <div class="sng-travel-top-tabs">
+            <button class="sng-travel-top-tab active" type="button">✈️ Vols</button>
+            <button class="sng-travel-top-tab" type="button">🏨 Hôtels</button>
+            <button class="sng-travel-top-tab" type="button">🧳 Vol + Hôtel</button>
+            <button class="sng-travel-top-tab" type="button">🚗 Location de voiture</button>
+          </div>
+
+          <div class="sng-travel-search-box">
+            <div class="sng-travel-options-row">
+              <label><input type="radio" name="tripType" value="roundtrip" checked> Aller-retour</label>
+              <label><input type="radio" name="tripType" value="oneway"> Aller simple</label>
+              <label><input type="radio" name="tripType" value="multi"> Multi-destinations</label>
+              <label><input type="checkbox" id="directOnly"> Vols directs</label>
+            </div>
+
+            <form id="sngTravelForm" class="sng-travel-form-real">
+              <div class="sng-travel-input-group origin">
+                <span class="sng-label">Origine</span>
+                <input type="text" id="origin" placeholder="D'où partez-vous ?" required>
+              </div>
+
+              <div class="sng-travel-input-group destination">
+                <span class="sng-label">Destination</span>
+                <input type="text" id="destination" placeholder="Où allez-vous ?" required>
+              </div>
+
+              <div class="sng-travel-input-group">
+                <span class="sng-label">Départ le</span>
+                <input type="date" id="departureDate" required>
+              </div>
+
+              <div class="sng-travel-input-group">
+                <span class="sng-label">Retour le</span>
+                <input type="date" id="returnDate">
+              </div>
+
+              <div class="sng-travel-input-group passengers">
+                <span class="sng-label">Passagers</span>
+                <select id="passengers">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
+
+              <button type="submit" class="sng-travel-submit-real">Rechercher des vols</button>
+            </form>
+          </div>
+        </div>
+
+        <section class="travel-explore-section go-style">
+          <div class="travel-explore-header">
+            <h2>Explorer les voyages</h2>
+            <p>Découvre les meilleures rubriques voyage de SNG Portal.</p>
+          </div>
+
+          <div class="travel-explore-grid">
+            <div class="travel-explore-card" data-go="https://www.govoyages.com/vols-pas-cher/">
+              <div class="travel-explore-icon">✈️</div>
+              <h3>Vols</h3>
+              <p>Compare les vols, dates, départs, retours et destinations populaires.</p>
+            </div>
+
+            <div class="travel-explore-card" data-go="https://www.govoyages.com/">
+              <div class="travel-explore-icon">🏨</div>
+              <h3>Hôtels</h3>
+              <p>Découvre des hôtels, séjours, vacances et hébergements à prix intéressants.</p>
+            </div>
+
+            <div class="travel-explore-card" data-go="https://www.govoyages.com/">
+              <div class="travel-explore-icon">🌍</div>
+              <h3>Vol + Hôtel</h3>
+              <p>Combine transport et hébergement pour trouver des offres complètes.</p>
+            </div>
+
+            <div class="travel-explore-card" data-go="https://www.govoyages.com/">
+              <div class="travel-explore-icon">🚗</div>
+              <h3>Location voiture</h3>
+              <p>Réserve une voiture pour tes déplacements, vacances et voyages en toute liberté.</p>
+            </div>
+
+            <div class="travel-explore-card" data-go="https://www.govoyages.com/vols-pas-cher/">
+              <div class="travel-explore-icon">🏝️</div>
+              <h3>Destinations soleil</h3>
+              <p>République Dominicaine, Caraïbes, plages, soleil et escapades inoubliables.</p>
+            </div>
+
+            <div class="travel-explore-card" data-go="https://www.govoyages.com/vols-pas-cher/">
+              <div class="travel-explore-icon">🧳</div>
+              <h3>Bons plans voyage</h3>
+              <p>Retrouve des idées de départs pas chers, astuces et offres du moment.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <script>
+      document.getElementById("sngTravelForm").addEventListener("submit", function(e){
+        e.preventDefault();
+
+        const origin = document.getElementById("origin").value.trim();
+        const destination = document.getElementById("destination").value.trim();
+        const departureDate = document.getElementById("departureDate").value;
+        const returnDate = document.getElementById("returnDate").value;
+        const passengers = document.getElementById("passengers").value;
+        const tripType = document.querySelector('input[name="tripType"]:checked')?.value || "roundtrip";
+        const directOnly = document.getElementById("directOnly").checked;
+
+        let url = "https://www.govoyages.com/vols-pas-cher/";
+
+        const params = new URLSearchParams({
+          origin,
+          destination,
+          departureDate,
+          returnDate,
+          passengers,
+          tripType,
+          directOnly: directOnly ? "1" : "0"
+        });
+
+        window.open(url + "?" + params.toString(), "_blank");
+      });
+
+      document.querySelectorAll(".travel-explore-card").forEach(card => {
+        card.addEventListener("click", function(){
+          const target = this.getAttribute("data-go");
+          if(target){
+            window.open(target, "_blank");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
