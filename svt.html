@@ -2,21 +2,75 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SVT - SNG Études</title>
-  <link rel="stylesheet" href="study-page.css"/>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      background:#edf2f7;
+      color:#1f2933;
+    }
+
+    .study-layout{ display:flex; min-height:100vh; }
+    .study-sidebar{ width:260px; background:linear-gradient(180deg,#1b2430,#141b24); color:#fff; padding:24px 16px; position:sticky; top:0; height:100vh; border-right:1px solid rgba(255,255,255,.05); }
+    .study-logo{ display:flex; align-items:center; gap:12px; margin-bottom:28px; }
+    .study-logo-badge{ width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg,#ff7ab6,#7aa7ff); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px; color:#fff; box-shadow:0 10px 18px rgba(0,0,0,.18); }
+    .study-logo-text strong{ display:block; font-size:24px; line-height:1; }
+    .study-logo-text span{ display:block; color:rgba(255,255,255,.7); font-size:13px; margin-top:5px; }
+    .study-btn{ display:block; width:100%; text-align:center; text-decoration:none; color:#fff; font-weight:800; padding:14px 12px; border-radius:12px; margin-bottom:12px; transition:.2s ease; }
+    .study-btn:hover{ transform:translateY(-2px); }
+    .study-btn.green{ background:#23c768; } .study-btn.blue{ background:#2897ff; }
+    .study-level-label{ margin:24px 0 14px; color:rgba(255,255,255,.65); font-size:14px; font-weight:700; }
+    .study-nav{ display:flex; flex-direction:column; gap:8px; }
+    .study-nav a{ text-decoration:none; color:#d8dde5; padding:12px 14px; border-radius:12px; transition:.2s ease; border-left:4px solid transparent; font-weight:700; }
+    .study-nav a:hover,.study-nav a.active{ background:rgba(255,255,255,.08); border-left-color:#62c5c3; color:#fff; }
+    .study-sidebar-footer{ position:absolute; bottom:20px; left:16px; right:16px; color:rgba(255,255,255,.45); font-size:12px; line-height:1.5; }
+    .study-main{ flex:1; min-width:0; }
+    .study-hero{ height:145px; background: linear-gradient(rgba(0,0,0,.18), rgba(0,0,0,.34)), url('https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat; }
+    .study-header{ background:#fff; padding:24px 30px; border-bottom:1px solid #e5e9ef; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+    .study-breadcrumb{ color:#8c97a3; font-size:14px; margin-bottom:8px; }
+    .study-title{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+    .study-title-icon{ width:44px; height:44px; border-radius:50%; background:#62c5c3; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:24px; box-shadow:inset 0 -4px 0 rgba(0,0,0,.08); }
+    .study-title h1{ font-size:34px; line-height:1.1; }
+    .study-points{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+    .study-point-box{ background:#f6f8fb; border:1px solid #e4e9f0; padding:12px 18px; border-radius:14px; font-weight:800; color:#637081; }
+    .study-content{ padding:28px; }
+    .study-toolbar{ display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:22px; }
+    .study-toolbar h2{ font-size:24px; } .study-toolbar p{ color:#6d7885; font-size:15px; margin-top:5px; }
+    .study-search{ background:#fff; border:1px solid #dce3eb; border-radius:999px; padding:12px 18px; min-width:260px; color:#7c8794; font-size:14px; }
+    .chapters-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
+    .chapter-card{ display:block; text-decoration:none; background:#fff; border-radius:22px; overflow:hidden; color:#1f2933; box-shadow:0 8px 20px rgba(17,24,39,.06); transition:transform .2s ease, box-shadow .2s ease; border:1px solid #eef2f7; }
+    .chapter-card:hover{ transform:translateY(-6px); box-shadow:0 18px 34px rgba(17,24,39,.10); }
+    .chapter-image{ height:180px; background-size:cover; background-position:center; position:relative; }
+    .chapter-image::after{ content:""; position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.18), rgba(0,0,0,.02)); }
+    .chapter-badge{ position:absolute; top:14px; left:14px; z-index:2; background:rgba(255,255,255,.92); color:#5b6471; font-size:12px; font-weight:800; padding:8px 10px; border-radius:999px; }
+    .chapter-body{ padding:20px; }
+    .chapter-label{ display:block; font-size:12px; letter-spacing:.7px; color:#8b96a2; font-weight:800; margin-bottom:10px; }
+    .chapter-body h3{ font-size:25px; line-height:1.28; min-height:95px; margin-bottom:18px; }
+    .chapter-desc{ color:#697483; font-size:14px; line-height:1.5; min-height:62px; margin-bottom:18px; }
+    .chapter-meta{ display:flex; flex-wrap:wrap; gap:10px; padding-top:14px; border-top:1px solid #edf1f5; color:#8a94a0; font-size:13px; font-weight:700; }
+    .chapter-meta span{ background:#f7f9fc; border-radius:999px; padding:7px 10px; }
+    @media (max-width:1250px){ .chapters-grid{ grid-template-columns:repeat(3,1fr); } }
+    @media (max-width:980px){ .study-layout{ flex-direction:column; } .study-sidebar{ width:100%; height:auto; position:relative; padding-bottom:70px; } .study-sidebar-footer{ position:relative; left:auto; right:auto; bottom:auto; margin-top:20px; } .chapters-grid{ grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:640px){ .study-header{ padding:20px 16px; } .study-content{ padding:16px; } .study-title h1{ font-size:28px; } .study-toolbar{ align-items:flex-start; } .study-search{ min-width:100%; } .chapters-grid{ grid-template-columns:1fr; } .chapter-body h3{ min-height:auto; font-size:22px; } .chapter-desc{ min-height:auto; } }
+  </style>
 </head>
 <body>
-
-  <section class="study-inner-page">
+  <div class="study-layout">
     <aside class="study-sidebar">
-      <div class="study-logo">SNG Études</div>
-
-      <a href="#" class="study-side-btn green">M'INSCRIRE</a>
-      <a href="#" class="study-side-btn blue">ME CONNECTER</a>
-
-      <div class="study-side-title">Niveau 6ème ></div>
-
+      <div class="study-logo">
+        <div class="study-logo-badge">SNG</div>
+        <div class="study-logo-text"><strong>Études</strong><span>Réviser • Apprendre • Progresser</span></div>
+      </div>
+      <a href="#" class="study-btn green">M'INSCRIRE</a>
+      <a href="#" class="study-btn blue">ME CONNECTER</a>
+      <div class="study-level-label">Niveau 6ème ></div>
       <nav class="study-nav">
         <a href="mathematiques.html" class="">Mathématiques</a>
         <a href="histoire.html" class="">Histoire</a>
@@ -24,59 +78,153 @@
         <a href="geographie.html" class="">Géographie</a>
         <a href="svt.html" class="active">SVT</a>
       </nav>
+      <div class="study-sidebar-footer">SNG Études<br>Plateforme de révision moderne</div>
     </aside>
-
-    <main class="study-content">
-      <div class="study-hero-banner"></div>
-
+    <main class="study-main">
+      <div class="study-hero"></div>
       <div class="study-header">
         <div>
-          <p class="study-breadcrumb">Accueil > SVT 6ème</p>
-          <h1>SVT</h1>
+          <p class="study-breadcrumb">Accueil > Études > SVT 6ème</p>
+          <div class="study-title"><div class="study-title-icon">🌿</div><h1>SVT</h1></div>
         </div>
-        <div class="study-points">0 PTS</div>
+        <div class="study-points"><div class="study-point-box">0 PTS</div><div class="study-point-box">8 chapitres</div></div>
       </div>
+      <section class="study-content">
+        <div class="study-toolbar">
+          <div><h2>Commencer à réviser</h2><p>Choisis un chapitre pour apprendre et t’entraîner.</p></div>
+          <div class="study-search">🔎 Rechercher un chapitre...</div>
+        </div>
+        <div class="chapters-grid">
+          <a href="#" class="chapter-card">
+            <div class="chapter-image" style="background-image:url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=1200&q=80');">
+              <div class="chapter-badge">Niveau 6ème</div>
+            </div>
+            <div class="chapter-body">
+              <span class="chapter-label">CHAPITRE 1</span>
+              <h3>Le vivant et ses cellules</h3>
+              <p class="chapter-desc">Observer le vivant et comprendre l’organisation cellulaire.</p>
+              <div class="chapter-meta">
+                <span>⏱ 10 min</span>
+                <span>✏️ Exercices</span>
+                <span>☆ 0 pts</span>
+              </div>
+            </div>
+          </a>
 
-      <div class="chapters-grid">
-        <a href="#" class="chapter-card">
-          <div class="chapter-image" style="background-image:url('https://images.unsplash.com/photo-1635372722656-389f87a941b7?auto=format&fit=crop&w=1200&q=80');"></div>
-          <div class="chapter-body">
-            <span>CHAPITRE 1</span>
-            <h3>Les besoins des êtres vivants</h3>
-            <div class="chapter-meta">⏱ 0 minute · ✏️ 0 · ☆ 0 pts</div>
-            <div class="chapter-links"><span>Leçons</span><span>Exercices</span><span>Quiz</span><span>Fiches PDF</span><span>Révisions rapides</span></div>
-          </div>
-        </a>
-        <a href="#" class="chapter-card">
-          <div class="chapter-image" style="background-image:url('https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=1200&q=80');"></div>
-          <div class="chapter-body">
-            <span>CHAPITRE 2</span>
-            <h3>La cellule et le vivant</h3>
-            <div class="chapter-meta">⏱ 0 minute · ✏️ 0 · ☆ 0 pts</div>
-            <div class="chapter-links"><span>Leçons</span><span>Exercices</span><span>Quiz</span><span>Fiches PDF</span><span>Révisions rapides</span></div>
-          </div>
-        </a>
-        <a href="#" class="chapter-card">
-          <div class="chapter-image" style="background-image:url('https://images.unsplash.com/photo-1509228627152-72ae9ae6848d?auto=format&fit=crop&w=1200&q=80');"></div>
-          <div class="chapter-body">
-            <span>CHAPITRE 3</span>
-            <h3>Diversité des écosystèmes</h3>
-            <div class="chapter-meta">⏱ 0 minute · ✏️ 0 · ☆ 0 pts</div>
-            <div class="chapter-links"><span>Leçons</span><span>Exercices</span><span>Quiz</span><span>Fiches PDF</span><span>Révisions rapides</span></div>
-          </div>
-        </a>
-        <a href="#" class="chapter-card">
-          <div class="chapter-image" style="background-image:url('https://images.unsplash.com/photo-1453738773917-9c3eff1db985?auto=format&fit=crop&w=1200&q=80');"></div>
-          <div class="chapter-body">
-            <span>CHAPITRE 4</span>
-            <h3>Le corps humain en mouvement</h3>
-            <div class="chapter-meta">⏱ 0 minute · ✏️ 0 · ☆ 0 pts</div>
-            <div class="chapter-links"><span>Leçons</span><span>Exercices</span><span>Quiz</span><span>Fiches PDF</span><span>Révisions rapides</span></div>
-          </div>
-        </a>
-      </div>
+          <a href="#" class="chapter-card">
+            <div class="chapter-image" style="background-image:url('https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=1200&q=80');">
+              <div class="chapter-badge">Niveau 6ème</div>
+            </div>
+            <div class="chapter-body">
+              <span class="chapter-label">CHAPITRE 2</span>
+              <h3>Nutrition et digestion</h3>
+              <p class="chapter-desc">Étudier le trajet des aliments et les besoins du corps.</p>
+              <div class="chapter-meta">
+                <span>⏱ 12 min</span>
+                <span>✏️ Quiz</span>
+                <span>☆ 0 pts</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="chapter-card">
+            <div class="chapter-image" style="background-image:url('https://images.unsplash.com/photo-1509228627152-72ae9ae6848d?auto=format&fit=crop&w=1200&q=80');">
+              <div class="chapter-badge">Niveau 6ème</div>
+            </div>
+            <div class="chapter-body">
+              <span class="chapter-label">CHAPITRE 3</span>
+              <h3>Respiration et circulation</h3>
+              <p class="chapter-desc">Comprendre comment le corps transporte oxygène et nutriments.</p>
+              <div class="chapter-meta">
+                <span>⏱ 14 min</span>
+                <span>✏️ Cours</span>
+                <span>☆ 0 pts</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="chapter-card">
+            <div class="chapter-image" style="background-image:url('https://images.unsplash.com/photo-1453738773917-9c3eff1db985?auto=format&fit=crop&w=1200&q=80');">
+              <div class="chapter-badge">Niveau 6ème</div>
+            </div>
+            <div class="chapter-body">
+              <span class="chapter-label">CHAPITRE 4</span>
+              <h3>Reproduction chez les êtres vivants</h3>
+              <p class="chapter-desc">Comparer les modes de reproduction des espèces.</p>
+              <div class="chapter-meta">
+                <span>⏱ 15 min</span>
+                <span>✏️ Exercices</span>
+                <span>☆ 0 pts</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="chapter-card">
+            <div class="chapter-image" style="background-image:url('https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?auto=format&fit=crop&w=1200&q=80');">
+              <div class="chapter-badge">Niveau 6ème</div>
+            </div>
+            <div class="chapter-body">
+              <span class="chapter-label">CHAPITRE 5</span>
+              <h3>Écosystèmes et biodiversité</h3>
+              <p class="chapter-desc">Analyser les relations entre êtres vivants et milieux.</p>
+              <div class="chapter-meta">
+                <span>⏱ 11 min</span>
+                <span>✏️ Quiz</span>
+                <span>☆ 0 pts</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="chapter-card">
+            <div class="chapter-image" style="background-image:url('https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&w=1200&q=80');">
+              <div class="chapter-badge">Niveau 6ème</div>
+            </div>
+            <div class="chapter-body">
+              <span class="chapter-label">CHAPITRE 6</span>
+              <h3>Volcans et séismes</h3>
+              <p class="chapter-desc">Découvrir les phénomènes internes de la Terre.</p>
+              <div class="chapter-meta">
+                <span>⏱ 13 min</span>
+                <span>✏️ Cours</span>
+                <span>☆ 0 pts</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="chapter-card">
+            <div class="chapter-image" style="background-image:url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1200&q=80');">
+              <div class="chapter-badge">Niveau 6ème</div>
+            </div>
+            <div class="chapter-body">
+              <span class="chapter-label">CHAPITRE 7</span>
+              <h3>Roches et paysages</h3>
+              <p class="chapter-desc">Comprendre la formation des reliefs au fil du temps.</p>
+              <div class="chapter-meta">
+                <span>⏱ 16 min</span>
+                <span>✏️ Exercices</span>
+                <span>☆ 0 pts</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="chapter-card">
+            <div class="chapter-image" style="background-image:url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80');">
+              <div class="chapter-badge">Niveau 6ème</div>
+            </div>
+            <div class="chapter-body">
+              <span class="chapter-label">CHAPITRE 8</span>
+              <h3>Santé et prévention</h3>
+              <p class="chapter-desc">Adopter de bonnes habitudes pour protéger sa santé.</p>
+              <div class="chapter-meta">
+                <span>⏱ 18 min</span>
+                <span>✏️ Entraînement</span>
+                <span>☆ 0 pts</span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </section>
     </main>
-  </section>
-
+  </div>
 </body>
 </html>

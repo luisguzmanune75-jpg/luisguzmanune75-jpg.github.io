@@ -1069,6 +1069,268 @@
 }
   }
       }
+
+      .sng-study-pro{
+        padding: 90px 20px;
+        background:
+          radial-gradient(circle at top left, rgba(70,160,255,0.12), transparent 25%),
+          radial-gradient(circle at bottom right, rgba(0,191,166,0.10), transparent 25%),
+          linear-gradient(180deg, #07111c 0%, #081827 100%);
+      }
+
+      .sng-study-pro-inner{
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 42px 28px;
+        border-radius: 32px;
+        background: linear-gradient(180deg, #56c3ef 0%, #48aedc 100%);
+        box-shadow: 0 28px 60px rgba(0,0,0,0.35);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .sng-study-pro-inner::before,
+      .sng-study-pro-inner::after{
+        content:"";
+        position:absolute;
+        border-radius:50%;
+        background:rgba(255,255,255,0.10);
+        filter: blur(2px);
+      }
+
+      .sng-study-pro-inner::before{
+        width:240px;
+        height:240px;
+        top:120px;
+        left:40px;
+      }
+
+      .sng-study-pro-inner::after{
+        width:200px;
+        height:200px;
+        right:70px;
+        top:180px;
+      }
+
+      .sng-study-pro-head{
+        position: relative;
+        z-index: 2;
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        gap:20px;
+        flex-wrap:wrap;
+        margin-bottom:34px;
+      }
+
+      .sng-study-label{
+        color:#ecfaff;
+        font-size:14px;
+        letter-spacing:2px;
+        margin:0 0 10px;
+        font-weight:700;
+      }
+
+      .sng-study-pro-head h2{
+        margin:0;
+        color:#fff;
+        font-size:clamp(30px, 5vw, 58px);
+        line-height:1.05;
+        font-weight:900;
+      }
+
+      .sng-study-sub{
+        margin:14px 0 0;
+        color:rgba(255,255,255,0.88);
+        font-size:18px;
+        max-width:650px;
+        line-height:1.5;
+      }
+
+      .sng-study-levels{
+        display:flex;
+        flex-wrap:wrap;
+        gap:10px;
+        justify-content:flex-end;
+      }
+
+      .study-level{
+        border:2px solid rgba(255,255,255,0.8);
+        background:transparent;
+        color:#fff;
+        padding:10px 18px;
+        border-radius:999px;
+        font-weight:800;
+        cursor:pointer;
+        transition:.25s ease;
+      }
+
+      .study-level:hover,
+      .study-level.active{
+        background:#fff;
+        color:#1c97ca;
+      }
+
+      .sng-study-pro-board{
+        position: relative;
+        z-index: 2;
+        display:grid;
+        grid-template-columns:repeat(3, 1fr);
+        gap:22px;
+        margin-bottom:28px;
+      }
+
+      .study-pro-card{
+        text-decoration:none;
+        background:rgba(255,255,255,0.96);
+        border-radius:24px;
+        padding:24px 20px;
+        min-height:170px;
+        color:#18212a;
+        display:flex;
+        flex-direction:column;
+        align-items:flex-start;
+        justify-content:flex-start;
+        box-shadow:0 14px 26px rgba(0,0,0,0.12);
+        transition:transform .22s ease, box-shadow .22s ease;
+      }
+
+      .study-pro-card:hover{
+        transform:translateY(-6px);
+        box-shadow:0 18px 34px rgba(0,0,0,0.18);
+      }
+
+      .study-pro-icon{
+        width:86px;
+        height:86px;
+        border-radius:50%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:34px;
+        color:#fff;
+        font-weight:900;
+        margin-bottom:18px;
+        box-shadow: inset 0 -6px 0 rgba(0,0,0,0.10);
+      }
+
+      .study-pro-text h3{
+        margin:0 0 8px;
+        font-size:25px;
+        line-height:1.2;
+      }
+
+      .study-pro-text p{
+        margin:0;
+        color:#59636d;
+        font-size:15px;
+        line-height:1.45;
+      }
+
+      .math .study-pro-icon{ background:#d9ab55; }
+      .histoire .study-pro-icon{ background:#bd5f50; }
+      .francais .study-pro-icon{ background:#73b9dc; }
+      .geo .study-pro-icon{ background:#60b181; }
+      .svt .study-pro-icon{ background:#62c5c3; }
+      .general .study-pro-icon{ background:#6677f0; }
+
+      .sng-study-stats{
+        position: relative;
+        z-index: 2;
+        display:flex;
+        gap:16px;
+        flex-wrap:wrap;
+        margin-bottom:26px;
+      }
+
+      .study-stat-box{
+        background:rgba(9,26,42,0.72);
+        color:#fff;
+        border-radius:20px;
+        padding:18px 24px;
+        min-width:140px;
+        backdrop-filter:blur(8px);
+      }
+
+      .study-stat-box strong{
+        display:block;
+        font-size:28px;
+        font-weight:900;
+        margin-bottom:6px;
+      }
+
+      .study-stat-box span{
+        color:rgba(255,255,255,0.80);
+        font-size:14px;
+      }
+
+      .sng-study-pro-actions{
+        position: relative;
+        z-index: 2;
+        display:flex;
+        gap:14px;
+        flex-wrap:wrap;
+      }
+
+      .study-btn-main,
+      .study-btn-outline{
+        text-decoration:none;
+        padding:15px 26px;
+        border-radius:999px;
+        font-weight:800;
+        transition:.25s ease;
+      }
+
+      .study-btn-main{
+        background:#0f1f32;
+        color:#fff;
+        box-shadow:0 10px 24px rgba(0,0,0,0.18);
+      }
+
+      .study-btn-main:hover{
+        transform:translateY(-2px);
+      }
+
+      .study-btn-outline{
+        border:2px solid #fff;
+        color:#fff;
+        background:transparent;
+      }
+
+      .study-btn-outline:hover{
+        background:#fff;
+        color:#1996c9;
+      }
+
+      @media (max-width: 1024px){
+        .sng-study-pro-board{
+          grid-template-columns:repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 680px){
+        .sng-study-pro{
+          padding: 60px 14px;
+        }
+
+        .sng-study-pro-inner{
+          padding: 28px 16px;
+          border-radius: 24px;
+        }
+
+        .sng-study-pro-board{
+          grid-template-columns:1fr;
+        }
+
+        .study-pro-text h3{
+          font-size:22px;
+        }
+
+        .sng-study-sub{
+          font-size:16px;
+        }
+      }
+
     </style>
   </head>
   <body data-page="home">
@@ -1119,7 +1381,6 @@
           <a href="./jeux.html">Jeux</a>
           <a href="./blog.html">Blog</a>
           <a href="#etudes">Études</a>
-          <a href="./scolaire.html">Scolaire</a>
         </nav>
 
         <form id="portal-search-form" class="search-box" role="search">
@@ -1249,78 +1510,98 @@
     </div>
   </div>
 </section>
+      <section id="etudes" class="sng-study-pro">
+        <div class="sng-study-pro-inner">
 
-      <section id="etudes" class="container">
-        <section class="sng-study-home">
-          <div class="study-overlay"></div>
+          <div class="sng-study-pro-head">
+            <div>
+              <p class="sng-study-label">SNG ÉTUDES</p>
+              <h2>Apprends, révise et progresse</h2>
+              <p class="sng-study-sub">
+                Cours, révisions et chapitres dans un espace séparé du reste du site.
+              </p>
+            </div>
 
-          <div class="study-top">
-            <p class="study-mini">SNG Portal</p>
-            <h2>Entraîne-toi à réviser. Gratuitement.</h2>
-
-            <div class="study-levels">
-              <button class="level-btn active">6ème</button>
-              <button class="level-btn">5ème</button>
-              <button class="level-btn">4ème</button>
-              <button class="level-btn">3ème</button>
-              <button class="level-btn">2nde</button>
-              <button class="level-btn">1ère</button>
-              <button class="level-btn">Terminale</button>
+            <div class="sng-study-levels">
+              <button class="study-level active">6ème</button>
+              <button class="study-level">5ème</button>
+              <button class="study-level">4ème</button>
+              <button class="study-level">3ème</button>
+              <button class="study-level">2nde</button>
             </div>
           </div>
 
-          <div class="study-board">
-            <a href="mathematiques.html" class="study-subject math">
-              <span class="study-icon">ƒx</span>
-              <strong>Mathématiques</strong>
+          <div class="sng-study-pro-board">
+            <a href="mathematiques.html" class="study-pro-card math">
+              <div class="study-pro-icon">ƒx</div>
+              <div class="study-pro-text">
+                <h3>Mathématiques</h3>
+                <p>Calcul, nombres, logique et exercices</p>
+              </div>
             </a>
 
-            <a href="histoire.html" class="study-subject histoire">
-              <span class="study-icon">⌛</span>
-              <strong>Histoire</strong>
+            <a href="histoire.html" class="study-pro-card histoire">
+              <div class="study-pro-icon">⌛</div>
+              <div class="study-pro-text">
+                <h3>Histoire</h3>
+                <p>Humanité, civilisations et repères</p>
+              </div>
             </a>
 
-            <a href="francais.html" class="study-subject francais">
-              <span class="study-icon">📖</span>
-              <strong>Français</strong>
+            <a href="francais.html" class="study-pro-card francais">
+              <div class="study-pro-icon">📖</div>
+              <div class="study-pro-text">
+                <h3>Français</h3>
+                <p>Lecture, grammaire, orthographe</p>
+              </div>
             </a>
 
-            <a href="geographie.html" class="study-subject geo">
-              <span class="study-icon">🌍</span>
-              <strong>Géographie</strong>
+            <a href="geographie.html" class="study-pro-card geo">
+              <div class="study-pro-icon">🌍</div>
+              <div class="study-pro-text">
+                <h3>Géographie</h3>
+                <p>Cartes, territoires et monde actuel</p>
+              </div>
             </a>
 
-            <a href="svt.html" class="study-subject svt">
-              <span class="study-icon">🌿</span>
-              <strong>SVT</strong>
+            <a href="svt.html" class="study-pro-card svt">
+              <div class="study-pro-icon">🌿</div>
+              <div class="study-pro-text">
+                <h3>SVT</h3>
+                <p>Nature, corps humain et vivant</p>
+              </div>
+            </a>
+
+            <a href="revision.html" class="study-pro-card general">
+              <div class="study-pro-icon">🧠</div>
+              <div class="study-pro-text">
+                <h3>Révisions rapides</h3>
+                <p>Quiz, fiches et entraînements</p>
+              </div>
             </a>
           </div>
 
-          <div class="study-actions">
-            <a href="mathematiques.html" class="study-main-btn">Commencer à réviser</a>
-            <a href="#study-categories" class="study-second-btn">Découvrir</a>
-          </div>
-
-          <div id="study-categories" class="study-bottom-cards">
-            <div class="mini-study-card">
-              <div class="mini-icon">📚</div>
-              <h3>Révisions</h3>
-              <p>Fiches, exercices, leçons et entraînements rapides.</p>
+          <div class="sng-study-stats">
+            <div class="study-stat-box">
+              <strong>5</strong>
+              <span>Matières</span>
             </div>
-
-            <div class="mini-study-card">
-              <div class="mini-icon">🧠</div>
-              <h3>Apprendre</h3>
-              <p>Comprendre les cours facilement avec un style moderne.</p>
+            <div class="study-stat-box">
+              <strong>24</strong>
+              <span>Chapitres</span>
             </div>
-
-            <div class="mini-study-card">
-              <div class="mini-icon">✍️</div>
-              <h3>Exercices</h3>
-              <p>Chapitre par chapitre comme une vraie plateforme scolaire.</p>
+            <div class="study-stat-box">
+              <strong>100%</strong>
+              <span>Mobile</span>
             </div>
           </div>
-        </section>
+
+          <div class="sng-study-pro-actions">
+            <a href="mathematiques.html" class="study-btn-main">Commencer maintenant</a>
+            <a href="revision.html" class="study-btn-outline">Voir les révisions</a>
+          </div>
+
+        </div>
       </section>
 
       <section class="section container">
