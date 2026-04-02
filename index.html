@@ -630,43 +630,6 @@
   box-shadow:0 12px 28px rgba(29,185,84,0.35);
 }
 
-.sng-popular-routes{
-  margin-top:28px;
-}
-
-.sng-popular-routes h3{
-  color:#fff;
-  font-size:22px;
-  margin-bottom:16px;
-}
-
-.sng-route-grid{
-  display:grid;
-  grid-template-columns:repeat(4, 1fr);
-  gap:16px;
-}
-
-.sng-route-card{
-  background:rgba(255,255,255,0.07);
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:20px;
-  padding:18px;
-  color:#fff;
-  backdrop-filter:blur(10px);
-}
-
-.sng-route-card strong{
-  display:block;
-  font-size:17px;
-  margin-bottom:8px;
-}
-
-.sng-route-card span{
-  color:rgba(255,255,255,0.72);
-  font-size:14px;
-  line-height:1.4;
-}
-
 .sng-travel-result{
   display:none;
   margin-top:22px;
@@ -679,6 +642,128 @@
 
 .sng-travel-result.show{
   display:block;
+}
+
+.travel-explore-section{
+  margin-top:40px;
+  padding:20px 0 10px;
+}
+
+.travel-explore-header{
+  text-align:center;
+  margin-bottom:28px;
+}
+
+.travel-explore-header h2{
+  color:#fff;
+  font-size:52px;
+  font-weight:800;
+  margin:0 0 10px;
+}
+
+.travel-explore-header p{
+  color:rgba(255,255,255,0.75);
+  font-size:18px;
+  margin:0;
+}
+
+.travel-explore-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:22px;
+}
+
+.travel-explore-card{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:28px;
+  padding:36px 24px;
+  text-align:center;
+  color:#fff;
+  min-height:240px;
+  backdrop-filter:blur(12px);
+  transition:0.25s ease;
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+
+.travel-explore-card:hover{
+  transform:translateY(-6px);
+  background:rgba(255,255,255,0.09);
+  box-shadow:0 18px 35px rgba(0,0,0,0.22);
+}
+
+.travel-explore-icon{
+  font-size:30px;
+  margin-bottom:18px;
+}
+
+.travel-explore-card h3{
+  font-size:24px;
+  margin:0 0 14px;
+  font-weight:800;
+}
+
+.travel-explore-card p{
+  font-size:15px;
+  line-height:1.5;
+  color:rgba(255,255,255,0.78);
+  margin:0;
+}
+
+.travel-explore-bottom{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:18px;
+  margin-top:26px;
+}
+
+.travel-info-pill{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  color:#fff;
+  border-radius:22px;
+  padding:18px 22px;
+  font-size:15px;
+}
+
+.travel-info-pill strong{
+  margin-right:6px;
+}
+
+@media (max-width: 1100px){
+  .sng-travel-form{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .travel-explore-grid{
+    grid-template-columns:repeat(2, 1fr);
+  }
+
+  .travel-explore-bottom{
+    grid-template-columns:1fr;
+  }
+}
+
+@media (max-width: 700px){
+  .sng-travel-head h2{
+    font-size:30px;
+  }
+
+  .sng-travel-form{
+    grid-template-columns:1fr;
+  }
+
+  .sng-trip-options{
+    flex-direction:column;
+  }
+
+  .travel-explore-header h2{
+    font-size:34px;
+  }
+
+  .travel-explore-grid{
+    grid-template-columns:1fr;
+  }
 }
 
       .site-footer {
@@ -702,8 +787,13 @@
     grid-template-columns:1fr 1fr;
   }
 
-  .sng-route-grid{
-    grid-template-columns:1fr 1fr;
+@media (max-width: 1100px){
+  .travel-explore-grid{
+    grid-template-columns:repeat(2, 1fr);
+  }
+
+  .travel-explore-bottom{
+    grid-template-columns:1fr;
   }
 }
 
@@ -740,12 +830,17 @@
     grid-template-columns:1fr;
   }
 
-  .sng-route-grid{
-    grid-template-columns:1fr;
-  }
+.sng-trip-options{
+  flex-direction:column;
+}
 
-  .sng-trip-options{
-    flex-direction:column;
+.travel-explore-header h2{
+  font-size:34px;
+}
+
+.travel-explore-grid{
+  grid-template-columns:1fr;
+}
   }
       }
     </style>
@@ -985,29 +1080,58 @@
       <button type="submit" class="sng-travel-button">Rechercher des vols</button>
     </form>
 
-    <div class="sng-popular-routes">
-      <h3>Destinations populaires</h3>
-      <div class="sng-route-grid">
-        <div class="sng-route-card">
-          <strong>Paris → Saint-Domingue</strong>
-          <span>Vols long-courriers vers République Dominicaine</span>
-        </div>
-        <div class="sng-route-card">
-          <strong>Lyon → Punta Cana</strong>
-          <span>Départs vacances et séjours soleil</span>
-        </div>
-        <div class="sng-route-card">
-          <strong>Marseille → Santiago</strong>
-          <span>Option pratique via correspondance</span>
-        </div>
-        <div class="sng-route-card">
-          <strong>Madrid → Saint-Domingue</strong>
-          <span>Offres Europe / Caraïbes</span>
-        </div>
-      </div>
+<div id="sngTravelResult" class="sng-travel-result"></div>
+
+<section class="travel-explore-section">
+  <div class="travel-explore-header">
+    <h2>Explorer les voyages</h2>
+    <p>Découvre les meilleures rubriques voyage de SNG Portal.</p>
+  </div>
+
+  <div class="travel-explore-grid">
+    <div class="travel-explore-card">
+      <div class="travel-explore-icon">✈️</div>
+      <h3>Vols</h3>
+      <p>Compare les vols, dates, départs, retours et destinations populaires.</p>
     </div>
 
-    <div id="sngTravelResult" class="sng-travel-result"></div>
+    <div class="travel-explore-card">
+      <div class="travel-explore-icon">🏨</div>
+      <h3>Hôtels</h3>
+      <p>Découvre des hôtels, séjours, vacances et hébergements à prix intéressants.</p>
+    </div>
+
+    <div class="travel-explore-card">
+      <div class="travel-explore-icon">🌍</div>
+      <h3>Vol + Hôtel</h3>
+      <p>Combine transport et hébergement pour trouver des offres complètes.</p>
+    </div>
+
+    <div class="travel-explore-card">
+      <div class="travel-explore-icon">🚗</div>
+      <h3>Location voiture</h3>
+      <p>Réserve une voiture pour tes déplacements, vacances et voyages en toute liberté.</p>
+    </div>
+
+    <div class="travel-explore-card">
+      <div class="travel-explore-icon">🏝️</div>
+      <h3>Destinations soleil</h3>
+      <p>République Dominicaine, Caraïbes, plages, soleil et escapades inoubliables.</p>
+    </div>
+
+    <div class="travel-explore-card">
+      <div class="travel-explore-icon">🧳</div>
+      <h3>Bons plans voyage</h3>
+      <p>Retrouve des idées de départs pas chers, astuces et offres du moment.</p>
+    </div>
+  </div>
+
+  <div class="travel-explore-bottom">
+    <div class="travel-info-pill"><strong>+6 rubriques</strong> Voyage pratique et moderne</div>
+    <div class="travel-info-pill"><strong>Design premium</strong> Clair sur PC et mobile</div>
+    <div class="travel-info-pill"><strong>Style SNG</strong> Élégant, fort et utile</div>
+  </div>
+</section>
   </div>
 </section>
       <section class="section container">
