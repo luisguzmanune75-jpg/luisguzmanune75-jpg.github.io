@@ -617,8 +617,8 @@
               <h1>Le sport version premium</h1>
               <p>Donne à ta page sport le même niveau que ta page jeux : gros visuel, cartes modernes, filtres, matchs, résultats, classements et style pro.</p>
               <div class="hero-actions">
-                <button class="btn">Voir les matchs</button>
-                <button class="btn-outline">Classements</button>
+                <a class="btn" href="#catalogue-sport" style="display:inline-block;">Voir les matchs</a>
+                <a class="btn-outline" href="#classement" style="display:inline-block;">Classements</a>
               </div>
             </div>
           </article>
@@ -631,8 +631,8 @@
               <h1>NBA, EuroLeague, highlights</h1>
               <p>Une mise en page qui fait propre sur PC et mobile, parfaite pour afficher du basket, du foot, du tennis et plus encore.</p>
               <div class="hero-actions">
-                <button class="btn">Voir le basket</button>
-                <button class="btn-outline">Résultats</button>
+                <a class="btn" href="#catalogue-sport" style="display:inline-block;">Voir le basket</a>
+                <a class="btn-outline" href="https://www.flashscore.fr/" target="_blank" rel="noopener noreferrer" style="display:inline-block;">Résultats</a>
               </div>
             </div>
           </article>
@@ -645,37 +645,37 @@
               <h1>Calendrier & affiches du moment</h1>
               <p>Tu peux brancher plus tard une API sport, ou commencer direct avec tes cartes et tes liens manuels vers les pages d'équipes ou de compétitions.</p>
               <div class="hero-actions">
-                <button class="btn">Découvrir</button>
-                <button class="btn-outline">Actualités</button>
+                <a class="btn" href="#catalogue-sport" style="display:inline-block;">Découvrir</a>
+                <a class="btn-outline" href="https://www.lequipe.fr/" target="_blank" rel="noopener noreferrer" style="display:inline-block;">Actualités</a>
               </div>
             </div>
           </article>
         </div>
 
         <aside class="hero-side">
-          <div class="side-item active" data-target="0">
+          <a class="side-item active" data-target="0" href="https://www.flashscore.fr/football/" target="_blank" rel="noopener noreferrer">
             <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=300&q=80" alt="Football" />
             <div>
               <h4>Football live</h4>
               <p>Champions League, Ligue 1, Premier League.</p>
             </div>
-          </div>
+          </a>
 
-          <div class="side-item" data-target="1">
+          <a class="side-item" data-target="1" href="https://www.flashscore.fr/basketball/" target="_blank" rel="noopener noreferrer">
             <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=300&q=80" alt="Basket" />
             <div>
               <h4>Basket premium</h4>
               <p>NBA, playoffs, EuroLeague et résultats.</p>
             </div>
-          </div>
+          </a>
 
-          <div class="side-item" data-target="2">
+          <a class="side-item" data-target="2" href="https://www.lequipe.fr/" target="_blank" rel="noopener noreferrer">
             <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=300&q=80" alt="Sports calendar" />
             <div>
               <h4>Affiches du jour</h4>
               <p>Calendrier visuel et gros matchs du moment.</p>
             </div>
-          </div>
+          </a>
         </aside>
       </div>
     </section>
@@ -699,7 +699,7 @@
           </div>
         </div>
 
-        <div class="chips">
+        <div id="catalogue-sport" class="chips">
           <button class="chip active" data-filter="all">Tous</button>
           <button class="chip" data-filter="Football">Football</button>
           <button class="chip" data-filter="Basket">Basket</button>
@@ -712,7 +712,7 @@
         <div class="empty-state" id="emptyState">Aucun événement trouvé avec ce filtre.</div>
 
         <div class="stats-wrap">
-          <section class="panel">
+          <section id="classement" class="panel">
             <h3>Classement vedette</h3>
             <div class="table">
               <div class="table-row">
@@ -807,7 +807,7 @@
         status: 'Live',
         popularity: 98,
         odds: '1.62',
-        link: '#',
+        link: 'https://www.flashscore.fr/football/france/ligue-1/',
         image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=700&q=80'
       },
       {
@@ -821,7 +821,7 @@
         status: 'À venir',
         popularity: 100,
         odds: '1.95',
-        link: '#',
+        link: 'https://www.flashscore.fr/football/espagne/laliga/',
         image: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=700&q=80'
       },
       {
@@ -835,7 +835,7 @@
         status: 'Live',
         popularity: 96,
         odds: '1.74',
-        link: '#',
+        link: 'https://www.flashscore.fr/basketball/usa/nba/',
         image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=700&q=80'
       },
       {
@@ -849,7 +849,7 @@
         status: 'À venir',
         popularity: 75,
         odds: '1.58',
-        link: '#',
+        link: 'https://www.flashscore.fr/basketball/france/betclic-elite/',
         image: 'https://images.unsplash.com/photo-1519861531473-9200262188bf?auto=format&fit=crop&w=700&q=80'
       },
       {
@@ -863,7 +863,7 @@
         status: 'À venir',
         popularity: 87,
         odds: '2.10',
-        link: '#',
+        link: 'https://www.flashscore.fr/tennis/',
         image: 'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?auto=format&fit=crop&w=700&q=80'
       },
       {
@@ -877,7 +877,7 @@
         status: 'À venir',
         popularity: 84,
         odds: '1.88',
-        link: '#',
+        link: 'https://www.flashscore.fr/mma/',
         image: 'https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=700&q=80'
       },
       {
@@ -891,7 +891,7 @@
         status: 'À venir',
         popularity: 92,
         odds: '1.83',
-        link: '#',
+        link: 'https://www.flashscore.fr/football/angleterre/premier-league/',
         image: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=700&q=80'
       },
       {
@@ -905,7 +905,7 @@
         status: 'Terminé',
         popularity: 90,
         odds: '1.70',
-        link: '#',
+        link: 'https://www.flashscore.fr/football/allemagne/bundesliga/',
         image: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=700&q=80'
       }
     ];
@@ -944,7 +944,7 @@
       }
 
       sportsGrid.innerHTML = filtered.map(event => `
-        <a href="${event.link}" style="text-decoration:none;">
+        <a href="${event.link}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
           <article class="sport-card">
             <div class="sport-thumb">
               <img src="${event.image}" alt="${event.title}" loading="lazy">
@@ -961,6 +961,10 @@
               <div class="meta-line">
                 <span>${event.status} • ${event.time}</span>
                 <span class="odds">Pop. ${event.popularity}%</span>
+              </div>
+              <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+                <span style="display:inline-block; padding:8px 12px; border-radius:999px; background:rgba(59,130,246,0.14); color:#dbeafe; font-size:0.82rem; font-weight:700;">Voir le match</span>
+                <span style="display:inline-block; padding:8px 12px; border-radius:999px; background:rgba(255,255,255,0.06); color:#e2e8f0; font-size:0.82rem; font-weight:700;">Accès direct</span>
               </div>
             </div>
           </article>
