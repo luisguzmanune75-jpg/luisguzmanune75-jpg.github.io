@@ -626,8 +626,8 @@ function renderPulse() {
     </div>
     <div class="pulse-card">
       <span>Mode live</span>
-      <strong>${lotteryState.apiToken ? "Actif" : "Optionnel"}</strong>
-      <p>${lotteryState.apiToken ? "Token local enregistre" : "Ajoute un token pour les tirages live"}</p>
+      <strong>${lotteryState.apiToken ? "Actif + token" : "Actif"}</strong>
+      <p>${lotteryState.apiToken ? "Token local enregistre" : "Mise a jour automatique des tirages"}</p>
     </div>
   `;
 }
@@ -819,8 +819,9 @@ function renderLotteryDetail() {
           <h4>Mode annuaire</h4>
           <ul>
             <li>La recherche par pays ou nom marche sans token.</li>
+            <li>La page tente aussi de charger les derniers tirages automatiquement.</li>
             <li>Les liens officiels restent toujours disponibles.</li>
-            <li>Ajoute un token local si tu veux les tirages directement dans cette page.</li>
+            <li>Ajoute un token local seulement si ton fournisseur API l'exige.</li>
           </ul>
         </div>
       `;
@@ -856,7 +857,7 @@ function renderFormatNote() {
     ${
       liveLottery
         ? `<p>Le mode live est charge pour cette fiche. Tu peux changer l'annee et rafraichir les tirages.</p>`
-        : `<p>Sans token live, la page reste un moteur de recherche mondial avec liens officiels.</p>`
+        : `<p>La page essaie d'abord le mode live sans token, puis garde les liens officiels en secours.</p>`
     }
   `;
 }
@@ -1018,7 +1019,7 @@ function renderDrawResults() {
     root.innerHTML = `
       <div class="empty-state">
         Aucun tirage charge pour cette loterie. Tu peux utiliser le lien officiel
-        ou enregistrer un token live pour tenter un chargement direct.
+        ou rafraichir la page pour relancer la mise a jour live.
       </div>
     `;
     return;
@@ -1346,26 +1347,8 @@ async function fetchFrequency(id, year) {
 async function loadLiveData(force = false) {
   const entry = selectedEntry();
 
-  if (!lotteryState.apiToken) {
-    lotteryState.liveEntryId = "";
-    lotteryState.liveLottery = null;
-    lotteryState.liveResults = [];
-    lotteryState.liveFrequency = null;
-    lotteryState.availableYears = [];
-    lotteryState.selectedYear = "";
-    populateYearSelect([]);
-    renderLotteryDetail();
-    renderOfficialLinks();
-    renderFormatNote();
-    renderHotNumbers();
-    renderOddsPanel();
-    renderResultsPlaceholder("Ajoute un token live pour charger les tirages reels");
-    SITE.setStatus(document.querySelector("#lottery-status"), "Annuaire mondial charge", "neutral");
-    return;
-  }
-
   try {
-    SITE.setStatus(document.querySelector("#lottery-status"), "Recherche live en cours", "neutral");
+    SITE.setStatus(document.querySelector("#lottery-status"), "Mise a jour live en cours", "neutral");
     SITE.setStatus(document.querySelector("#lottery-results-status"), "Chargement des tirages", "neutral");
 
     if (force) {
@@ -1509,7 +1492,7 @@ function setupTokenForm() {
   renderTokenStatus(
     lotteryState.apiToken
       ? "Token live enregistre localement dans ce navigateur."
-      : "Aucun token live enregistre. Le mode annuaire reste disponible.",
+      : "Aucun token live enregistre. Les tirages sont quand meme tentes sans token.",
   );
 
   form.addEventListener("submit", (event) => {
@@ -1518,7 +1501,7 @@ function setupTokenForm() {
 
     if (!lotteryState.apiToken) {
       localStorage.removeItem(LOTTERY_TOKEN_KEY);
-      renderTokenStatus("Token vide. Le mode live a ete retire.");
+      renderTokenStatus("Token vide. Les tirages continuent en mode sans token.");
       loadLiveData(true);
       renderPulse();
       return;
@@ -1534,7 +1517,7 @@ function setupTokenForm() {
     lotteryState.apiToken = "";
     input.value = "";
     localStorage.removeItem(LOTTERY_TOKEN_KEY);
-    renderTokenStatus("Token efface. Retour au mode annuaire.");
+    renderTokenStatus("Token efface. Les tirages continuent en mode sans token.");
     renderPulse();
     loadLiveData(true);
   });
