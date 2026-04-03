@@ -700,9 +700,68 @@ function scheduleRefresh() {
   window.setInterval(loadCryptoData, 90000);
 }
 
+function setupPremiumChart() {
+  const chartData = {
+    "1h": [180, 176, 178, 170, 166, 160, 155, 158, 162, 168, 172, 178, 184, 190, 198, 210, 205, 214],
+    "24h": [190, 196, 193, 204, 210, 216, 214, 198, 205, 212, 226, 238, 222, 236, 248, 262, 256, 268],
+    "7j": [220, 214, 208, 202, 198, 190, 183, 176, 170, 165, 160, 155, 150, 142, 136, 128, 120, 114],
+    "1m": [240, 235, 228, 220, 210, 198, 186, 176, 168, 160, 154, 148, 138, 130, 120, 110, 96, 88],
+  };
+  const linePath = document.getElementById("sngLinePath");
+  const areaPath = document.getElementById("sngAreaPath");
+  const buttons = document.querySelectorAll(".sng-chart-tabs button");
+
+  if (!linePath || !areaPath || !buttons.length) {
+    return;
+  }
+
+  function makePath(points, width, height) {
+    const max = Math.max(...points);
+    const min = Math.min(...points);
+    const stepX = width / (points.length - 1);
+
+    const coords = points.map((value, index) => {
+      const x = index * stepX;
+      const yRatio = (value - min) / (max - min || 1);
+      const y = height - yRatio * (height - 30) - 15;
+      return [x, y];
+    });
+
+    let path = `M${coords[0][0]},${coords[0][1]}`;
+    coords.slice(1).forEach(([x, y]) => {
+      path += ` L${x},${y}`;
+    });
+
+    return { path, coords };
+  }
+
+  function renderChart(key) {
+    const width = 900;
+    const height = 280;
+    const points = chartData[key] || chartData["24h"];
+    const { path, coords } = makePath(points, width, height);
+    linePath.setAttribute("d", path);
+    areaPath.setAttribute(
+      "d",
+      `${path} L${coords[coords.length - 1][0]},${height} L0,${height} Z`,
+    );
+  }
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      buttons.forEach((item) => item.classList.remove("active"));
+      button.classList.add("active");
+      renderChart(button.dataset.chart);
+    });
+  });
+
+  renderChart("24h");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   SITE.setupMenu();
   SITE.observeReveals();
+  setupPremiumChart();
   renderFilterButtons();
   renderGlobalOverview();
   renderAssetList();
