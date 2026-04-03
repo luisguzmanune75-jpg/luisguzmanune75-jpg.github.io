@@ -1,58 +1,902 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Révision - SNG Études</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Révisions - SNG Études</title>
   <style>
-    body{
+    *{
+      box-sizing:border-box;
       margin:0;
-      font-family:Arial;
-      background:#07111c;
+      padding:0;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      background:
+        radial-gradient(circle at top left, rgba(44,147,255,.18), transparent 25%),
+        radial-gradient(circle at bottom right, rgba(0,194,168,.15), transparent 25%),
+        linear-gradient(180deg,#06101a,#071a2b);
       color:#fff;
+      min-height:100vh;
+    }
+
+    .page{
+      max-width:1200px;
+      margin:0 auto;
+      padding:30px 18px 60px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:28px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+
+    .brand-logo{
+      width:58px;
+      height:58px;
+      border-radius:50%;
+      background:linear-gradient(135deg,#ff7ac2,#71a8ff);
       display:flex;
       align-items:center;
       justify-content:center;
-      height:100vh;
-      text-align:center;
+      font-weight:900;
+      box-shadow:0 12px 26px rgba(0,0,0,.25);
     }
 
-    .box{
-      background:#0f1d33;
-      padding:40px;
-      border-radius:20px;
-      box-shadow:0 10px 30px rgba(0,0,0,.4);
+    .brand h1{
+      font-size:30px;
+      margin-bottom:4px;
     }
 
-    h1{
-      font-size:40px;
-      margin-bottom:10px;
+    .brand p{
+      color:rgba(255,255,255,.72);
+      font-size:14px;
     }
 
-    p{
-      color:#aaa;
+    .top-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
     }
 
-    a{
-      display:inline-block;
-      margin-top:20px;
-      padding:12px 20px;
-      background:#1f9fff;
-      color:#fff;
+    .btn{
+      border:none;
       text-decoration:none;
-      border-radius:30px;
-      font-weight:bold;
+      cursor:pointer;
+      border-radius:999px;
+      padding:13px 20px;
+      font-weight:800;
+      transition:.2s ease;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+    }
+
+    .btn-primary{
+      background:#259cff;
+      color:#fff;
+      box-shadow:0 10px 22px rgba(0,0,0,.18);
+    }
+
+    .btn-secondary{
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      color:#fff;
+    }
+
+    .hero{
+      background:linear-gradient(180deg,#53c0eb,#44acd8);
+      color:#fff;
+      border-radius:28px;
+      padding:34px 24px;
+      box-shadow:0 20px 40px rgba(0,0,0,.22);
+      margin-bottom:28px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero::before,
+    .hero::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,.12);
+    }
+
+    .hero::before{
+      width:180px;
+      height:180px;
+      left:-30px;
+      top:50px;
+    }
+
+    .hero::after{
+      width:150px;
+      height:150px;
+      right:20px;
+      top:30px;
+    }
+
+    .hero-content{
+      position:relative;
+      z-index:2;
+    }
+
+    .hero small{
+      font-size:13px;
+      letter-spacing:2px;
+      font-weight:800;
+    }
+
+    .hero h2{
+      font-size:clamp(30px,5vw,58px);
+      line-height:1.05;
+      margin:10px 0 12px;
+    }
+
+    .hero p{
+      max-width:760px;
+      font-size:18px;
+      line-height:1.5;
+      color:rgba(255,255,255,.9);
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:18px;
+      margin-bottom:28px;
+    }
+
+    .stat{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      padding:22px;
+      backdrop-filter:blur(10px);
+    }
+
+    .stat strong{
+      display:block;
+      font-size:30px;
+      margin-bottom:8px;
+    }
+
+    .stat span{
+      color:rgba(255,255,255,.72);
+      font-size:14px;
+    }
+
+    .main-grid{
+      display:grid;
+      grid-template-columns:350px 1fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .panel{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:24px;
+      padding:22px;
+      backdrop-filter:blur(10px);
+      box-shadow:0 14px 32px rgba(0,0,0,.18);
+    }
+
+    .panel h3{
+      font-size:24px;
+      margin-bottom:8px;
+    }
+
+    .panel-sub{
+      color:rgba(255,255,255,.7);
+      font-size:14px;
+      margin-bottom:18px;
+      line-height:1.5;
+    }
+
+    .subject-list{
+      display:grid;
+      gap:14px;
+    }
+
+    .subject-card{
+      border:none;
+      cursor:pointer;
+      width:100%;
+      text-align:left;
+      border-radius:20px;
+      padding:18px;
+      display:flex;
+      gap:14px;
+      align-items:center;
+      background:rgba(255,255,255,.05);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.08);
+      transition:.2s ease;
+    }
+
+    .subject-card:hover,
+    .subject-card.active{
+      transform:translateY(-2px);
+      background:rgba(255,255,255,.11);
+      border-color:rgba(255,255,255,.16);
+    }
+
+    .subject-icon{
+      min-width:58px;
+      width:58px;
+      height:58px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:26px;
+      font-weight:900;
+      color:#fff;
+      box-shadow:inset 0 -5px 0 rgba(0,0,0,.12);
+    }
+
+    .math{ background:#d7aa55; }
+    .history{ background:#bd5d4f; }
+    .french{ background:#71b9db; }
+    .geo{ background:#5eb181; }
+    .svt{ background:#63c6c3; }
+
+    .subject-info strong{
+      display:block;
+      font-size:19px;
+      margin-bottom:4px;
+    }
+
+    .subject-info span{
+      color:rgba(255,255,255,.72);
+      font-size:13px;
+      line-height:1.4;
+    }
+
+    .quiz-box{
+      min-height:520px;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .quiz-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+
+    .quiz-topic{
+      font-size:14px;
+      color:#94d9ff;
+      font-weight:800;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+
+    .quiz-progress{
+      font-size:14px;
+      color:rgba(255,255,255,.72);
+      font-weight:700;
+    }
+
+    .progress-bar{
+      width:100%;
+      height:10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      overflow:hidden;
+      margin-bottom:24px;
+    }
+
+    .progress-fill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,#26a4ff,#5ce1e6);
+      transition:.3s ease;
+    }
+
+    .question{
+      font-size:31px;
+      line-height:1.25;
+      margin-bottom:22px;
+      font-weight:900;
+    }
+
+    .answers{
+      display:grid;
+      gap:14px;
+      margin-bottom:20px;
+    }
+
+    .answer-btn{
+      text-align:left;
+      border:none;
+      cursor:pointer;
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.09);
+      border-radius:18px;
+      padding:18px 16px;
+      font-size:17px;
+      font-weight:700;
+      transition:.2s ease;
+    }
+
+    .answer-btn:hover{
+      background:rgba(255,255,255,.11);
+    }
+
+    .answer-btn.correct{
+      background:rgba(26,181,109,.22);
+      border-color:#36d184;
+    }
+
+    .answer-btn.wrong{
+      background:rgba(255,82,82,.18);
+      border-color:#ff6767;
+    }
+
+    .explanation{
+      margin-top:8px;
+      margin-bottom:24px;
+      background:rgba(255,255,255,.05);
+      border-left:4px solid #59d8e6;
+      border-radius:14px;
+      padding:16px;
+      color:rgba(255,255,255,.88);
+      line-height:1.55;
+      display:none;
+    }
+
+    .quiz-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:auto;
+    }
+
+    .result-box{
+      display:none;
+      text-align:center;
+      padding:26px 10px 10px;
+    }
+
+    .result-box h3{
+      font-size:36px;
+      margin-bottom:12px;
+    }
+
+    .result-box p{
+      color:rgba(255,255,255,.8);
+      font-size:18px;
+      line-height:1.5;
+      margin-bottom:18px;
+    }
+
+    .score-big{
+      font-size:62px;
+      font-weight:900;
+      color:#7ee4ff;
+      margin-bottom:16px;
+    }
+
+    .mini-list{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+      margin-top:20px;
+    }
+
+    .mini-card{
+      background:rgba(255,255,255,.05);
+      border-radius:18px;
+      padding:18px;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .mini-card strong{
+      display:block;
+      font-size:20px;
+      margin-bottom:6px;
+    }
+
+    .mini-card span{
+      color:rgba(255,255,255,.72);
+      font-size:14px;
+      line-height:1.45;
+    }
+
+    @media (max-width: 980px){
+      .stats{
+        grid-template-columns:repeat(2,1fr);
+      }
+
+      .main-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 640px){
+      .hero{
+        padding:28px 18px;
+      }
+
+      .hero p{
+        font-size:16px;
+      }
+
+      .question{
+        font-size:24px;
+      }
+
+      .stats{
+        grid-template-columns:1fr;
+      }
+
+      .mini-list{
+        grid-template-columns:1fr;
+      }
+
+      .topbar{
+        align-items:flex-start;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="page">
 
-  <div class="box">
-    <h1>Révisions SNG</h1>
-    <p>Les quiz et exercices arrivent bientôt 🔥</p>
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-logo">SNG</div>
+        <div>
+          <h1>Révisions SNG</h1>
+          <p>Quiz, entraînement, points et progression</p>
+        </div>
+      </div>
 
-    <a href="index.html">Retour au site</a>
+      <div class="top-actions">
+        <a class="btn btn-secondary" href="index.html">Retour au site</a>
+        <a class="btn btn-primary" href="mathematiques.html">Voir les chapitres</a>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-content">
+        <small>SNG ÉTUDES</small>
+        <h2>Travaille vraiment avec des quiz interactifs</h2>
+        <p>
+          Choisis une matière, réponds aux questions, regarde la correction et améliore ton score comme sur une vraie plateforme de révision.
+        </p>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat">
+        <strong id="globalPoints">0</strong>
+        <span>Points gagnés</span>
+      </div>
+      <div class="stat">
+        <strong id="bestScore">0%</strong>
+        <span>Meilleur score</span>
+      </div>
+      <div class="stat">
+        <strong>5</strong>
+        <span>Matières disponibles</span>
+      </div>
+      <div class="stat">
+        <strong id="quizCount">3</strong>
+        <span>Questions dans ce quiz</span>
+      </div>
+    </section>
+
+    <div class="main-grid">
+
+      <aside class="panel">
+        <h3>Matières</h3>
+        <p class="panel-sub">Clique sur une matière pour charger automatiquement un quiz.</p>
+
+        <div class="subject-list">
+          <button class="subject-card active" data-subject="maths">
+            <div class="subject-icon math">ƒx</div>
+            <div class="subject-info">
+              <strong>Mathématiques</strong>
+              <span>Nombres, calcul, logique et opérations</span>
+            </div>
+          </button>
+
+          <button class="subject-card" data-subject="histoire">
+            <div class="subject-icon history">⌛</div>
+            <div class="subject-info">
+              <strong>Histoire</strong>
+              <span>Repères, civilisations et humanité</span>
+            </div>
+          </button>
+
+          <button class="subject-card" data-subject="francais">
+            <div class="subject-icon french">📖</div>
+            <div class="subject-info">
+              <strong>Français</strong>
+              <span>Lecture, grammaire et orthographe</span>
+            </div>
+          </button>
+
+          <button class="subject-card" data-subject="geo">
+            <div class="subject-icon geo">🌍</div>
+            <div class="subject-info">
+              <strong>Géographie</strong>
+              <span>Espaces, territoires et cartes</span>
+            </div>
+          </button>
+
+          <button class="subject-card" data-subject="svt">
+            <div class="subject-icon svt">🌿</div>
+            <div class="subject-info">
+              <strong>SVT</strong>
+              <span>Nature, vivant et corps humain</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="mini-list">
+          <div class="mini-card">
+            <strong>Quiz rapides</strong>
+            <span>Réponds en quelques secondes pour t’entraîner tous les jours.</span>
+          </div>
+          <div class="mini-card">
+            <strong>Correction</strong>
+            <span>Chaque réponse affiche l’explication pour comprendre.</span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel quiz-box">
+        <div id="quizArea">
+          <div class="quiz-header">
+            <div class="quiz-topic" id="quizTopic">Mathématiques</div>
+            <div class="quiz-progress" id="quizProgressText">Question 1 / 3</div>
+          </div>
+
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+
+          <div class="question" id="questionText"></div>
+
+          <div class="answers" id="answersBox"></div>
+
+          <div class="explanation" id="explanationBox"></div>
+
+          <div class="quiz-actions">
+            <button class="btn btn-primary" id="nextBtn" style="display:none;">Question suivante</button>
+            <button class="btn btn-secondary" id="restartBtn">Recommencer le quiz</button>
+          </div>
+        </div>
+
+        <div class="result-box" id="resultBox">
+          <h3>Quiz terminé</h3>
+          <div class="score-big" id="finalScore">0/3</div>
+          <p id="finalMessage">Bravo.</p>
+          <div class="quiz-actions" style="justify-content:center;">
+            <button class="btn btn-primary" id="restartQuizBtn">Rejouer</button>
+            <button class="btn btn-secondary" id="changeSubjectBtn">Changer de matière</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
   </div>
 
+  <script>
+    const quizData = {
+      maths: {
+        title: "Mathématiques",
+        questions: [
+          {
+            q: "Quel est le résultat de 25 + 17 ?",
+            answers: ["32", "42", "52", "35"],
+            correct: 1,
+            exp: "25 + 17 = 42. On additionne les dizaines puis les unités."
+          },
+          {
+            q: "Lequel de ces nombres est un nombre décimal ?",
+            answers: ["7,5", "12/4", "100", "8 x 2"],
+            correct: 0,
+            exp: "7,5 est écrit avec une virgule. C’est un nombre décimal."
+          },
+          {
+            q: "Combien font 6 × 8 ?",
+            answers: ["46", "54", "48", "56"],
+            correct: 2,
+            exp: "6 multiplié par 8 = 48."
+          }
+        ]
+      },
+
+      histoire: {
+        title: "Histoire",
+        questions: [
+          {
+            q: "La Préhistoire correspond à la période...",
+            answers: ["avant l’écriture", "après internet", "après la Révolution française", "pendant le Moyen Âge"],
+            correct: 0,
+            exp: "La Préhistoire est la période avant l’invention de l’écriture."
+          },
+          {
+            q: "Les premiers États et premières écritures apparaissent surtout...",
+            answers: ["en Mésopotamie", "sur la Lune", "en Antarctique", "dans les Alpes"],
+            correct: 0,
+            exp: "La Mésopotamie est l’un des grands berceaux des premières écritures."
+          },
+          {
+            q: "Les hommes du Néolithique deviennent surtout...",
+            answers: ["agriculteurs et éleveurs", "astronautes", "pirates", "banquiers"],
+            correct: 0,
+            exp: "Au Néolithique, les humains se sédentarisent et développent agriculture et élevage."
+          }
+        ]
+      },
+
+      francais: {
+        title: "Français",
+        questions: [
+          {
+            q: "Dans la phrase “Le chat noir dort”, quel est le nom ?",
+            answers: ["noir", "dort", "chat", "le"],
+            correct: 2,
+            exp: "Le nom est “chat”. C’est lui qui désigne l’animal."
+          },
+          {
+            q: "Quel mot est bien orthographié ?",
+            answers: ["ecole", "école", "éccole", "aicole"],
+            correct: 1,
+            exp: "La bonne orthographe est “école”."
+          },
+          {
+            q: "Quel est le verbe dans “Nous chantons ce soir” ?",
+            answers: ["nous", "ce", "soir", "chantons"],
+            correct: 3,
+            exp: "Le verbe est “chantons”. C’est l’action."
+          }
+        ]
+      },
+
+      geo: {
+        title: "Géographie",
+        questions: [
+          {
+            q: "Un planisphère sert à représenter...",
+            answers: ["le corps humain", "le monde", "un animal", "une voiture"],
+            correct: 1,
+            exp: "Un planisphère représente l’ensemble du monde."
+          },
+          {
+            q: "Un territoire est...",
+            answers: ["un espace habité et organisé", "une note de musique", "une planète", "un sport"],
+            correct: 0,
+            exp: "En géographie, un territoire est un espace organisé par les sociétés."
+          },
+          {
+            q: "La capitale de la France est...",
+            answers: ["Lyon", "Marseille", "Paris", "Nice"],
+            correct: 2,
+            exp: "La capitale de la France est Paris."
+          }
+        ]
+      },
+
+      svt: {
+        title: "SVT",
+        questions: [
+          {
+            q: "Les plantes ont besoin de quoi pour vivre ?",
+            answers: ["lumière, eau, air", "plastique", "piles", "sable uniquement"],
+            correct: 0,
+            exp: "Les plantes ont besoin notamment d’eau, de lumière et d’air."
+          },
+          {
+            q: "Le corps humain a besoin de respirer pour obtenir...",
+            answers: ["du sucre en poudre", "de l’oxygène", "du béton", "du sable"],
+            correct: 1,
+            exp: "La respiration apporte de l’oxygène au corps."
+          },
+          {
+            q: "Lequel est un être vivant ?",
+            answers: ["une pierre", "une table", "un arbre", "un ballon"],
+            correct: 2,
+            exp: "Un arbre grandit, se nourrit et se reproduit : c’est un être vivant."
+          }
+        ]
+      }
+    };
+
+    let currentSubject = "maths";
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let answered = false;
+
+    const questionText = document.getElementById("questionText");
+    const answersBox = document.getElementById("answersBox");
+    const explanationBox = document.getElementById("explanationBox");
+    const nextBtn = document.getElementById("nextBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const restartQuizBtn = document.getElementById("restartQuizBtn");
+    const changeSubjectBtn = document.getElementById("changeSubjectBtn");
+    const resultBox = document.getElementById("resultBox");
+    const quizArea = document.getElementById("quizArea");
+    const quizTopic = document.getElementById("quizTopic");
+    const quizProgressText = document.getElementById("quizProgressText");
+    const progressFill = document.getElementById("progressFill");
+    const finalScore = document.getElementById("finalScore");
+    const finalMessage = document.getElementById("finalMessage");
+    const bestScoreEl = document.getElementById("bestScore");
+    const globalPointsEl = document.getElementById("globalPoints");
+    const quizCountEl = document.getElementById("quizCount");
+
+    let globalPoints = Number(localStorage.getItem("sngGlobalPoints") || 0);
+    let bestScore = Number(localStorage.getItem("sngBestScore") || 0);
+
+    globalPointsEl.textContent = globalPoints;
+    bestScoreEl.textContent = bestScore + "%";
+
+    function loadQuiz(subjectKey){
+      currentSubject = subjectKey;
+      currentQuestionIndex = 0;
+      score = 0;
+      answered = false;
+
+      const subject = quizData[currentSubject];
+      quizTopic.textContent = subject.title;
+      quizCountEl.textContent = subject.questions.length;
+
+      resultBox.style.display = "none";
+      quizArea.style.display = "block";
+      explanationBox.style.display = "none";
+      nextBtn.style.display = "none";
+
+      renderQuestion();
+    }
+
+    function renderQuestion(){
+      answered = false;
+      explanationBox.style.display = "none";
+      nextBtn.style.display = "none";
+
+      const subject = quizData[currentSubject];
+      const currentQuestion = subject.questions[currentQuestionIndex];
+
+      quizProgressText.textContent = `Question ${currentQuestionIndex + 1} / ${subject.questions.length}`;
+      progressFill.style.width = `${((currentQuestionIndex) / subject.questions.length) * 100}%`;
+
+      questionText.textContent = currentQuestion.q;
+      answersBox.innerHTML = "";
+
+      currentQuestion.answers.forEach((answer, index) => {
+        const btn = document.createElement("button");
+        btn.className = "answer-btn";
+        btn.textContent = answer;
+        btn.onclick = () => selectAnswer(index, btn);
+        answersBox.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(index, buttonEl){
+      if(answered) return;
+      answered = true;
+
+      const subject = quizData[currentSubject];
+      const currentQuestion = subject.questions[currentQuestionIndex];
+      const allButtons = document.querySelectorAll(".answer-btn");
+
+      allButtons.forEach((btn, i) => {
+        btn.disabled = true;
+        if(i === currentQuestion.correct){
+          btn.classList.add("correct");
+        }
+      });
+
+      if(index === currentQuestion.correct){
+        score++;
+      } else {
+        buttonEl.classList.add("wrong");
+      }
+
+      explanationBox.style.display = "block";
+      explanationBox.textContent = currentQuestion.exp;
+
+      if(currentQuestionIndex < subject.questions.length - 1){
+        nextBtn.style.display = "inline-flex";
+      } else {
+        nextBtn.style.display = "inline-flex";
+        nextBtn.textContent = "Voir mon résultat";
+      }
+
+      progressFill.style.width = `${((currentQuestionIndex + 1) / subject.questions.length) * 100}%`;
+    }
+
+    nextBtn.addEventListener("click", () => {
+      const subject = quizData[currentSubject];
+
+      if(currentQuestionIndex < subject.questions.length - 1){
+        currentQuestionIndex++;
+        nextBtn.textContent = "Question suivante";
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    });
+
+    function showResults(){
+      quizArea.style.display = "none";
+      resultBox.style.display = "block";
+
+      const total = quizData[currentSubject].questions.length;
+      const percent = Math.round((score / total) * 100);
+      finalScore.textContent = `${score}/${total}`;
+
+      if(percent === 100){
+        finalMessage.textContent = "Excellent travail. Tu as tout réussi 🔥";
+      } else if(percent >= 67){
+        finalMessage.textContent = "Très bien. Encore un petit effort et ce sera parfait.";
+      } else if(percent >= 34){
+        finalMessage.textContent = "Pas mal. Relis les corrections et recommence.";
+      } else {
+        finalMessage.textContent = "Il faut encore travailler. Reprends calmement les bases.";
+      }
+
+      globalPoints += score * 10;
+      if(percent > bestScore){
+        bestScore = percent;
+      }
+
+      localStorage.setItem("sngGlobalPoints", globalPoints);
+      localStorage.setItem("sngBestScore", bestScore);
+
+      globalPointsEl.textContent = globalPoints;
+      bestScoreEl.textContent = bestScore + "%";
+    }
+
+    restartBtn.addEventListener("click", () => {
+      loadQuiz(currentSubject);
+    });
+
+    restartQuizBtn.addEventListener("click", () => {
+      loadQuiz(currentSubject);
+    });
+
+    changeSubjectBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    document.querySelectorAll(".subject-card").forEach(card => {
+      card.addEventListener("click", () => {
+        document.querySelectorAll(".subject-card").forEach(c => c.classList.remove("active"));
+        card.classList.add("active");
+        loadQuiz(card.dataset.subject);
+      });
+    });
+
+    loadQuiz("maths");
+  </script>
 </body>
 </html>
