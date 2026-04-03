@@ -735,6 +735,18 @@
         oldPrice: null,
         discount: 0,
         rating: 4.8,
+        link: 'https://store.epicgames.com/fr/p/fortnite',
+        image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=700&q=80'
+      },
+      {
+        title: 'Fortnite Original',
+        type: 'Jeu de base',
+        genre: 'Action',
+        platform: 'PC / Console',
+        price: 0,
+        oldPrice: null,
+        discount: 0,
+        rating: 4.8,
         image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=700&q=80'
       },
       {
@@ -880,6 +892,7 @@
       }
 
       gamesGrid.innerHTML = filtered.map(game => `
+        <a href="${game.link || '#'}" target="_blank" style="text-decoration:none;">
         <article class="game-card">
           <div class="game-thumb">
             <img src="${game.image}" alt="${game.title}" loading="lazy">
@@ -901,6 +914,7 @@
             </div>
           </div>
         </article>
+        </a>
       `).join('');
 
       emptyState.style.display = filtered.length ? 'none' : 'block';
