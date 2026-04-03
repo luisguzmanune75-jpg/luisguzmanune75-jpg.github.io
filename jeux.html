@@ -1,136 +1,947 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3338685171783718"
-     crossorigin="anonymous"></script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Jeux populaires sur SNG Portal avec catalogue multi-plateforme, PC, mobile, PlayStation, Xbox, Switch et live Steam quand disponible."
-    />
-    <meta
-      name="keywords"
-      content="SNG Portal jeux populaires, PC, mobile, PlayStation, Xbox, Switch, Steam current players"
-    />
-    <meta name="robots" content="index,follow" />
-    <meta name="theme-color" content="#4c3138" />
-    <meta property="og:title" content="Jeux populaires - SNG Portal" />
-    <meta
-      property="og:description"
-      content="Suis les jeux populaires sur plusieurs plateformes avec live Steam quand disponible."
-    />
-    <title>Jeux populaires - SNG Portal</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
-  <body data-page="jeux">
-    <div class="site-shell">
-      <header class="site-header">
-        <div class="container header-inner">
-          <a class="brand" href="./index.html" aria-label="Accueil SNG Portal">
-            <img class="brand-logo" src="./logo-sng.svg" alt="Logo SNG Portal" />
-            <span class="brand-copy">
-              <span class="brand-kicker">SNG Media</span>
-              <span class="brand-title">SNG Portal</span>
-            </span>
-          </a>
-          <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">
-            Menu
-          </button>
-          <nav id="main-nav" class="main-nav" aria-label="Navigation principale">
-            <a href="./index.html">Accueil</a>
-            <a href="./crypto.html">Crypto</a>
-            <a href="./meteo.html">Meteo</a>
-            <a href="./marches.html">Marches</a>
-            <a href="./loterie.html">Loterie</a>
-            <a href="./sports.html">Sports</a>
-            <a class="is-current" href="./jeux.html">Jeux</a>
-            <a href="./blog.html">Blog</a>
-            <a href="./contact.html">Contact</a>
-          </nav>
-        </div>
-      </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SNG Portal - Jeux</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-      <main>
-        <section class="hero hero-crypto-page">
-          <div class="container hero-grid hero-grid-crypto">
-            <div class="hero-copy reveal">
-              <p class="search-logo-kicker">Jeux monde</p>
-              <h1>Un board jeux plus large: PC, mobile, PlayStation, Xbox, Switch.</h1>
-              <p class="hero-text">
-                Cette page suit les joueurs Steam quand c'est possible et ajoute
-                un vrai catalogue multi-plateforme pour les jeux les plus joues
-                et les plus visibles du moment.
-              </p>
+    :root {
+      --bg: #070b14;
+      --bg-2: #0b1120;
+      --panel: #111827;
+      --panel-2: #0f172a;
+      --line: rgba(255,255,255,0.08);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-2: #60a5fa;
+      --success: #22c55e;
+      --chip: rgba(255,255,255,0.06);
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+      --radius: 24px;
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(59,130,246,0.10), transparent 28%),
+        radial-gradient(circle at top right, rgba(14,165,233,0.08), transparent 22%),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; width: 100%; }
+
+    .container {
+      width: min(1380px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(18px);
+      background: rgba(7,11,20,0.82);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      display: grid;
+      grid-template-columns: 220px 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+    }
+
+    .brand-badge {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+      box-shadow: var(--shadow);
+      font-size: 1rem;
+      font-weight: 900;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      color: var(--muted);
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition: 0.2s ease;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .nav a:hover, .nav a.active {
+      color: var(--text);
+      background: var(--chip);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn, .btn-outline {
+      border: none;
+      border-radius: 14px;
+      font-weight: 700;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-outline {
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .hero-wrap {
+      padding: 28px 0 12px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.45fr 340px;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .hero-card {
+      position: relative;
+      min-height: 520px;
+      border-radius: 32px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #0f172a;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.45s ease;
+    }
+
+    .hero-slide.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .hero-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.72);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(6,10,18,0.88) 0%, rgba(6,10,18,0.62) 34%, rgba(6,10,18,0.15) 70%, rgba(6,10,18,0.10) 100%);
+    }
+
+    .hero-content {
+      position: absolute;
+      left: 34px;
+      bottom: 34px;
+      max-width: 480px;
+      z-index: 2;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #cbd5e1;
+      background: rgba(255,255,255,0.08);
+      padding: 8px 12px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2rem, 4vw, 3.8rem);
+      line-height: 0.95;
+      margin-bottom: 16px;
+      letter-spacing: -1.5px;
+    }
+
+    .hero-content p {
+      color: #dbe4f0;
+      font-size: 1rem;
+      line-height: 1.65;
+      margin-bottom: 22px;
+      max-width: 46ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 14px;
+    }
+
+    .side-item {
+      display: grid;
+      grid-template-columns: 88px 1fr;
+      gap: 14px;
+      padding: 12px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      cursor: pointer;
+      transition: 0.2s ease;
+      min-height: 98px;
+      align-items: center;
+    }
+
+    .side-item:hover,
+    .side-item.active {
+      background: rgba(255,255,255,0.08);
+      transform: translateY(-2px);
+    }
+
+    .side-item img {
+      height: 76px;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+
+    .side-item h4 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    .side-item p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .catalog-section {
+      padding: 22px 0 60px;
+    }
+
+    .catalog-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .catalog-top h2 {
+      font-size: clamp(1.6rem, 2vw, 2.2rem);
+      letter-spacing: -0.8px;
+    }
+
+    .catalog-controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .search-box, .filter-select {
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 13px 16px;
+      outline: none;
+      min-width: 210px;
+    }
+
+    .chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--line);
+      color: #d8e3f0;
+      cursor: pointer;
+      transition: 0.2s ease;
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    .chip.active, .chip:hover {
+      background: rgba(59,130,246,0.16);
+      border-color: rgba(96,165,250,0.32);
+      color: white;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .game-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      transition: 0.24s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    }
+
+    .game-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.28);
+      border-color: rgba(255,255,255,0.14);
+    }
+
+    .game-thumb {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      background: #101828;
+    }
+
+    .game-thumb img {
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .game-card:hover .game-thumb img {
+      transform: scale(1.04);
+    }
+
+    .discount {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      background: #0ea5e9;
+      color: white;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      box-shadow: var(--shadow);
+    }
+
+    .platform-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(15,23,42,0.75);
+      backdrop-filter: blur(10px);
+      color: #e2e8f0;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .game-body {
+      padding: 15px 14px 16px;
+    }
+
+    .game-type {
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-bottom: 7px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    .game-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      line-height: 1.35;
+      min-height: 2.8em;
+      margin-bottom: 10px;
+    }
+
+    .game-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .genre {
+      color: #cbd5e1;
+      font-size: 0.88rem;
+    }
+
+    .rating {
+      color: #fde68a;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .price-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .new-price {
+      font-size: 1.16rem;
+      font-weight: 900;
+      color: white;
+    }
+
+    .old-price {
+      color: var(--muted);
+      text-decoration: line-through;
+      font-size: 0.95rem;
+    }
+
+    .free-badge {
+      color: #86efac;
+      font-weight: 800;
+    }
+
+    .empty-state {
+      display: none;
+      padding: 34px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    .section-spacing {
+      margin-top: 40px;
+    }
+
+    .row-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .mini-card {
+      border-radius: 22px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+    }
+
+    .mini-card img {
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    .mini-card div {
+      padding: 14px;
+    }
+
+    .mini-card h4 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    .mini-card p {
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.92rem;
+    }
+
+    footer {
+      padding: 34px 0 50px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      margin-top: 46px;
+    }
+
+    @media (max-width: 1200px) {
+      .games-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .hero-grid { grid-template-columns: 1fr; }
+      .mini-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px) {
+      .topbar-inner {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .nav { justify-content: flex-start; }
+      .top-actions { justify-content: flex-start; }
+      .games-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 640px) {
+      .container { width: min(100% - 20px, 1380px); }
+      .games-grid,
+      .mini-grid { grid-template-columns: 1fr; }
+      .hero-card { min-height: 470px; }
+      .hero-content { left: 18px; right: 18px; bottom: 20px; max-width: none; }
+      .catalog-controls { width: 100%; }
+      .search-box, .filter-select { width: 100%; min-width: unset; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-badge">SNG</div>
+        <div>
+          <div style="font-size:1rem;">SNG Portal</div>
+          <div style="font-size:0.78rem; color:var(--muted); font-weight:600;">Jeux & catalogues</div>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <a href="index.html">Accueil</a>
+        <a href="crypto.html">Crypto</a>
+        <a href="meteo.html">Météo</a>
+        <a href="marches.html">Marchés</a>
+        <a href="loterie.html">Loterie</a>
+        <a href="sports.html">Sports</a>
+        <a href="jeux.html" class="active">Jeux</a>
+        <a href="blog.html">Blog</a>
+      </nav>
+
+      <div class="top-actions">
+        <button class="btn-outline">Connexion</button>
+        <button class="btn">Télécharger</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-wrap">
+      <div class="container hero-grid">
+        <div class="hero-card" id="heroCard">
+          <article class="hero-slide active" data-id="0">
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1400&q=80" alt="Fortnite style gaming banner" />
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+              <span class="eyebrow">Disponible maintenant</span>
+              <h1>Fortnite Original</h1>
+              <p>Retrouve les jeux les plus joués, les sorties populaires, les promos du moment et un catalogue qui donne un vrai look premium à ton portail SNG.</p>
               <div class="hero-actions">
-                <a class="button button-solid" href="#games-zone">Voir le classement</a>
-                <a class="button button-outline" href="./index.html">Retour accueil</a>
+                <button class="btn">Jouer maintenant</button>
+                <button class="btn-outline">Voir les promos</button>
               </div>
             </div>
+          </article>
 
-            <aside class="hero-panel reveal reveal-delay">
-              <div class="panel-head">
-                <div>
-                  <p class="section-tag">Live games</p>
-                  <h2>Vue rapide</h2>
-                </div>
-                <button id="refresh-games" class="ghost-button" type="button">Rafraichir</button>
+          <article class="hero-slide" data-id="1">
+            <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1400&q=80" alt="Action game banner" />
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+              <span class="eyebrow">Promotions de printemps</span>
+              <h1>Red Dead Redemption 2</h1>
+              <p>Une grande bannière immersive, un carrousel à droite, et des cartes de jeux modernes comme sur une vraie boutique gaming.</p>
+              <div class="hero-actions">
+                <button class="btn">Acheter</button>
+                <button class="btn-outline">Détails</button>
               </div>
-              <span id="games-status" class="status-pill status-neutral">Chargement des joueurs...</span>
-              <div id="games-pulse" class="pulse-grid"></div>
-            </aside>
-          </div>
-        </section>
+            </div>
+          </article>
 
-        <section id="games-zone" class="page-section">
-          <div class="container live-two-col">
-            <article class="module module-wide reveal">
-              <div class="module-head">
-                <div>
-                  <p class="section-tag">Classement</p>
-                  <h2>Jeux les plus visibles</h2>
-                </div>
+          <article class="hero-slide" data-id="2">
+            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1400&q=80" alt="Sports game banner" />
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+              <span class="eyebrow">Top ventes</span>
+              <h1>EA Sports FC 26</h1>
+              <p>Ajoute ensuite tes vrais liens d'achat, ton système de fiches, ou même des redirections vers Amazon, Epic, PlayStation Store ou d'autres pages.</p>
+              <div class="hero-actions">
+                <button class="btn">Découvrir</button>
+                <button class="btn-outline">Essai disponible</button>
               </div>
-              <form id="games-search-form" class="search-bar search-bar-panel" role="search">
-                <label class="sr-only" for="games-query">Recherche jeux</label>
-                <span class="search-icon" aria-hidden="true">J</span>
-                <input id="games-query" type="search" placeholder="Exemple: mobile, PlayStation, Mario, Fortnite, Steam..." />
-                <button type="submit">Filtrer</button>
-              </form>
-              <div id="games-quick-filters" class="pill-row pill-row-spaced"></div>
-              <div id="games-platform-summary" class="inline-actions"></div>
-              <div id="games-list" class="game-list"></div>
-            </article>
-
-            <aside class="module reveal">
-              <div class="module-head">
-                <div>
-                  <p class="section-tag">Fiche</p>
-                  <h2>Jeu actif</h2>
-                </div>
-              </div>
-              <div id="games-detail" class="briefing-card"></div>
-              <div id="games-source-note" class="briefing-card briefing-card-accent"></div>
-            </aside>
-          </div>
-        </section>
-      </main>
-
-      <footer class="site-footer">
-        <div class="container footer-inner">
-          <p>(c) 2026 SNG Portal. Tous droits reserves.</p>
-          <p>Jeux populaires: classement live et details rapides.</p>
+            </div>
+          </article>
         </div>
-      </footer>
-    </div>
 
-    <script src="./site.js"></script>
-    <script src="./games.js"></script>
-  </body>
+        <aside class="hero-side" id="heroSideNav">
+          <div class="side-item active" data-target="0">
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80" alt="Fortnite" />
+            <div>
+              <h4>Fortnite Original</h4>
+              <p>Jeu culte et mise en avant principale.</p>
+            </div>
+          </div>
+
+          <div class="side-item" data-target="1">
+            <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=300&q=80" alt="RDR2" />
+            <div>
+              <h4>Red Dead Redemption 2</h4>
+              <p>Promo forte et gros visuel immersion.</p>
+            </div>
+          </div>
+
+          <div class="side-item" data-target="2">
+            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=300&q=80" alt="EA Sports FC" />
+            <div>
+              <h4>EA Sports FC 26</h4>
+              <p>Jeu sport, tarif barré et visibilité pro.</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="catalog-section">
+      <div class="container">
+        <div class="catalog-top">
+          <div>
+            <h2>Catalogue de jeux</h2>
+            <p style="color:var(--muted); margin-top:8px;">Un design inspiré des grandes boutiques gaming, adapté à ton site SNG Portal.</p>
+          </div>
+
+          <div class="catalog-controls">
+            <input id="searchInput" class="search-box" type="text" placeholder="Recherche un jeu..." />
+            <select id="sortSelect" class="filter-select">
+              <option value="default">Trier : recommandé</option>
+              <option value="price-low">Prix croissant</option>
+              <option value="price-high">Prix décroissant</option>
+              <option value="discount">Plus grosse promo</option>
+              <option value="rating">Meilleure note</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="chips" id="filterChips">
+          <button class="chip active" data-filter="all">Tous</button>
+          <button class="chip" data-filter="Action">Action</button>
+          <button class="chip" data-filter="Aventure">Aventure</button>
+          <button class="chip" data-filter="Sport">Sport</button>
+          <button class="chip" data-filter="RPG">RPG</button>
+          <button class="chip" data-filter="Course">Course</button>
+          <button class="chip" data-filter="Gratuit">Gratuit</button>
+        </div>
+
+        <div class="games-grid" id="gamesGrid"></div>
+        <div class="empty-state" id="emptyState">Aucun jeu trouvé avec ce filtre.</div>
+
+        <div class="section-spacing">
+          <div class="row-head">
+            <h2>À la une sur SNG Portal</h2>
+            <button class="btn-outline">Voir plus</button>
+          </div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?auto=format&fit=crop&w=900&q=80" alt="Gaming setup" />
+              <div>
+                <h4>Les promotions à surveiller</h4>
+                <p>Ajoute ici tes articles, tes guides, ou des liens vers des pages partenaires.</p>
+              </div>
+            </article>
+            <article class="mini-card">
+              <img src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80" alt="Controller" />
+              <div>
+                <h4>Top jeux console</h4>
+                <p>Une rangée secondaire pour mettre en avant tes coups de cœur ou les plus cliqués.</p>
+              </div>
+            </article>
+            <article class="mini-card">
+              <img src="https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=900&q=80" alt="Esports" />
+              <div>
+                <h4>Esport & compétitions</h4>
+                <p>Tu peux aussi brancher plus tard une API jeux ou alimenter le contenu à la main.</p>
+              </div>
+            </article>
+            <article class="mini-card">
+              <img src="https://images.unsplash.com/photo-1560253023-3ec5d502959f?auto=format&fit=crop&w=900&q=80" alt="Gaming neon" />
+              <div>
+                <h4>News gaming SNG</h4>
+                <p>Parfait pour mélanger boutique, actualités, bons plans et redirections externes.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 SNG Portal — Espace jeux stylé, moderne et prêt à être relié à tes liens, APIs et catalogues.
+    </div>
+  </footer>
+
+  <script>
+    const games = [
+      {
+        title: 'Fortnite Original',
+        type: 'Jeu de base',
+        genre: 'Action',
+        platform: 'PC / Console',
+        price: 0,
+        oldPrice: null,
+        discount: 0,
+        rating: 4.8,
+        image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=700&q=80'
+      },
+      {
+        title: 'Grand Theft Auto V Enhanced',
+        type: 'Jeu de base',
+        genre: 'Action',
+        platform: 'PC',
+        price: 14.99,
+        oldPrice: 29.99,
+        discount: 50,
+        rating: 4.9,
+        image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=700&q=80'
+      },
+      {
+        title: 'EA Sports FC 26',
+        type: 'Édition Standard',
+        genre: 'Sport',
+        platform: 'PS5 / PC',
+        price: 20.99,
+        oldPrice: 69.99,
+        discount: 70,
+        rating: 4.7,
+        image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=700&q=80'
+      },
+      {
+        title: 'Red Dead Redemption 2',
+        type: 'Jeu de base',
+        genre: 'Aventure',
+        platform: 'PC / Console',
+        price: 14.99,
+        oldPrice: 59.99,
+        discount: 75,
+        rating: 4.9,
+        image: 'https://images.unsplash.com/photo-1519669556878-63bdad8a1a49?auto=format&fit=crop&w=700&q=80'
+      },
+      {
+        title: 'Battlefield 6',
+        type: 'Offre groupée',
+        genre: 'Action',
+        platform: 'PS5',
+        price: 47.99,
+        oldPrice: 79.99,
+        discount: 40,
+        rating: 4.4,
+        image: 'https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?auto=format&fit=crop&w=700&q=80'
+      },
+      {
+        title: 'Forza Horizon 5 Premium',
+        type: 'Premium',
+        genre: 'Course',
+        platform: 'Xbox / PC',
+        price: 29.99,
+        oldPrice: 59.99,
+        discount: 50,
+        rating: 4.8,
+        image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=80'
+      },
+      {
+        title: 'Astro Bot',
+        type: 'Jeu PS5',
+        genre: 'Aventure',
+        platform: 'PS5',
+        price: 49.69,
+        oldPrice: 69.99,
+        discount: 29,
+        rating: 4.8,
+        image: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=700&q=80'
+      },
+      {
+        title: 'Elden Ring',
+        type: 'Jeu complet',
+        genre: 'RPG',
+        platform: 'PC / Console',
+        price: 35.99,
+        oldPrice: 59.99,
+        discount: 40,
+        rating: 4.9,
+        image: 'https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=700&q=80'
+      },
+      {
+        title: 'Rocket League',
+        type: 'Free to play',
+        genre: 'Sport',
+        platform: 'PC / Console',
+        price: 0,
+        oldPrice: null,
+        discount: 0,
+        rating: 4.6,
+        image: 'https://images.unsplash.com/photo-1560253023-3ec5d502959f?auto=format&fit=crop&w=700&q=80'
+      },
+      {
+        title: 'Arc Raiders',
+        type: 'Jeu de base',
+        genre: 'Action',
+        platform: 'PC / PS5',
+        price: 31.99,
+        oldPrice: 39.99,
+        discount: 20,
+        rating: 4.3,
+        image: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=700&q=80'
+      }
+    ];
+
+    const gamesGrid = document.getElementById('gamesGrid');
+    const searchInput = document.getElementById('searchInput');
+    const sortSelect = document.getElementById('sortSelect');
+    const chips = [...document.querySelectorAll('.chip')];
+    const emptyState = document.getElementById('emptyState');
+
+    let activeFilter = 'all';
+
+    function formatPrice(value) {
+      return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(value);
+    }
+
+    function renderGames() {
+      const term = searchInput.value.trim().toLowerCase();
+      let filtered = games.filter(game => {
+        const matchesSearch = game.title.toLowerCase().includes(term) || game.genre.toLowerCase().includes(term) || game.platform.toLowerCase().includes(term);
+        const matchesFilter = activeFilter === 'all'
+          ? true
+          : activeFilter === 'Gratuit'
+            ? game.price === 0
+            : game.genre === activeFilter;
+        return matchesSearch && matchesFilter;
+      });
+
+      switch (sortSelect.value) {
+        case 'price-low':
+          filtered.sort((a, b) => a.price - b.price);
+          break;
+        case 'price-high':
+          filtered.sort((a, b) => b.price - a.price);
+          break;
+        case 'discount':
+          filtered.sort((a, b) => b.discount - a.discount);
+          break;
+        case 'rating':
+          filtered.sort((a, b) => b.rating - a.rating);
+          break;
+        default:
+          break;
+      }
+
+      gamesGrid.innerHTML = filtered.map(game => `
+        <article class="game-card">
+          <div class="game-thumb">
+            <img src="${game.image}" alt="${game.title}" loading="lazy">
+            <span class="platform-tag">${game.platform}</span>
+            ${game.discount > 0 ? `<span class="discount">-${game.discount}%</span>` : ''}
+          </div>
+          <div class="game-body">
+            <div class="game-type">${game.type}</div>
+            <h3 class="game-title">${game.title}</h3>
+            <div class="game-meta">
+              <span class="genre">${game.genre}</span>
+              <span class="rating">★ ${game.rating}</span>
+            </div>
+            <div class="price-line">
+              ${game.price === 0
+                ? `<span class="new-price free-badge">Gratuit</span>`
+                : `<span class="new-price">${formatPrice(game.price)}</span>`}
+              ${game.oldPrice ? `<span class="old-price">${formatPrice(game.oldPrice)}</span>` : ''}
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      emptyState.style.display = filtered.length ? 'none' : 'block';
+    }
+
+    searchInput.addEventListener('input', renderGames);
+    sortSelect.addEventListener('change', renderGames);
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeFilter = chip.dataset.filter;
+        renderGames();
+      });
+    });
+
+    renderGames();
+
+    const sideItems = [...document.querySelectorAll('.side-item')];
+    const slides = [...document.querySelectorAll('.hero-slide')];
+    let currentSlide = 0;
+
+    function showSlide(index) {
+      slides.forEach(slide => slide.classList.remove('active'));
+      sideItems.forEach(item => item.classList.remove('active'));
+      slides[index].classList.add('active');
+      sideItems[index].classList.add('active');
+      currentSlide = index;
+    }
+
+    sideItems.forEach(item => {
+      item.addEventListener('click', () => {
+        showSlide(Number(item.dataset.target));
+      });
+    });
+
+    setInterval(() => {
+      const next = (currentSlide + 1) % slides.length;
+      showSlide(next);
+    }, 5000);
+  </script>
+</body>
 </html>
