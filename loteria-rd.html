@@ -100,9 +100,22 @@
     }
 
     .live{
-      color: #ff2d55;
-      font-weight: bold;
-      margin-bottom: 20px;
+      color:#ff2d55;
+      font-weight:800;
+      margin:8px 0 6px;
+      animation:blink 1s infinite;
+    }
+
+    .last-update{
+      color:#cbd5e1;
+      font-size:14px;
+      margin-bottom:18px;
+    }
+
+    @keyframes blink{
+      0%{opacity:1;}
+      50%{opacity:.35;}
+      100%{opacity:1;}
     }
 
     .lottery-grid{
@@ -117,11 +130,13 @@
       border-radius: 15px;
       text-align: center;
       border: 1px solid rgba(255, 255, 255, 0.08);
-      transition: transform 0.18s ease, border-color 0.18s ease;
+      transition:transform .25s ease, box-shadow .25s ease;
+      box-shadow:0 8px 20px rgba(0,0,0,.18);
     }
 
     .lottery-card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-4px);
+      box-shadow:0 14px 30px rgba(0,0,0,.28);
       border-color: rgba(245, 158, 11, 0.58);
     }
 
@@ -141,6 +156,22 @@
       min-width: 42px;
     }
 
+
+    .btn-home{
+      display:inline-block;
+      margin: 0 0 16px;
+      background: rgba(255,255,255,0.08);
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.2);
+      padding:10px 14px;
+      border-radius:10px;
+      text-decoration:none;
+      font-weight:700;
+    }
+
+    .btn-home:hover{
+      background: rgba(255,255,255,0.14);
+    }
     .btn-play{
       display: block;
       margin-top: 20px;
@@ -171,6 +202,12 @@
       color: #fff;
       text-decoration: none;
     }
+
+    .btn-play,
+    .money-link,
+    .result-link{
+      cursor:pointer;
+    }
   </style>
 </head>
 <body>
@@ -187,8 +224,10 @@
     </header>
 
     <section class="sng-loteria-rd">
+      <a class="btn-home" href="index.html">⬅ Retour à l'accueil</a>
       <h1>🇩🇴 SNG Lotería RD en Directo</h1>
-      <p class="live">● Resultados actualizados hoy</p>
+      <p class="live">● EN DIRECT</p>
+      <p class="last-update">🕒 Dernière mise à jour : --</p>
 
       <div class="lottery-grid">
         <div class="lottery-card">
@@ -237,7 +276,7 @@
 💰 Jouer maintenant
 </a>
 
-        <a href="https://www.conectate.com.do/loterias/" target="_blank" class="money-link">
+        <a href="https://www.conectate.com.do/loterias/" target="_blank" class="money-link result-link">
 📊 Voir résultats complets
 </a>
 
@@ -249,32 +288,61 @@
   </main>
 
   <script>
-    async function chargerLoterie(){
-      try{
-        const res = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://www.conectate.com.do/feed/"));
-        const data = await res.json();
+document.addEventListener("DOMContentLoaded", function () {
+  const liveEl = document.querySelector(".live");
+  const updateEl = document.querySelector(".last-update");
+  const resultButtons = document.querySelectorAll(".btn-play, .money-link, .result-link");
 
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(data.contents, "text/xml");
+  function formatDateFR(date) {
+    const jours = ["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"];
+    const mois = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+    const jour = jours[date.getDay()];
+    const numero = String(date.getDate()).padStart(2, "0");
+    const moisNom = mois[date.getMonth()];
+    const annee = date.getFullYear();
+    const heures = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    return `${jour} ${numero} ${moisNom} ${annee} à ${heures}:${minutes}`;
+  }
 
-        const items = xml.querySelectorAll("item");
+  function updateClock() {
+    const now = new Date();
 
-        if(items.length > 0){
-          const titre = items[0].querySelector("title").textContent;
-
-          document.querySelector(".live").innerText = "● " + titre;
-        }
-
-      }catch(e){
-        console.log("Erreur RSS", e);
-      }
+    if (liveEl) {
+      liveEl.textContent = "● EN DIRECT";
     }
 
-    // refresh auto
-    setInterval(chargerLoterie, 60000);
+    if (updateEl) {
+      updateEl.textContent = "🕒 Dernière mise à jour : " + formatDateFR(now);
+    }
+  }
 
-    // lancement
-    chargerLoterie();
+  updateClock();
+  setInterval(updateClock, 60000);
+
+  resultButtons.forEach(btn => {
+    btn.setAttribute("href", "https://www.conectate.com.do/loterias/");
+    btn.setAttribute("target", "_blank");
+    btn.setAttribute("rel", "noopener noreferrer");
+  });
+
+  const cards = document.querySelectorAll(".lottery-card");
+  cards.forEach(card => {
+    card.style.cursor = "pointer";
+
+    card.addEventListener("mouseenter", function () {
+      card.style.transform = "translateY(-4px)";
+    });
+
+    card.addEventListener("mouseleave", function () {
+      card.style.transform = "translateY(0)";
+    });
+
+    card.addEventListener("click", function () {
+      window.open("https://www.conectate.com.do/loterias/", "_blank");
+    });
+  });
+});
   </script>
 </body>
 </html>
