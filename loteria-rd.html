@@ -161,12 +161,15 @@
       gap: 10px;
     }
 
-    .money-item {
+    .money-link {
+      display: block;
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       padding: 12px 14px;
       font-weight: 700;
+      color: #fff;
+      text-decoration: none;
     }
   </style>
 </head>
@@ -225,14 +228,53 @@
         </div>
       </div>
 
-      <a href="#" class="btn-play">💰 Ver resultados completos</a>
+      <a href="https://www.conectate.com.do/loterias/" target="_blank" class="btn-play">
+💰 Ver resultados completos
+</a>
 
       <div class="monetizacion">
-        <div class="money-item">💸 Jouer maintenant</div>
-        <div class="money-item">💸 Voir résultats complets</div>
-        <div class="money-item">💸 Offre sponsorisée</div>
+        <a href="https://www.conectate.com.do/loterias/" target="_blank" class="money-link">
+💰 Jouer maintenant
+</a>
+
+        <a href="https://www.conectate.com.do/loterias/" target="_blank" class="money-link">
+📊 Voir résultats complets
+</a>
+
+        <a href="https://www.conectate.com.do/loterias/" target="_blank" class="money-link">
+🚀 Offre sponsorisée
+</a>
       </div>
     </section>
   </main>
+
+  <script>
+    async function chargerLoterie(){
+      try{
+        const res = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://www.conectate.com.do/feed/"));
+        const data = await res.json();
+
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(data.contents, "text/xml");
+
+        const items = xml.querySelectorAll("item");
+
+        if(items.length > 0){
+          const titre = items[0].querySelector("title").textContent;
+
+          document.querySelector(".live").innerText = "● " + titre;
+        }
+
+      }catch(e){
+        console.log("Erreur RSS", e);
+      }
+    }
+
+    // refresh auto
+    setInterval(chargerLoterie, 60000);
+
+    // lancement
+    chargerLoterie();
+  </script>
 </body>
 </html>
