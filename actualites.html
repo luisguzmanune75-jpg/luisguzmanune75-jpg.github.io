@@ -167,81 +167,91 @@
       "Sports": "https://feeds.bbci.co.uk/sport/rss.xml?edition=uk"
     };
 
-    let currentCategory = "A la une";
+    async function fetchRss(feedUrl) {
+      const proxies = [
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`,
+        `https://corsproxy.io/?${encodeURIComponent(feedUrl)}`
+      ];
 
-    async function loadNews(category = "A la une") {
-      currentCategory = category;
+      for (const url of proxies) {
+        try {
+          const res = await fetch(url);
+          if (!res.ok) continue;
+          const text = await res.text();
+          if (text && text.includes('<item')) return text;
+        } catch (_) {
+          // on tente le proxy suivant
+        }
+      }
 
-      const newsContainer = document.getElementById("news-container");
-      const statusBar = document.getElementById("news-status");
+      throw new Error('Erreur de chargement RSS');
+    }
+
+    async function loadNews(categorie = "A la une") {
+      const container = document.getElementById("news-container");
+      const status = document.getElementById("news-status");
       const ticker = document.getElementById("ticker-inner");
-      const feedUrl = feeds[category];
 
-      statusBar.textContent = "Chargement...";
-      newsContainer.innerHTML = "";
+      status.textContent = "Chargement...";
+      container.innerHTML = "";
 
       try {
-        const apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`;
-        const response = await fetch(apiUrl);
+        const text = await fetchRss(feeds[categorie]);
 
-        if (!response.ok) {
-          throw new Error("Impossible de récupérer le flux");
-        }
-
-        const xmlText = await response.text();
         const parser = new DOMParser();
-        const xml = parser.parseFromString(xmlText, "text/xml");
+        const xml = parser.parseFromString(text, "text/xml");
+        const parseError = xml.querySelector('parsererror');
+        if (parseError) throw new Error('Flux invalide');
 
-        const items = [...xml.querySelectorAll("item")].slice(0, 8);
+        const items = xml.querySelectorAll("item");
+        if (!items.length) throw new Error("Aucune actualité trouvée");
 
-        if (!items.length) {
-          throw new Error("Aucune actualité trouvée");
-        }
+        ticker.textContent = [...items]
+          .slice(0, 8)
+          .map(item => item.querySelector("title")?.textContent || "Sans titre")
+          .join("   ·   ");
 
-        ticker.textContent = items.map(item => item.querySelector("title")?.textContent || "Sans titre").join("   ·   ");
+        items.forEach((item, i) => {
+          if (i > 7) return;
 
-        items.forEach(item => {
-          const title = item.querySelector("title")?.textContent || "Sans titre";
-          const link = item.querySelector("link")?.textContent || "#";
-          const description = item.querySelector("description")?.textContent || "";
+          const titre = item.querySelector("title")?.textContent || "Sans titre";
+          const lien = item.querySelector("link")?.textContent || "#";
+          const desc = item.querySelector("description")?.textContent || "";
           const pubDate = item.querySelector("pubDate")?.textContent || "";
 
           const card = document.createElement("article");
           card.className = "news-card";
+
           card.innerHTML = `
             <div class="news-card-body">
-              <h3>${title}</h3>
-              <p>${description.replace(/<[^>]*>/g, "").slice(0, 140)}...</p>
+              <h3>${titre}</h3>
+              <p>${desc.replace(/<[^>]*>?/gm, "").slice(0, 120)}...</p>
               <div class="news-meta">${pubDate}</div>
-              <a href="${link}" target="_blank" rel="noopener noreferrer">Lire plus</a>
+              <a href="${lien}" target="_blank" rel="noopener noreferrer">Lire plus</a>
             </div>
           `;
 
-          newsContainer.appendChild(card);
+          container.appendChild(card);
         });
 
-        statusBar.textContent = `Actualités chargées : ${category}`;
-      } catch (error) {
+        status.textContent = "Actualités chargées";
+      } catch (err) {
         ticker.textContent = "Chargement des actualites en direct...";
-        statusBar.textContent = "Chargement impossible — réessayez plus tard.";
-        newsContainer.innerHTML = `
-          <div class="error-box error-msg">
-            <strong>⚠ Impossible de charger les actualités.</strong>
-            <p>${error.message}</p>
-            <button onclick="loadNews(currentCategory)">Réessayer</button>
-          </div>
-        `;
+        status.textContent = "Erreur de chargement";
+        container.innerHTML = '<p style="color:#ff6b6b;">⚠ Impossible de charger les actualités</p>';
       }
     }
 
+    // gestion des boutons
     document.querySelectorAll(".news-tab").forEach(btn => {
-      btn.addEventListener("click", () => {
+      btn.onclick = () => {
         document.querySelectorAll(".news-tab").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
-        loadNews(btn.dataset.category);
-      });
+        loadNews(btn.innerText.trim());
+      };
     });
 
+    // lancement au démarrage
     loadNews("A la une");
   </script>
 </body>
