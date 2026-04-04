@@ -117,19 +117,12 @@
       <div class="hero-top">
         <div>
           <h1>Actualites SNG Portal</h1>
-          <p>Les titres se chargent automatiquement depuis Google Actualites en version France.</p>
+          <p>Les titres se chargent automatiquement depuis le flux BBC News World.</p>
         </div>
-        <div class="source-badge">Google Actualites RSS</div>
+        <div class="source-badge">BBC News World RSS</div>
       </div>
 
       <img src="sng-news.png" class="hero-news-image" alt="Banniere SNG News" loading="lazy">
-
-      <div class="toolbar">
-        <button class="feed-btn active" data-feed="top">A la une</button>
-        <button class="feed-btn" data-feed="world">Monde</button>
-        <button class="feed-btn" data-feed="business">Business</button>
-        <button class="feed-btn" data-feed="sports">Sports</button>
-      </div>
 
       <div class="ticker">
         <span class="ticker-inner" id="ticker-inner">Chargement des actualites en direct...</span>
@@ -137,10 +130,10 @@
     </section>
 
     <section class="layout">
-      <div class="main-column" id="main-col">
-        <div class="loading-msg">Chargement des actualités...</div>
+      <div class="main-column">
+        <div id="news-status" class="loading-msg">Chargement des actualités...</div>
+        <div id="news-container"></div>
       </div>
-      <div class="side-column" id="side-col"></div>
     </section>
   </main>
 
@@ -149,115 +142,58 @@
   </footer>
 
   <script>
-    // ── Solution simple : rss2json.com convertit le RSS en JSON sans CORS ─────
-    const FEEDS = {
-      top:      "https://news.google.com/rss?hl=fr&gl=FR&ceid=FR:fr",
-      world:    "https://news.google.com/rss/headlines/section/topic/WORLD?hl=fr&gl=FR&ceid=FR:fr",
-      business: "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=fr&gl=FR&ceid=FR:fr",
-      sports:   "https://news.google.com/rss/headlines/section/topic/SPORTS?hl=fr&gl=FR&ceid=FR:fr",
-    };
-    const LABELS = { top:"À la une", world:"Monde", business:"Business", sports:"Sports" };
-    let currentFeed = "top";
+    async function loadNews() {
+      const newsContainer = document.getElementById("news-container");
+      const statusBar = document.getElementById("news-status");
+      const ticker = document.getElementById("ticker-inner");
 
-    function cleanTitle(t) {
-      const parts = (t || "").split(" - ");
-      if (parts.length > 1) parts.pop();
-      return parts.join(" - ").trim();
-    }
+      statusBar.textContent = "Chargement des actualités...";
+      ticker.textContent = "Chargement des actualites en direct...";
 
-    function formatDate(str) {
-      if (!str) return "";
-      const d = new Date(str);
-      return isNaN(d) ? "" : d.toLocaleDateString("fr-FR", { day:"numeric", month:"long", hour:"2-digit", minute:"2-digit" });
-    }
-
-    async function loadFeed(feedKey) {
-      const mainCol = document.getElementById("main-col");
-      const sideCol = document.getElementById("side-col");
-      mainCol.innerHTML = '<div class="loading-msg">⏳ Chargement des actualités…</div>';
-      sideCol.innerHTML = "";
+      const feedUrl = "https://feeds.bbci.co.uk/news/world/rss.xml";
+      const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`;
 
       try {
-        const apiUrl = "https://api.rss2json.com/v1/api.json?count=10&rss_url=" + encodeURIComponent(FEEDS[feedKey]);
-        const res  = await fetch(apiUrl);
-        const data = await res.json();
+        const response = await fetch(apiUrl);
+        const data = await response.json();
 
-        if (data.status !== "ok") throw new Error(data.message || "Erreur rss2json");
-        const items = data.items || [];
-        if (!items.length) throw new Error("Aucun article reçu.");
-
-        // Ticker
-        document.getElementById("ticker-inner").textContent =
-          items.map(i => cleanTitle(i.title)).join("   ·   ");
-
-        // 5 articles principaux
-        mainCol.innerHTML = "";
-        items.slice(0, 5).forEach(item => {
-          const title  = cleanTitle(item.title);
-          const link   = item.link || "#";
-          const date   = formatDate(item.pubDate);
-          const source = item.author || "";
-          const desc   = (item.description || "").replace(/<[^>]*>/g, "").slice(0, 160);
-
-          const card = document.createElement("div");
-          card.className = "news-card";
-          card.innerHTML = `
-            <div class="news-card-body">
-              <span class="tag">${LABELS[feedKey]}</span>
-              <h3><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></h3>
-              ${desc ? `<p>${desc}…</p>` : ""}
-              <div class="meta">
-                ${source ? `<span>📰 ${source}</span>` : ""}
-                ${date   ? `<span>🕐 ${date}</span>`   : ""}
-              </div>
-            </div>`;
-          mainCol.appendChild(card);
-        });
-
-        // 5 articles secondaires dans la colonne latérale
-        const sideItems = items.slice(5, 10);
-        if (sideItems.length > 0) {
-          const sideCard = document.createElement("div");
-          sideCard.className = "side-card";
-          sideCard.innerHTML = `<h3>Autres titres</h3><div class="mini-list"></div>`;
-          sideCol.appendChild(sideCard);
-          const miniList = sideCard.querySelector(".mini-list");
-          sideItems.forEach(item => {
-            const el = document.createElement("div");
-            el.className = "mini-item";
-            el.innerHTML = `
-              <a href="${item.link || '#'}" target="_blank" rel="noopener noreferrer">
-                <strong>${cleanTitle(item.title)}</strong>
-                ${item.author ? `<span>${item.author}</span>` : ""}
-              </a>`;
-            miniList.appendChild(el);
-          });
+        if (data.status !== "ok" || !data.items) {
+          throw new Error("Flux RSS invalide");
         }
 
-      } catch (err) {
-        console.error(err);
-        mainCol.innerHTML = `
-          <div class="error-msg">
-            <strong>⚠️ Impossible de charger les actualités.</strong><br>
-            ${err.message}<br><br>
-            <button onclick="loadFeed('${feedKey}')" style="margin-top:8px;padding:10px 18px;border-radius:999px;background:var(--accent);border:none;color:#fff;font-weight:700;cursor:pointer;">
-              🔄 Réessayer
-            </button>
-          </div>`;
-        document.getElementById("ticker-inner").textContent = "Chargement impossible — réessayez plus tard.";
+        newsContainer.innerHTML = "";
+        ticker.textContent = data.items.slice(0, 8).map(item => item.title).join("   ·   ");
+
+        data.items.slice(0, 6).forEach(item => {
+          const article = document.createElement("div");
+          article.className = "news-card";
+          article.innerHTML = `
+            <div class="news-card-body">
+              <span class="tag">Monde</span>
+              <h3>${item.title}</h3>
+              <p>${item.description ? item.description.replace(/<[^>]*>/g, "").substring(0, 120) + "..." : ""}</p>
+              <div class="meta">
+                <a href="${item.link}" target="_blank" rel="noopener noreferrer">Lire plus</a>
+              </div>
+            </div>
+          `;
+          newsContainer.appendChild(article);
+        });
+
+        statusBar.textContent = "Actualités chargées avec succès.";
+      } catch (error) {
+        statusBar.textContent = "Chargement impossible — réessayez plus tard.";
+        newsContainer.innerHTML = `
+          <div class="error-box error-msg">
+            <strong>⚠ Impossible de charger les actualités.</strong>
+            <p>${error.message}</p>
+            <button onclick="loadNews()">Réessayer</button>
+          </div>
+        `;
       }
     }
 
-    document.querySelectorAll(".feed-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".feed-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        currentFeed = btn.dataset.feed;
-        loadFeed(currentFeed);
-      });
-    });
-
-    loadFeed(currentFeed);
+    loadNews();
   </script>
 </body>
 </html>
