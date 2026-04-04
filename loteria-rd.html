@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SNG Lotería RD en Directo</title>
+  <style>
+    :root {
+      --panel: #0b1220;
+      --text: #ffffff;
+      --accent: #ff2d55;
+      --line: rgba(255, 255, 255, 0.1);
+      --max: 1080px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 20%, rgba(255, 45, 85, 0.2), transparent 40%),
+        radial-gradient(circle at 90% 10%, rgba(245, 158, 11, 0.16), transparent 36%),
+        linear-gradient(180deg, #040815, #081125 60%, #050b18);
+      min-height: 100vh;
+    }
+
+    .page-wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 24px 18px 48px;
+    }
+
+    .sng-header {
+      background: rgba(8, 13, 24, 0.86);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      backdrop-filter: blur(8px);
+    }
+
+    .sng-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+    }
+
+    .sng-logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #243654, #121f38);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 14px;
+    }
+
+    .sng-title {
+      font-size: clamp(24px, 4vw, 38px);
+      margin: 0;
+      line-height: 1;
+    }
+
+    .live-status {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: right;
+      font-weight: 700;
+    }
+
+    .live-status strong {
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+
+    .sng-loteria-rd{
+      background: var(--panel);
+      color: #fff;
+      padding: 25px;
+      border-radius: 20px;
+      font-family: Arial, sans-serif;
+      border: 1px solid var(--line);
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3);
+    }
+
+    .sng-loteria-rd h1 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: clamp(28px, 4.8vw, 48px);
+    }
+
+    .live{
+      color: #ff2d55;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .lottery-grid{
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+      gap: 15px;
+    }
+
+    .lottery-card{
+      background: #111a2e;
+      padding: 15px;
+      border-radius: 15px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: transform 0.18s ease, border-color 0.18s ease;
+    }
+
+    .lottery-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(245, 158, 11, 0.58);
+    }
+
+    .lottery-card h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .numbers span{
+      background: #fff;
+      color: #000;
+      padding: 10px;
+      margin: 5px;
+      border-radius: 50%;
+      font-weight: bold;
+      display: inline-block;
+      min-width: 42px;
+    }
+
+    .btn-play{
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      background: #f59e0b;
+      color: #000;
+      padding: 15px;
+      border-radius: 12px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .monetizacion {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: grid;
+      gap: 10px;
+    }
+
+    .money-item {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <main class="page-wrap">
+    <header class="sng-header">
+      <div class="sng-brand">
+        <div class="sng-logo">SNG</div>
+        <h1 class="sng-title">SNG LOTERÍA RD 🔥</h1>
+      </div>
+      <div class="live-status">
+        <strong>● EN DIRECTO</strong>
+        <span>Resultados de hoy actualizados</span>
+      </div>
+    </header>
+
+    <section class="sng-loteria-rd">
+      <h1>🇩🇴 SNG Lotería RD en Directo</h1>
+      <p class="live">● Resultados actualizados hoy</p>
+
+      <div class="lottery-grid">
+        <div class="lottery-card">
+          <h2>Lotería Nacional</h2>
+          <div class="numbers"><span>12</span><span>34</span><span>56</span></div>
+          <p>Último sorteo</p>
+        </div>
+
+        <div class="lottery-card">
+          <h2>Leidsa</h2>
+          <div class="numbers"><span>07</span><span>19</span><span>31</span></div>
+          <p>En directo</p>
+        </div>
+
+        <div class="lottery-card">
+          <h2>Loteka</h2>
+          <div class="numbers"><span>22</span><span>45</span><span>78</span></div>
+          <p>Actualizado</p>
+        </div>
+
+        <div class="lottery-card">
+          <h2>La Primera</h2>
+          <div class="numbers"><span>03</span><span>14</span><span>29</span></div>
+          <p>Hoy</p>
+        </div>
+
+        <div class="lottery-card">
+          <h2>Real</h2>
+          <div class="numbers"><span>11</span><span>28</span><span>60</span></div>
+          <p>Resultados</p>
+        </div>
+
+        <div class="lottery-card">
+          <h2>New York</h2>
+          <div class="numbers"><span>09</span><span>25</span><span>40</span></div>
+          <p>USA</p>
+        </div>
+      </div>
+
+      <a href="#" class="btn-play">💰 Ver resultados completos</a>
+
+      <div class="monetizacion">
+        <div class="money-item">💸 Jouer maintenant</div>
+        <div class="money-item">💸 Voir résultats complets</div>
+        <div class="money-item">💸 Offre sponsorisée</div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
