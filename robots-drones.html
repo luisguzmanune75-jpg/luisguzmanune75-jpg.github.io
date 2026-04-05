@@ -3,96 +3,446 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🚁 Robots & drones | SNG Portal</title>
+  <title>Robots & drones | SNG Portal</title>
+  <meta name="description" content="Robots, drones, innovation, création vidéo, loisirs high-tech, robots domestiques et drones intelligents sur SNG Portal." />
   <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      color: #fff;
+    :root {
+      --bg:#04101c;
+      --panel:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.10);
+      --text:#eef7ff;
+      --muted:#9bb1c8;
+      --cyan:#6cf3ff;
+      --blue:#48a8ff;
+      --green:#55f59d;
+      --shadow:0 20px 50px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,Arial,Helvetica,sans-serif;
+      color:var(--text);
       background:
-        radial-gradient(circle at top left, rgba(255, 170, 0, 0.08), transparent 20%),
-        radial-gradient(circle at top right, rgba(0, 255, 255, 0.10), transparent 25%),
-        linear-gradient(135deg, #07111c 0%, #081521 45%, #031b24 100%);
+        radial-gradient(circle at 15% 20%, rgba(72,168,255,.14), transparent 30%),
+        radial-gradient(circle at 85% 25%, rgba(108,243,255,.12), transparent 28%),
+        radial-gradient(circle at 70% 78%, rgba(85,245,157,.10), transparent 25%),
+        linear-gradient(180deg, #04101c 0%, #03101a 45%, #041523 100%);
+      min-height:100vh;
     }
-
-    .wrap {
-      width: min(1200px, calc(100% - 24px));
-      margin: 30px auto;
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size:38px 38px;
+      mask-image:linear-gradient(to bottom, rgba(0,0,0,.55), transparent 90%);
     }
-
-    .hero {
-      border-radius: 28px;
-      padding: 40px 28px;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
-      border: 1px solid rgba(255, 255, 255, 0.10);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
-    }
-
-    .back {
-      display: inline-block;
-      margin-bottom: 16px;
-      color: #9efcff;
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    h1 {
-      margin: 0 0 12px;
-      font-size: 42px;
-    }
-
-    p {
-      color: rgba(255, 255, 255, 0.84);
-      line-height: 1.7;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      margin-top: 24px;
-    }
-
-    .card {
-      padding: 22px;
-      border-radius: 22px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .card h3 {
-      margin: 0 0 10px;
-    }
-
-    @media (max-width: 900px) {
-      .grid { grid-template-columns: 1fr; }
-      h1 { font-size: 30px; }
-    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .container{width:min(1280px, calc(100% - 32px));margin:0 auto}
+    .topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(3,13,22,.72);border-bottom:1px solid rgba(255,255,255,.08)}
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.3px}
+    .brand-badge{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg, rgba(72,168,255,.28), rgba(108,243,255,.12));border:1px solid rgba(255,255,255,.10);box-shadow: inset 0 0 20px rgba(255,255,255,.03), 0 0 24px rgba(72,168,255,.16);font-size:1.2rem}
+    .nav{display:flex;flex-wrap:wrap;gap:10px}
+    .nav a{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#d4e5f8;font-size:.95rem}
+    .nav a:hover,.btn:hover,.card-link:hover{transform:translateY(-2px);transition:.25s ease}
+    .hero{padding:44px 0 24px}
+    .hero-wrap{display:grid;grid-template-columns:1.2fr .95fr;gap:24px;align-items:stretch}
+    .hero-main,.hero-side,.card,.info-box,.news,.faq,.compare,.guide{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.09);border-radius:30px;box-shadow:var(--shadow);overflow:hidden;position:relative}
+    .hero-main::after,.hero-side::after,.card::after,.guide::after{content:"";position:absolute;width:180px;height:180px;right:-40px;bottom:-40px;background:radial-gradient(circle, rgba(108,243,255,.18) 0%, rgba(108,243,255,0) 70%);pointer-events:none}
+    .hero-main-content,.hero-side-content{padding:34px;position:relative;z-index:1}
+    .eyebrow{color:var(--cyan);text-transform:uppercase;letter-spacing:.16em;font-size:.8rem;font-weight:800;margin-bottom:12px}
+    h1{margin:0 0 14px;line-height:.98;font-size:clamp(2.2rem, 5vw, 4.2rem);letter-spacing:-.04em}
+    .lead{color:#dce9f7;font-size:1.08rem;line-height:1.7;max-width:760px;margin:0 0 22px}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 18px;border-radius:16px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.06);font-weight:700;transition:.25s ease}
+    .btn-primary{background:linear-gradient(135deg, rgba(72,168,255,.28), rgba(108,243,255,.12));box-shadow:0 0 28px rgba(72,168,255,.18)}
+    .chips{display:flex;flex-wrap:wrap;gap:10px}
+    .chips span{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#d6e7f8;font-size:.94rem}
+    .hero-visual{border-radius:26px;min-height:290px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)),url('https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&w=1200&q=80') center/cover;box-shadow:inset 0 -80px 120px rgba(0,0,0,.38);display:flex;align-items:flex-end;padding:18px}
+    .hero-visual-badge{display:inline-flex;gap:8px;align-items:center;background:rgba(3,14,24,.72);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(12px);border-radius:16px;padding:12px 14px;color:#f2f8ff;font-weight:700}
+    .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+    .stat{padding:18px;border-radius:20px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08)}
+    .stat strong{display:block;font-size:1.25rem;margin-bottom:6px}
+    .stat span{color:var(--muted);font-size:.92rem;line-height:1.5}
+    section{padding:22px 0}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:18px}
+    .section-head h2{margin:0;font-size:clamp(1.6rem, 3vw, 2.6rem);letter-spacing:-.03em}
+    .section-head p{margin:8px 0 0;color:var(--muted);line-height:1.7;max-width:760px}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    .card-image{height:220px;position:relative;overflow:hidden}
+    .card-image img{width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+    .card:hover .card-image img{transform:scale(1.05)}
+    .card-overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(4,16,28,.06) 0%, rgba(4,16,28,.18) 40%, rgba(4,16,28,.90) 100%)}
+    .card-content{padding:18px;position:relative;z-index:1}
+    .card-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+    .logo-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);font-weight:800;font-size:.9rem}
+    .tag{font-size:.78rem;color:var(--cyan);font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .card h3{margin:0 0 8px;font-size:1.35rem}
+    .card p{margin:0 0 16px;color:#d8e5f2;line-height:1.65;min-height:82px}
+    .features{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+    .features span{padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#d8e8f7;font-size:.82rem}
+    .card-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .card-link{text-align:center;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-weight:700;transition:.25s ease}
+    .card-link.primary{background:linear-gradient(135deg, rgba(72,168,255,.22), rgba(108,243,255,.12))}
+    .three-grid,.four-grid,.two-grid{display:grid;gap:18px}
+    .three-grid{grid-template-columns:repeat(3,1fr)}
+    .four-grid{grid-template-columns:repeat(4,1fr)}
+    .two-grid{grid-template-columns:repeat(2,1fr)}
+    .guide,.info-box,.news,.faq,.compare{padding:22px}
+    .guide h3,.info-box h3,.news h3,.faq h3,.compare h3{margin:0 0 10px}
+    .guide p,.info-box p,.news p,.faq p,.compare p{margin:0;color:var(--muted);line-height:1.7}
+    .compare ul{margin:14px 0 0;padding-left:18px;color:#dce9f7;line-height:1.8}
+    .news-image{height:180px;border-radius:18px;overflow:hidden;margin-bottom:14px;border:1px solid rgba(255,255,255,.08)}
+    .news-image img{width:100%;height:100%;object-fit:cover}
+    .footer{padding:28px 0 60px;color:var(--muted)}
+    .footer-box{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);border-radius:24px;padding:24px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+    .footer strong{color:var(--text)}
+    @media (max-width:1100px){.hero-wrap,.grid,.three-grid,.four-grid,.two-grid{grid-template-columns:repeat(2,1fr)}.hero-wrap{grid-template-columns:1fr}}
+    @media (max-width:780px){.container{width:min(100% - 18px, 1280px)}.topbar-inner{flex-direction:column;align-items:flex-start}.nav{overflow:auto;width:100%;padding-bottom:6px}.grid,.three-grid,.four-grid,.two-grid,.stat-grid,.card-actions{grid-template-columns:1fr}.hero-main-content,.hero-side-content{padding:22px}h1{font-size:2.5rem}.lead{font-size:1rem}}
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-badge">🤖</span>
+        <span>SNG Portal • Robots & drones</span>
+      </a>
+      <nav class="nav">
+        <a href="#produits">Produits</a>
+        <a href="#guides">Guides</a>
+        <a href="#comparatif">Comparatif</a>
+        <a href="#tendances">Tendances</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
     <section class="hero">
-      <a class="back" href="tech-hub.html">← Retour Tech Hub</a>
-      <h1>🚁 Robots & drones</h1>
-      <p>Découvre l’univers des robots et drones : innovation, captation vidéo, loisirs créatifs et usages professionnels.</p>
+      <div class="container hero-wrap">
+        <div class="hero-main">
+          <div class="hero-main-content">
+            <div class="eyebrow">Tech Hub • SNG Portal</div>
+            <h1>Robots & drones<br>innovation, vidéo et futur</h1>
+            <p class="lead">
+              Une page complète avec drones de création vidéo, robots domestiques, robots éducatifs,
+              drones compacts, machines intelligentes et gadgets futuristes pour loisirs, travail et contenu.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#produits">Explorer robots & drones</a>
+              <a class="btn" href="index.html">← Retour Tech Hub</a>
+            </div>
+            <div class="chips">
+              <span>DJI</span>
+              <span>Autel Robotics</span>
+              <span>Parrot</span>
+              <span>Roborock</span>
+              <span>Ecovacs</span>
+              <span>Unitree</span>
+              <span>Anki / Cozmo</span>
+              <span>Lego Robotics</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero-side">
+          <div class="hero-side-content">
+            <div class="hero-visual">
+              <div class="hero-visual-badge">🚁 Vidéo aérienne • Robots smart • Futur • Création</div>
+            </div>
+            <div class="stat-grid">
+              <div class="stat">
+                <strong>8 univers</strong>
+                <span>Drones, robots pratiques, robots fun et innovations réunis dans une seule page.</span>
+              </div>
+              <div class="stat">
+                <strong>Liens directs</strong>
+                <span>Accès rapide aux sites officiels et pages produit pour explorer plus loin.</span>
+              </div>
+              <div class="stat">
+                <strong>Effet premium</strong>
+                <span>Une section bien remplie, plus moderne et plus forte visuellement pour ton portail.</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
     </section>
 
-    <section class="grid">
-      <div class="card">
-        <h3>Drones caméra</h3>
-        <p>Stabilisation avancée, prises de vue aériennes et contenu spectaculaire.</p>
-      </div>
-      <div class="card">
-        <h3>Robots domestiques</h3>
-        <p>Aide quotidienne pour nettoyage, surveillance et automatisation utile.</p>
-      </div>
-      <div class="card">
-        <h3>Drones FPV</h3>
-        <p>Pilotage immersif pour vitesse, précision et sensations fortes.</p>
+    <section id="produits">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Top innovation</div>
+            <h2>Drones intelligents et robots modernes</h2>
+            <p>Chaque carte contient une image, une description claire, des points forts et des boutons pour visiter les sites officiels.</p>
+          </div>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <div class="card-image">
+              <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&w=900&q=80" alt="Drone DJI en vol" />
+              <div class="card-overlay"></div>
+            </div>
+            <div class="card-content">
+              <div class="card-top"><span class="logo-pill">🚁 DJI</span><span class="tag">Création vidéo</span></div>
+              <h3>DJI Drones</h3>
+              <p>La grande référence pour la vidéo aérienne, les drones compacts, les prises de vue premium et la création de contenu.</p>
+              <div class="features"><span>Vidéo 4K</span><span>Stabilisation</span><span>Créateur</span><span>Drone compact</span></div>
+              <div class="card-actions">
+                <a class="card-link primary" href="https://www.dji.com/fr" target="_blank" rel="noopener noreferrer">Site officiel</a>
+                <a class="card-link" href="https://store.dji.com/fr" target="_blank" rel="noopener noreferrer">Produits</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-image">
+              <img src="https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=900&q=80" alt="Drone Autel Robotics" />
+              <div class="card-overlay"></div>
+            </div>
+            <div class="card-content">
+              <div class="card-top"><span class="logo-pill">🛰️ Autel</span><span class="tag">Performance</span></div>
+              <h3>Autel Robotics</h3>
+              <p>Très intéressant pour ceux qui aiment les drones performants, les prises de vue puissantes et l’exploration avancée.</p>
+              <div class="features"><span>Caméra</span><span>Vol précis</span><span>Création</span><span>Innovation</span></div>
+              <div class="card-actions">
+                <a class="card-link primary" href="https://autelrobotics.com/" target="_blank" rel="noopener noreferrer">Site officiel</a>
+                <a class="card-link" href="https://shop.autelrobotics.com/" target="_blank" rel="noopener noreferrer">Catalogue</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-image">
+              <img src="https://images.unsplash.com/photo-1521405924368-64c5b84bec60?auto=format&fit=crop&w=900&q=80" alt="Drone Parrot futuriste" />
+              <div class="card-overlay"></div>
+            </div>
+            <div class="card-content">
+              <div class="card-top"><span class="logo-pill">🛸 Parrot</span><span class="tag">Tech française</span></div>
+              <h3>Parrot</h3>
+              <p>Une marque reconnue dans l’univers des drones avec une identité innovante, professionnelle et technologique.</p>
+              <div class="features"><span>Drone pro</span><span>Innovation</span><span>Europe</span><span>Image</span></div>
+              <div class="card-actions">
+                <a class="card-link primary" href="https://www.parrot.com/fr" target="_blank" rel="noopener noreferrer">Site officiel</a>
+                <a class="card-link" href="https://www.parrot.com/fr/drones" target="_blank" rel="noopener noreferrer">Voir plus</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-image">
+              <img src="https://images.unsplash.com/photo-1580128637393-7d6d4b5d34b9?auto=format&fit=crop&w=900&q=80" alt="Robot aspirateur intelligent" />
+              <div class="card-overlay"></div>
+            </div>
+            <div class="card-content">
+              <div class="card-top"><span class="logo-pill">🧹 Roborock</span><span class="tag">Robot maison</span></div>
+              <h3>Roborock</h3>
+              <p>Excellent pour les robots aspirateurs intelligents avec cartographie, nettoyage automatique et gestion pratique de la maison.</p>
+              <div class="features"><span>Robot aspirateur</span><span>Cartographie</span><span>Maison</span><span>Automatique</span></div>
+              <div class="card-actions">
+                <a class="card-link primary" href="https://fr.roborock.com/" target="_blank" rel="noopener noreferrer">Site officiel</a>
+                <a class="card-link" href="https://fr.roborock.com/pages/robot-vacuum-cleaner" target="_blank" rel="noopener noreferrer">Produits</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-image">
+              <img src="https://images.unsplash.com/photo-1589254065878-42c9da997008?auto=format&fit=crop&w=900&q=80" alt="Robot Ecovacs domestique" />
+              <div class="card-overlay"></div>
+            </div>
+            <div class="card-content">
+              <div class="card-top"><span class="logo-pill">🏡 Ecovacs</span><span class="tag">Domestique</span></div>
+              <h3>Ecovacs</h3>
+              <p>Très fort dans les robots de nettoyage et les solutions pratiques pour automatiser une partie des tâches à la maison.</p>
+              <div class="features"><span>Nettoyage</span><span>Robot maison</span><span>Pratique</span><span>Gain de temps</span></div>
+              <div class="card-actions">
+                <a class="card-link primary" href="https://www.ecovacs.com/fr" target="_blank" rel="noopener noreferrer">Site officiel</a>
+                <a class="card-link" href="https://www.ecovacs.com/fr/deebot-robotic-vacuum-cleaner" target="_blank" rel="noopener noreferrer">Collection</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-image">
+              <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=900&q=80" alt="Robot futuriste Unitree" />
+              <div class="card-overlay"></div>
+            </div>
+            <div class="card-content">
+              <div class="card-top"><span class="logo-pill">🐾 Unitree</span><span class="tag">Robot du futur</span></div>
+              <h3>Unitree Robotics</h3>
+              <p>Des robots quadrupèdes et machines futuristes qui donnent tout de suite un effet high-tech et innovation extrême.</p>
+              <div class="features"><span>Robot avancé</span><span>IA</span><span>Innovation</span><span>Futur</span></div>
+              <div class="card-actions">
+                <a class="card-link primary" href="https://www.unitree.com/" target="_blank" rel="noopener noreferrer">Site officiel</a>
+                <a class="card-link" href="https://shop.unitree.com/" target="_blank" rel="noopener noreferrer">Voir produits</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-image">
+              <img src="https://images.unsplash.com/photo-1535378917042-10a22c95931a?auto=format&fit=crop&w=900&q=80" alt="Petit robot éducatif" />
+              <div class="card-overlay"></div>
+            </div>
+            <div class="card-content">
+              <div class="card-top"><span class="logo-pill">🎮 Cozmo</span><span class="tag">Fun & éducatif</span></div>
+              <h3>Cozmo / Anki</h3>
+              <p>Des petits robots ludiques, intelligents et attachants, parfaits pour la découverte, le jeu et le côté fun tech.</p>
+              <div class="features"><span>Robot fun</span><span>Éducatif</span><span>Famille</span><span>Tech playful</span></div>
+              <div class="card-actions">
+                <a class="card-link primary" href="https://www.digitaldreamlabs.com/pages/cozmo" target="_blank" rel="noopener noreferrer">Site officiel</a>
+                <a class="card-link" href="https://www.digitaldreamlabs.com/" target="_blank" rel="noopener noreferrer">Découvrir</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-image">
+              <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=900&q=80" alt="Robotique Lego" />
+              <div class="card-overlay"></div>
+            </div>
+            <div class="card-content">
+              <div class="card-top"><span class="logo-pill">🧱 Lego</span><span class="tag">Robotique éducative</span></div>
+              <h3>Lego Robotics</h3>
+              <p>Très bon pour apprendre la robotique, la logique, la construction et l’expérimentation de manière visuelle et fun.</p>
+              <div class="features"><span>Apprentissage</span><span>Construction</span><span>Code</span><span>Créativité</span></div>
+              <div class="card-actions">
+                <a class="card-link primary" href="https://www.lego.com/fr-fr/themes/education" target="_blank" rel="noopener noreferrer">Site officiel</a>
+                <a class="card-link" href="https://education.lego.com/" target="_blank" rel="noopener noreferrer">Education</a>
+              </div>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
-  </div>
+
+    <section id="guides">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Guides rapides</div>
+            <h2>Choisir selon ton besoin</h2>
+            <p>Cette section aide à rendre la page plus complète et à orienter les visiteurs rapidement.</p>
+          </div>
+        </div>
+        <div class="three-grid">
+          <article class="guide"><h3>🎥 Pour la création vidéo</h3><p>DJI et Autel sont parfaits si tu veux filmer depuis le ciel, faire du contenu stylé et obtenir un rendu pro.</p></article>
+          <article class="guide"><h3>🏠 Pour la maison</h3><p>Roborock et Ecovacs sont très utiles si tu cherches des robots pratiques pour le nettoyage et le confort quotidien.</p></article>
+          <article class="guide"><h3>🧠 Pour le futur et l’apprentissage</h3><p>Unitree, Cozmo et Lego Robotics sont intéressants pour le côté innovation, découverte et effet high-tech.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Blocs premium</div>
+            <h2>Encore plus de contenu sur la page</h2>
+            <p>Comme tu veux un truc riche avec plein de choses, j’ai ajouté des blocs utiles pour remplir proprement.</p>
+          </div>
+        </div>
+        <div class="four-grid">
+          <article class="info-box"><h3>📸 Vidéo aérienne</h3><p>Les drones peuvent servir pour YouTube, réseaux sociaux, immobilier, tourisme, événements et contenus stylés.</p></article>
+          <article class="info-box"><h3>🤖 Robots pratiques</h3><p>Les robots domestiques simplifient certaines tâches répétitives et rendent la maison plus moderne.</p></article>
+          <article class="info-box"><h3>🧪 Innovation</h3><p>Cette section peut aussi montrer des robots du futur, gadgets IA et machines qui impressionnent visuellement.</p></article>
+          <article class="info-box"><h3>💸 Monétisation</h3><p>Tu peux mettre ici des liens affiliés vers drones compacts, robots de nettoyage ou kits éducatifs.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="comparatif">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Comparatif</div>
+            <h2>Les grands profils robots & drones</h2>
+            <p>Un bon bloc visuel pour renforcer le côté sérieux et magazine de la page.</p>
+          </div>
+        </div>
+        <div class="three-grid">
+          <article class="compare">
+            <h3>DJI / Autel / Parrot</h3>
+            <p>Le bon choix pour les drones, les prises de vue aériennes, l’exploration vidéo et les créateurs de contenu.</p>
+            <ul><li>Caméras et vol</li><li>Création premium</li><li>Innovation aérienne</li></ul>
+          </article>
+          <article class="compare">
+            <h3>Roborock / Ecovacs</h3>
+            <p>Très fort pour les robots maison, l’automatisation du nettoyage et le confort au quotidien.</p>
+            <ul><li>Maison pratique</li><li>Automatisation</li><li>Gain de temps</li></ul>
+          </article>
+          <article class="compare">
+            <h3>Unitree / Cozmo / Lego</h3>
+            <p>Idéal pour l’effet futur, l’apprentissage, le côté tech impressionnant et la découverte robotique.</p>
+            <ul><li>Robotique fun</li><li>Éducation</li><li>Futur high-tech</li></ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="tendances">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Tendances</div>
+            <h2>Sections style magazine</h2>
+            <p>Parfaites pour mettre des tops produits, des nouveautés, des promos ou des articles affiliés.</p>
+          </div>
+        </div>
+        <div class="three-grid">
+          <article class="news">
+            <div class="news-image"><img src="https://images.unsplash.com/photo-1506947411487-a56738267384?auto=format&fit=crop&w=1000&q=80" alt="Top drones vidéo" /></div>
+            <h3>Top drones pour la vidéo</h3>
+            <p>Une bonne section pour présenter les meilleurs drones compacts, les plus pratiques ou les plus puissants.</p>
+          </article>
+          <article class="news">
+            <div class="news-image"><img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=80" alt="Robots du futur" /></div>
+            <h3>Robots du futur à découvrir</h3>
+            <p>Idéal pour montrer des machines impressionnantes, tendances et visuellement fortes pour ton portail.</p>
+          </article>
+          <article class="news">
+            <div class="news-image"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=80" alt="Kits et gadgets robotique" /></div>
+            <h3>Kits, gadgets et bons plans</h3>
+            <p>Ajoute ici tes sélections produits et tes liens affiliés pour monétiser la section robots & drones.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">FAQ</div>
+            <h2>Questions fréquentes</h2>
+            <p>Très utile pour ajouter du texte SEO et renforcer le côté pro de la page.</p>
+          </div>
+        </div>
+        <div class="two-grid">
+          <article class="faq"><h3>Quel drone pour faire de belles vidéos ?</h3><p>DJI reste souvent le premier choix pour les créateurs qui veulent une vidéo stable, belle et facile à produire.</p></article>
+          <article class="faq"><h3>Quel robot pour la maison ?</h3><p>Roborock et Ecovacs sont souvent de très bons choix pour le nettoyage automatique et le confort quotidien.</p></article>
+          <article class="faq"><h3>Quel univers pour l’effet futur ?</h3><p>Unitree et certains robots avancés donnent immédiatement une impression high-tech très forte.</p></article>
+          <article class="faq"><h3>Peut-on monétiser cette page ?</h3><p>Oui, tu peux remplacer les boutons officiels par tes liens affiliés Amazon, Awin ou autres plateformes.</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-box">
+        <div><strong>SNG Portal • Robots & drones</strong><br>Une page riche, stylée et prête à être reliée au reste de ton portail.</div>
+        <div>Étape suivante : je te fais <strong>Futur immersif</strong> dans le même style.</div>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
