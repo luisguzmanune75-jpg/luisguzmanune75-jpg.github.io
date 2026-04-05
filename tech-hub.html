@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Technologie, IA et smartphones : sélection SNG Portal des outils, téléphones et gadgets du moment."
+    />
+    <title>Tech Hub | SNG Portal</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        color: #fff;
+        background:
+          radial-gradient(circle at top left, rgba(255, 180, 0, 0.12), transparent 30%),
+          radial-gradient(circle at top right, rgba(0, 255, 255, 0.12), transparent 35%),
+          linear-gradient(135deg, #10151e, #071c24);
+      }
+
+      .container {
+        width: min(100% - 28px, 1180px);
+        margin: 0 auto;
+      }
+
+      .tech-page-head {
+        padding: 28px 0 12px;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        color: #fff;
+        font-weight: 700;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 999px;
+        padding: 10px 14px;
+      }
+
+      .sng-tech-hub {
+        padding: 30px 18px 40px;
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.04);
+        color: #fff;
+        margin: 16px 0 30px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .tech-header {
+        text-align: center;
+        margin-bottom: 26px;
+      }
+
+      .tech-header h1 {
+        margin: 0 0 10px;
+        font-size: 32px;
+        font-weight: 800;
+      }
+
+      .tech-header p {
+        margin: 0 auto;
+        max-width: 840px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      .tech-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      .tech-panel {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 22px;
+        padding: 20px;
+        backdrop-filter: blur(8px);
+      }
+
+      .panel-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .panel-title span {
+        font-size: 24px;
+      }
+
+      .panel-title h2 {
+        margin: 0;
+        font-size: 22px;
+      }
+
+      .phone-list,
+      .ai-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .tech-item {
+        display: block;
+        text-decoration: none;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        padding: 16px;
+        transition: 0.25s ease;
+      }
+
+      .tech-item:hover {
+        transform: translateY(-4px);
+        border-color: rgba(0, 255, 255, 0.35);
+        box-shadow: 0 10px 25px rgba(0, 255, 255, 0.1);
+      }
+
+      .item-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+      }
+
+      .item-top strong {
+        font-size: 17px;
+      }
+
+      .tech-item p {
+        margin: 0 0 12px;
+        color: rgba(255, 255, 255, 0.84);
+        line-height: 1.45;
+        font-size: 14px;
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .meta span {
+        font-size: 12px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(0, 255, 255, 0.1);
+        border: 1px solid rgba(0, 255, 255, 0.18);
+        color: #dffcff;
+      }
+
+      .tag {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 6px 10px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+
+      .premium { background: rgba(255, 255, 255, 0.12); }
+      .android { background: rgba(61, 220, 132, 0.16); }
+      .google { background: rgba(66, 133, 244, 0.16); }
+      .xiaomi { background: rgba(255, 106, 0, 0.16); }
+      .oneplus { background: rgba(255, 0, 0, 0.16); }
+      .ai { background: rgba(168, 85, 247, 0.18); }
+
+      .gadget-board {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .gadget-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 14px;
+      }
+
+      .gadget-card strong {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 15px;
+      }
+
+      .gadget-card p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .ticker-wrap {
+        overflow: hidden;
+        margin-top: 18px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .ticker {
+        display: flex;
+        gap: 28px;
+        padding: 12px 18px;
+        white-space: nowrap;
+        min-width: max-content;
+        animation: sngTicker 22s linear infinite;
+      }
+
+      .ticker span {
+        color: #aefeff;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      @keyframes sngTicker {
+        from { transform: translateX(0); }
+        to { transform: translateX(-35%); }
+      }
+
+      @media (max-width: 768px) {
+        .tech-header h1 {
+          font-size: 24px;
+        }
+
+        .gadget-board {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="tech-page-head">
+        <a class="back-link" href="./index.html">← Retour à l'accueil</a>
+      </header>
+
+      <section class="sng-tech-hub">
+        <div class="tech-header">
+          <h1>🚀 Technologie, IA & Smartphones</h1>
+          <p>
+            Explore les meilleurs téléphones du moment, les IA les plus utiles
+            pour gagner de l’argent et les gadgets futuristes qui font parler d’eux.
+          </p>
+        </div>
+
+        <div class="tech-grid">
+          <div class="tech-panel">
+            <div class="panel-title">
+              <span>📱</span>
+              <h2>Top Smartphones du marché</h2>
+            </div>
+
+            <div class="phone-list">
+              <a class="tech-item" href="https://www.apple.com/fr/iphone/" target="_blank" rel="noopener noreferrer">
+                <div class="item-top">
+                  <strong>iPhone 17 Pro</strong>
+                  <span class="tag premium">Apple</span>
+                </div>
+                <p>Apple Intelligence, design premium, photo haut niveau.</p>
+                <div class="meta">
+                  <span>💶 dès 55,38 €/mois</span>
+                  <span>⚡ Haut de gamme</span>
+                </div>
+              </a>
+
+              <a class="tech-item" href="https://www.samsung.com/fr/smartphones/galaxy-s25-ultra/" target="_blank" rel="noopener noreferrer">
+                <div class="item-top">
+                  <strong>Galaxy S25 Ultra</strong>
+                  <span class="tag android">Samsung</span>
+                </div>
+                <p>Galaxy AI, S Pen intégré, grand écran 6,9".</p>
+                <div class="meta">
+                  <span>🤖 Galaxy AI</span>
+                  <span>📸 Photo ultra</span>
+                </div>
+              </a>
+
+              <a class="tech-item" href="https://store.google.com/fr/category/phones?hl=fr" target="_blank" rel="noopener noreferrer">
+                <div class="item-top">
+                  <strong>Pixel 10 Pro</strong>
+                  <span class="tag google">Google</span>
+                </div>
+                <p>Gemini intégré, expérience Android IA très propre.</p>
+                <div class="meta">
+                  <span>🧠 IA Google</span>
+                  <span>🔄 7 ans de mises à jour</span>
+                </div>
+              </a>
+
+              <a class="tech-item" href="https://www.mi.com/fr/store/" target="_blank" rel="noopener noreferrer">
+                <div class="item-top">
+                  <strong>Xiaomi 17 Ultra</strong>
+                  <span class="tag xiaomi">Xiaomi</span>
+                </div>
+                <p>Leica 200 MP, batterie 6000 mAh, monstre photo.</p>
+                <div class="meta">
+                  <span>💶 dès 1 503 €</span>
+                  <span>📷 Ultra photo</span>
+                </div>
+              </a>
+
+              <a class="tech-item" href="https://www.oneplus.com/fr/oneplus-15" target="_blank" rel="noopener noreferrer">
+                <div class="item-top">
+                  <strong>OnePlus 15</strong>
+                  <span class="tag oneplus">OnePlus</span>
+                </div>
+                <p>Très grosse batterie, performances premium, charge rapide.</p>
+                <div class="meta">
+                  <span>💶 1 129 €</span>
+                  <span>🔋 7300 mAh</span>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="tech-panel">
+            <div class="panel-title">
+              <span>🤖</span>
+              <h2>Meilleures IA pour faire de l’argent</h2>
+            </div>
+
+            <div class="ai-list">
+              <a class="tech-item" href="https://openai.com/pricing" target="_blank" rel="noopener noreferrer">
+                <div class="item-top">
+                  <strong>ChatGPT</strong>
+                  <span class="tag ai">Rédaction / business</span>
+                </div>
+                <p>Pour articles, idées business, scripts, mails, produits, automatisation.</p>
+                <div class="meta">
+                  <span>💵 Plus : 20 $/mois</span>
+                  <span>🚀 Go / Plus / Pro</span>
+                </div>
+              </a>
+
+              <a class="tech-item" href="https://www.anthropic.com/pricing" target="_blank" rel="noopener noreferrer">
+                <div class="item-top">
+                  <strong>Claude</strong>
+                  <span class="tag ai">Textes longs / analyse</span>
+                </div>
+                <p>Très fort pour résumés, documents, stratégies et travail approfondi.</p>
+                <div class="meta">
+                  <span>💵 Pro : 20 $/mois</span>
+                  <span>🧾 Longs documents</span>
+                </div>
+              </a>
+
+              <a class="tech-item" href="https://gemini.google.com/advanced?hl=fr" target="_blank" rel="noopener noreferrer">
+                <div class="item-top">
+                  <strong>Gemini</strong>
+                  <span class="tag ai">Google / productivité</span>
+                </div>
+                <p>Idéal pour Gmail, Docs, recherche, productivité et workflow Google.</p>
+                <div class="meta">
+                  <span>💵 Pro : 19,99 $/mois</span>
+                  <span>📂 Google intégré</span>
+                </div>
+              </a>
+
+              <a class="tech-item" href="https://docs.midjourney.com/hc/en-us/articles/27870484040333-Comparing-Midjourney-Plans" target="_blank" rel="noopener noreferrer">
+                <div class="item-top">
+                  <strong>Midjourney</strong>
+                  <span class="tag ai">Images virales</span>
+                </div>
+                <p>Créer des visuels puissants pour TikTok, pubs, couvertures et produits.</p>
+                <div class="meta">
+                  <span>💵 dès 10 $/mois</span>
+                  <span>🎨 Image premium</span>
+                </div>
+              </a>
+
+              <a class="tech-item" href="https://runwayml.com/pricing" target="_blank" rel="noopener noreferrer">
+                <div class="item-top">
+                  <strong>Runway</strong>
+                  <span class="tag ai">Vidéo IA</span>
+                </div>
+                <p>Parfait pour créer vidéos virales, clips, pubs et contenu social.</p>
+                <div class="meta">
+                  <span>💵 dès 12 $/mois</span>
+                  <span>🎬 Vidéo IA</span>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="tech-panel gadgets-panel">
+            <div class="panel-title">
+              <span>🛸</span>
+              <h2>Gadgets, inventions & tendances</h2>
+            </div>
+
+            <div class="gadget-board">
+              <div class="gadget-card">
+                <strong>⌚ Montres connectées</strong>
+                <p>Suivi santé, sport, notifications, business mobile.</p>
+              </div>
+              <div class="gadget-card">
+                <strong>🎧 Audio intelligent</strong>
+                <p>Casques, écouteurs premium, réduction de bruit, IA audio.</p>
+              </div>
+              <div class="gadget-card">
+                <strong>🏠 Maison connectée</strong>
+                <p>Caméras, assistants, lumières smart, sécurité et confort.</p>
+              </div>
+              <div class="gadget-card">
+                <strong>🚁 Robots & drones</strong>
+                <p>Innovation, vidéo, surveillance, loisirs et création de contenu.</p>
+              </div>
+              <div class="gadget-card">
+                <strong>🕶️ Futur immersif</strong>
+                <p>Lunettes intelligentes, réalité mixte, nouveaux usages.</p>
+              </div>
+              <div class="gadget-card">
+                <strong>💸 Bons plans tech</strong>
+                <p>Produits tendance à promouvoir avec affiliation.</p>
+              </div>
+            </div>
+
+            <div class="ticker-wrap">
+              <div class="ticker">
+                <span>🔥 IA générative</span>
+                <span>📱 smartphones premium</span>
+                <span>🎬 vidéo IA</span>
+                <span>🧠 agents intelligents</span>
+                <span>⌚ wearables</span>
+                <span>🏠 smart home</span>
+                <span>🚀 gadgets futuristes</span>
+                <span>💰 business tech</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
