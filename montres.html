@@ -4,98 +4,1059 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Montres connectées | SNG Portal</title>
+  <meta name="description" content="Les meilleures montres connectées : Apple Watch, Galaxy Watch, Garmin, Huawei, Fitbit, Amazfit, Polar et plus encore sur SNG Portal." />
   <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      color: #fff;
-      background:
-        radial-gradient(circle at top left, rgba(255, 170, 0, 0.08), transparent 20%),
-        radial-gradient(circle at top right, rgba(0, 255, 255, 0.10), transparent 25%),
-        linear-gradient(135deg, #07111c 0%, #081521 45%, #031b24 100%);
+    :root {
+      --bg:#04101c;
+      --bg-2:#071827;
+      --panel:rgba(255,255,255,.06);
+      --panel-2:rgba(255,255,255,.08);
+      --line:rgba(255,255,255,.10);
+      --text:#edf6ff;
+      --muted:#9db1c6;
+      --cyan:#6cf3ff;
+      --blue:#48a8ff;
+      --green:#55f59d;
+      --shadow:0 20px 50px rgba(0,0,0,.35);
+      --radius:24px;
     }
 
-    .wrap {
-      width: min(1200px, calc(100% - 24px));
-      margin: 30px auto;
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(72,168,255,.14), transparent 30%),
+        radial-gradient(circle at 85% 25%, rgba(108,243,255,.12), transparent 28%),
+        radial-gradient(circle at 70% 78%, rgba(85,245,157,.10), transparent 25%),
+        linear-gradient(180deg, #04101c 0%, #03101a 45%, #041523 100%);
+      min-height:100vh;
+    }
+
+    body::before {
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size:38px 38px;
+      mask-image:linear-gradient(to bottom, rgba(0,0,0,.55), transparent 90%);
+    }
+
+    a { color:inherit; text-decoration:none; }
+    img { max-width:100%; display:block; }
+
+    .container {
+      width:min(1280px, calc(100% - 32px));
+      margin:0 auto;
+    }
+
+    .topbar {
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter: blur(14px);
+      background:rgba(3,13,22,.72);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .topbar-inner {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      padding:14px 0;
+    }
+
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      letter-spacing:.3px;
+    }
+
+    .brand-badge {
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, rgba(72,168,255,.28), rgba(108,243,255,.12));
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow: inset 0 0 20px rgba(255,255,255,.03), 0 0 24px rgba(72,168,255,.16);
+      font-size:1.2rem;
+    }
+
+    .nav {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .nav a {
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      color:#d4e5f8;
+      font-size:.95rem;
+    }
+
+    .nav a:hover,
+    .btn:hover,
+    .chip:hover,
+    .card-link:hover {
+      transform:translateY(-2px);
+      transition:.25s ease;
     }
 
     .hero {
-      border-radius: 28px;
-      padding: 40px 28px;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
-      border: 1px solid rgba(255, 255, 255, 0.10);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
+      padding:44px 0 24px;
     }
 
-    .back {
-      display: inline-block;
-      margin-bottom: 16px;
-      color: #9efcff;
-      text-decoration: none;
-      font-weight: 700;
+    .hero-wrap {
+      display:grid;
+      grid-template-columns:1.25fr .95fr;
+      gap:24px;
+      align-items:stretch;
+    }
+
+    .hero-main,
+    .hero-side,
+    .glass {
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.035));
+      border:1px solid rgba(255,255,255,.09);
+      border-radius:32px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .hero-main::after,
+    .hero-side::after,
+    .brand-card::after,
+    .guide::after {
+      content:"";
+      position:absolute;
+      width:180px;
+      height:180px;
+      right:-40px;
+      bottom:-40px;
+      background:radial-gradient(circle, rgba(108,243,255,.18) 0%, rgba(108,243,255,0) 70%);
+      pointer-events:none;
+    }
+
+    .hero-main-content {
+      padding:34px;
+      position:relative;
+      z-index:1;
+    }
+
+    .eyebrow {
+      color:var(--cyan);
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      font-size:.8rem;
+      font-weight:800;
+      margin-bottom:12px;
     }
 
     h1 {
-      margin: 0 0 12px;
-      font-size: 42px;
+      margin:0 0 14px;
+      line-height:.98;
+      font-size:clamp(2.2rem, 5vw, 4.4rem);
+      letter-spacing:-.04em;
     }
 
-    p {
-      color: rgba(255, 255, 255, 0.84);
-      line-height: 1.7;
+    .lead {
+      color:#dce9f7;
+      font-size:1.08rem;
+      line-height:1.7;
+      max-width:760px;
+      margin:0 0 22px;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      margin-top: 24px;
+    .hero-actions {
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-bottom:22px;
     }
 
-    .card {
-      padding: 22px;
-      border-radius: 22px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
-      border: 1px solid rgba(255, 255, 255, 0.08);
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:14px 18px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      font-weight:700;
+      transition:.25s ease;
     }
 
-    .card h3 {
-      margin: 0 0 10px;
+    .btn-primary {
+      background:linear-gradient(135deg, rgba(72,168,255,.28), rgba(108,243,255,.12));
+      box-shadow:0 0 28px rgba(72,168,255,.18);
     }
 
-    @media (max-width: 900px) {
-      .grid { grid-template-columns: 1fr; }
-      h1 { font-size: 30px; }
+    .hero-chips {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .chip {
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      color:#d6e7f8;
+      font-size:.94rem;
+      transition:.25s ease;
+    }
+
+    .hero-side {
+      min-height:100%;
+    }
+
+    .hero-side-content {
+      padding:28px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      height:100%;
+      position:relative;
+      z-index:1;
+    }
+
+    .hero-visual {
+      border-radius:26px;
+      min-height:280px;
+      border:1px solid rgba(255,255,255,.08);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)),
+        url('https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=1200&q=80') center/cover;
+      box-shadow: inset 0 -80px 120px rgba(0,0,0,.38);
+      display:flex;
+      align-items:flex-end;
+      padding:18px;
+    }
+
+    .hero-visual-badge {
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      background:rgba(3,14,24,.72);
+      border:1px solid rgba(255,255,255,.1);
+      backdrop-filter: blur(12px);
+      border-radius:16px;
+      padding:12px 14px;
+      color:#f2f8ff;
+      font-weight:700;
+    }
+
+    .stat-grid {
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:14px;
+    }
+
+    .stat {
+      padding:18px;
+      border-radius:20px;
+      background:rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .stat strong {
+      display:block;
+      font-size:1.25rem;
+      margin-bottom:6px;
+    }
+
+    .stat span { color:var(--muted); font-size:.92rem; line-height:1.5; }
+
+    section { padding:22px 0; }
+
+    .section-head {
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:18px;
+      margin-bottom:18px;
+    }
+
+    .section-head h2 {
+      margin:0;
+      font-size:clamp(1.6rem, 3vw, 2.6rem);
+      letter-spacing:-.03em;
+    }
+
+    .section-head p {
+      margin:8px 0 0;
+      color:var(--muted);
+      line-height:1.7;
+      max-width:760px;
+    }
+
+    .brand-grid {
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:18px;
+    }
+
+    .brand-card {
+      position:relative;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.035));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:26px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+
+    .brand-image {
+      height:220px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .brand-image img {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      transition:transform .45s ease;
+    }
+
+    .brand-card:hover .brand-image img { transform:scale(1.05); }
+
+    .brand-overlay {
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(4,16,28,.06) 0%, rgba(4,16,28,.18) 40%, rgba(4,16,28,.90) 100%);
+    }
+
+    .brand-content {
+      padding:18px;
+      position:relative;
+      z-index:1;
+    }
+
+    .brand-top {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .logo-pill {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
+      font-weight:800;
+      font-size:.9rem;
+    }
+
+    .tag {
+      font-size:.78rem;
+      color:var(--cyan);
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .brand-content h3 {
+      margin:0 0 8px;
+      font-size:1.35rem;
+    }
+
+    .brand-content p {
+      margin:0 0 16px;
+      color:#d8e5f2;
+      line-height:1.65;
+      min-height:80px;
+    }
+
+    .features {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:16px;
+    }
+
+    .features span {
+      padding:8px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      color:#d8e8f7;
+      font-size:.82rem;
+    }
+
+    .card-actions {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .card-link {
+      text-align:center;
+      padding:12px 14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      font-weight:700;
+      transition:.25s ease;
+    }
+
+    .card-link.primary {
+      background:linear-gradient(135deg, rgba(72,168,255,.22), rgba(108,243,255,.12));
+    }
+
+    .guide-grid,
+    .tips-grid,
+    .compare-grid,
+    .news-grid,
+    .faq-grid {
+      display:grid;
+      gap:18px;
+    }
+
+    .guide-grid { grid-template-columns:repeat(3, 1fr); }
+    .tips-grid { grid-template-columns:repeat(4, 1fr); }
+    .compare-grid { grid-template-columns:repeat(3, 1fr); }
+    .news-grid { grid-template-columns:repeat(3, 1fr); }
+    .faq-grid { grid-template-columns:repeat(2, 1fr); }
+
+    .guide,
+    .tip,
+    .compare,
+    .news,
+    .faq {
+      background:linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.035));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:24px;
+      padding:22px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .guide h3,
+    .tip h3,
+    .compare h3,
+    .news h3,
+    .faq h3 { margin:0 0 10px; }
+
+    .guide p,
+    .tip p,
+    .compare p,
+    .news p,
+    .faq p {
+      margin:0;
+      color:var(--muted);
+      line-height:1.7;
+    }
+
+    .compare ul {
+      margin:14px 0 0;
+      padding-left:18px;
+      color:#dce9f7;
+      line-height:1.8;
+    }
+
+    .news .news-image {
+      height:180px;
+      border-radius:18px;
+      overflow:hidden;
+      margin-bottom:14px;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .news .news-image img {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .highlight {
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:18px;
+    }
+
+    .spotlight,
+    .spotlight-side {
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:28px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+
+    .spotlight-cover {
+      min-height:380px;
+      background:
+        linear-gradient(180deg, rgba(3,14,24,.10), rgba(3,14,24,.75)),
+        url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=80') center/cover;
+      display:flex;
+      align-items:flex-end;
+      padding:24px;
+    }
+
+    .spotlight-text h3 {
+      margin:0 0 10px;
+      font-size:2rem;
+    }
+
+    .spotlight-text p {
+      margin:0;
+      color:#deebf8;
+      line-height:1.8;
+      max-width:680px;
+    }
+
+    .spotlight-side {
+      padding:22px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .mini-item {
+      padding:16px;
+      border-radius:20px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .mini-item strong {
+      display:block;
+      margin-bottom:8px;
+      font-size:1.05rem;
+    }
+
+    .mini-item span { color:var(--muted); line-height:1.65; display:block; }
+
+    .footer {
+      padding:28px 0 60px;
+      color:var(--muted);
+    }
+
+    .footer-box {
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);
+      border-radius:24px;
+      padding:24px;
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+
+    .footer strong { color:var(--text); }
+
+    @media (max-width: 1100px) {
+      .hero-wrap,
+      .highlight,
+      .guide-grid,
+      .tips-grid,
+      .compare-grid,
+      .news-grid,
+      .faq-grid,
+      .brand-grid {
+        grid-template-columns:repeat(2, 1fr);
+      }
+
+      .hero-wrap,
+      .highlight {
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 780px) {
+      .container { width:min(100% - 18px, 1280px); }
+      .topbar-inner { flex-direction:column; align-items:flex-start; }
+      .nav { overflow:auto; width:100%; padding-bottom:6px; }
+      .brand-grid,
+      .guide-grid,
+      .tips-grid,
+      .compare-grid,
+      .news-grid,
+      .faq-grid,
+      .stat-grid,
+      .card-actions {
+        grid-template-columns:1fr;
+      }
+      .hero-main-content,
+      .hero-side-content { padding:22px; }
+      h1 { font-size:2.5rem; }
+      .lead { font-size:1rem; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-badge">⌚</span>
+        <span>SNG Portal • Montres connectées</span>
+      </a>
+      <nav class="nav">
+        <a href="#marques">Marques</a>
+        <a href="#guides">Guides</a>
+        <a href="#comparatif">Comparatif</a>
+        <a href="#tendances">Tendances</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
     <section class="hero">
-      <a class="back" href="tech-hub.html">← Retour Tech Hub</a>
-      <h1>⌚ Montres connectées</h1>
-      <p>
-        Découvre les meilleures montres connectées, les nouveautés du marché,
-        les usages santé, sport, notifications, autonomie et style premium.
-      </p>
+      <div class="container hero-wrap">
+        <div class="hero-main">
+          <div class="hero-main-content">
+            <div class="eyebrow">Tech Hub • SNG Portal</div>
+            <h1>Montres connectées<br>bien détaillées, belles et complètes</h1>
+            <p class="lead">
+              Une page premium avec images, comparatifs, accès direct aux sites officiels, idées d’achat,
+              nouveautés santé, sport, autonomie, design, notifications et modèles à suivre.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#marques">Explorer les marques</a>
+              <a class="btn" href="index.html">← Retour Tech Hub</a>
+            </div>
+            <div class="hero-chips">
+              <span class="chip">Apple Watch</span>
+              <span class="chip">Galaxy Watch</span>
+              <span class="chip">Garmin</span>
+              <span class="chip">Huawei</span>
+              <span class="chip">Fitbit</span>
+              <span class="chip">Amazfit</span>
+              <span class="chip">Polar</span>
+              <span class="chip">Withings</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero-side">
+          <div class="hero-side-content">
+            <div class="hero-visual">
+              <div class="hero-visual-badge">⚡ Design premium • Santé • Sport • Productivité</div>
+            </div>
+            <div class="stat-grid">
+              <div class="stat">
+                <strong>8+ marques</strong>
+                <span>Les grandes références du marché réunies dans une seule page.</span>
+              </div>
+              <div class="stat">
+                <strong>Liens directs</strong>
+                <span>Accès rapide aux sites officiels et pages produit.</span>
+              </div>
+              <div class="stat">
+                <strong>Page premium</strong>
+                <span>Images, sections, conseils, comparatifs et rendu moderne.</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
     </section>
 
-    <section class="grid">
-      <div class="card">
-        <h3>Apple Watch</h3>
-        <p>Style premium, santé, sport et intégration iPhone.</p>
-      </div>
-      <div class="card">
-        <h3>Galaxy Watch</h3>
-        <p>Très bon choix Android avec suivi quotidien complet.</p>
-      </div>
-      <div class="card">
-        <h3>Garmin</h3>
-        <p>Parfait pour sport, autonomie et suivi avancé.</p>
+    <section id="marques">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Top marques</div>
+            <h2>Découvre les meilleures montres</h2>
+            <p>Chaque carte contient une image, une description claire, des points forts et des boutons pour visiter le site officiel ou voir les modèles.</p>
+          </div>
+        </div>
+
+        <div class="brand-grid">
+          <article class="brand-card">
+            <div class="brand-image">
+              <img src="https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?auto=format&fit=crop&w=900&q=80" alt="Apple Watch premium" />
+              <div class="brand-overlay"></div>
+            </div>
+            <div class="brand-content">
+              <div class="brand-top">
+                <span class="logo-pill">🍎 Apple</span>
+                <span class="tag">iPhone</span>
+              </div>
+              <h3>Apple Watch</h3>
+              <p>Parfaite pour l’écosystème Apple, le suivi santé, le design premium, les notifications fluides et le sport au quotidien.</p>
+              <div class="features">
+                <span>ECG</span><span>Notifications</span><span>Fitness</span><span>Design premium</span>
+              </div>
+              <div class="card-actions">
+                <a class="card-link primary" href="https://www.apple.com/fr/watch/" target="_blank" rel="noopener noreferrer">Site officiel</a>
+                <a class="card-link" href="https://www.apple.com/fr/watch/compare/" target="_blank" rel="noopener noreferrer">Comparer</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="brand-card">
+            <div class="brand-image">
+              <img src="https://images.unsplash.com/photo-1617043786394-f977fa12eddf?auto=format&fit=crop&w=900&q=80" alt="Galaxy Watch moderne" />
+              <div class="brand-overlay"></div>
+            </div>
+            <div class="brand-content">
+              <div class="brand-top">
+                <span class="logo-pill">📱 Samsung</span>
+                <span class="tag">Android</span>
+              </div>
+              <h3>Galaxy Watch</h3>
+              <p>Très bon choix pour Android avec écran élégant, suivi de santé, assistant intelligent, autonomie correcte et style moderne.</p>
+              <div class="features">
+                <span>Wear OS</span><span>Santé</span><span>Appels</span><span>Sport</span>
+              </div>
+              <div class="card-actions">
+                <a class="card-link primary" href="https://www.samsung.com/fr/watches/" target="_blank" rel="noopener noreferrer">Site officiel</a>
+                <a class="card-link" href="https://www.samsung.com/fr/watches/all-watches/" target="_blank" rel="noopener noreferrer">Modèles</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="brand-card">
+            <div class="brand-image">
+              <img src="https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?auto=format&fit=crop&w=900&q=80" alt="Montre Garmin sport" />
+              <div class="brand-overlay"></div>
+            </div>
+            <div class="brand-content">
+              <div class="brand-top">
+                <span class="logo-pill">🏃 Garmin</span>
+                <span class="tag">Sport</span>
+              </div>
+              <h3>Garmin</h3>
+              <p>Excellente pour le running, la randonnée, le vélo, le GPS précis, l’autonomie solide et les données sportives avancées.</p>
+              <div class="features">
+                <span>GPS</span><span>Autonomie</span><span>Trail</span><span>Performance</span>
+              </div>
+              <div class="card-actions">
+                <a class="card-link primary" href="https://www.garmin.com/fr-FR/c/wearables-smartwatches/" target="_blank" rel="noopener noreferrer">Site officiel</a>
+                <a class="card-link" href="https://www.garmin.com/fr-FR/" target="_blank" rel="noopener noreferrer">Voir plus</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="brand-card">
+            <div class="brand-image">
+              <img src="https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?auto=format&fit=crop&w=900&q=80" alt="Montre Huawei élégante" />
+              <div class="brand-overlay"></div>
+            </div>
+            <div class="brand-content">
+              <div class="brand-top">
+                <span class="logo-pill">✨ Huawei</span>
+                <span class="tag">Style</span>
+              </div>
+              <h3>Huawei Watch</h3>
+              <p>Connue pour son très beau design, sa bonne autonomie, son confort au poignet et son approche élégante pour le quotidien.</p>
+              <div class="features">
+                <span>Autonomie</span><span>AMOLED</span><span>Élégance</span><span>Santé</span>
+              </div>
+              <div class="card-actions">
+                <a class="card-link primary" href="https://consumer.huawei.com/fr/wearables/" target="_blank" rel="noopener noreferrer">Site officiel</a>
+                <a class="card-link" href="https://consumer.huawei.com/fr/wearables/watch/" target="_blank" rel="noopener noreferrer">Collection</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="brand-card">
+            <div class="brand-image">
+              <img src="https://images.unsplash.com/photo-1544117519-31a4b719223d?auto=format&fit=crop&w=900&q=80" alt="Fitbit fitness lifestyle" />
+              <div class="brand-overlay"></div>
+            </div>
+            <div class="brand-content">
+              <div class="brand-top">
+                <span class="logo-pill">💓 Fitbit</span>
+                <span class="tag">Fitness</span>
+              </div>
+              <h3>Fitbit</h3>
+              <p>Idéale pour le suivi d’activité, le sommeil, la forme générale, les objectifs personnels et une utilisation simple au quotidien.</p>
+              <div class="features">
+                <span>Sommeil</span><span>Activité</span><span>Bien-être</span><span>Débutant</span>
+              </div>
+              <div class="card-actions">
+                <a class="card-link primary" href="https://www.fitbit.com/global/fr/home" target="_blank" rel="noopener noreferrer">Site officiel</a>
+                <a class="card-link" href="https://www.fitbit.com/global/fr/products" target="_blank" rel="noopener noreferrer">Produits</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="brand-card">
+            <div class="brand-image">
+              <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80" alt="Montre Amazfit tendance" />
+              <div class="brand-overlay"></div>
+            </div>
+            <div class="brand-content">
+              <div class="brand-top">
+                <span class="logo-pill">🔥 Amazfit</span>
+                <span class="tag">Bon plan</span>
+              </div>
+              <h3>Amazfit</h3>
+              <p>Très intéressant pour ceux qui veulent beaucoup de fonctions, une bonne batterie et un prix souvent plus accessible.</p>
+              <div class="features">
+                <span>Prix malin</span><span>Autonomie</span><span>Design</span><span>Usage mixte</span>
+              </div>
+              <div class="card-actions">
+                <a class="card-link primary" href="https://www.amazfit.com/" target="_blank" rel="noopener noreferrer">Site officiel</a>
+                <a class="card-link" href="https://www.amazfit.com/collections/smart-watch" target="_blank" rel="noopener noreferrer">Collection</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="brand-card">
+            <div class="brand-image">
+              <img src="https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=900&q=80" alt="Montre Polar entraînement" />
+              <div class="brand-overlay"></div>
+            </div>
+            <div class="brand-content">
+              <div class="brand-top">
+                <span class="logo-pill">❄️ Polar</span>
+                <span class="tag">Training</span>
+              </div>
+              <h3>Polar</h3>
+              <p>Très appréciée pour l’entraînement, la récupération, le cardio, les programmes sportifs et l’analyse sérieuse des performances.</p>
+              <div class="features">
+                <span>Cardio</span><span>Récupération</span><span>Sport</span><span>Coaching</span>
+              </div>
+              <div class="card-actions">
+                <a class="card-link primary" href="https://www.polar.com/fr" target="_blank" rel="noopener noreferrer">Site officiel</a>
+                <a class="card-link" href="https://www.polar.com/fr/products/sport" target="_blank" rel="noopener noreferrer">Modèles</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="brand-card">
+            <div class="brand-image">
+              <img src="https://images.unsplash.com/photo-1579586337278-3f436f25d4d6?auto=format&fit=crop&w=900&q=80" alt="Montre Withings santé" />
+              <div class="brand-overlay"></div>
+            </div>
+            <div class="brand-content">
+              <div class="brand-top">
+                <span class="logo-pill">🩺 Withings</span>
+                <span class="tag">Santé</span>
+              </div>
+              <h3>Withings</h3>
+              <p>Une approche santé élégante, plus discrète, avec un look premium et un vrai focus sur les données du bien-être.</p>
+              <div class="features">
+                <span>Santé</span><span>Design sobre</span><span>Poids</span><span>Bien-être</span>
+              </div>
+              <div class="card-actions">
+                <a class="card-link primary" href="https://www.withings.com/fr/fr/watches" target="_blank" rel="noopener noreferrer">Site officiel</a>
+                <a class="card-link" href="https://www.withings.com/fr/fr/" target="_blank" rel="noopener noreferrer">Voir plus</a>
+              </div>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
-  </div>
+
+    <section>
+      <div class="container highlight">
+        <div class="spotlight">
+          <div class="spotlight-cover">
+            <div class="spotlight-text">
+              <div class="eyebrow">Sélection premium</div>
+              <h3>Une vitrine moderne pour rendre la page beaucoup plus belle</h3>
+              <p>
+                Ici tu peux mettre en avant la montre du moment, une promo, un comparatif spécial ou un produit affilié.
+                Cette grande bannière donne tout de suite un effet haut de gamme à ta page.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="spotlight-side">
+          <div class="mini-item">
+            <strong>💡 Astuce visuelle</strong>
+            <span>Tu peux remplacer les images Unsplash par tes propres visuels produit pour un rendu encore plus pro.</span>
+          </div>
+          <div class="mini-item">
+            <strong>💸 Monétisation</strong>
+            <span>Ajoute un bouton “Acheter maintenant” avec ton lien affilié Amazon, Awin, Cdiscount ou autre plateforme.</span>
+          </div>
+          <div class="mini-item">
+            <strong>🚀 Effet premium</strong>
+            <span>Le fond sombre, les halos lumineux, les cartes glassmorphism et les gros titres donnent le style que tu veux.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="guides">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Guides rapides</div>
+            <h2>Choisir selon ton besoin</h2>
+            <p>Ajoute des sections utiles pour que la page soit riche, plus crédible et donne envie de rester dessus.</p>
+          </div>
+        </div>
+
+        <div class="guide-grid">
+          <article class="guide">
+            <h3>🏆 Pour le premium</h3>
+            <p>Apple Watch et Huawei Watch sont idéales si tu veux surtout le style, le confort, un bel écran et une interface soignée.</p>
+          </article>
+          <article class="guide">
+            <h3>🏃 Pour le sport</h3>
+            <p>Garmin et Polar sont parfaites pour les entraînements sérieux, la récupération, le GPS et les statistiques plus poussées.</p>
+          </article>
+          <article class="guide">
+            <h3>💰 Pour le budget malin</h3>
+            <p>Amazfit et certains modèles Fitbit peuvent donner une très bonne expérience sans monter trop haut en prix.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Plus de contenu</div>
+            <h2>Des blocs qui remplissent bien la page</h2>
+            <p>Comme tu voulais un truc avec plein de choses, voici plusieurs blocs visuels pour rendre la page bien complète.</p>
+          </div>
+        </div>
+
+        <div class="tips-grid">
+          <article class="tip"><h3>🔋 Autonomie</h3><p>Compare la batterie avant d’acheter. Certains modèles tiennent plusieurs jours, d’autres demandent plus de recharge.</p></article>
+          <article class="tip"><h3>❤️ Santé</h3><p>Regarde les fonctions cardio, sommeil, stress, oxygène sanguin, ECG et suivi de forme si c’est important pour toi.</p></article>
+          <article class="tip"><h3>📲 Compatibilité</h3><p>Vérifie si la montre fonctionne mieux avec iPhone, Android ou une marque précise avant de faire ton choix.</p></article>
+          <article class="tip"><h3>🎯 Usage réel</h3><p>Mode, sport, notifications, appels, travail, randonnée: choisis la montre selon ton vrai besoin quotidien.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="comparatif">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Comparatif</div>
+            <h2>Les grands profils de montres</h2>
+            <p>Ce bloc donne tout de suite une impression de site riche, utile et bien construit.</p>
+          </div>
+        </div>
+
+        <div class="compare-grid">
+          <article class="compare">
+            <h3>Apple / Samsung</h3>
+            <p>Le bon choix pour les utilisateurs qui veulent une montre connectée très moderne, pratique et bien intégrée au smartphone.</p>
+            <ul>
+              <li>Interface fluide</li>
+              <li>Notifications et appels</li>
+              <li>Très bon look premium</li>
+            </ul>
+          </article>
+          <article class="compare">
+            <h3>Garmin / Polar</h3>
+            <p>Le meilleur pour l’effort, l’analyse sportive, le suivi d’entraînement, le cardio et l’autonomie plus sérieuse.</p>
+            <ul>
+              <li>Sport et performance</li>
+              <li>GPS plus poussé</li>
+              <li>Données détaillées</li>
+            </ul>
+          </article>
+          <article class="compare">
+            <h3>Huawei / Amazfit / Fitbit</h3>
+            <p>Un bon équilibre pour ceux qui veulent du style, des fonctions utiles et parfois un prix plus accessible.</p>
+            <ul>
+              <li>Bon rapport style/prix</li>
+              <li>Suivi bien-être</li>
+              <li>Utilisation simple</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="tendances">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Tendances & idées</div>
+            <h2>Des cartes style magazine pour enrichir encore la page</h2>
+            <p>Tu peux mettre actualités, tops, guides d’achat, promos, articles sponsorisés ou contenus affiliés.</p>
+          </div>
+        </div>
+
+        <div class="news-grid">
+          <article class="news">
+            <div class="news-image"><img src="https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=1000&q=80" alt="Top montres pour le sport" /></div>
+            <h3>Top montres pour le sport</h3>
+            <p>Une section parfaite pour présenter les meilleurs modèles running, fitness, trail, vélo ou entraînement intensif.</p>
+          </article>
+          <article class="news">
+            <div class="news-image"><img src="https://images.unsplash.com/photo-1511735111819-9a3f7709049c?auto=format&fit=crop&w=1000&q=80" alt="Montres élégantes et premium" /></div>
+            <h3>Montres élégantes et premium</h3>
+            <p>Idéal pour un top visuel des modèles les plus classes, pour le bureau, les sorties et un look moderne.</p>
+          </article>
+          <article class="news">
+            <div class="news-image"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1000&q=80" alt="Guides d'achat et bons plans" /></div>
+            <h3>Bons plans et idées d’achat</h3>
+            <p>Ajoute ici tes sélections, tes liens d’affiliation et tes recommandations du moment pour gagner de l’argent.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">FAQ</div>
+            <h2>Questions fréquentes</h2>
+            <p>Ça ajoute du texte utile, du contenu SEO et ça donne un site plus sérieux.</p>
+          </div>
+        </div>
+
+        <div class="faq-grid">
+          <article class="faq">
+            <h3>Quelle montre pour iPhone ?</h3>
+            <p>L’Apple Watch reste la plus naturelle si tu veux une intégration très fluide avec l’iPhone.</p>
+          </article>
+          <article class="faq">
+            <h3>Quelle montre pour Android ?</h3>
+            <p>Galaxy Watch, Huawei Watch et plusieurs modèles Amazfit peuvent être très intéressants selon ton budget.</p>
+          </article>
+          <article class="faq">
+            <h3>Quelle montre pour le sport ?</h3>
+            <p>Garmin et Polar sont souvent les plus fortes pour le GPS, l’entraînement, l’endurance et les données sportives.</p>
+          </article>
+          <article class="faq">
+            <h3>Peut-on monétiser cette page ?</h3>
+            <p>Oui. Tu peux ajouter des liens affiliés, des boutons sponsorisés, des comparatifs et même une bannière pub.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-box">
+        <div>
+          <strong>SNG Portal • Montres connectées</strong><br>
+          Une page stylée, riche et prête à être reliée à ton portail principal.
+        </div>
+        <div>
+          Astuce : remplace les liens officiels par tes liens affiliés si tu veux monétiser.
+        </div>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
