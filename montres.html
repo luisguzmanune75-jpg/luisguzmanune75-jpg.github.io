@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Montres connectées | SNG Portal</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #fff;
+      background:
+        radial-gradient(circle at top left, rgba(255, 170, 0, 0.08), transparent 20%),
+        radial-gradient(circle at top right, rgba(0, 255, 255, 0.10), transparent 25%),
+        linear-gradient(135deg, #07111c 0%, #081521 45%, #031b24 100%);
+    }
+
+    .wrap {
+      width: min(1200px, calc(100% - 24px));
+      margin: 30px auto;
+    }
+
+    .hero {
+      border-radius: 28px;
+      padding: 40px 28px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
+    }
+
+    .back {
+      display: inline-block;
+      margin-bottom: 16px;
+      color: #9efcff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 42px;
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.84);
+      line-height: 1.7;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .card {
+      padding: 22px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      h1 { font-size: 30px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <a class="back" href="tech-hub.html">← Retour Tech Hub</a>
+      <h1>⌚ Montres connectées</h1>
+      <p>
+        Découvre les meilleures montres connectées, les nouveautés du marché,
+        les usages santé, sport, notifications, autonomie et style premium.
+      </p>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h3>Apple Watch</h3>
+        <p>Style premium, santé, sport et intégration iPhone.</p>
+      </div>
+      <div class="card">
+        <h3>Galaxy Watch</h3>
+        <p>Très bon choix Android avec suivi quotidien complet.</p>
+      </div>
+      <div class="card">
+        <h3>Garmin</h3>
+        <p>Parfait pour sport, autonomie et suivi avancé.</p>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
