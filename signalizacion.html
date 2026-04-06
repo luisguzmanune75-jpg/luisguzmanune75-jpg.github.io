@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Señalización vial RD - paneles de tránsito y su significado en español | SNG Portal" />
+  <title>Señalización RD | SNG Portal</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --bg1:#03142a;
+      --bg2:#072a4a;
+      --bg3:#0a1830;
+      --card:rgba(255,255,255,.08);
+      --card2:rgba(255,255,255,.11);
+      --line:rgba(255,255,255,.14);
+      --text:#ffffff;
+      --soft:rgba(255,255,255,.78);
+      --blue:#6fc7ff;
+      --red:#ff4d5a;
+      --yellow:#ffd34d;
+      --green:#38d39f;
+      --shadow:0 16px 40px rgba(0,0,0,.28);
+      --radius:22px;
+    }
+
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255,0,90,.18), transparent 25%),
+        linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+      min-height:100vh;
+      padding:28px;
+    }
+
+    .container{
+      max-width:1280px;
+      margin:auto;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:22px;
+    }
+
+    .back-btn, .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      color:#fff;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.08);
+      border-radius:999px;
+      padding:12px 18px;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius:30px;
+      padding:34px;
+      box-shadow:var(--shadow);
+      margin-bottom:26px;
+    }
+
+    .hero h1{
+      font-size:clamp(2rem, 5vw, 4rem);
+      line-height:1.02;
+      margin-bottom:14px;
+      max-width:900px;
+    }
+
+    .hero h1 .accent{
+      color:var(--blue);
+    }
+
+    .hero p{
+      color:var(--soft);
+      font-size:1.05rem;
+      line-height:1.7;
+      max-width:860px;
+      margin-bottom:24px;
+    }
+
+    .toolbar{
+      display:grid;
+      grid-template-columns:1.2fr .9fr;
+      gap:14px;
+      margin-bottom:26px;
+    }
+
+    .search-box, .select-box{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px 16px;
+      box-shadow:var(--shadow);
+    }
+
+    .search-box input,
+    .select-box select{
+      width:100%;
+      background:transparent;
+      border:none;
+      outline:none;
+      color:#fff;
+      font-size:1rem;
+    }
+
+    .search-box input::placeholder{
+      color:rgba(255,255,255,.58);
+    }
+
+    .stats{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:20px;
+    }
+
+    .stat{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px 16px;
+      color:var(--soft);
+    }
+
+    .section-title{
+      margin:30px 0 16px;
+      font-size:1.35rem;
+      color:var(--blue);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+      gap:18px;
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.06));
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:20px;
+      box-shadow:var(--shadow);
+      transition:transform .25s ease, background .25s ease, border-color .25s ease;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .card:hover{
+      transform:translateY(-6px);
+      background:var(--card2);
+      border-color:rgba(255,255,255,.22);
+    }
+
+    .signal-wrap{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+
+    .signal-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:78px;
+      width:78px;
+      height:78px;
+      border-radius:20px;
+      font-size:2rem;
+      font-weight:bold;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+    }
+
+    .type-danger{ background:rgba(255,211,77,.13); }
+    .type-priority{ background:rgba(255,77,90,.14); }
+    .type-prohibition{ background:rgba(255,77,90,.14); }
+    .type-obligation{ background:rgba(111,199,255,.14); }
+    .type-information{ background:rgba(56,211,159,.14); }
+    .type-marks{ background:rgba(255,255,255,.10); }
+
+    .mini-tag{
+      font-size:.78rem;
+      color:#fff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:7px 10px;
+      background:rgba(255,255,255,.06);
+      white-space:nowrap;
+    }
+
+    .card h3{
+      font-size:1.08rem;
+      line-height:1.3;
+    }
+
+    .card p{
+      color:var(--soft);
+      line-height:1.6;
+      font-size:.95rem;
+    }
+
+    .meaning{
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:12px;
+      color:#fff;
+      font-size:.92rem;
+      line-height:1.55;
+    }
+
+    .meaning strong{
+      color:var(--blue);
+    }
+
+    .empty{
+      display:none;
+      margin-top:10px;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      color:var(--soft);
+    }
+
+    .footer-note{
+      margin-top:28px;
+      color:rgba(255,255,255,.65);
+      line-height:1.7;
+      font-size:.94rem;
+    }
+
+    @media (max-width:820px){
+      .toolbar{
+        grid-template-columns:1fr;
+      }
+
+      body{
+        padding:16px;
+      }
+
+      .hero{
+        padding:22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="topbar">
+      <a href="index.html" class="back-btn">← Volver al portal</a>
+      <div class="pill">🇩🇴 República Dominicana · Señalización vial</div>
+    </div>
+
+    <section class="hero">
+      <h1>Aprende <span class="accent">todos los paneles</span> de señalización RD</h1>
+      <p>
+        Consulta señales de prioridad, peligro, prohibición, obligación, información y marcas viales.
+        Cada panel incluye su significado en español con una presentación clara, moderna y fácil de estudiar.
+      </p>
+
+      <div class="toolbar">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Buscar: stop, ceda el paso, peatones, velocidad, estacionar..." />
+        </div>
+
+        <div class="select-box">
+          <select id="categoryFilter">
+            <option value="all">Todas las categorías</option>
+            <option value="Prioridad">Prioridad</option>
+            <option value="Peligro">Peligro</option>
+            <option value="Prohibición">Prohibición</option>
+            <option value="Obligación">Obligación</option>
+            <option value="Información">Información</option>
+            <option value="Marcas viales">Marcas viales</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">📚 Catálogo visual de señales</div>
+        <div class="stat">🔎 Búsqueda en tiempo real</div>
+        <div class="stat">🧠 Ideal para estudiar el examen</div>
+      </div>
+    </section>
+
+    <h2 class="section-title">Paneles de tránsito</h2>
+    <div id="signalsGrid" class="grid"></div>
+    <div id="emptyState" class="empty">No se encontraron señales con esa búsqueda.</div>
+
+    <p class="footer-note">
+      Consejo: esta página está pensada para estudiar rápido. Si quieres, puedes después añadir
+      imágenes reales oficiales de cada señal reemplazando los iconos por archivos PNG o SVG.
+    </p>
+
+  </div>
+
+  <script>
+    const signals = [
+      // PRIORIDAD
+      {
+        category: "Prioridad",
+        icon: "🛑",
+        title: "Pare / Stop",
+        sign: "Detención obligatoria",
+        meaning: "Obliga a detener completamente el vehículo antes de continuar."
+      },
+      {
+        category: "Prioridad",
+        icon: "🔻",
+        title: "Ceda el paso",
+        sign: "Prioridad ajena",
+        meaning: "Debes reducir la velocidad y dejar pasar a los vehículos que tienen prioridad."
+      },
+      {
+        category: "Prioridad",
+        icon: "⬆️",
+        title: "Vía con prioridad",
+        sign: "Prioridad de paso",
+        meaning: "Indica que circulas por una vía con prioridad en la intersección."
+      },
+      {
+        category: "Prioridad",
+        icon: "⚠️",
+        title: "Fin de prioridad",
+        sign: "Termina la preferencia",
+        meaning: "Tu vía deja de tener prioridad y debes extremar la atención en los cruces."
+      },
+      {
+        category: "Prioridad",
+        icon: "↔️",
+        title: "Prioridad en sentido contrario",
+        sign: "Ceder a vehículos de frente",
+        meaning: "Debes dejar pasar a los vehículos que vienen en el sentido opuesto."
+      },
+      {
+        category: "Prioridad",
+        icon: "➡️",
+        title: "Tienes prioridad frente al sentido contrario",
+        sign: "Paso preferente",
+        meaning: "Tu carril tiene prioridad sobre el vehículo que viene de frente en un paso estrecho."
+      },
+
+      // PELIGRO
+      {
+        category: "Peligro",
+        icon: "⚠️",
+        title: "Curva peligrosa a la derecha",
+        sign: "Curva cerrada",
+        meaning: "Advierte una curva pronunciada hacia la derecha."
+      },
+      {
+        category: "Peligro",
+        icon: "⚠️",
+        title: "Curva peligrosa a la izquierda",
+        sign: "Curva cerrada",
+        meaning: "Advierte una curva pronunciada hacia la izquierda."
+      },
+      {
+        category: "Peligro",
+        icon: "↩️",
+        title: "Doble curva",
+        sign: "Curvas sucesivas",
+        meaning: "Indica dos curvas consecutivas; reduce la velocidad."
+      },
+      {
+        category: "Peligro",
+        icon: "⛰️",
+        title: "Pendiente pronunciada de subida",
+        sign: "Subida fuerte",
+        meaning: "Avisa una cuesta de ascenso pronunciado."
+      },
+      {
+        category: "Peligro",
+        icon: "⛰️",
+        title: "Pendiente pronunciada de bajada",
+        sign: "Bajada fuerte",
+        meaning: "Avisa una cuesta peligrosa de descenso."
+      },
+      {
+        category: "Peligro",
+        icon: "🛣️",
+        title: "Calzada estrecha",
+        sign: "Vía reducida",
+        meaning: "La vía se estrecha; conduce con precaución."
+      },
+      {
+        category: "Peligro",
+        icon: "🚧",
+        title: "Obras en la vía",
+        sign: "Trabajos en carretera",
+        meaning: "Hay construcción o mantenimiento en la vía."
+      },
+      {
+        category: "Peligro",
+        icon: "🚦",
+        title: "Semáforo próximo",
+        sign: "Atención a semáforo",
+        meaning: "Indica la cercanía de una intersección regulada por semáforo."
+      },
+      {
+        category: "Peligro",
+        icon: "🚸",
+        title: "Zona escolar",
+        sign: "Cruce de niños",
+        meaning: "Pueden cruzar estudiantes o niños; baja la velocidad."
+      },
+      {
+        category: "Peligro",
+        icon: "🚶",
+        title: "Paso de peatones",
+        sign: "Cruce peatonal",
+        meaning: "Indica un lugar donde pueden cruzar peatones."
+      },
+      {
+        category: "Peligro",
+        icon: "🚲",
+        title: "Cruce de ciclistas",
+        sign: "Atención bicicletas",
+        meaning: "Puede haber circulación o cruce de bicicletas."
+      },
+      {
+        category: "Peligro",
+        icon: "🚜",
+        title: "Maquinaria agrícola",
+        sign: "Vehículos lentos",
+        meaning: "Zona donde pueden circular tractores o vehículos agrícolas."
+      },
+      {
+        category: "Peligro",
+        icon: "🐄",
+        title: "Paso de animales",
+        sign: "Cruce de ganado o animales",
+        meaning: "Existe riesgo de animales cruzando la carretera."
+      },
+      {
+        category: "Peligro",
+        icon: "🪨",
+        title: "Desprendimiento de rocas",
+        sign: "Caída de piedras",
+        meaning: "Puede haber caída de piedras desde una pendiente cercana."
+      },
+      {
+        category: "Peligro",
+        icon: "🌧️",
+        title: "Pavimento resbaladizo",
+        sign: "Superficie peligrosa",
+        meaning: "La calzada puede perder adherencia, especialmente con lluvia."
+      },
+      {
+        category: "Peligro",
+        icon: "🌉",
+        title: "Puente angosto",
+        sign: "Paso estrecho",
+        meaning: "La vía pasa por un puente con ancho reducido."
+      },
+      {
+        category: "Peligro",
+        icon: "🚂",
+        title: "Paso a nivel ferroviario",
+        sign: "Cruce con tren",
+        meaning: "Advierte un cruce ferroviario próximo."
+      },
+      {
+        category: "Peligro",
+        icon: "⭕",
+        title: "Glorieta próxima",
+        sign: "Rotonda adelante",
+        meaning: "Indica la cercanía de una rotonda o glorieta."
+      },
+      {
+        category: "Peligro",
+        icon: "✈️",
+        title: "Zona de aeropuerto",
+        sign: "Baja altura de aeronaves",
+        meaning: "Puede haber paso de aeronaves a baja altura cerca de la vía."
+      },
+
+      // PROHIBICIÓN
+      {
+        category: "Prohibición",
+        icon: "⛔",
+        title: "Entrada prohibida",
+        sign: "No entrar",
+        meaning: "Prohíbe el acceso a esa vía o carril."
+      },
+      {
+        category: "Prohibición",
+        icon: "🚫",
+        title: "Circulación prohibida",
+        sign: "Prohibido el paso",
+        meaning: "No se permite circular por la vía o sector indicado."
+      },
+      {
+        category: "Prohibición",
+        icon: "↩️",
+        title: "Prohibido girar a la izquierda",
+        sign: "Giro no permitido",
+        meaning: "No puedes girar a la izquierda en ese punto."
+      },
+      {
+        category: "Prohibición",
+        icon: "↪️",
+        title: "Prohibido girar a la derecha",
+        sign: "Giro no permitido",
+        meaning: "No puedes girar a la derecha en ese punto."
+      },
+      {
+        category: "Prohibición",
+        icon: "🔄",
+        title: "Prohibido retorno",
+        sign: "No dar vuelta en U",
+        meaning: "No se permite hacer retorno o giro en U."
+      },
+      {
+        category: "Prohibición",
+        icon: "🚷",
+        title: "Prohibido peatones",
+        sign: "Sin paso peatonal",
+        meaning: "Los peatones no pueden circular por esa zona."
+      },
+      {
+        category: "Prohibición",
+        icon: "🚳",
+        title: "Prohibido bicicletas",
+        sign: "Sin bicicletas",
+        meaning: "No está permitido el paso de bicicletas."
+      },
+      {
+        category: "Prohibición",
+        icon: "🏍️",
+        title: "Prohibido motocicletas",
+        sign: "Sin motos",
+        meaning: "No se permite la circulación de motocicletas."
+      },
+      {
+        category: "Prohibición",
+        icon: "🚛",
+        title: "Prohibido camiones",
+        sign: "Restricción a pesados",
+        meaning: "Los camiones o vehículos pesados no pueden entrar."
+      },
+      {
+        category: "Prohibición",
+        icon: "🚍",
+        title: "Prohibido autobuses",
+        sign: "Restricción de buses",
+        meaning: "Los autobuses no pueden circular en esa vía."
+      },
+      {
+        category: "Prohibición",
+        icon: "⚖️",
+        title: "Límite de peso",
+        sign: "Peso máximo autorizado",
+        meaning: "Prohíbe el paso de vehículos que superen el peso indicado."
+      },
+      {
+        category: "Prohibición",
+        icon: "📏",
+        title: "Límite de altura",
+        sign: "Altura máxima",
+        meaning: "Prohíbe el paso a vehículos más altos que la medida indicada."
+      },
+      {
+        category: "Prohibición",
+        icon: "↔️",
+        title: "Límite de anchura",
+        sign: "Anchura máxima",
+        meaning: "Prohíbe el paso a vehículos con ancho superior al indicado."
+      },
+      {
+        category: "Prohibición",
+        icon: "📐",
+        title: "Límite de longitud",
+        sign: "Longitud máxima",
+        meaning: "Prohíbe el paso a vehículos o combinaciones más largas que la medida indicada."
+      },
+      {
+        category: "Prohibición",
+        icon: "50",
+        title: "Velocidad máxima",
+        sign: "Límite de velocidad",
+        meaning: "Indica la velocidad máxima permitida en la vía."
+      },
+      {
+        category: "Prohibición",
+        icon: "🚘",
+        title: "Prohibido adelantar",
+        sign: "No rebasar",
+        meaning: "No está permitido adelantar a otros vehículos."
+      },
+      {
+        category: "Prohibición",
+        icon: "🅿️❌",
+        title: "Prohibido estacionar",
+        sign: "No estacionar",
+        meaning: "No puedes dejar el vehículo estacionado en ese lugar."
+      },
+      {
+        category: "Prohibición",
+        icon: "⛔🕒",
+        title: "Prohibido parar y estacionar",
+        sign: "Detención restringida",
+        meaning: "No puedes detenerte ni estacionarte."
+      },
+      {
+        category: "Prohibición",
+        icon: "📵",
+        title: "Uso de celular prohibido",
+        sign: "Restricción durante conducción",
+        meaning: "Recuerda que no debes usar el teléfono al conducir."
+      },
+
+      // OBLIGACIÓN
+      {
+        category: "Obligación",
+        icon: "➡️",
+        title: "Dirección obligatoria a la derecha",
+        sign: "Debe seguir a la derecha",
+        meaning: "Estás obligado a girar o continuar hacia la derecha."
+      },
+      {
+        category: "Obligación",
+        icon: "⬅️",
+        title: "Dirección obligatoria a la izquierda",
+        sign: "Debe seguir a la izquierda",
+        meaning: "Estás obligado a girar o continuar hacia la izquierda."
+      },
+      {
+        category: "Obligación",
+        icon: "⬆️",
+        title: "Siga recto",
+        sign: "Dirección obligatoria",
+        meaning: "Debes seguir en línea recta."
+      },
+      {
+        category: "Obligación",
+        icon: "↗️",
+        title: "Recto o derecha",
+        sign: "Opciones permitidas",
+        meaning: "Solo puedes seguir recto o girar a la derecha."
+      },
+      {
+        category: "Obligación",
+        icon: "↖️",
+        title: "Recto o izquierda",
+        sign: "Opciones permitidas",
+        meaning: "Solo puedes seguir recto o girar a la izquierda."
+      },
+      {
+        category: "Obligación",
+        icon: "🔄",
+        title: "Glorieta obligatoria",
+        sign: "Circulación giratoria",
+        meaning: "Debes circular en el sentido indicado por la rotonda."
+      },
+      {
+        category: "Obligación",
+        icon: "⛓️",
+        title: "Uso obligatorio de cadenas",
+        sign: "Condición especial",
+        meaning: "En condiciones climáticas especiales, exige uso de cadenas."
+      },
+      {
+        category: "Obligación",
+        icon: "🚲",
+        title: "Vía obligatoria para bicicletas",
+        sign: "Carril bici",
+        meaning: "Espacio reservado para circulación de bicicletas."
+      },
+      {
+        category: "Obligación",
+        icon: "🚶",
+        title: "Camino peatonal",
+        sign: "Uso exclusivo de peatones",
+        meaning: "Zona destinada al paso de peatones."
+      },
+      {
+        category: "Obligación",
+        icon: "🚌",
+        title: "Carril exclusivo",
+        sign: "Uso reservado",
+        meaning: "Carril de uso exclusivo para el tipo de vehículo indicado."
+      },
+
+      // INFORMACIÓN
+      {
+        category: "Información",
+        icon: "🅿️",
+        title: "Estacionamiento permitido",
+        sign: "Zona de parqueo",
+        meaning: "Indica un lugar habilitado para estacionar."
+      },
+      {
+        category: "Información",
+        icon: "⛽",
+        title: "Gasolinera",
+        sign: "Combustible",
+        meaning: "Señala la cercanía de una estación de combustible."
+      },
+      {
+        category: "Información",
+        icon: "🏥",
+        title: "Hospital o centro médico",
+        sign: "Servicio de salud",
+        meaning: "Indica la proximidad de un hospital o clínica."
+      },
+      {
+        category: "Información",
+        icon: "🧰",
+        title: "Taller mecánico",
+        sign: "Asistencia técnica",
+        meaning: "Señala un servicio de reparación de vehículos."
+      },
+      {
+        category: "Información",
+        icon: "☎️",
+        title: "Teléfono o auxilio",
+        sign: "Punto de asistencia",
+        meaning: "Señala un punto de emergencia o comunicación."
+      },
+      {
+        category: "Información",
+        icon: "🛣️",
+        title: "Autopista",
+        sign: "Inicio de vía rápida",
+        meaning: "Indica la entrada a una autopista o vía de circulación rápida."
+      },
+      {
+        category: "Información",
+        icon: "🛑🛣️",
+        title: "Fin de autopista",
+        sign: "Final de vía rápida",
+        meaning: "Indica el final del tramo de autopista."
+      },
+      {
+        category: "Información",
+        icon: "🚌",
+        title: "Parada de autobús",
+        sign: "Transporte público",
+        meaning: "Señala una zona autorizada para abordaje de autobuses."
+      },
+      {
+        category: "Información",
+        icon: "🚻",
+        title: "Servicios sanitarios",
+        sign: "Baños",
+        meaning: "Indica la disponibilidad de servicios higiénicos."
+      },
+      {
+        category: "Información",
+        icon: "🍽️",
+        title: "Restaurante",
+        sign: "Comida y descanso",
+        meaning: "Señala la cercanía de un restaurante o zona de comida."
+      },
+      {
+        category: "Información",
+        icon: "🛏️",
+        title: "Hospedaje",
+        sign: "Alojamiento",
+        meaning: "Indica un lugar cercano de hospedaje o descanso."
+      },
+      {
+        category: "Información",
+        icon: "📍",
+        title: "Dirección o destino",
+        sign: "Orientación vial",
+        meaning: "Señala rutas, ciudades, distancias o destinos importantes."
+      },
+
+      // MARCAS VIALES
+      {
+        category: "Marcas viales",
+        icon: "🛣️",
+        title: "Línea continua",
+        sign: "Separación rígida",
+        meaning: "No debes cruzarla ni adelantar por encima de ella."
+      },
+      {
+        category: "Marcas viales",
+        icon: "🛣️",
+        title: "Línea discontinua",
+        sign: "Separación flexible",
+        meaning: "Puede cruzarse con precaución cuando la maniobra esté permitida."
+      },
+      {
+        category: "Marcas viales",
+        icon: "🚶",
+        title: "Paso peatonal cebrado",
+        sign: "Cruce de peatones",
+        meaning: "Zona marcada para el paso seguro de peatones."
+      },
+      {
+        category: "Marcas viales",
+        icon: "🛑",
+        title: "Línea de pare",
+        sign: "Punto de detención",
+        meaning: "Marca el lugar exacto donde debes detenerte."
+      },
+      {
+        category: "Marcas viales",
+        icon: "⬅️➡️",
+        title: "Flechas de dirección",
+        sign: "Sentido obligatorio o recomendado",
+        meaning: "Indican el movimiento permitido en el carril."
+      },
+      {
+        category: "Marcas viales",
+        icon: "BUS",
+        title: "Carril BUS / exclusivo",
+        sign: "Uso reservado",
+        meaning: "Marca carriles destinados a transporte público u otro uso específico."
+      }
+    ];
+
+    const grid = document.getElementById("signalsGrid");
+    const searchInput = document.getElementById("searchInput");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const emptyState = document.getElementById("emptyState");
+
+    function typeClass(category){
+      if(category === "Peligro") return "type-danger";
+      if(category === "Prioridad") return "type-priority";
+      if(category === "Prohibición") return "type-prohibition";
+      if(category === "Obligación") return "type-obligation";
+      if(category === "Información") return "type-information";
+      return "type-marks";
+    }
+
+    function renderSignals(){
+      const term = searchInput.value.toLowerCase().trim();
+      const category = categoryFilter.value;
+
+      const filtered = signals.filter(item => {
+        const matchesCategory = category === "all" || item.category === category;
+        const text = `${item.title} ${item.sign} ${item.meaning} ${item.category}`.toLowerCase();
+        const matchesSearch = text.includes(term);
+        return matchesCategory && matchesSearch;
+      });
+
+      grid.innerHTML = "";
+
+      if(!filtered.length){
+        emptyState.style.display = "block";
+        return;
+      }
+
+      emptyState.style.display = "none";
+
+      filtered.forEach(item => {
+        const card = document.createElement("article");
+        card.className = "card";
+
+        card.innerHTML = `
+          <div class="signal-wrap">
+            <div class="signal-badge ${typeClass(item.category)}">${item.icon}</div>
+            <div class="mini-tag">${item.category}</div>
+          </div>
+          <div>
+            <h3>${item.title}</h3>
+          </div>
+          <p>${item.sign}</p>
+          <div class="meaning"><strong>Significado:</strong> ${item.meaning}</div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    searchInput.addEventListener("input", renderSignals);
+    categoryFilter.addEventListener("change", renderSignals);
+
+    renderSignals();
+  </script>
+</body>
+</html>
