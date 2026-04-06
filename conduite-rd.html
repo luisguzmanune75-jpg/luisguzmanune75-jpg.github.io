@@ -280,108 +280,154 @@
 
 
     .practice-section{
-      padding: 40px 50px;
-      background: linear-gradient(135deg, #031a35, #05264d 60%, #041629);
+      padding: 60px 28px;
+      background:
+        radial-gradient(circle at top left, rgba(255,0,90,0.10), transparent 20%),
+        linear-gradient(135deg, #03152b, #07294a 55%, #041426);
     }
 
-    .practice-section h2{
+    .practice-header{
+      max-width: 820px;
+      margin: 0 auto 30px;
+      text-align: center;
+    }
+
+    .practice-badge{
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
       color: #fff;
-      font-size: 2.2rem;
-      margin-bottom: 24px;
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+    }
+
+    .practice-header h2{
+      color: #fff;
+      font-size: clamp(2rem, 4vw, 3.1rem);
+      margin-bottom: 12px;
       font-weight: 800;
     }
 
+    .practice-header p{
+      color: rgba(255,255,255,0.82);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
     .practice-grid{
+      max-width: 1280px;
+      margin: 0 auto;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
+      gap: 20px;
     }
 
     .practice-card{
       display: block;
       text-decoration: none;
       color: #fff;
+      padding: 24px;
+      border-radius: 26px;
       background: rgba(255,255,255,0.08);
       border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 24px;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.25);
+      transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease, background .28s ease;
+      position: relative;
       overflow: hidden;
-      box-shadow: 0 20px 45px rgba(0,0,0,0.25);
-      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+    }
+
+    .practice-card::before{
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .practice-card.basic::before{
+      background: linear-gradient(135deg, #28a745, transparent 60%);
+    }
+
+    .practice-card.medium::before{
+      background: linear-gradient(135deg, #ffc107, transparent 60%);
+    }
+
+    .practice-card.pro::before{
+      background: linear-gradient(135deg, #ff2d55, #4dabff 70%, transparent);
     }
 
     .practice-card:hover{
       transform: translateY(-8px);
-      box-shadow: 0 26px 60px rgba(0,0,0,0.35);
-      border-color: rgba(255,255,255,0.28);
+      box-shadow: 0 28px 60px rgba(0,0,0,0.34);
+      border-color: rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.11);
     }
 
-    .practice-image{
-      position: relative;
-      height: 250px;
-      overflow: hidden;
+    .practice-top{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      gap: 12px;
     }
 
-    .practice-image img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transform: scale(1);
-      transition: transform 0.4s ease;
-    }
-
-    .practice-card:hover .practice-image img{
-      transform: scale(1.06);
-    }
-
-    .overlay{
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(5,20,40,0.75), rgba(5,20,40,0.12));
-    }
-
-    .level-badge{
-      position: absolute;
-      top: 14px;
-      left: 14px;
-      padding: 8px 14px;
+    .level-pill{
+      display: inline-block;
+      padding: 9px 14px;
       border-radius: 999px;
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: #fff;
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.18);
-      z-index: 2;
+      font-size: 0.9rem;
+      font-weight: 800;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.14);
     }
 
-    .nivel1{
-      background: rgba(40, 167, 69, 0.75);
+    .mini-icon{
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.14);
     }
 
-    .nivel2{
-      background: rgba(255, 193, 7, 0.78);
-      color: #1e1e1e;
-    }
-
-    .nivel3{
-      background: rgba(220, 53, 69, 0.78);
-    }
-
-    .practice-content{
-      padding: 22px 18px 20px;
-      background: linear-gradient(180deg, rgba(34,59,92,0.95), rgba(24,44,72,0.98));
-    }
-
-    .practice-content h3{
+    .practice-card h3{
       font-size: 1.5rem;
       margin-bottom: 12px;
       font-weight: 800;
     }
 
-    .practice-content p{
-      font-size: 1.02rem;
-      line-height: 1.6;
+    .practice-card p{
+      color: rgba(255,255,255,0.85);
+      line-height: 1.65;
+      font-size: 1rem;
+      margin-bottom: 18px;
+    }
+
+    .practice-list{
+      list-style: none;
+      padding: 0;
+      margin: 0 0 20px 0;
+    }
+
+    .practice-list li{
       color: rgba(255,255,255,0.88);
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .practice-action{
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      color: #8fd3ff;
+      font-size: 1rem;
     }
 
     .quiz-wrap {
@@ -575,10 +621,6 @@
       .practice-grid{
         grid-template-columns: 1fr;
       }
-
-      .practice-image{
-        height: 230px;
-      }
     }
 
     @media (max-width: 900px) {
@@ -597,19 +639,19 @@
 
     @media (max-width: 700px){
       .practice-section{
-        padding: 24px 16px;
+        padding: 34px 16px;
       }
 
-      .practice-section h2{
-        font-size: 1.7rem;
+      .practice-card{
+        padding: 20px;
       }
 
-      .practice-content h3{
-        font-size: 1.25rem;
+      .practice-card h3{
+        font-size: 1.3rem;
       }
 
-      .practice-content p{
-        font-size: 0.96rem;
+      .practice-header p{
+        font-size: 0.98rem;
       }
     }
   </style>
@@ -682,43 +724,65 @@
   </section>
 
   <section class="practice-section">
-    <h2>Temas para practicar</h2>
+    <div class="practice-header">
+      <span class="practice-badge">🇩🇴 República Dominicana</span>
+      <h2>Practica el examen de conducir RD</h2>
+      <p>
+        Elige tu nivel y entrena con exámenes blancos modernos para mejorar tu preparación
+        antes de pasar la prueba de conducción en República Dominicana.
+      </p>
+    </div>
 
     <div class="practice-grid">
-      <a href="examen-rd-basico.html" class="practice-card">
-        <div class="practice-image">
-          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80" alt="Nivel 1 examen RD">
-          <div class="overlay"></div>
-          <span class="level-badge nivel1">Nivel 1</span>
+      <a href="examen-rd-basico.html" class="practice-card basic">
+        <div class="practice-top">
+          <span class="level-pill">Nivel 1</span>
+          <span class="mini-icon">🚦</span>
         </div>
-        <div class="practice-content">
-          <h3>Examen blanco básico</h3>
-          <p>Señales, semáforos, cinturón, velocidad y normas básicas.</p>
-        </div>
+        <h3>Examen blanco básico</h3>
+        <p>
+          Aprende señales, semáforos, cinturón, prioridad, velocidad y reglas esenciales.
+        </p>
+        <ul class="practice-list">
+          <li>Preguntas fáciles</li>
+          <li>Ideal para empezar</li>
+          <li>Base del examen RD</li>
+        </ul>
+        <div class="practice-action">Entrar al examen →</div>
       </a>
 
-      <a href="examen-rd-intermedio.html" class="practice-card">
-        <div class="practice-image">
-          <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1200&q=80" alt="Nivel 2 examen RD">
-          <div class="overlay"></div>
-          <span class="level-badge nivel2">Nivel 2</span>
+      <a href="examen-rd-intermedio.html" class="practice-card medium">
+        <div class="practice-top">
+          <span class="level-pill">Nivel 2</span>
+          <span class="mini-icon">🛣️</span>
         </div>
-        <div class="practice-content">
-          <h3>Examen blanco intermedio</h3>
-          <p>Cruces, prioridad, distancia de seguridad y cambio de carril.</p>
-        </div>
+        <h3>Examen blanco intermedio</h3>
+        <p>
+          Practica cruces, cambios de carril, distancia de seguridad, maniobras y prioridad.
+        </p>
+        <ul class="practice-list">
+          <li>Situaciones reales</li>
+          <li>Más lógica de conducción</li>
+          <li>Buen nivel de práctica</li>
+        </ul>
+        <div class="practice-action">Entrar al examen →</div>
       </a>
 
-      <a href="examen-rd-avanzado.html" class="practice-card">
-        <div class="practice-image">
-          <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80" alt="Nivel 3 examen RD">
-          <div class="overlay"></div>
-          <span class="level-badge nivel3">Nivel 3</span>
+      <a href="examen-rd-pro.html" class="practice-card pro">
+        <div class="practice-top">
+          <span class="level-pill">RD PRO</span>
+          <span class="mini-icon">🏆</span>
         </div>
-        <div class="practice-content">
-          <h3>Examen blanco avanzado</h3>
-          <p>Conducción defensiva, rotondas, emergencias y decisiones rápidas.</p>
-        </div>
+        <h3>Examen RD Pro</h3>
+        <p>
+          Accede al modo completo con 3 niveles, progreso, timer, puntuación y certificado final.
+        </p>
+        <ul class="practice-list">
+          <li>Modo examen real</li>
+          <li>Barra de progreso</li>
+          <li>Resultado final premium</li>
+        </ul>
+        <div class="practice-action">Entrar al modo pro →</div>
       </a>
     </div>
   </section>

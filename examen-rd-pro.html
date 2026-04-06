@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examen RD Pro | SNG Portal</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+    :root{
+      --bg1:#041426;
+      --bg2:#082a4a;
+      --bg3:#03111f;
+      --card:rgba(255,255,255,.08);
+      --line:rgba(255,255,255,.14);
+      --soft:rgba(255,255,255,.82);
+      --blue:#6fc7ff;
+      --red:#ff4d5a;
+      --green:#28a745;
+      --yellow:#ffc107;
+    }
+
+    body{
+      min-height:100vh;
+      color:#fff;
+      background:
+        radial-gradient(circle at top left, rgba(255,0,90,.14), transparent 25%),
+        linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
+      padding:20px;
+    }
+
+    .container{
+      max-width:1100px;
+      margin:auto;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .btn,
+    .ghost-btn,
+    .level-btn,
+    .next-btn,
+    .restart-btn,
+    .print-btn{
+      border:none;
+      cursor:pointer;
+      text-decoration:none;
+      color:#fff;
+      border-radius:16px;
+      padding:14px 18px;
+      font-weight:700;
+      transition:.25s ease;
+    }
+
+    .btn,
+    .ghost-btn{
+      background:rgba(255,255,255,.08);
+      border:1px solid var(--line);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .btn:hover,
+    .ghost-btn:hover{
+      background:rgba(255,255,255,.14);
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:0 20px 55px rgba(0,0,0,.28);
+    }
+
+    .hero{
+      padding:28px;
+      margin-bottom:18px;
+    }
+
+    .hero h1{
+      font-size:clamp(2rem,4vw,3.5rem);
+      line-height:1.05;
+      margin-bottom:10px;
+    }
+
+    .hero h1 span{
+      color:var(--blue);
+    }
+
+    .hero p{
+      color:var(--soft);
+      line-height:1.7;
+      max-width:820px;
+      margin-bottom:18px;
+    }
+
+    .hero-badges{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .badge{
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid var(--line);
+      color:#fff;
+      font-size:.95rem;
+    }
+
+    .level-select{
+      padding:24px;
+      margin-bottom:18px;
+    }
+
+    .level-select h2{
+      font-size:1.5rem;
+      margin-bottom:16px;
+    }
+
+    .levels-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+    }
+
+    .level-btn{
+      background:linear-gradient(135deg, rgba(255,255,255,.11), rgba(255,255,255,.05));
+      border:1px solid var(--line);
+      text-align:left;
+      min-height:120px;
+    }
+
+    .level-btn:hover{
+      transform:translateY(-4px);
+      background:rgba(255,255,255,.12);
+    }
+
+    .level-btn strong{
+      display:block;
+      font-size:1.05rem;
+      margin-bottom:8px;
+    }
+
+    .level-btn span{
+      display:block;
+      color:var(--soft);
+      line-height:1.5;
+      font-size:.94rem;
+      font-weight:400;
+    }
+
+    .quiz-wrap{
+      display:none;
+      padding:24px;
+      margin-bottom:18px;
+    }
+
+    .quiz-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+
+    .quiz-meta{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .pill{
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid var(--line);
+      font-size:.95rem;
+    }
+
+    .progress-box{
+      margin:16px 0 22px;
+    }
+
+    .progress-label{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      color:var(--soft);
+      margin-bottom:8px;
+      font-size:.95rem;
+    }
+
+    .progress{
+      width:100%;
+      height:14px;
+      background:rgba(255,255,255,.08);
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .progress-fill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,#ff2d55,#6fc7ff);
+      transition:width .3s ease;
+    }
+
+    .question-card{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:20px;
+      align-items:stretch;
+    }
+
+    .question-left,
+    .question-right{
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:24px;
+      overflow:hidden;
+    }
+
+    .question-image{
+      width:100%;
+      height:100%;
+      min-height:320px;
+      object-fit:cover;
+      display:block;
+      background:#0b203a;
+    }
+
+    .question-content{
+      padding:22px;
+    }
+
+    .question-number{
+      color:var(--blue);
+      font-weight:700;
+      margin-bottom:10px;
+      font-size:.98rem;
+    }
+
+    .question-text{
+      font-size:1.45rem;
+      line-height:1.42;
+      font-weight:700;
+      margin-bottom:20px;
+    }
+
+    .answers{
+      display:grid;
+      gap:12px;
+    }
+
+    .answer-btn{
+      width:100%;
+      text-align:left;
+      padding:16px 18px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      font-size:1rem;
+      cursor:pointer;
+      transition:.22s ease;
+    }
+
+    .answer-btn:hover{
+      background:rgba(255,255,255,.12);
+    }
+
+    .answer-btn.correct{
+      background:rgba(40,167,69,.24);
+      border-color:rgba(40,167,69,.9);
+    }
+
+    .answer-btn.wrong{
+      background:rgba(220,53,69,.24);
+      border-color:rgba(220,53,69,.9);
+    }
+
+    .feedback{
+      display:none;
+      margin-top:16px;
+      padding:16px;
+      border-radius:18px;
+      background:rgba(255,255,255,.06);
+      line-height:1.6;
+      color:#fff;
+    }
+
+    .quiz-actions{
+      margin-top:18px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .next-btn{
+      background:linear-gradient(90deg,#ff2d55,#6fc7ff);
+      display:none;
+    }
+
+    .next-btn:hover{
+      transform:translateY(-2px);
+    }
+
+    .result-wrap{
+      display:none;
+      padding:28px;
+      text-align:center;
+    }
+
+    .result-wrap h2{
+      font-size:2.2rem;
+      margin-bottom:10px;
+    }
+
+    .result-score{
+      font-size:1.15rem;
+      color:var(--soft);
+      line-height:1.7;
+      margin-bottom:16px;
+    }
+
+    .ranking-box{
+      margin:20px auto;
+      max-width:700px;
+      text-align:left;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:24px;
+      padding:20px;
+    }
+
+    .ranking-box h3{
+      margin-bottom:14px;
+      color:var(--blue);
+    }
+
+    .ranking-item{
+      padding:12px 14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      margin-bottom:10px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .certificate{
+      margin:22px auto 0;
+      max-width:850px;
+      padding:30px;
+      border-radius:28px;
+      background:linear-gradient(135deg, rgba(255,215,0,.12), rgba(255,255,255,.06));
+      border:1px solid rgba(255,215,0,.25);
+      box-shadow:0 18px 45px rgba(0,0,0,.22);
+    }
+
+    .certificate h3{
+      font-size:2rem;
+      margin-bottom:10px;
+      color:#ffe08a;
+    }
+
+    .certificate p{
+      line-height:1.8;
+      color:#fff;
+    }
+
+    .certificate .name{
+      font-size:1.5rem;
+      font-weight:800;
+      color:#fff;
+      margin:12px 0;
+    }
+
+    .certificate .small{
+      color:rgba(255,255,255,.82);
+      font-size:.98rem;
+    }
+
+    .result-actions{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .restart-btn{
+      background:linear-gradient(90deg,#ff2d55,#6fc7ff);
+    }
+
+    .print-btn{
+      background:rgba(255,255,255,.1);
+      border:1px solid var(--line);
+    }
+
+    .hidden{
+      display:none !important;
+    }
+
+    @media (max-width:980px){
+      .levels-grid{
+        grid-template-columns:1fr 1fr;
+      }
+      .question-card{
+        grid-template-columns:1fr;
+      }
+      .question-image{
+        min-height:240px;
+      }
+    }
+
+    @media (max-width:650px){
+      body{padding:14px}
+      .levels-grid{
+        grid-template-columns:1fr;
+      }
+      .question-text{
+        font-size:1.2rem;
+      }
+      .hero,.level-select,.quiz-wrap,.result-wrap{
+        padding:18px;
+      }
+    }
+
+    @media print{
+      body *{
+        visibility:hidden;
+      }
+      #certificateArea, #certificateArea *{
+        visibility:visible;
+      }
+      #certificateArea{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        background:#0b1b2e;
+        padding:30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a href="index.html" class="btn">← Volver</a>
+      <button class="ghost-btn" onclick="window.location.reload()">Reiniciar todo</button>
+    </div>
+
+    <section class="card hero">
+      <h1>Examen <span>RD Pro</span> con niveles, imágenes y certificado</h1>
+      <p>
+        Practica como si fuera un examen real de conducción de República Dominicana.
+        Elige tu nivel, responde con tiempo, revisa tu puntuación, descubre tu clasificación
+        y genera tu certificado final.
+      </p>
+      <div class="hero-badges">
+        <div class="badge">🚗 3 niveles + examen real</div>
+        <div class="badge">📸 preguntas con imágenes</div>
+        <div class="badge">📊 barra de progreso</div>
+        <div class="badge">🏆 classement final</div>
+        <div class="badge">📜 certificado</div>
+      </div>
+    </section>
+
+    <section class="card level-select" id="levelSelect">
+      <h2>Elige un modo</h2>
+      <div class="levels-grid">
+        <button class="level-btn" onclick="startQuiz('basico')">
+          <strong>Nivel 1 · Básico</strong>
+          <span>10 preguntas sobre señales, semáforos, cinturón, documentos y reglas simples.</span>
+        </button>
+
+        <button class="level-btn" onclick="startQuiz('intermedio')">
+          <strong>Nivel 2 · Intermedio</strong>
+          <span>10 preguntas sobre prioridad, cruces, cambios de carril y distancia de seguridad.</span>
+        </button>
+
+        <button class="level-btn" onclick="startQuiz('avanzado')">
+          <strong>Nivel 3 · Avanzado</strong>
+          <span>10 preguntas sobre conducción defensiva, riesgo, obras, lluvia y rotondas.</span>
+        </button>
+
+        <button class="level-btn" onclick="startQuiz('real')">
+          <strong>Modo examen real · 30 preguntas</strong>
+          <span>Mezcla completa de los 3 niveles con tiempo total y resultado final serio.</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="card quiz-wrap" id="quizWrap">
+      <div class="quiz-top">
+        <div class="quiz-meta">
+          <div class="pill" id="modePill">Modo</div>
+          <div class="pill" id="timerPill">Tiempo</div>
+          <div class="pill" id="scorePill">Puntuación</div>
+        </div>
+      </div>
+
+      <div class="progress-box">
+        <div class="progress-label">
+          <span id="progressText">Pregunta 1</span>
+          <span id="progressPercent">0%</span>
+        </div>
+        <div class="progress">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div class="question-left">
+          <img id="questionImage" class="question-image" src="" alt="Pregunta de tránsito RD">
+        </div>
+
+        <div class="question-right">
+          <div class="question-content">
+            <div class="question-number" id="questionNumber"></div>
+            <div class="question-text" id="questionText"></div>
+            <div class="answers" id="answersBox"></div>
+            <div class="feedback" id="feedback"></div>
+
+            <div class="quiz-actions">
+              <button class="ghost-btn" onclick="skipQuestion()">Saltar</button>
+              <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Siguiente</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card result-wrap" id="resultWrap">
+      <h2>Resultado final</h2>
+      <div class="result-score" id="resultScore"></div>
+
+      <div class="ranking-box">
+        <h3>🏆 Clasificación</h3>
+        <div id="rankingList"></div>
+      </div>
+
+      <div class="certificate" id="certificateArea">
+        <h3>Certificado de práctica vial</h3>
+        <p>Este documento certifica que</p>
+        <div class="name" id="certName">Tu nombre aquí</div>
+        <p>
+          ha completado satisfactoriamente el
+          <strong id="certMode">Examen RD Pro</strong>
+          en SNG Portal con una puntuación de
+          <strong id="certScore">0%</strong>.
+        </p>
+        <p class="small" id="certLevelText">Nivel alcanzado: --</p>
+        <p class="small" id="certDate"></p>
+      </div>
+
+      <div class="result-actions">
+        <button class="restart-btn" onclick="window.location.reload()">Volver a empezar</button>
+        <button class="print-btn" onclick="printCertificate()">Imprimir certificado</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const IMG_SIGNS = "https://images.unsplash.com/photo-1504215680853-026ed2a45def?auto=format&fit=crop&w=1200&q=80";
+    const IMG_TRAFFIC = "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1200&q=80";
+    const IMG_CAR = "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1200&q=80";
+    const IMG_SEATBELT = "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1200&q=80";
+    const IMG_RAIN = "https://images.unsplash.com/photo-1502741126161-b048400d85a3?auto=format&fit=crop&w=1200&q=80";
+    const IMG_ROAD = "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80";
+    const IMG_NIGHT = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80";
+    const IMG_WORKS = "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1200&q=80";
+
+    const basico = [
+      {
+        image: IMG_SIGNS,
+        q: "¿Qué significa una señal de PARE?",
+        a: ["Reducir un poco la velocidad", "Detenerse completamente", "Tocar bocina", "Seguir sin mirar"],
+        correct: 1,
+        explain: "La señal de PARE obliga a detener completamente el vehículo antes de continuar."
+      },
+      {
+        image: IMG_TRAFFIC,
+        q: "¿Qué debes hacer ante una luz roja del semáforo?",
+        a: ["Acelerar", "Pasar rápido", "Detenerte", "Girar siempre"],
+        correct: 2,
+        explain: "La luz roja indica detención obligatoria."
+      },
+      {
+        image: IMG_SEATBELT,
+        q: "¿Para qué sirve el cinturón de seguridad?",
+        a: ["Para decorar el asiento", "Para proteger al ocupante", "Para escuchar mejor", "Para girar mejor"],
+        correct: 1,
+        explain: "El cinturón reduce el riesgo de lesiones en caso de accidente."
+      },
+      {
+        image: IMG_SIGNS,
+        q: "Si ves una señal de CEDA EL PASO, debes:",
+        a: ["Seguir sin mirar", "Dar prioridad a otros vehículos", "Parquearte", "Tocar bocina"],
+        correct: 1,
+        explain: "Debes dejar pasar a quienes tienen prioridad."
+      },
+      {
+        image: IMG_TRAFFIC,
+        q: "¿Qué color del semáforo indica precaución?",
+        a: ["Azul", "Verde", "Amarillo", "Negro"],
+        correct: 2,
+        explain: "La luz amarilla indica precaución y preparación para detenerse."
+      },
+      {
+        image: IMG_CAR,
+        q: "¿Qué documento debe tener un conductor?",
+        a: ["Licencia de conducir", "Tarjeta de supermercado", "Boleto de autobús", "Solo cédula"],
+        correct: 0,
+        explain: "La licencia es el documento básico para conducir legalmente."
+      },
+      {
+        image: IMG_SIGNS,
+        q: "¿Qué significa un límite de velocidad?",
+        a: ["Velocidad máxima permitida", "Velocidad mínima", "Velocidad libre", "Fin de la vía"],
+        correct: 0,
+        explain: "La señal establece la velocidad máxima autorizada."
+      },
+      {
+        image: IMG_TRAFFIC,
+        q: "Antes de cambiar de carril debes:",
+        a: ["Cerrar los ojos", "Mirar espejos y señalizar", "Acelerar sin avisar", "Frenar seco"],
+        correct: 1,
+        explain: "Debes comprobar espejos, punto ciego y usar direccional."
+      },
+      {
+        image: IMG_SIGNS,
+        q: "¿Qué indica una señal de paso peatonal?",
+        a: ["Cruce de personas", "Obras", "Taller mecánico", "Zona de motos"],
+        correct: 0,
+        explain: "Indica una zona destinada al cruce de peatones."
+      },
+      {
+        image: IMG_CAR,
+        q: "Si usas el celular al conducir estás:",
+        a: ["Manejando mejor", "Aumentando el riesgo de accidente", "Ahorrando tiempo", "Cumpliendo la ley"],
+        correct: 1,
+        explain: "El celular distrae y aumenta el riesgo de colisión."
+      }
+    ];
+
+    const intermedio = [
+      {
+        image: IMG_TRAFFIC,
+        q: "Al acercarte a una intersección sin señalización, debes:",
+        a: ["Acelerar primero", "Observar y ceder si corresponde", "Tocar bocina y pasar", "Frenar en seco"],
+        correct: 1,
+        explain: "Debes actuar con precaución y respetar la prioridad."
+      },
+      {
+        image: IMG_ROAD,
+        q: "Antes de adelantar a otro vehículo debes:",
+        a: ["Verificar que sea seguro y permitido", "Cerrar los ojos", "Pegarte al vehículo", "Acelerar siempre"],
+        correct: 0,
+        explain: "Adelantar exige visibilidad, espacio y maniobra permitida."
+      },
+      {
+        image: IMG_ROAD,
+        q: "La distancia de seguridad sirve para:",
+        a: ["Ahorrar gasolina", "Tener tiempo de reacción", "Ir más rápido", "Cambiar de carril"],
+        correct: 1,
+        explain: "Permite reaccionar y frenar a tiempo."
+      },
+      {
+        image: IMG_TRAFFIC,
+        q: "Si un peatón cruza en el paso peatonal, debes:",
+        a: ["Acelerar", "Esperar y ceder el paso", "Pasar primero", "Cambiar de carril sin mirar"],
+        correct: 1,
+        explain: "Debes permitir el paso seguro del peatón."
+      },
+      {
+        image: IMG_CAR,
+        q: "¿Cuándo es más peligroso cambiar de carril?",
+        a: ["Cuando no revisas espejos ni punto ciego", "Cuando señalizas", "Cuando el carril está libre", "Cuando reduces velocidad"],
+        correct: 0,
+        explain: "No revisar espejos y punto ciego puede provocar choques."
+      },
+      {
+        image: IMG_TRAFFIC,
+        q: "En una rotonda o glorieta generalmente debes:",
+        a: ["Entrar sin mirar", "Respetar el flujo y la prioridad", "Pararte dentro", "Ir en reversa"],
+        correct: 1,
+        explain: "Debes incorporarte con precaución y respetar el flujo existente."
+      },
+      {
+        image: IMG_ROAD,
+        q: "Si el vehículo delante frena bruscamente y vas muy cerca, el mayor riesgo es:",
+        a: ["Ganar tiempo", "Choque por alcance", "Ahorrar frenos", "Mejor visibilidad"],
+        correct: 1,
+        explain: "Ir demasiado cerca aumenta el riesgo de colisión trasera."
+      },
+      {
+        image: IMG_CAR,
+        q: "Para girar correctamente en una esquina debes:",
+        a: ["Avisar con direccional y reducir", "Acelerar fuerte", "Solo tocar bocina", "Invadir otro carril"],
+        correct: 0,
+        explain: "La maniobra segura requiere señalización y control."
+      },
+      {
+        image: IMG_RAIN,
+        q: "Si hay lluvia, lo más recomendable es:",
+        a: ["Aumentar velocidad", "Reducir velocidad y aumentar distancia", "Usar celular", "Frenar tarde"],
+        correct: 1,
+        explain: "La lluvia reduce la adherencia y aumenta la distancia de frenado."
+      },
+      {
+        image: IMG_CAR,
+        q: "El punto ciego es:",
+        a: ["Zona que no ves bien por espejos", "Una luz del tablero", "Lugar para estacionar", "Parte del volante"],
+        correct: 0,
+        explain: "Es una zona lateral o trasera que no aparece claramente en los espejos."
+      }
+    ];
+
+    const avanzado = [
+      {
+        image: IMG_RAIN,
+        q: "Vas por una vía mojada y notas poca adherencia. ¿Qué haces?",
+        a: ["Aumentar velocidad", "Reducir velocidad y evitar maniobras bruscas", "Frenar fuerte en curva", "Usar el celular"],
+        correct: 1,
+        explain: "Con pavimento mojado debes conducir con suavidad y control."
+      },
+      {
+        image: IMG_CAR,
+        q: "La conducción defensiva consiste en:",
+        a: ["Reaccionar tarde", "Anticipar riesgos y mantener control", "Cerrar el paso a todos", "Confiar en la suerte"],
+        correct: 1,
+        explain: "La conducción defensiva busca anticipar errores ajenos y reducir riesgos."
+      },
+      {
+        image: IMG_TRAFFIC,
+        q: "En una rotonda con varios carriles, lo más importante es:",
+        a: ["Entrar rápido", "Elegir carril correcto y respetar prioridad", "Cambiar dentro sin avisar", "Detenerse en el centro"],
+        correct: 1,
+        explain: "Debes entrar en el carril adecuado y respetar la circulación."
+      },
+      {
+        image: IMG_ROAD,
+        q: "Si un vehículo te sigue demasiado cerca por detrás, conviene:",
+        a: ["Frenar fuerte", "Mantener calma y aumentar tu distancia delante", "Cerrarle el paso", "Apagar luces"],
+        correct: 1,
+        explain: "Tener más espacio delante te permite reaccionar mejor sin frenar brusco."
+      },
+      {
+        image: IMG_NIGHT,
+        q: "Al manejar de noche, una medida correcta es:",
+        a: ["Usar luces adecuadas y reducir velocidad si hace falta", "Apagar luces en zonas oscuras", "Mirar el celular", "Pegarte al vehículo delante"],
+        correct: 0,
+        explain: "La visibilidad nocturna exige prudencia y luces bien usadas."
+      },
+      {
+        image: IMG_WORKS,
+        q: "Si llegas a una zona de obras con carriles reducidos debes:",
+        a: ["Pasar a toda velocidad", "Seguir señales temporales y reducir velocidad", "Adelantar por cualquier lado", "Ignorar al personal"],
+        correct: 1,
+        explain: "En obras debes seguir la señalización temporal y aumentar la atención."
+      },
+      {
+        image: IMG_ROAD,
+        q: "Cuando aparece un obstáculo repentino en la vía, lo más seguro suele ser:",
+        a: ["Cerrar los ojos", "Mantener control, frenar con firmeza y evaluar escape seguro", "Girar sin mirar", "Acelerar"],
+        correct: 1,
+        explain: "Lo esencial es conservar el control y reaccionar con criterio."
+      },
+      {
+        image: IMG_TRAFFIC,
+        q: "En tráfico denso, cambiar constantemente de carril suele:",
+        a: ["Mejorar siempre el tiempo", "Aumentar riesgo y estrés", "Ser obligatorio", "Ahorrar combustible"],
+        correct: 1,
+        explain: "Los cambios innecesarios aumentan el riesgo de incidente."
+      },
+      {
+        image: IMG_CAR,
+        q: "Si un peatón o motociclista es vulnerable cerca de tu vehículo, debes:",
+        a: ["Ignorarlo", "Dar más espacio lateral y extremar precaución", "Acercarte más", "Solo tocar bocina"],
+        correct: 1,
+        explain: "Los usuarios vulnerables requieren más distancia y atención."
+      },
+      {
+        image: IMG_ROAD,
+        q: "La mejor forma de evitar un accidente en una situación dudosa es:",
+        a: ["Competir por el paso", "Ceder, observar y actuar con prudencia", "Acelerar primero", "No mirar espejos"],
+        correct: 1,
+        explain: "La prudencia reduce el riesgo y evita conflictos."
+      }
+    ];
+
+    let currentQuestions = [];
+    let currentMode = "";
+    let currentIndex = 0;
+    let score = 0;
+    let answered = false;
+    let timeLeft = 20;
+    let timer = null;
+
+    const levelSelect = document.getElementById("levelSelect");
+    const quizWrap = document.getElementById("quizWrap");
+    const resultWrap = document.getElementById("resultWrap");
+
+    const modePill = document.getElementById("modePill");
+    const timerPill = document.getElementById("timerPill");
+    const scorePill = document.getElementById("scorePill");
+
+    const progressText = document.getElementById("progressText");
+    const progressPercent = document.getElementById("progressPercent");
+    const progressFill = document.getElementById("progressFill");
+
+    const questionImage = document.getElementById("questionImage");
+    const questionNumber = document.getElementById("questionNumber");
+    const questionText = document.getElementById("questionText");
+    const answersBox = document.getElementById("answersBox");
+    const feedback = document.getElementById("feedback");
+    const nextBtn = document.getElementById("nextBtn");
+
+    const resultScore = document.getElementById("resultScore");
+    const rankingList = document.getElementById("rankingList");
+
+    const certName = document.getElementById("certName");
+    const certMode = document.getElementById("certMode");
+    const certScore = document.getElementById("certScore");
+    const certLevelText = document.getElementById("certLevelText");
+    const certDate = document.getElementById("certDate");
+
+    function askName() {
+      let name = localStorage.getItem("sng_rd_name");
+      if (!name) {
+        name = prompt("Escribe tu nombre para el certificado:", "Estudiante RD");
+        if (!name || !name.trim()) name = "Estudiante RD";
+        localStorage.setItem("sng_rd_name", name.trim());
+      }
+      certName.textContent = name;
+      return name;
+    }
+
+    function startQuiz(mode){
+      askName();
+
+      currentMode = mode;
+      currentIndex = 0;
+      score = 0;
+      answered = false;
+
+      if(mode === "basico"){
+        currentQuestions = [...basico];
+        timeLeft = 15;
+        modePill.textContent = "Modo: Nivel 1 · Básico";
+      } else if(mode === "intermedio"){
+        currentQuestions = [...intermedio];
+        timeLeft = 18;
+        modePill.textContent = "Modo: Nivel 2 · Intermedio";
+      } else if(mode === "avanzado"){
+        currentQuestions = [...avanzado];
+        timeLeft = 20;
+        modePill.textContent = "Modo: Nivel 3 · Avanzado";
+      } else {
+        currentQuestions = [...basico, ...intermedio, ...avanzado];
+        timeLeft = 20;
+        modePill.textContent = "Modo: Examen real · 30 preguntas";
+      }
+
+      levelSelect.style.display = "none";
+      resultWrap.style.display = "none";
+      quizWrap.style.display = "block";
+
+      renderQuestion();
+    }
+
+    function renderQuestion(){
+      clearInterval(timer);
+      answered = false;
+      feedback.style.display = "none";
+      feedback.innerHTML = "";
+      nextBtn.style.display = "none";
+
+      const item = currentQuestions[currentIndex];
+      const total = currentQuestions.length;
+      const progress = Math.round((currentIndex / total) * 100);
+
+      questionImage.src = item.image;
+      questionNumber.textContent = `Pregunta ${currentIndex + 1} de ${total}`;
+      questionText.textContent = item.q;
+      answersBox.innerHTML = "";
+
+      progressText.textContent = `Avance del examen`;
+      progressPercent.textContent = `${progress}%`;
+      progressFill.style.width = `${progress}%`;
+
+      scorePill.textContent = `Puntuación: ${score}`;
+      timerPill.textContent = `Tiempo: ${timeLeft}s`;
+
+      item.a.forEach((answer, index) => {
+        const btn = document.createElement("button");
+        btn.className = "answer-btn";
+        btn.textContent = answer;
+        btn.onclick = () => validateAnswer(index);
+        answersBox.appendChild(btn);
+      });
+
+      startTimer();
+    }
+
+    function startTimer(){
+      clearInterval(timer);
+
+      if(currentMode === "basico") timeLeft = 15;
+      else if(currentMode === "intermedio") timeLeft = 18;
+      else timeLeft = 20;
+
+      timerPill.textContent = `Tiempo: ${timeLeft}s`;
+
+      timer = setInterval(() => {
+        timeLeft--;
+        timerPill.textContent = `Tiempo: ${timeLeft}s`;
+
+        if(timeLeft <= 0){
+          clearInterval(timer);
+          if(!answered){
+            validateAnswer(-1);
+          }
+        }
+      }, 1000);
+    }
+
+    function validateAnswer(selectedIndex){
+      if(answered) return;
+      answered = true;
+      clearInterval(timer);
+
+      const item = currentQuestions[currentIndex];
+      const buttons = document.querySelectorAll(".answer-btn");
+
+      buttons.forEach((btn, index) => {
+        btn.disabled = true;
+        if(index === item.correct) btn.classList.add("correct");
+        if(index === selectedIndex && index !== item.correct) btn.classList.add("wrong");
+      });
+
+      if(selectedIndex === item.correct){
+        score++;
+        feedback.innerHTML = `✅ <strong>Correcto.</strong><br>${item.explain}`;
+      } else if(selectedIndex === -1){
+        feedback.innerHTML = `⏰ <strong>Tiempo agotado.</strong><br>Respuesta correcta: <strong>${item.a[item.correct]}</strong><br>${item.explain}`;
+      } else {
+        feedback.innerHTML = `❌ <strong>Incorrecto.</strong><br>Respuesta correcta: <strong>${item.a[item.correct]}</strong><br>${item.explain}`;
+      }
+
+      scorePill.textContent = `Puntuación: ${score}`;
+      feedback.style.display = "block";
+      nextBtn.style.display = "inline-block";
+    }
+
+    function skipQuestion(){
+      if(answered) return;
+      validateAnswer(-1);
+    }
+
+    function nextQuestion(){
+      currentIndex++;
+      if(currentIndex < currentQuestions.length){
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult(){
+      quizWrap.style.display = "none";
+      resultWrap.style.display = "block";
+
+      const total = currentQuestions.length;
+      const percent = Math.round((score / total) * 100);
+
+      let mention = "Debes practicar más.";
+      let rank = "Aprendiz vial";
+      if(percent >= 90){
+        mention = "Excelente resultado. Dominio muy fuerte.";
+        rank = "Maestro de la carretera";
+      } else if(percent >= 80){
+        mention = "Muy buen resultado. Estás casi listo.";
+        rank = "Conductor avanzado";
+      } else if(percent >= 70){
+        mention = "Buen trabajo. Sigue mejorando.";
+        rank = "Conductor competente";
+      } else if(percent >= 60){
+        mention = "Nivel aceptable, pero necesitas más práctica.";
+        rank = "Practicante vial";
+      }
+
+      resultScore.innerHTML = `
+        Obtuviste <strong>${score}/${total}</strong> respuestas correctas
+        (<strong>${percent}%</strong>).<br>${mention}
+      `;
+
+      const rankingData = [
+        { label: "90% - 100%", title: "Maestro de la carretera" },
+        { label: "80% - 89%", title: "Conductor avanzado" },
+        { label: "70% - 79%", title: "Conductor competente" },
+        { label: "60% - 69%", title: "Practicante vial" },
+        { label: "0% - 59%", title: "Aprendiz vial" }
+      ];
+
+      rankingList.innerHTML = "";
+      rankingData.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "ranking-item";
+        div.innerHTML = `<span>${item.label}</span><strong>${item.title}</strong>`;
+        rankingList.appendChild(div);
+      });
+
+      certMode.textContent = modePill.textContent.replace("Modo: ", "");
+      certScore.textContent = `${percent}%`;
+      certLevelText.textContent = `Nivel alcanzado: ${rank}`;
+
+      const today = new Date();
+      certDate.textContent = `Fecha: ${today.toLocaleDateString("es-DO", { year: "numeric", month: "long", day: "numeric" })}`;
+    }
+
+    function printCertificate(){
+      window.print();
+    }
+  </script>
+</body>
+</html>
