@@ -494,22 +494,23 @@
 
     <div class="quiz-wrap">
       <div class="quiz-visual">
-        <img id="quizImage" src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1200&q=80" alt="Imagen de apoyo del quiz">
+        <img id="quiz-image" src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1200&q=80" alt="Question de conduite">
       </div>
 
       <div class="quiz-box">
+        <div style="margin-bottom:10px;">🇩🇴 Examen de conducción - República Dominicana</div>
         <div class="quiz-top">
           <h3>Práctica visual</h3>
           <span class="quiz-badge">Solo español</span>
         </div>
 
-        <div class="question" id="question"></div>
-        <div class="answers" id="answers"></div>
+        <h3 class="question" id="quiz-question"></h3>
+        <div class="answers" id="quiz-answers"></div>
 
         <div class="progress-wrap">
           <div class="progress-label">
             <span id="progressText">0%</span>
-            <span id="questionCounter">Pregunta 1 de 4</span>
+            <span id="questionCounter">Serie 1 • Pregunta 1 de 3</span>
           </div>
           <progress id="progressBar" value="0" max="100"></progress>
         </div>
@@ -521,89 +522,172 @@
   </section>
 
   <script>
-    const quiz = [
+    const series = [
       {
-        q: '¿Qué debes hacer en una señal de STOP?',
-        answers: ['Reducir un poco y seguir', 'Detenerte completamente', 'Tocar bocina y pasar'],
-        correct: 1,
-        image: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1200&q=80'
+        title: 'Serie 1: Señales básicas',
+        questions: [
+          {
+            question: 'Antes de girar, ¿qué debes hacer?',
+            image: 'https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1200&q=80',
+            choices: ['Poner la direccional', 'Acelerar fuerte', 'Cerrar los ojos y girar'],
+            answer: 0
+          },
+          {
+            question: '¿Qué significa esta señal?',
+            image: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1200&q=80',
+            choices: ['Seguir rápido', 'Parada obligatoria', 'Zona escolar'],
+            answer: 1
+          },
+          {
+            question: '¿Quién tiene prioridad en este cruce?',
+            image: 'https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=1200&q=80',
+            choices: ['El vehículo de la derecha', 'El más rápido', 'El más grande'],
+            answer: 0
+          }
+        ]
       },
       {
-        q: '¿Qué significa un semáforo en rojo?',
-        answers: ['Pasar rápido', 'Reducir la velocidad', 'Detenerse'],
-        correct: 2,
-        image: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80'
+        title: 'Serie 2: Semáforos y maniobras',
+        questions: [
+          {
+            question: '¿Qué significa semáforo en rojo en este caso?',
+            image: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80',
+            choices: ['Detenerse totalmente', 'Acelerar antes del cruce', 'Solo tocar bocina'],
+            answer: 0
+          },
+          {
+            question: '¿Esta maniobra de cambio de carril es correcta?',
+            image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1200&q=80',
+            choices: ['Sí, si señaliza y verifica espejos', 'Sí, siempre', 'No importa mirar'],
+            answer: 0
+          },
+          {
+            question: '¿Cómo debes responder a un paso peatonal ocupado?',
+            image: 'https://images.unsplash.com/photo-1572204092160-8f2ce6f88f1a?auto=format&fit=crop&w=1200&q=80',
+            choices: ['Mantener velocidad', 'Detenerte y ceder el paso', 'Rebasar por la derecha'],
+            answer: 1
+          }
+        ]
       },
       {
-        q: 'Antes de girar, ¿qué debes hacer?',
-        answers: ['Poner la direccional', 'Acelerar fuerte', 'Cerrar los ojos y girar'],
-        correct: 0,
-        image: 'https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1200&q=80'
-      },
-      {
-        q: 'Para conducir con seguridad, ¿qué es obligatorio?',
-        answers: ['Usar el cinturón de seguridad', 'Mirar el móvil a veces', 'Conducir con una mano siempre'],
-        correct: 0,
-        image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1200&q=80'
+        title: 'Serie 3: Seguridad vial RD',
+        questions: [
+          {
+            question: 'Para conducir con seguridad, ¿qué es obligatorio?',
+            image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=1200&q=80',
+            choices: ['Usar el cinturón de seguridad', 'Mirar el móvil a veces', 'Conducir con una mano siempre'],
+            answer: 0
+          },
+          {
+            question: 'Si hay lluvia intensa, ¿qué debes hacer?',
+            image: 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=1200&q=80',
+            choices: ['Aumentar velocidad', 'Reducir velocidad y distancia', 'Apagar luces'],
+            answer: 1
+          },
+          {
+            question: '¿Qué distancia mínima conviene mantener detrás del vehículo frontal?',
+            image: 'https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1200&q=80',
+            choices: ['Muy pegado para reaccionar rápido', 'Distancia de seguridad suficiente', 'Solo 1 metro'],
+            answer: 1
+          }
+        ]
       }
     ];
 
-    let index = 0;
+    let currentSeries = 0;
+    let currentQuestion = 0;
     let score = 0;
 
-    function loadQuestion() {
-      const q = quiz[index];
-      document.getElementById('question').innerText = q.q;
-      document.getElementById('quizImage').src = q.image;
-      document.getElementById('questionCounter').innerText = `Pregunta ${index + 1} de ${quiz.length}`;
+    function totalQuestions() {
+      return series.reduce((total, serie) => total + serie.questions.length, 0);
+    }
 
-      const answersDiv = document.getElementById('answers');
+    function answeredQuestions() {
+      let answered = 0;
+      for (let i = 0; i < currentSeries; i++) {
+        answered += series[i].questions.length;
+      }
+      return answered + currentQuestion;
+    }
+
+    function renderQuestion() {
+      const q = series[currentSeries].questions[currentQuestion];
+
+      document.getElementById('quiz-image').src = q.image;
+      document.getElementById('quiz-question').textContent = q.question;
+      document.getElementById('questionCounter').innerText = `Serie ${currentSeries + 1} • Pregunta ${currentQuestion + 1} de ${series[currentSeries].questions.length}`;
+
+      const answersDiv = document.getElementById('quiz-answers');
       answersDiv.innerHTML = '';
 
-      q.answers.forEach((ans, i) => {
+      q.choices.forEach((choice, i) => {
         const btn = document.createElement('button');
         btn.className = 'answer-btn';
-        btn.innerText = ans;
+        btn.innerHTML = `<strong>${String.fromCharCode(65 + i)}.</strong> ${choice}`;
         btn.onclick = () => checkAnswer(i);
         answersDiv.appendChild(btn);
       });
     }
 
     function checkAnswer(i) {
-      if (i === quiz[index].correct) score++;
-      index++;
-      updateProgress();
+      const q = series[currentSeries].questions[currentQuestion];
+      const buttons = document.querySelectorAll('#quiz-answers .answer-btn');
+      buttons.forEach((btn, btnIndex) => {
+        btn.disabled = true;
+        if (btnIndex === q.answer) {
+          btn.style.background = '#16a34a';
+        } else {
+          btn.style.background = '#dc2626';
+        }
+      });
 
-      if (index < quiz.length) {
-        loadQuestion();
-      } else {
-        endQuiz();
+      if (i === q.answer) {
+        score++;
       }
+
+      setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion >= series[currentSeries].questions.length) {
+          currentSeries++;
+          currentQuestion = 0;
+        }
+        updateProgress();
+
+        if (currentSeries < series.length) {
+          renderQuestion();
+        } else {
+          endQuiz();
+        }
+      }, 700);
     }
 
     function updateProgress() {
-      const percent = (index / quiz.length) * 100;
+      const percent = (answeredQuestions() / totalQuestions()) * 100;
       document.getElementById('progressBar').value = percent;
       document.getElementById('progressText').innerText = Math.round(percent) + '%';
     }
 
     function endQuiz() {
-      document.getElementById('question').innerText = '🎉 Quiz terminado';
-      document.getElementById('answers').innerHTML = '<button class="answer-btn" onclick="restartQuiz()">Volver a empezar</button>';
-      document.getElementById('score').innerText = 'Puntuación: ' + score + ' / ' + quiz.length;
-      document.getElementById('questionCounter').innerText = 'Completado';
-      document.getElementById('quizImage').src = 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80';
+      document.getElementById('quiz-question').innerText = '🎉 Examen completado';
+      document.getElementById('quiz-answers').innerHTML = '<button class="answer-btn" onclick="restartQuiz()">Volver a empezar</button>';
+      document.getElementById('score').innerText = 'Puntuación: ' + score + ' / ' + totalQuestions();
+      document.getElementById('questionCounter').innerText = 'Todas las series completadas';
+      document.getElementById('quiz-image').src = 'https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1200&q=80';
+      document.getElementById('progressBar').value = 100;
+      document.getElementById('progressText').innerText = '100%';
     }
 
     function restartQuiz() {
-      index = 0;
+      currentSeries = 0;
+      currentQuestion = 0;
       score = 0;
       document.getElementById('score').innerText = '';
       updateProgress();
-      loadQuestion();
+      renderQuestion();
     }
 
-    loadQuestion();
+    updateProgress();
+    renderQuestion();
   </script>
 </body>
 </html>
