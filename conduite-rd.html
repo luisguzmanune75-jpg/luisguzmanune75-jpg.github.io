@@ -139,7 +139,15 @@
       box-shadow: var(--sombra);
     }
 
-    .feature-card span {
+
+    .feature-card {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .feature-card span,
+    .feature-card .icon {
       font-size: 1.8rem;
       display: block;
       margin-bottom: 10px;
@@ -494,11 +502,11 @@
       </div>
 
       <div class="features" id="temas">
-        <article class="feature-card">
-          <span>🛑</span>
+        <a href="signalizacion.html" class="feature-card">
+          <div class="icon">🛑</div>
           <h3>Señales y prioridad</h3>
-          <p>Stop, ceda el paso, cruces, prioridad a la derecha y normas básicas para evitar accidentes.</p>
-        </article>
+          <p>Todos los paneles de señalización con su significado en español.</p>
+        </a>
         <article class="feature-card">
           <span>🚦</span>
           <h3>Semáforos y carriles</h3>
