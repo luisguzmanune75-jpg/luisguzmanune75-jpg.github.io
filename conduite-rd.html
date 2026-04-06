@@ -494,10 +494,11 @@
 
     <div class="quiz-wrap">
       <div class="quiz-visual">
-        <img id="quizImage" src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1200&q=80" alt="Imagen de apoyo del quiz">
+        <img id="quizImage" src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1400&q=80" alt="Imagen de apoyo del quiz">
       </div>
 
       <div class="quiz-box">
+        <div style="margin-bottom:10px;">🇩🇴 Examen de conducción - República Dominicana</div>
         <div class="quiz-top">
           <h3>Práctica visual</h3>
           <span class="quiz-badge">Solo español</span>
@@ -509,7 +510,7 @@
         <div class="progress-wrap">
           <div class="progress-label">
             <span id="progressText">0%</span>
-            <span id="questionCounter">Pregunta 1 de 4</span>
+            <span id="questionCounter">Pregunta 1 de 5</span>
           </div>
           <progress id="progressBar" value="0" max="100"></progress>
         </div>
@@ -522,6 +523,12 @@
 
   <script>
     const quiz = [
+      {
+        q: '¿Esta conductora está conduciendo correctamente?',
+        answers: ['Sí', 'No'],
+        correct: 1,
+        image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=1200&q=80'
+      },
       {
         q: '¿Qué debes hacer en una señal de STOP?',
         answers: ['Reducir un poco y seguir', 'Detenerte completamente', 'Tocar bocina y pasar'],
@@ -563,22 +570,37 @@
       q.answers.forEach((ans, i) => {
         const btn = document.createElement('button');
         btn.className = 'answer-btn';
-        btn.innerText = ans;
+        btn.innerHTML = `<strong>${String.fromCharCode(65 + i)}.</strong> ${ans}`;
         btn.onclick = () => checkAnswer(i);
         answersDiv.appendChild(btn);
       });
     }
 
     function checkAnswer(i) {
-      if (i === quiz[index].correct) score++;
-      index++;
-      updateProgress();
+      const buttons = document.querySelectorAll('#answers .answer-btn');
+      buttons.forEach((btn, btnIndex) => {
+        btn.disabled = true;
+        if (btnIndex === quiz[index].correct) {
+          btn.style.background = '#16a34a';
+        } else {
+          btn.style.background = '#dc2626';
+        }
+      });
 
-      if (index < quiz.length) {
-        loadQuestion();
-      } else {
-        endQuiz();
+      if (i === quiz[index].correct) {
+        score++;
       }
+
+      setTimeout(() => {
+        index++;
+        updateProgress();
+
+        if (index < quiz.length) {
+          loadQuestion();
+        } else {
+          endQuiz();
+        }
+      }, 700);
     }
 
     function updateProgress() {
