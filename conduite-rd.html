@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SNG Portal - Conducción RD: normas, señales y práctica para conducir en República Dominicana." />
+  <title>SNG Portal - Conducción RD</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #031b34 0%, #0b3a63 45%, #06213d 100%);
+      color: white;
+      min-height: 100vh;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+      gap: 40px;
+      padding: 50px 7%;
+    }
+
+    .left-panel {
+      position: relative;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 10px 18px;
+      border-radius: 999px;
+      margin-bottom: 22px;
+      backdrop-filter: blur(10px);
+      font-weight: bold;
+    }
+
+    .badge img {
+      width: 28px;
+      height: 20px;
+      object-fit: cover;
+      border-radius: 3px;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 4vw, 4.6rem);
+      line-height: 1.05;
+      margin-bottom: 18px;
+      text-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .highlight {
+      color: #38bdf8;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 650px;
+      margin-bottom: 28px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .btn {
+      text-decoration: none;
+      padding: 15px 24px;
+      border-radius: 14px;
+      font-weight: 700;
+      transition: 0.25s ease;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #dc2626, #2563eb);
+      color: white;
+      box-shadow: 0 10px 30px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-primary:hover { transform: translateY(-2px); }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(150px, 1fr));
+      gap: 16px;
+      margin-top: 26px;
+      max-width: 760px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 18px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    .feature-card span {
+      font-size: 1.8rem;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .feature-card h3 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 0.92rem;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.5;
+    }
+
+    .right-panel {
+      display: flex;
+      justify-content: center;
+    }
+
+    .main-card {
+      width: 100%;
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(16px);
+    }
+
+    .card-image {
+      width: 100%;
+      height: 270px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-content {
+      padding: 24px;
+    }
+
+    .card-tag {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.22);
+      color: #93c5fd;
+      font-weight: 700;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+    }
+
+    .card-content h2 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .card-content p {
+      color: rgba(255, 255, 255, 0.84);
+      line-height: 1.65;
+      margin-bottom: 18px;
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 14px 10px;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+      color: #ffffff;
+    }
+
+    .stat small {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .gallery {
+      padding: 10px 7% 60px;
+    }
+
+    .gallery h2 {
+      font-size: 2rem;
+      margin-bottom: 18px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .gallery-item {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-item div {
+      padding: 16px;
+    }
+
+    .gallery-item h3 {
+      margin-bottom: 8px;
+      font-size: 1.05rem;
+    }
+
+    .gallery-item p {
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.5;
+      font-size: 0.94rem;
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 35px;
+      }
+
+      .features,
+      .gallery-grid,
+      .mini-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="left-panel">
+      <div class="badge">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_the_Dominican_Republic.svg" alt="Bandera de República Dominicana">
+        <span>República Dominicana</span>
+      </div>
+
+      <h1>Aprende el <span class="highlight">código de tránsito RD</span> y conduce con seguridad.</h1>
+
+      <p class="subtitle">
+        Una guía visual de SNG Portal para reforzar señales, normas clave y buenas prácticas.
+        Ideal para nuevos conductores y para quien quiere repasar rápido antes de salir a la calle.
+      </p>
+
+      <div class="actions">
+        <a class="btn btn-primary" href="./index.html">Volver al portal</a>
+        <a class="btn btn-secondary" href="#temas">Ver temas</a>
+      </div>
+
+      <div class="features" id="temas">
+        <article class="feature-card">
+          <span>🛑</span>
+          <h3>Señales y prioridad</h3>
+          <p>Stop, ceda el paso, intersecciones y normas básicas para evitar accidentes.</p>
+        </article>
+        <article class="feature-card">
+          <span>🚦</span>
+          <h3>Semáforos y carriles</h3>
+          <p>Cómo actuar en rojo, amarillo y verde, además de reglas al cambiar de carril.</p>
+        </article>
+        <article class="feature-card">
+          <span>📘</span>
+          <h3>Buenas prácticas</h3>
+          <p>Cinturón, distancia, velocidad y atención permanente para una conducción responsable.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="right-panel">
+      <article class="main-card">
+        <img
+          class="card-image"
+          src="https://images.unsplash.com/photo-1556122071-e404eaedb77f?auto=format&fit=crop&w=1200&q=80"
+          alt="Conductor en carretera"
+        >
+        <div class="card-content">
+          <span class="card-tag">SNG • Conducción RD</span>
+          <h2>Maneja con criterio</h2>
+          <p>
+            Entender las normas no solo te ayuda a aprobar exámenes: te ayuda a proteger tu vida,
+            la de tus pasajeros y la de todos en la vía.
+          </p>
+
+          <div class="mini-stats">
+            <div class="stat">
+              <strong>+20</strong>
+              <small>Normas útiles</small>
+            </div>
+            <div class="stat">
+              <strong>3</strong>
+              <small>Bloques clave</small>
+            </div>
+            <div class="stat">
+              <strong>100%</strong>
+              <small>Responsive</small>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="gallery">
+    <h2>Práctica visual</h2>
+    <div class="gallery-grid">
+      <article class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80" alt="Carretera urbana">
+        <div>
+          <h3>Entorno urbano</h3>
+          <p>Atención a peatones, motocicletas, cruces y cambios bruscos de flujo.</p>
+        </div>
+      </article>
+
+      <article class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1471478331149-c72f17e33c73?auto=format&fit=crop&w=1200&q=80" alt="Señal de tránsito">
+        <div>
+          <h3>Señalización</h3>
+          <p>Reconoce señales preventivas, reglamentarias e informativas al instante.</p>
+        </div>
+      </article>
+
+      <article class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1200&q=80" alt="Conducción nocturna">
+        <div>
+          <h3>Conducción nocturna</h3>
+          <p>Usa luces correctamente, reduce riesgos y mejora tu tiempo de reacción.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+</body>
+</html>
