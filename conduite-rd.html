@@ -18,6 +18,13 @@
       --borde: rgba(255,255,255,0.14);
       --texto-suave: rgba(255,255,255,0.82);
       --sombra: 0 20px 50px rgba(0,0,0,0.28);
+      --verde: #16a34a;
+      --rojo-error: #dc2626;
+      --amarillo: #f59e0b;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
@@ -28,6 +35,10 @@
         linear-gradient(135deg, #04111f 0%, #0b2646 45%, #0a1c33 100%);
       color: white;
       min-height: 100vh;
+    }
+
+    img {
+      max-width: 100%;
     }
 
     .hero {
@@ -91,7 +102,7 @@
       padding: 15px 24px;
       border-radius: 14px;
       font-weight: 700;
-      transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease, opacity .22s ease;
       display: inline-block;
       border: none;
       cursor: pointer;
@@ -280,6 +291,7 @@
       width: 100%;
       height: 100%;
       min-height: 420px;
+      max-height: 620px;
       object-fit: cover;
       display: block;
     }
@@ -311,6 +323,23 @@
       font-weight: 700;
     }
 
+    .quiz-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .meta-pill {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
     .question {
       font-size: 1.2rem;
       line-height: 1.6;
@@ -337,9 +366,28 @@
       font-weight: 600;
     }
 
-    .answer-btn:hover {
+    .answer-btn:hover:not(:disabled) {
       background: linear-gradient(90deg, rgba(206,17,38,0.24), rgba(11,78,162,0.28));
       transform: translateY(-1px);
+    }
+
+    .answer-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.95;
+    }
+
+    .answer-btn.correct {
+      background: rgba(22,163,74,0.25);
+      border-color: rgba(22,163,74,0.55);
+    }
+
+    .answer-btn.wrong {
+      background: rgba(220,38,38,0.25);
+      border-color: rgba(220,38,38,0.55);
+    }
+
+    .answer-btn.neutral {
+      opacity: 0.65;
     }
 
     .progress-wrap {
@@ -353,6 +401,8 @@
       margin-bottom: 8px;
       color: rgba(255,255,255,0.78);
       font-size: 0.92rem;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     progress {
@@ -369,11 +419,38 @@
       font-size: 1rem;
     }
 
+    .feedback {
+      margin-top: 12px;
+      min-height: 24px;
+      font-size: 0.96rem;
+      font-weight: 700;
+    }
+
+    .feedback.success {
+      color: #9ef0b5;
+    }
+
+    .feedback.error {
+      color: #ffb4b4;
+    }
+
     .quiz-footer {
       margin-top: 14px;
       color: rgba(255,255,255,0.72);
       line-height: 1.55;
       font-size: 0.93rem;
+    }
+
+    .restart-btn {
+      margin-top: 8px;
+      background: linear-gradient(90deg, var(--rojo), var(--azul));
+      color: #fff;
+      border: none;
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
     }
 
     @media (max-width: 1100px) {
@@ -390,6 +467,10 @@
       .hero {
         padding-top: 34px;
       }
+
+      .quiz-visual img {
+        min-height: 280px;
+      }
     }
   </style>
 </head>
@@ -404,7 +485,7 @@
       <h1>Aprende el <span class="highlight">código de tránsito RD</span> con imágenes y práctica real</h1>
 
       <p class="subtitle">
-        Ahora sí en español, más visual, más bonito y con una parte de quiz incluida. Practica señales, prioridades, seguridad vial y situaciones de manejo con un estilo mucho más profesional para SNG Portal.
+        Practica señales, prioridades, seguridad vial y situaciones reales de manejo con un estilo moderno, visual y profesional para SNG Portal.
       </p>
 
       <div class="actions">
@@ -426,7 +507,7 @@
         <article class="feature-card">
           <span>📘</span>
           <h3>Práctica visual</h3>
-          <p>Aprende más rápido con imágenes grandes, tarjetas modernas y preguntas claras.</p>
+          <p>Aprende más rápido con imágenes grandes, preguntas claras y respuestas inmediatas.</p>
         </article>
       </div>
     </div>
@@ -438,7 +519,7 @@
           <span class="card-tag">SNG Portal • Conducción RD</span>
           <h2>Modo dominicano en español</h2>
           <p>
-            Un bloque visual más fuerte, inspirado en una experiencia de examen real, con mejor presencia, imágenes llamativas y colores conectados con la bandera dominicana.
+            Una experiencia más fuerte y más clara, inspirada en un examen visual real, con mejor presencia, mejores colores y una estructura lista para crecer.
           </p>
 
           <div class="mini-stats">
@@ -472,15 +553,15 @@
       </article>
 
       <article class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1471478331149-c72f17e33c73?auto=format&fit=crop&w=1200&q=80" alt="Señal de tránsito">
+        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1200&q=80" alt="Señal y tráfico urbano">
         <div>
           <h3>Señales de tránsito</h3>
-          <p>Reconoce señales preventivas, reglamentarias e informativas al instante.</p>
+          <p>Reconoce señales preventivas, reglamentarias e informativas con práctica visual.</p>
         </div>
       </article>
 
       <article class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1200&q=80" alt="Conducción nocturna">
+        <img src="https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=1200&q=80" alt="Conducción segura">
         <div>
           <h3>Conducción segura</h3>
           <p>Uso correcto del cinturón, luces, visibilidad, atención al entorno y control del vehículo.</p>
@@ -494,29 +575,43 @@
 
     <div class="quiz-wrap">
       <div class="quiz-visual">
-        <img id="quiz-image" src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1200&q=80" alt="Question de conduite">
+        <img
+          id="quiz-image"
+          src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1200&q=80"
+          alt="Imagen de apoyo del quiz"
+        >
       </div>
 
       <div class="quiz-box">
         <div style="margin-bottom:10px;">🇩🇴 Examen de conducción - República Dominicana</div>
+
         <div class="quiz-top">
-          <h3>Práctica visual</h3>
+          <h3 id="series-title">Práctica visual</h3>
           <span class="quiz-badge">Solo español</span>
+        </div>
+
+        <div class="quiz-meta">
+          <div class="meta-pill" id="questionCounter">Serie 1 • Pregunta 1 de 3</div>
+          <div class="meta-pill" id="scoreLive">Aciertos: 0</div>
         </div>
 
         <h3 class="question" id="quiz-question"></h3>
         <div class="answers" id="quiz-answers"></div>
 
+        <div class="feedback" id="feedback"></div>
+
         <div class="progress-wrap">
           <div class="progress-label">
             <span id="progressText">0%</span>
-            <span id="questionCounter">Serie 1 • Pregunta 1 de 3</span>
+            <span id="progressSubtext">Progreso total del examen</span>
           </div>
           <progress id="progressBar" value="0" max="100"></progress>
         </div>
 
         <div class="score" id="score"></div>
-        <div class="quiz-footer">Responde y practica. Al final verás tu puntuación total.</div>
+        <div class="quiz-footer">
+          Responde y practica. Cada pregunta cambia también la imagen para que la experiencia visual sea más clara.
+        </div>
       </div>
     </div>
   </section>
@@ -529,20 +624,26 @@
           {
             question: 'Antes de girar, ¿qué debes hacer?',
             image: 'https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1200&q=80',
+            imageAlt: 'Vehículo preparado para girar',
             choices: ['Poner la direccional', 'Acelerar fuerte', 'Cerrar los ojos y girar'],
-            answer: 0
+            answer: 0,
+            explanation: 'Antes de girar debes señalizar correctamente con la direccional.'
           },
           {
-            question: '¿Qué significa esta señal?',
+            question: '¿Qué significa una señal de STOP?',
             image: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1200&q=80',
+            imageAlt: 'Intersección urbana con tráfico',
             choices: ['Seguir rápido', 'Parada obligatoria', 'Zona escolar'],
-            answer: 1
+            answer: 1,
+            explanation: 'La señal STOP obliga a detener el vehículo completamente.'
           },
           {
             question: '¿Quién tiene prioridad en este cruce?',
-            image: 'https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=1200&q=80',
+            image: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80',
+            imageAlt: 'Cruce urbano entre varios vehículos',
             choices: ['El vehículo de la derecha', 'El más rápido', 'El más grande'],
-            answer: 0
+            answer: 0,
+            explanation: 'En muchas situaciones sin señalización específica, se respeta la prioridad a la derecha.'
           }
         ]
       },
@@ -550,22 +651,28 @@
         title: 'Serie 2: Semáforos y maniobras',
         questions: [
           {
-            question: '¿Qué significa semáforo en rojo en este caso?',
-            image: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1200&q=80',
+            question: '¿Qué significa el semáforo en rojo?',
+            image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1200&q=80',
+            imageAlt: 'Tráfico urbano con semáforos',
             choices: ['Detenerse totalmente', 'Acelerar antes del cruce', 'Solo tocar bocina'],
-            answer: 0
+            answer: 0,
+            explanation: 'La luz roja indica detención total antes de avanzar.'
           },
           {
-            question: '¿Esta maniobra de cambio de carril es correcta?',
+            question: '¿Cómo cambiar de carril de forma segura?',
             image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1200&q=80',
-            choices: ['Sí, si señaliza y verifica espejos', 'Sí, siempre', 'No importa mirar'],
-            answer: 0
+            imageAlt: 'Vehículo circulando en carretera',
+            choices: ['Señalizar y verificar espejos', 'Girar de golpe', 'No mirar alrededor'],
+            answer: 0,
+            explanation: 'Para cambiar de carril correctamente debes señalizar y revisar espejos.'
           },
           {
             question: '¿Cómo debes responder a un paso peatonal ocupado?',
             image: 'https://images.unsplash.com/photo-1572204092160-8f2ce6f88f1a?auto=format&fit=crop&w=1200&q=80',
+            imageAlt: 'Paso peatonal en ciudad',
             choices: ['Mantener velocidad', 'Detenerte y ceder el paso', 'Rebasar por la derecha'],
-            answer: 1
+            answer: 1,
+            explanation: 'Los peatones tienen prioridad en el paso peatonal.'
           }
         ]
       },
@@ -575,20 +682,26 @@
           {
             question: 'Para conducir con seguridad, ¿qué es obligatorio?',
             image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=1200&q=80',
+            imageAlt: 'Conductor en vehículo',
             choices: ['Usar el cinturón de seguridad', 'Mirar el móvil a veces', 'Conducir con una mano siempre'],
-            answer: 0
+            answer: 0,
+            explanation: 'El cinturón de seguridad es obligatorio para una conducción responsable.'
           },
           {
             question: 'Si hay lluvia intensa, ¿qué debes hacer?',
             image: 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=1200&q=80',
-            choices: ['Aumentar velocidad', 'Reducir velocidad y distancia', 'Apagar luces'],
-            answer: 1
+            imageAlt: 'Conducción bajo lluvia intensa',
+            choices: ['Aumentar velocidad', 'Reducir velocidad y conducir con precaución', 'Apagar luces'],
+            answer: 1,
+            explanation: 'Con lluvia debes bajar la velocidad y manejar con mayor precaución.'
           },
           {
-            question: '¿Qué distancia mínima conviene mantener detrás del vehículo frontal?',
+            question: '¿Qué distancia conviene mantener detrás del vehículo frontal?',
             image: 'https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1200&q=80',
+            imageAlt: 'Vehículos circulando con separación',
             choices: ['Muy pegado para reaccionar rápido', 'Distancia de seguridad suficiente', 'Solo 1 metro'],
-            answer: 1
+            answer: 1,
+            explanation: 'Siempre debes mantener una distancia de seguridad suficiente.'
           }
         ]
       }
@@ -597,25 +710,48 @@
     let currentSeries = 0;
     let currentQuestion = 0;
     let score = 0;
+    let locked = false;
 
     function totalQuestions() {
       return series.reduce((total, serie) => total + serie.questions.length, 0);
     }
 
+    function getCurrentQuestionData() {
+      return series[currentSeries].questions[currentQuestion];
+    }
+
     function answeredQuestions() {
       let answered = 0;
+
       for (let i = 0; i < currentSeries; i++) {
         answered += series[i].questions.length;
       }
+
       return answered + currentQuestion;
     }
 
-    function renderQuestion() {
-      const q = series[currentSeries].questions[currentQuestion];
+    function updateProgress() {
+      const percent = (answeredQuestions() / totalQuestions()) * 100;
+      document.getElementById('progressBar').value = percent;
+      document.getElementById('progressText').innerText = Math.round(percent) + '%';
+      document.getElementById('scoreLive').innerText = `Aciertos: ${score}`;
+    }
 
+    function renderQuestion() {
+      const currentSerie = series[currentSeries];
+      const q = getCurrentQuestionData();
+
+      locked = false;
+
+      document.getElementById('series-title').textContent = currentSerie.title;
       document.getElementById('quiz-image').src = q.image;
+      document.getElementById('quiz-image').alt = q.imageAlt || 'Imagen de apoyo del quiz';
       document.getElementById('quiz-question').textContent = q.question;
-      document.getElementById('questionCounter').innerText = `Serie ${currentSeries + 1} • Pregunta ${currentQuestion + 1} de ${series[currentSeries].questions.length}`;
+      document.getElementById('questionCounter').innerText =
+        `Serie ${currentSeries + 1} • Pregunta ${currentQuestion + 1} de ${currentSerie.questions.length}`;
+      document.getElementById('feedback').textContent = '';
+      document.getElementById('feedback').className = 'feedback';
+      document.getElementById('score').textContent = '';
 
       const answersDiv = document.getElementById('quiz-answers');
       answersDiv.innerHTML = '';
@@ -623,70 +759,97 @@
       q.choices.forEach((choice, i) => {
         const btn = document.createElement('button');
         btn.className = 'answer-btn';
+        btn.type = 'button';
         btn.innerHTML = `<strong>${String.fromCharCode(65 + i)}.</strong> ${choice}`;
         btn.onclick = () => checkAnswer(i);
         answersDiv.appendChild(btn);
       });
+
+      updateProgress();
     }
 
-    function checkAnswer(i) {
-      const q = series[currentSeries].questions[currentQuestion];
+    function checkAnswer(selectedIndex) {
+      if (locked) return;
+      locked = true;
+
+      const q = getCurrentQuestionData();
       const buttons = document.querySelectorAll('#quiz-answers .answer-btn');
+      const feedback = document.getElementById('feedback');
+      const isCorrect = selectedIndex === q.answer;
+
       buttons.forEach((btn, btnIndex) => {
         btn.disabled = true;
+
         if (btnIndex === q.answer) {
-          btn.style.background = '#16a34a';
+          btn.classList.add('correct');
+        } else if (btnIndex === selectedIndex) {
+          btn.classList.add('wrong');
         } else {
-          btn.style.background = '#dc2626';
+          btn.classList.add('neutral');
         }
       });
 
-      if (i === q.answer) {
+      if (isCorrect) {
         score++;
+        feedback.textContent = '✅ Correcto. ' + q.explanation;
+        feedback.className = 'feedback success';
+      } else {
+        feedback.textContent = '❌ Incorrecto. ' + q.explanation;
+        feedback.className = 'feedback error';
       }
+
+      document.getElementById('scoreLive').innerText = `Aciertos: ${score}`;
 
       setTimeout(() => {
         currentQuestion++;
+
         if (currentQuestion >= series[currentSeries].questions.length) {
           currentSeries++;
           currentQuestion = 0;
         }
-        updateProgress();
 
         if (currentSeries < series.length) {
           renderQuestion();
         } else {
           endQuiz();
         }
-      }, 700);
-    }
-
-    function updateProgress() {
-      const percent = (answeredQuestions() / totalQuestions()) * 100;
-      document.getElementById('progressBar').value = percent;
-      document.getElementById('progressText').innerText = Math.round(percent) + '%';
+      }, 1400);
     }
 
     function endQuiz() {
+      const total = totalQuestions();
+      const percent = Math.round((score / total) * 100);
+
+      let level = 'Buen intento';
+      if (percent >= 90) level = 'Excelente';
+      else if (percent >= 70) level = 'Muy bien';
+      else if (percent >= 50) level = 'Nivel aceptable';
+
+      document.getElementById('series-title').textContent = 'Resultado final';
       document.getElementById('quiz-question').innerText = '🎉 Examen completado';
-      document.getElementById('quiz-answers').innerHTML = '<button class="answer-btn" onclick="restartQuiz()">Volver a empezar</button>';
-      document.getElementById('score').innerText = 'Puntuación: ' + score + ' / ' + totalQuestions();
       document.getElementById('questionCounter').innerText = 'Todas las series completadas';
       document.getElementById('quiz-image').src = 'https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1200&q=80';
+      document.getElementById('quiz-image').alt = 'Resultado final del examen';
       document.getElementById('progressBar').value = 100;
       document.getElementById('progressText').innerText = '100%';
+      document.getElementById('feedback').textContent = `Nivel: ${level}`;
+      document.getElementById('feedback').className = 'feedback success';
+      document.getElementById('scoreLive').innerText = `Aciertos: ${score}`;
+      document.getElementById('score').innerText = `Puntuación final: ${score} / ${total} (${percent}%)`;
+
+      document.getElementById('quiz-answers').innerHTML = `
+        <button class="restart-btn" type="button" onclick="restartQuiz()">Volver a empezar</button>
+      `;
     }
 
     function restartQuiz() {
       currentSeries = 0;
       currentQuestion = 0;
       score = 0;
-      document.getElementById('score').innerText = '';
-      updateProgress();
+      locked = false;
       renderQuestion();
     }
 
-    updateProgress();
     renderQuestion();
   </script>
 </body>
