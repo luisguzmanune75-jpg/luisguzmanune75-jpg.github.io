@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examen Blanco RD - Nivel 3</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+    body{
+      background:linear-gradient(135deg,#07111f,#092846,#04111b);
+      color:#fff;
+      min-height:100vh;
+      padding:20px;
+    }
+    .container{max-width:920px;margin:auto}
+    .topbar{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+    .btn{display:inline-block;text-decoration:none;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);padding:12px 16px;border-radius:14px}
+    .card{
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:24px;
+      box-shadow:0 20px 50px rgba(0,0,0,.28);
+      padding:24px;
+    }
+    .hero{margin-bottom:18px}
+    .hero h1{font-size:2.2rem;margin-bottom:10px}
+    .hero p{line-height:1.6;color:rgba(255,255,255,.84)}
+    .tags{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+    .tag{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+    .meta{color:#7ec8ff;font-weight:700;margin-bottom:12px}
+    .question{font-size:1.4rem;font-weight:700;line-height:1.42;margin-bottom:18px}
+    .answers{display:grid;gap:12px}
+    .ans{
+      padding:16px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:16px;
+      color:#fff;
+      cursor:pointer;
+      text-align:left;
+    }
+    .ans:hover{background:rgba(255,255,255,.12)}
+    .ans.correct{background:rgba(25,135,84,.28);border-color:rgba(25,135,84,.85)}
+    .ans.wrong{background:rgba(220,53,69,.28);border-color:rgba(220,53,69,.85)}
+    .feedback{
+      display:none;
+      margin-top:16px;
+      padding:15px;
+      border-radius:16px;
+      background:rgba(255,255,255,.06);
+      line-height:1.65;
+    }
+    .actions{display:flex;justify-content:flex-end;margin-top:18px}
+    .next{
+      display:none;
+      border:none;
+      padding:14px 20px;
+      border-radius:14px;
+      font-weight:700;
+      color:#fff;
+      cursor:pointer;
+      background:linear-gradient(90deg,#e63946,#5dade2);
+    }
+    .result{
+      display:none;
+      text-align:center;
+      margin-top:18px;
+    }
+    .result h2{font-size:2rem;margin-bottom:10px}
+    .result p{font-size:1.1rem;color:rgba(255,255,255,.86);margin-bottom:16px}
+    .restart{
+      display:inline-block;
+      text-decoration:none;
+      color:#fff;
+      padding:14px 20px;
+      border-radius:14px;
+      font-weight:700;
+      background:linear-gradient(90deg,#e63946,#5dade2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a href="index.html" class="btn">← Volver</a>
+      <a href="examen-rd-basico.html" class="btn">Reiniciar desde Nivel 1</a>
+    </div>
+
+    <div class="card hero">
+      <h1>Examen blanco RD · Nivel 3</h1>
+      <p>Prueba avanzada con decisiones rápidas, conducción defensiva, rotondas, carriles múltiples y situaciones de riesgo.</p>
+      <div class="tags">
+        <div class="tag">📕 Nivel avanzado</div>
+        <div class="tag">⏱️ 20 s por pregunta</div>
+        <div class="tag">🎯 10 preguntas</div>
+      </div>
+    </div>
+
+    <div class="card" id="quiz">
+      <div class="meta" id="meta"></div>
+      <div class="question" id="question"></div>
+      <div class="answers" id="answers"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="actions">
+        <button class="next" id="next">Siguiente</button>
+      </div>
+    </div>
+
+    <div class="card result" id="result">
+      <h2>Resultado final</h2>
+      <p id="resultText"></p>
+      <a href="examen-rd-avanzado.html" class="restart">Repetir examen</a>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        q:"Vas por una vía mojada y notas poca adherencia. ¿Qué haces?",
+        a:["Aumentar velocidad para salir rápido", "Reducir velocidad y evitar maniobras bruscas", "Frenar de golpe en curva", "Usar el celular mientras avanzas lento"],
+        correct:1,
+        explain:"Con pavimento mojado debes reducir velocidad y conducir suavemente."
+      },
+      {
+        q:"En una emergencia, la conducción defensiva consiste en:",
+        a:["Reaccionar tarde", "Anticipar riesgos y mantener control", "Cerrar el paso a todos", "Confiar solo en la suerte"],
+        correct:1,
+        explain:"La conducción defensiva busca anticipar errores ajenos y reducir riesgos."
+      },
+      {
+        q:"En una rotonda con varios carriles, lo más importante es:",
+        a:["Entrar rápido sin mirar", "Elegir carril correcto y respetar prioridad", "Cambiar de carril dentro sin señalizar", "Detenerse en el centro"],
+        correct:1,
+        explain:"Debes entrar en el carril adecuado y respetar a quienes ya circulan."
+      },
+      {
+        q:"Si un vehículo te sigue demasiado cerca por detrás, conviene:",
+        a:["Frenar fuerte para asustarlo", "Mantener calma y aumentar tu distancia delante", "Cerrarle el paso", "Apagar luces"],
+        correct:1,
+        explain:"Aumentar tu margen adelante te da más espacio para reaccionar sin frenar bruscamente."
+      },
+      {
+        q:"Al manejar de noche, una medida correcta es:",
+        a:["Usar luces adecuadas y reducir velocidad si hace falta", "Apagar luces en zonas oscuras", "Mirar el celular con brillo alto", "Pegarte al vehículo delante"],
+        correct:0,
+        explain:"La visibilidad nocturna exige buen uso de luces y conducción más prudente."
+      },
+      {
+        q:"Si llegas a una zona de obras con carriles reducidos debes:",
+        a:["Pasar primero a toda velocidad", "Seguir señales temporales y reducir velocidad", "Adelantar por cualquier lado", "Ignorar al personal de control"],
+        correct:1,
+        explain:"En obras debes seguir la señalización temporal y conducir con máxima atención."
+      },
+      {
+        q:"Cuando aparece un obstáculo repentino en la vía, la reacción más segura suele ser:",
+        a:["Cerrar los ojos", "Mantener control, frenar con firmeza y evaluar escape seguro", "Girar bruscamente sin mirar", "Acelerar"],
+        correct:1,
+        explain:"Debes conservar el control del vehículo y actuar con criterio."
+      },
+      {
+        q:"En tráfico denso, cambiar constantemente de carril suele:",
+        a:["Mejorar siempre el tiempo", "Aumentar riesgo y estrés", "Ser obligatorio", "Ahorrar combustible siempre"],
+        correct:1,
+        explain:"Los cambios de carril innecesarios elevan el riesgo de incidente."
+      },
+      {
+        q:"Si un peatón o motociclista es vulnerable cerca de tu vehículo, debes:",
+        a:["Ignorarlo", "Dar más espacio lateral y extremar precaución", "Tocarle bocina sin parar", "Acercarte para que se aparte"],
+        correct:1,
+        explain:"Usuarios vulnerables requieren más distancia y atención."
+      },
+      {
+        q:"La mejor forma de evitar un accidente en una situación dudosa es:",
+        a:["Competir por el paso", "Ceder, observar y actuar con prudencia", "Acelerar primero", "No mirar espejos"],
+        correct:1,
+        explain:"La prudencia evita conflictos y reduce el riesgo de colisión."
+      }
+    ];
+
+    let current=0, score=0, answered=false, timeLeft=20, timer;
+    const meta=document.getElementById('meta');
+    const question=document.getElementById('question');
+    const answers=document.getElementById('answers');
+    const feedback=document.getElementById('feedback');
+    const next=document.getElementById('next');
+    const quiz=document.getElementById('quiz');
+    const result=document.getElementById('result');
+    const resultText=document.getElementById('resultText');
+
+    function setMeta(){
+      meta.textContent=`Pregunta ${current+1} de ${questions.length} · Tiempo: ${timeLeft}s`;
+    }
+
+    function startTimer(){
+      clearInterval(timer);
+      timeLeft=20;
+      setMeta();
+      timer=setInterval(()=>{
+        timeLeft--;
+        setMeta();
+        if(timeLeft<=0){
+          clearInterval(timer);
+          if(!answered) validate(-1);
+        }
+      },1000);
+    }
+
+    function render(){
+      answered=false;
+      next.style.display='none';
+      feedback.style.display='none';
+      const item=questions[current];
+      question.textContent=item.q;
+      answers.innerHTML='';
+      item.a.forEach((opt,index)=>{
+        const btn=document.createElement('button');
+        btn.className='ans';
+        btn.textContent=opt;
+        btn.onclick=()=>validate(index);
+        answers.appendChild(btn);
+      });
+      startTimer();
+    }
+
+    function validate(selected){
+      answered=true;
+      clearInterval(timer);
+      const item=questions[current];
+      const btns=document.querySelectorAll('.ans');
+
+      btns.forEach((btn,index)=>{
+        btn.disabled=true;
+        if(index===item.correct) btn.classList.add('correct');
+        if(index===selected && index!==item.correct) btn.classList.add('wrong');
+      });
+
+      if(selected===item.correct){
+        score++;
+        feedback.innerHTML=`✅ <strong>Correcto.</strong><br>${item.explain}`;
+      }else if(selected===-1){
+        feedback.innerHTML=`⏰ <strong>Tiempo agotado.</strong><br>Respuesta correcta: <strong>${item.a[item.correct]}</strong><br>${item.explain}`;
+      }else{
+        feedback.innerHTML=`❌ <strong>Incorrecto.</strong><br>Respuesta correcta: <strong>${item.a[item.correct]}</strong><br>${item.explain}`;
+      }
+
+      feedback.style.display='block';
+      next.style.display='inline-block';
+    }
+
+    next.onclick=()=>{
+      current++;
+      if(current < questions.length){
+        render();
+      }else{
+        finish();
+      }
+    };
+
+    function finish(){
+      quiz.style.display='none';
+      result.style.display='block';
+      const pct=Math.round(score / questions.length * 100);
+      let msg="Nivel avanzado aún en progreso.";
+      if(pct >= 80) msg="Excelente dominio. Muy buen nivel.";
+      else if(pct >= 60) msg="Buen nivel, pero puedes mejorar.";
+      resultText.innerHTML=`Obtuviste <strong>${score}/${questions.length}</strong> (${pct}%).<br>${msg}`;
+    }
+
+    render();
+  </script>
+</body>
+</html>

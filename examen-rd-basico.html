@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examen Blanco RD - Nivel 1</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+    body{
+      background:linear-gradient(135deg,#041a33,#07294d,#041427);
+      color:#fff;
+      min-height:100vh;
+      padding:20px;
+    }
+    .container{max-width:900px;margin:auto}
+    .topbar{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px;
+    }
+    .btn{
+      display:inline-block;text-decoration:none;color:#fff;
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
+      padding:12px 16px;border-radius:14px;
+    }
+    .hero,.quiz-box,.result-box{
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:24px;
+      box-shadow:0 20px 50px rgba(0,0,0,.25);
+    }
+    .hero{padding:26px;margin-bottom:18px}
+    .hero h1{font-size:2.2rem;margin-bottom:10px}
+    .hero p{color:rgba(255,255,255,.82);line-height:1.6}
+    .stats{
+      display:flex;gap:12px;flex-wrap:wrap;margin-top:18px
+    }
+    .pill{
+      padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);font-size:.95rem
+    }
+    .quiz-box{padding:24px}
+    .question-count{color:#7ec8ff;font-weight:700;margin-bottom:12px}
+    .question{
+      font-size:1.45rem;
+      line-height:1.4;
+      margin-bottom:20px;
+      font-weight:700;
+    }
+    .answers{
+      display:grid;
+      gap:12px;
+    }
+    .answer-btn{
+      width:100%;
+      text-align:left;
+      padding:16px 18px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      cursor:pointer;
+      font-size:1rem;
+      transition:.25s ease;
+    }
+    .answer-btn:hover{background:rgba(255,255,255,.12)}
+    .answer-btn.correct{background:rgba(40,167,69,.25);border-color:rgba(40,167,69,.8)}
+    .answer-btn.wrong{background:rgba(220,53,69,.25);border-color:rgba(220,53,69,.8)}
+    .feedback{
+      margin-top:18px;
+      padding:16px;
+      border-radius:16px;
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.9);
+      display:none;
+      line-height:1.6;
+    }
+    .actions{
+      margin-top:18px;
+      display:flex;
+      justify-content:flex-end;
+    }
+    .next-btn{
+      padding:14px 20px;
+      border:none;
+      border-radius:14px;
+      background:linear-gradient(90deg,#ff2d55,#4dabff);
+      color:#fff;
+      font-size:1rem;
+      font-weight:700;
+      cursor:pointer;
+      display:none;
+    }
+    .result-box{
+      display:none;
+      padding:28px;
+      text-align:center;
+      margin-top:18px;
+    }
+    .result-box h2{font-size:2rem;margin-bottom:12px}
+    .result-box p{font-size:1.1rem;color:rgba(255,255,255,.86);margin-bottom:18px}
+    .restart-btn{
+      display:inline-block;
+      text-decoration:none;
+      padding:14px 20px;
+      border-radius:14px;
+      background:linear-gradient(90deg,#ff2d55,#4dabff);
+      color:#fff;
+      font-weight:700;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a href="index.html" class="btn">← Volver</a>
+      <a href="examen-rd-intermedio.html" class="btn">Ir al Nivel 2</a>
+    </div>
+
+    <section class="hero">
+      <h1>Examen blanco RD · Nivel 1</h1>
+      <p>Práctica básica sobre señales, semáforos, cinturón, documentos y normas simples de conducción.</p>
+      <div class="stats">
+        <div class="pill">📘 Nivel básico</div>
+        <div class="pill">⏱️ 15 s por pregunta</div>
+        <div class="pill">🎯 10 preguntas</div>
+      </div>
+    </section>
+
+    <section class="quiz-box" id="quizBox">
+      <div class="question-count" id="questionCount"></div>
+      <div class="question" id="questionText"></div>
+      <div class="answers" id="answersBox"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="actions">
+        <button class="next-btn" id="nextBtn">Siguiente</button>
+      </div>
+    </section>
+
+    <section class="result-box" id="resultBox">
+      <h2>Resultado final</h2>
+      <p id="resultText"></p>
+      <a href="examen-rd-basico.html" class="restart-btn">Repetir examen</a>
+    </section>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        q: "¿Qué significa una señal de PARE?",
+        a: ["Reducir un poco la velocidad", "Detenerse completamente", "Tocar bocina", "Seguir si no viene nadie"],
+        correct: 1,
+        explain: "La señal de PARE obliga a detener completamente el vehículo antes de continuar."
+      },
+      {
+        q: "¿Qué debes hacer ante una luz roja del semáforo?",
+        a: ["Acelerar", "Pasar rápido", "Detenerte", "Girar siempre a la derecha"],
+        correct: 2,
+        explain: "La luz roja indica detención obligatoria."
+      },
+      {
+        q: "¿Para qué sirve el cinturón de seguridad?",
+        a: ["Para decorar el asiento", "Para escuchar mejor", "Para proteger al ocupante", "Para conducir más rápido"],
+        correct: 2,
+        explain: "El cinturón de seguridad reduce el riesgo de lesiones en caso de accidente."
+      },
+      {
+        q: "Si ves una señal de CEDA EL PASO, debes:",
+        a: ["Seguir sin mirar", "Detener al carro en medio", "Dar prioridad a otros vehículos", "Estacionarte"],
+        correct: 2,
+        explain: "Ceda el paso significa que debes dejar pasar a quienes tienen prioridad."
+      },
+      {
+        q: "¿Qué color del semáforo indica precaución?",
+        a: ["Rojo", "Verde", "Amarillo", "Azul"],
+        correct: 2,
+        explain: "La luz amarilla advierte que debes prepararte para detenerte con precaución."
+      },
+      {
+        q: "¿Qué documento debe tener un conductor legalmente?",
+        a: ["Tarjeta de supermercado", "Licencia de conducir", "Carnet de gimnasio", "Pasaporte siempre"],
+        correct: 1,
+        explain: "La licencia de conducir es el documento básico para conducir legalmente."
+      },
+      {
+        q: "¿Qué significa una señal de límite de velocidad?",
+        a: ["Velocidad mínima", "Velocidad exacta obligatoria", "Velocidad máxima permitida", "Zona sin reglas"],
+        correct: 2,
+        explain: "La señal indica la velocidad máxima autorizada."
+      },
+      {
+        q: "Antes de cambiar de carril debes:",
+        a: ["Cerrar los ojos", "Mirar espejos y señalizar", "Acelerar sin avisar", "Frenar de golpe"],
+        correct: 1,
+        explain: "Debes verificar el entorno y usar las luces direccionales."
+      },
+      {
+        q: "¿Qué significa una señal de paso peatonal?",
+        a: ["Zona para correr", "Cruce de personas", "Taller mecánico", "Fin de la vía"],
+        correct: 1,
+        explain: "Indica un área donde los peatones pueden cruzar."
+      },
+      {
+        q: "Si conduces usando el celular, estás:",
+        a: ["Conduciendo correctamente", "Aumentando el riesgo de accidente", "Ahorrando tiempo", "Siguiendo la ley"],
+        correct: 1,
+        explain: "Usar el celular al conducir distrae y aumenta el riesgo de accidente."
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+    let answered = false;
+    let timeLeft = 15;
+    let timer;
+
+    const questionCount = document.getElementById("questionCount");
+    const questionText = document.getElementById("questionText");
+    const answersBox = document.getElementById("answersBox");
+    const feedback = document.getElementById("feedback");
+    const nextBtn = document.getElementById("nextBtn");
+    const resultBox = document.getElementById("resultBox");
+    const resultText = document.getElementById("resultText");
+    const quizBox = document.getElementById("quizBox");
+
+    function startTimer(){
+      clearInterval(timer);
+      timeLeft = 15;
+      updateCounter();
+      timer = setInterval(() => {
+        timeLeft--;
+        updateCounter();
+        if(timeLeft <= 0){
+          clearInterval(timer);
+          if(!answered){
+            lockAnswers(-1);
+          }
+        }
+      }, 1000);
+    }
+
+    function updateCounter(){
+      questionCount.textContent = `Pregunta ${current + 1} de ${questions.length} · Tiempo: ${timeLeft}s`;
+    }
+
+    function loadQuestion(){
+      answered = false;
+      nextBtn.style.display = "none";
+      feedback.style.display = "none";
+      feedback.innerHTML = "";
+
+      const item = questions[current];
+      questionText.textContent = item.q;
+      answersBox.innerHTML = "";
+
+      item.a.forEach((answer, index) => {
+        const btn = document.createElement("button");
+        btn.className = "answer-btn";
+        btn.textContent = answer;
+        btn.onclick = () => lockAnswers(index);
+        answersBox.appendChild(btn);
+      });
+
+      startTimer();
+    }
+
+    function lockAnswers(selected){
+      answered = true;
+      clearInterval(timer);
+
+      const item = questions[current];
+      const buttons = document.querySelectorAll(".answer-btn");
+
+      buttons.forEach((btn, index) => {
+        btn.disabled = true;
+        if(index === item.correct) btn.classList.add("correct");
+        if(index === selected && index !== item.correct) btn.classList.add("wrong");
+      });
+
+      if(selected === item.correct){
+        score++;
+        feedback.innerHTML = `✅ <strong>Correcto.</strong><br>${item.explain}`;
+      } else if(selected === -1){
+        feedback.innerHTML = `⏰ <strong>Tiempo agotado.</strong><br>Respuesta correcta: <strong>${item.a[item.correct]}</strong><br>${item.explain}`;
+      } else {
+        feedback.innerHTML = `❌ <strong>Incorrecto.</strong><br>Respuesta correcta: <strong>${item.a[item.correct]}</strong><br>${item.explain}`;
+      }
+
+      feedback.style.display = "block";
+      nextBtn.style.display = "inline-block";
+    }
+
+    nextBtn.addEventListener("click", () => {
+      current++;
+      if(current < questions.length){
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    });
+
+    function showResult(){
+      quizBox.style.display = "none";
+      resultBox.style.display = "block";
+      const percent = Math.round((score / questions.length) * 100);
+      let level = "Debes practicar más.";
+      if(percent >= 80) level = "Muy bien, nivel excelente.";
+      else if(percent >= 60) level = "Buen trabajo, sigue practicando.";
+      resultText.innerHTML = `Obtuviste <strong>${score}/${questions.length}</strong> (${percent}%).<br>${level}`;
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>

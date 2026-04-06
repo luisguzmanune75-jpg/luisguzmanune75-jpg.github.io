@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examen Blanco RD - Nivel 2</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+    body{background:linear-gradient(135deg,#051a31,#0a2e52,#04111f);color:#fff;min-height:100vh;padding:20px}
+    .container{max-width:900px;margin:auto}
+    .topbar{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+    .btn{display:inline-block;text-decoration:none;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);padding:12px 16px;border-radius:14px}
+    .box{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:24px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+    .hero,.quiz,.result{padding:24px}
+    .hero{margin-bottom:18px}
+    .hero h1{font-size:2.2rem;margin-bottom:10px}
+    .hero p{color:rgba(255,255,255,.82);line-height:1.6}
+    .pill-wrap{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+    .pill{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+    .meta{color:#7ec8ff;font-weight:700;margin-bottom:12px}
+    .question{font-size:1.42rem;font-weight:700;line-height:1.4;margin-bottom:18px}
+    .answers{display:grid;gap:12px}
+    .answer{padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#fff;cursor:pointer;text-align:left}
+    .answer:hover{background:rgba(255,255,255,.11)}
+    .answer.correct{background:rgba(40,167,69,.25);border-color:rgba(40,167,69,.8)}
+    .answer.wrong{background:rgba(220,53,69,.25);border-color:rgba(220,53,69,.8)}
+    .feedback{display:none;margin-top:16px;padding:15px;border-radius:16px;background:rgba(255,255,255,.06);line-height:1.6}
+    .actions{margin-top:18px;display:flex;justify-content:flex-end}
+    .next{display:none;padding:14px 20px;border:none;border-radius:14px;background:linear-gradient(90deg,#ff9f1c,#4dabff);color:#fff;font-weight:700;cursor:pointer}
+    .result{display:none;text-align:center}
+    .result h2{font-size:2rem;margin-bottom:10px}
+    .result p{font-size:1.1rem;color:rgba(255,255,255,.85);margin-bottom:16px}
+    .restart{display:inline-block;text-decoration:none;padding:14px 20px;border-radius:14px;background:linear-gradient(90deg,#ff9f1c,#4dabff);color:#fff;font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a href="index.html" class="btn">← Volver</a>
+      <a href="examen-rd-avanzado.html" class="btn">Ir al Nivel 3</a>
+    </div>
+
+    <div class="box hero">
+      <h1>Examen blanco RD · Nivel 2</h1>
+      <p>Preguntas intermedias sobre cruces, prioridad, cambios de carril, adelantamiento y distancia de seguridad.</p>
+      <div class="pill-wrap">
+        <div class="pill">📙 Nivel intermedio</div>
+        <div class="pill">⏱️ 18 s por pregunta</div>
+        <div class="pill">🎯 10 preguntas</div>
+      </div>
+    </div>
+
+    <div class="box quiz" id="quiz">
+      <div class="meta" id="meta"></div>
+      <div class="question" id="question"></div>
+      <div class="answers" id="answers"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="actions">
+        <button class="next" id="next">Siguiente</button>
+      </div>
+    </div>
+
+    <div class="box result" id="result">
+      <h2>Resultado final</h2>
+      <p id="resultText"></p>
+      <a href="examen-rd-intermedio.html" class="restart">Repetir examen</a>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        q:"Al acercarte a una intersección sin señalización, debes:",
+        a:["Acelerar primero", "Observar y ceder si corresponde", "Tocar bocina y pasar", "Frenar en medio"],
+        correct:1,
+        explain:"En una intersección sin señalización debes actuar con precaución y respetar la prioridad."
+      },
+      {
+        q:"Antes de adelantar a otro vehículo debes:",
+        a:["Verificar que sea seguro y permitido", "Cerrar los ojos y acelerar", "Pegarte al otro carro", "Solo tocar bocina"],
+        correct:0,
+        explain:"Adelantar exige visibilidad, espacio suficiente y maniobra permitida."
+      },
+      {
+        q:"La distancia de seguridad sirve para:",
+        a:["Ahorrar gasolina", "Evitar multas únicamente", "Tener tiempo de reacción", "Manejar más lento siempre"],
+        correct:2,
+        explain:"Permite reaccionar y frenar a tiempo ante un imprevisto."
+      },
+      {
+        q:"Si un peatón está cruzando por el paso peatonal, debes:",
+        a:["Acelerar", "Esperar y ceder el paso", "Pasar rozándolo", "Cambiar de carril sin mirar"],
+        correct:1,
+        explain:"Debes permitir el paso seguro del peatón."
+      },
+      {
+        q:"¿Cuándo es más peligroso cambiar de carril?",
+        a:["Cuando no revisas espejos ni punto ciego", "Cuando usas direccional", "Cuando reduces velocidad con control", "Cuando el carril está libre"],
+        correct:0,
+        explain:"No revisar espejos y punto ciego puede provocar colisiones."
+      },
+      {
+        q:"En una rotonda o glorieta generalmente debes:",
+        a:["Entrar sin mirar", "Respetar el flujo y la prioridad existente", "Pararte dentro", "Ir en reversa"],
+        correct:1,
+        explain:"Debes incorporarte con precaución y respetar a quienes ya circulan."
+      },
+      {
+        q:"Si un vehículo delante frena bruscamente y vas muy cerca, el principal riesgo es:",
+        a:["Mejorar tu tiempo", "Choque por alcance", "Gastar menos frenos", "Tener más espacio"],
+        correct:1,
+        explain:"Ir demasiado cerca aumenta el riesgo de colisión trasera."
+      },
+      {
+        q:"Para girar correctamente en una esquina debes:",
+        a:["Avisar con direccional y reducir", "Acelerar al máximo", "Tocar bocina solamente", "Invadir otro carril sin mirar"],
+        correct:0,
+        explain:"La maniobra segura requiere señalizar y ajustar velocidad."
+      },
+      {
+        q:"Si hay lluvia, lo más recomendable es:",
+        a:["Aumentar velocidad", "Reducir velocidad y aumentar distancia", "Usar celular", "Frenar tarde"],
+        correct:1,
+        explain:"Con lluvia hay menos adherencia y más distancia de frenado."
+      },
+      {
+        q:"El punto ciego es:",
+        a:["La parte del vidrio delantero", "Zona que no ves bien por espejos", "Lugar para estacionar", "Una luz del tablero"],
+        correct:1,
+        explain:"Es una zona lateral o trasera que no aparece claramente en los espejos."
+      }
+    ];
+
+    let current = 0, score = 0, answered = false, timeLeft = 18, timer;
+    const meta = document.getElementById('meta');
+    const question = document.getElementById('question');
+    const answers = document.getElementById('answers');
+    const feedback = document.getElementById('feedback');
+    const next = document.getElementById('next');
+    const result = document.getElementById('result');
+    const quiz = document.getElementById('quiz');
+    const resultText = document.getElementById('resultText');
+
+    function updateMeta(){
+      meta.textContent = `Pregunta ${current+1} de ${questions.length} · Tiempo: ${timeLeft}s`;
+    }
+
+    function startTimer(){
+      clearInterval(timer);
+      timeLeft = 18;
+      updateMeta();
+      timer = setInterval(()=>{
+        timeLeft--;
+        updateMeta();
+        if(timeLeft <= 0){
+          clearInterval(timer);
+          if(!answered) check(-1);
+        }
+      },1000);
+    }
+
+    function render(){
+      answered = false;
+      next.style.display = 'none';
+      feedback.style.display = 'none';
+      const item = questions[current];
+      question.textContent = item.q;
+      answers.innerHTML = '';
+      item.a.forEach((opt,index)=>{
+        const btn = document.createElement('button');
+        btn.className = 'answer';
+        btn.textContent = opt;
+        btn.onclick = ()=>check(index);
+        answers.appendChild(btn);
+      });
+      startTimer();
+    }
+
+    function check(selected){
+      answered = true;
+      clearInterval(timer);
+      const item = questions[current];
+      const btns = document.querySelectorAll('.answer');
+      btns.forEach((btn,index)=>{
+        btn.disabled = true;
+        if(index === item.correct) btn.classList.add('correct');
+        if(index === selected && index !== item.correct) btn.classList.add('wrong');
+      });
+
+      if(selected === item.correct){
+        score++;
+        feedback.innerHTML = `✅ <strong>Correcto.</strong><br>${item.explain}`;
+      }else if(selected === -1){
+        feedback.innerHTML = `⏰ <strong>Tiempo agotado.</strong><br>Respuesta correcta: <strong>${item.a[item.correct]}</strong><br>${item.explain}`;
+      }else{
+        feedback.innerHTML = `❌ <strong>Incorrecto.</strong><br>Respuesta correcta: <strong>${item.a[item.correct]}</strong><br>${item.explain}`;
+      }
+
+      feedback.style.display = 'block';
+      next.style.display = 'inline-block';
+    }
+
+    next.onclick = ()=>{
+      current++;
+      if(current < questions.length) render();
+      else finish();
+    };
+
+    function finish(){
+      quiz.style.display = 'none';
+      result.style.display = 'block';
+      const pct = Math.round(score / questions.length * 100);
+      let txt = "Sigue practicando.";
+      if(pct >= 80) txt = "Muy buen nivel intermedio.";
+      else if(pct >= 60) txt = "Buen trabajo, vas avanzando.";
+      resultText.innerHTML = `Obtuviste <strong>${score}/${questions.length}</strong> (${pct}%).<br>${txt}`;
+    }
+
+    render();
+  </script>
+</body>
+</html>

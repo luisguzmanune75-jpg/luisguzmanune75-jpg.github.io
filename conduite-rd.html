@@ -278,6 +278,112 @@
       font-size: 0.94rem;
     }
 
+
+    .practice-section{
+      padding: 40px 50px;
+      background: linear-gradient(135deg, #031a35, #05264d 60%, #041629);
+    }
+
+    .practice-section h2{
+      color: #fff;
+      font-size: 2.2rem;
+      margin-bottom: 24px;
+      font-weight: 800;
+    }
+
+    .practice-grid{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .practice-card{
+      display: block;
+      text-decoration: none;
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.25);
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+    }
+
+    .practice-card:hover{
+      transform: translateY(-8px);
+      box-shadow: 0 26px 60px rgba(0,0,0,0.35);
+      border-color: rgba(255,255,255,0.28);
+    }
+
+    .practice-image{
+      position: relative;
+      height: 250px;
+      overflow: hidden;
+    }
+
+    .practice-image img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1);
+      transition: transform 0.4s ease;
+    }
+
+    .practice-card:hover .practice-image img{
+      transform: scale(1.06);
+    }
+
+    .overlay{
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(5,20,40,0.75), rgba(5,20,40,0.12));
+    }
+
+    .level-badge{
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #fff;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.18);
+      z-index: 2;
+    }
+
+    .nivel1{
+      background: rgba(40, 167, 69, 0.75);
+    }
+
+    .nivel2{
+      background: rgba(255, 193, 7, 0.78);
+      color: #1e1e1e;
+    }
+
+    .nivel3{
+      background: rgba(220, 53, 69, 0.78);
+    }
+
+    .practice-content{
+      padding: 22px 18px 20px;
+      background: linear-gradient(180deg, rgba(34,59,92,0.95), rgba(24,44,72,0.98));
+    }
+
+    .practice-content h3{
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      font-weight: 800;
+    }
+
+    .practice-content p{
+      font-size: 1.02rem;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.88);
+    }
+
     .quiz-wrap {
       display: grid;
       grid-template-columns: 0.95fr 1.05fr;
@@ -465,6 +571,14 @@
       .hero, .quiz-wrap {
         grid-template-columns: 1fr;
       }
+
+      .practice-grid{
+        grid-template-columns: 1fr;
+      }
+
+      .practice-image{
+        height: 230px;
+      }
     }
 
     @media (max-width: 900px) {
@@ -478,6 +592,24 @@
 
       .quiz-visual img {
         min-height: 280px;
+      }
+    }
+
+    @media (max-width: 700px){
+      .practice-section{
+        padding: 24px 16px;
+      }
+
+      .practice-section h2{
+        font-size: 1.7rem;
+      }
+
+      .practice-content h3{
+        font-size: 1.25rem;
+      }
+
+      .practice-content p{
+        font-size: 0.96rem;
       }
     }
   </style>
@@ -549,32 +681,45 @@
     </div>
   </section>
 
-  <section class="gallery">
-    <h2 class="section-title">Temas para practicar</h2>
-    <div class="gallery-grid">
-      <article class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80" alt="Carretera urbana">
-        <div>
-          <h3>Manejo en carretera</h3>
-          <p>Practica velocidad, distancia de seguridad, adelantamientos y reacción ante imprevistos.</p>
-        </div>
-      </article>
+  <section class="practice-section">
+    <h2>Temas para practicar</h2>
 
-      <article class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1200&q=80" alt="Señal y tráfico urbano">
-        <div>
-          <h3>Señales de tránsito</h3>
-          <p>Reconoce señales preventivas, reglamentarias e informativas con práctica visual.</p>
+    <div class="practice-grid">
+      <a href="examen-rd-basico.html" class="practice-card">
+        <div class="practice-image">
+          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80" alt="Nivel 1 examen RD">
+          <div class="overlay"></div>
+          <span class="level-badge nivel1">Nivel 1</span>
         </div>
-      </article>
+        <div class="practice-content">
+          <h3>Examen blanco básico</h3>
+          <p>Señales, semáforos, cinturón, velocidad y normas básicas.</p>
+        </div>
+      </a>
 
-      <article class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=1200&q=80" alt="Conducción segura">
-        <div>
-          <h3>Conducción segura</h3>
-          <p>Uso correcto del cinturón, luces, visibilidad, atención al entorno y control del vehículo.</p>
+      <a href="examen-rd-intermedio.html" class="practice-card">
+        <div class="practice-image">
+          <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1200&q=80" alt="Nivel 2 examen RD">
+          <div class="overlay"></div>
+          <span class="level-badge nivel2">Nivel 2</span>
         </div>
-      </article>
+        <div class="practice-content">
+          <h3>Examen blanco intermedio</h3>
+          <p>Cruces, prioridad, distancia de seguridad y cambio de carril.</p>
+        </div>
+      </a>
+
+      <a href="examen-rd-avanzado.html" class="practice-card">
+        <div class="practice-image">
+          <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80" alt="Nivel 3 examen RD">
+          <div class="overlay"></div>
+          <span class="level-badge nivel3">Nivel 3</span>
+        </div>
+        <div class="practice-content">
+          <h3>Examen blanco avanzado</h3>
+          <p>Conducción defensiva, rotondas, emergencias y decisiones rápidas.</p>
+        </div>
+      </a>
     </div>
   </section>
 
