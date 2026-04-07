@@ -613,6 +613,312 @@
       width: 100%;
     }
 
+    .examen-rd-card {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 24px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #0a1f44, #0d47a1, #ce1126);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.35);
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      color: #fff;
+    }
+
+    .examen-rd-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 25px 55px rgba(0,0,0,0.45);
+    }
+
+    .card-glow {
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 140px;
+      height: 140px;
+      background: rgba(255,255,255,0.16);
+      border-radius: 50%;
+      filter: blur(10px);
+    }
+
+    .card-icon-big {
+      position: relative;
+      z-index: 2;
+      font-size: 42px;
+      width: 74px;
+      height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.14);
+      backdrop-filter: blur(8px);
+    }
+
+    .card-text {
+      position: relative;
+      z-index: 2;
+    }
+
+    .card-text h3 {
+      margin: 0 0 8px;
+      font-size: 1.4rem;
+    }
+
+    .card-text p {
+      margin: 0 0 12px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.88);
+    }
+
+    .card-tag {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.14);
+      font-size: 0.88rem;
+    }
+
+    .exam-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(4, 10, 24, 0.82);
+      backdrop-filter: blur(8px);
+      padding: 20px;
+    }
+
+    .exam-modal-box {
+      position: relative;
+      max-width: 860px;
+      margin: 30px auto;
+      padding: 28px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, #0b1831, #071323);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+      color: #fff;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      background: rgba(255,255,255,0.18);
+    }
+
+    .exam-header {
+      margin-bottom: 24px;
+      padding-right: 60px;
+    }
+
+    .exam-badge {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #0d47a1, #ce1126);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .exam-header h2 {
+      margin: 0 0 10px;
+      font-size: 2rem;
+      line-height: 1.2;
+    }
+
+    .exam-header p {
+      margin: 0;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.6;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .info-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .info-emoji {
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+
+    .info-box h4 {
+      margin: 0 0 10px;
+      font-size: 1.05rem;
+    }
+
+    .info-box ul {
+      margin: 0;
+      padding-left: 18px;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.7;
+    }
+
+    .steps-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .step-chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.85);
+      font-size: 0.9rem;
+    }
+
+    .step-chip.active {
+      background: linear-gradient(90deg, #0d47a1, #ce1126);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .cta-row {
+      display: flex;
+      justify-content: center;
+      margin-top: 18px;
+    }
+
+    .primary-btn {
+      border: none;
+      padding: 14px 22px;
+      border-radius: 14px;
+      background: linear-gradient(90deg, #0d47a1, #ce1126);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(206,17,38,0.25);
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.95;
+    }
+
+    .quiz-topbar {
+      margin-bottom: 18px;
+    }
+
+    .quiz-progress-wrap {
+      width: 100%;
+      height: 12px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .quiz-progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #0d47a1, #ce1126);
+      transition: width 0.3s ease;
+    }
+
+    .quiz-stats {
+      display: flex;
+      justify-content: space-between;
+      color: rgba(255,255,255,0.86);
+      font-size: 0.95rem;
+    }
+
+    .quiz-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .quiz-card h3 {
+      margin-top: 0;
+      margin-bottom: 18px;
+      font-size: 1.3rem;
+    }
+
+    .answers-box {
+      display: grid;
+      gap: 12px;
+    }
+
+    .answer-btn-rd {
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      padding: 14px 16px;
+      border-radius: 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.98rem;
+    }
+
+    .answer-btn-rd:hover {
+      background: rgba(255,255,255,0.12);
+      transform: translateX(4px);
+    }
+
+    .answer-btn-rd.correct {
+      background: rgba(28, 181, 96, 0.25);
+      border-color: rgba(28, 181, 96, 0.6);
+    }
+
+    .answer-btn-rd.wrong {
+      background: rgba(255, 71, 87, 0.25);
+      border-color: rgba(255, 71, 87, 0.6);
+    }
+
+    .result-box {
+      text-align: center;
+      padding: 30px 10px 10px;
+    }
+
+    .result-icon {
+      font-size: 50px;
+      margin-bottom: 12px;
+    }
+
+    .result-box h3 {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+    }
+
+    .result-box p {
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 10px;
+    }
+
     @media (max-width: 1100px) {
       .hero, .quiz-wrap {
         grid-template-columns: 1fr;
@@ -654,6 +960,21 @@
         font-size: 0.98rem;
       }
     }
+
+    @media (max-width: 768px) {
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .exam-header h2 {
+        font-size: 1.5rem;
+      }
+
+      .examen-rd-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
   </style>
 </head>
 <body>
@@ -681,10 +1002,16 @@
           <h3>Señales y prioridad</h3>
           <p>Todos los paneles de señalización con su significado en español.</p>
         </a>
-        <article class="feature-card">
-          <span>🚦</span>
-          <h3>Semáforos y carriles</h3>
-          <p>Cómo actuar en rojo, amarillo y verde, y cómo cambiar de carril de forma segura.</p>
+        <article class="feature-card examen-rd-card" onclick="openExamRD()">
+          <div class="card-glow"></div>
+          <div class="card-icon-big">📝</div>
+          <div class="card-text">
+            <h3>Passer le code RD</h3>
+            <p>
+              Découvre les documents, les conditions et entraîne-toi avec un mini examen interactif.
+            </p>
+            <span class="card-tag">Examen théorique • République Dominicaine 🇩🇴</span>
+          </div>
         </article>
         <article class="feature-card">
           <span>📘</span>
@@ -722,6 +1049,94 @@
       </article>
     </div>
   </section>
+
+  <div id="examModal" class="exam-modal">
+    <div class="exam-modal-box">
+      <button class="close-btn" onclick="closeExamRD()">×</button>
+
+      <div class="exam-header">
+        <span class="exam-badge">🇩🇴 CODE RD</span>
+        <h2>Passer l’examen théorique en République Dominicaine</h2>
+        <p>
+          Tout ce qu’il faut savoir avant de te présenter, puis un mini test pour t’entraîner.
+        </p>
+      </div>
+
+      <div id="introScreen">
+        <div class="info-grid">
+          <div class="info-box">
+            <div class="info-emoji">📄</div>
+            <h4>Documents</h4>
+            <ul>
+              <li>Pièce d’identité</li>
+              <li>Certificat médical</li>
+              <li>Paiement des frais</li>
+            </ul>
+          </div>
+
+          <div class="info-box">
+            <div class="info-emoji">📚</div>
+            <h4>À apprendre</h4>
+            <ul>
+              <li>Panneaux</li>
+              <li>Règles de circulation</li>
+              <li>Sécurité routière</li>
+            </ul>
+          </div>
+
+          <div class="info-box">
+            <div class="info-emoji">🎯</div>
+            <h4>Objectif</h4>
+            <ul>
+              <li>Comprendre le test</li>
+              <li>S’exercer rapidement</li>
+              <li>Gagner en confiance</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="steps-row">
+          <div class="step-chip active">1. Conditions</div>
+          <div class="step-chip">2. Documents</div>
+          <div class="step-chip">3. Quiz</div>
+        </div>
+
+        <div class="cta-row">
+          <button class="primary-btn" onclick="startQuizRD()">🚀 Commencer le mini test</button>
+        </div>
+      </div>
+
+      <div id="quizScreen" style="display:none;">
+        <div class="quiz-topbar">
+          <div class="quiz-progress-wrap">
+            <div class="quiz-progress-bar" id="quizProgressBar"></div>
+          </div>
+          <div class="quiz-stats">
+            <span id="questionCounterRD">Question 1/5</span>
+            <span id="timerBox">⏱️ 20s</span>
+          </div>
+        </div>
+
+        <div class="quiz-card">
+          <h3 id="questionText">Question ici</h3>
+          <div id="answersBox" class="answers-box"></div>
+        </div>
+      </div>
+
+      <div id="resultScreen" style="display:none;">
+        <div class="result-box">
+          <div class="result-icon">🏁</div>
+          <h3>Résultat du mini test</h3>
+          <p id="finalScoreText">Tu as obtenu 0/5</p>
+          <p id="finalMessage">Continue, tu peux faire encore mieux.</p>
+
+          <div class="cta-row">
+            <button class="primary-btn" onclick="restartQuizRD()">🔁 Recommencer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <section class="practice-section">
     <div class="practice-header">
@@ -1066,6 +1481,156 @@
       locked = false;
       renderQuestion();
     }
+
+    const rdQuestions = [
+      {
+        q: "Quel document est généralement demandé pour se présenter à l’examen théorique en RD ?",
+        a: ["Une pièce d’identité", "Une carte bancaire", "Une facture internet"],
+        correct: 0
+      },
+      {
+        q: "Que faut-il étudier avant de passer le code RD ?",
+        a: ["Les panneaux et les règles de circulation", "Seulement comment démarrer une voiture", "Uniquement les autoroutes"],
+        correct: 0
+      },
+      {
+        q: "Quand le feu est rouge, que faut-il faire ?",
+        a: ["Accélérer", "S’arrêter", "Klaxonner"],
+        correct: 1
+      },
+      {
+        q: "Quel élément fait partie de la sécurité routière ?",
+        a: ["Respecter la signalisation", "Rouler sans regarder", "Ignorer les priorités"],
+        correct: 0
+      },
+      {
+        q: "Pourquoi faire un mini test avant l’examen ?",
+        a: ["Pour s’entraîner et gagner en confiance", "Pour perdre du temps", "Parce que c’est obligatoire partout"],
+        correct: 0
+      }
+    ];
+
+    let rdCurrentQuestion = 0;
+    let rdScore = 0;
+    let rdTimeLeft = 20;
+    let rdTimerInterval = null;
+
+    function openExamRD() {
+      document.getElementById("examModal").style.display = "block";
+    }
+
+    function closeExamRD() {
+      document.getElementById("examModal").style.display = "none";
+      document.getElementById("introScreen").style.display = "block";
+      document.getElementById("quizScreen").style.display = "none";
+      document.getElementById("resultScreen").style.display = "none";
+      clearInterval(rdTimerInterval);
+    }
+
+    function startQuizRD() {
+      document.getElementById("introScreen").style.display = "none";
+      document.getElementById("resultScreen").style.display = "none";
+      document.getElementById("quizScreen").style.display = "block";
+
+      rdCurrentQuestion = 0;
+      rdScore = 0;
+      showQuestionRD();
+    }
+
+    function showQuestionRD() {
+      clearInterval(rdTimerInterval);
+      rdTimeLeft = 20;
+
+      const q = rdQuestions[rdCurrentQuestion];
+      document.getElementById("questionText").textContent = q.q;
+      document.getElementById("questionCounterRD").textContent = `Question ${rdCurrentQuestion + 1}/${rdQuestions.length}`;
+      document.getElementById("timerBox").textContent = `⏱️ ${rdTimeLeft}s`;
+
+      const progress = (rdCurrentQuestion / rdQuestions.length) * 100;
+      document.getElementById("quizProgressBar").style.width = progress + "%";
+
+      const answersBox = document.getElementById("answersBox");
+      answersBox.innerHTML = "";
+
+      q.a.forEach((answer, index) => {
+        const btn = document.createElement("button");
+        btn.className = "answer-btn-rd";
+        btn.textContent = answer;
+        btn.onclick = () => selectAnswerRD(index, btn);
+        answersBox.appendChild(btn);
+      });
+
+      rdTimerInterval = setInterval(() => {
+        rdTimeLeft--;
+        document.getElementById("timerBox").textContent = `⏱️ ${rdTimeLeft}s`;
+
+        if (rdTimeLeft <= 0) {
+          clearInterval(rdTimerInterval);
+          goNextQuestionRD();
+        }
+      }, 1000);
+    }
+
+    function selectAnswerRD(index, buttonElement) {
+      clearInterval(rdTimerInterval);
+
+      const correctIndex = rdQuestions[rdCurrentQuestion].correct;
+      const buttons = document.querySelectorAll("#answersBox .answer-btn-rd");
+
+      buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === correctIndex) btn.classList.add("correct");
+      });
+
+      if (index === correctIndex) {
+        rdScore++;
+      } else {
+        buttonElement.classList.add("wrong");
+      }
+
+      setTimeout(() => {
+        goNextQuestionRD();
+      }, 900);
+    }
+
+    function goNextQuestionRD() {
+      rdCurrentQuestion++;
+
+      if (rdCurrentQuestion < rdQuestions.length) {
+        showQuestionRD();
+      } else {
+        showResultsRD();
+      }
+    }
+
+    function showResultsRD() {
+      clearInterval(rdTimerInterval);
+      document.getElementById("quizScreen").style.display = "none";
+      document.getElementById("resultScreen").style.display = "block";
+      document.getElementById("quizProgressBar").style.width = "100%";
+
+      document.getElementById("finalScoreText").textContent = `Tu as obtenu ${rdScore}/${rdQuestions.length}`;
+
+      let message = "Continue, tu peux faire encore mieux.";
+      if (rdScore === rdQuestions.length) {
+        message = "Excellent 🔥 tu es prêt pour passer au niveau supérieur.";
+      } else if (rdScore >= 3) {
+        message = "Très bien 👏 encore un peu d’entraînement et ce sera parfait.";
+      }
+
+      document.getElementById("finalMessage").textContent = message;
+    }
+
+    function restartQuizRD() {
+      startQuizRD();
+    }
+
+    window.onclick = function(e) {
+      const modal = document.getElementById("examModal");
+      if (e.target === modal) {
+        closeExamRD();
+      }
+    };
 
     renderQuestion();
   </script>
