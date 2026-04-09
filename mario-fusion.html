@@ -3,160 +3,426 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sng-subway-runner-pro</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/framer-motion/dist/framer-motion.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <title>SNG Subway Runner Pro</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:Arial,Helvetica,sans-serif;
+      background:radial-gradient(circle at top,#1f2b4d 0%,#080d16 65%);
+      color:#fff;
+      min-height:100vh;
+      overflow:hidden;
+    }
+    .hud{
+      position:fixed;top:18px;left:18px;right:18px;z-index:20;
+      display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    }
+    .logo{
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+      backdrop-filter:blur(10px);padding:12px 18px;border-radius:18px;
+      font-weight:900;font-size:28px;letter-spacing:.5px;
+      box-shadow:0 10px 30px rgba(0,0,0,.3);
+    }
+    .logo span{color:#ff9b2f}
+    .stats{display:flex;gap:10px;flex-wrap:wrap}
+    .card{
+      min-width:110px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+      backdrop-filter:blur(10px);padding:10px 14px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.25)
+    }
+    .label{font-size:12px;color:#cbd5e1}
+    .value{font-size:28px;font-weight:900}
+    #game{
+      position:relative;width:100vw;height:100vh;overflow:hidden;
+    }
+    .sky{
+      position:absolute;inset:0;
+      background:
+        radial-gradient(circle at top, rgba(255,180,120,0.35), transparent 25%),
+        linear-gradient(180deg,#101726 0%,#13233e 38%,#1d3457 65%,#27466d 100%);
+    }
+    .buildings{position:absolute;left:0;right:0;bottom:220px;height:260px;opacity:.7}
+    .building{position:absolute;bottom:0;background:rgba(255,255,255,.08);border-radius:18px 18px 0 0;overflow:hidden}
+    .windows{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:10px}
+    .windows span{display:block;height:6px;border-radius:10px;background:rgba(255,255,255,.15)}
+    .windows span:nth-child(4n){background:rgba(255,210,70,.8)}
+    .trackWrap{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:min(92vw,760px);height:80vh}
+    .laneMark{position:absolute;top:0;bottom:0;width:4px;background:rgba(255,255,255,.16)}
+    .rail{position:absolute;left:50%;transform:translateX(-50%) perspective(900px) rotateX(68deg);border-radius:30px;background:rgba(11,15,24,.55);border:1px solid rgba(255,255,255,.05)}
+    .player{
+      position:absolute;bottom:115px;width:84px;height:110px;z-index:8;
+      transition:left .14s ease,bottom .18s ease,transform .18s ease;
+    }
+    .shieldAura{position:absolute;inset:-10px;border-radius:26px;border:2px solid rgba(103,232,249,.65);box-shadow:0 0 35px rgba(103,232,249,.35);animation:pulse 1s infinite}
+    .head{position:absolute;left:50%;top:0;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;background:#fde68a}
+    .hood{position:absolute;left:50%;top:16px;transform:translateX(-50%);width:36px;height:24px;border-radius:16px;background:#111827}
+    .body{position:absolute;left:50%;top:32px;transform:translateX(-50%);width:58px;height:42px;border-radius:18px;background:#f97316}
+    .legs{position:absolute;left:50%;top:62px;transform:translateX(-50%);width:64px;height:40px;border-radius:18px;background:#34d399}
+    .armL,.armR,.legL,.legR{position:absolute;background:#111827;border-radius:10px}
+    .armL{left:10px;top:52px;width:10px;height:34px;background:#fb923c}
+    .armR{right:10px;top:52px;width:10px;height:34px;background:#fb923c}
+    .legL{left:20px;bottom:0;width:12px;height:34px}
+    .legR{right:20px;bottom:0;width:12px;height:34px}
+    .obstacle,.coin,.power{position:absolute;transform-origin:center center}
+    .train{background:linear-gradient(180deg,#38bdf8,#2563eb);border:1px solid rgba(255,255,255,.12);border-radius:24px;box-shadow:0 20px 40px rgba(0,0,0,.35)}
+    .barrier{background:linear-gradient(180deg,#fb7185,#b91c1c);border-radius:16px;border:1px solid rgba(255,255,255,.12)}
+    .cone{background:linear-gradient(180deg,#fdba74,#ea580c);border-radius:14px;border:1px solid rgba(255,255,255,.12)}
+    .coin{
+      width:34px;height:34px;border-radius:50%;background:linear-gradient(180deg,#fde68a,#f59e0b);
+      color:#4a2d00;font-weight:900;display:flex;align-items:center;justify-content:center;
+      box-shadow:0 8px 20px rgba(245,158,11,.35);animation:spin 1.4s linear infinite;
+    }
+    .power{
+      width:44px;height:44px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+      box-shadow:0 10px 25px rgba(0,0,0,.25);font-size:22px;font-weight:900;
+    }
+    .magnet{background:rgba(217,70,239,.88);border:1px solid rgba(245,208,254,.5)}
+    .shield{background:rgba(6,182,212,.88);border:1px solid rgba(165,243,252,.5)}
+    .overlay{
+      position:absolute;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;
+      background:rgba(2,6,23,.5);backdrop-filter:blur(6px);
+    }
+    .panel{
+      width:min(92vw,620px);background:rgba(2,6,23,.82);border:1px solid rgba(255,255,255,.12);
+      border-radius:30px;padding:34px;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,.45)
+    }
+    .panel h1{font-size:52px;line-height:1;font-weight:900}
+    .panel h1 span{color:#ff9b2f}
+    .panel p{margin-top:14px;color:#cbd5e1;font-size:18px}
+    .btn{
+      margin-top:24px;border:none;background:#f97316;color:#fff;padding:16px 26px;border-radius:18px;
+      font-size:20px;font-weight:900;cursor:pointer;box-shadow:0 14px 35px rgba(249,115,22,.35)
+    }
+    .btn:hover{background:#fb923c}
+    .tips{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+    .tip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);padding:14px;border-radius:18px;font-size:14px}
+    .mobileControls{
+      position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:25;display:none;gap:10px
+    }
+    .ctrl{width:58px;height:58px;border:none;border-radius:18px;background:rgba(0,0,0,.35);color:#fff;font-size:24px;backdrop-filter:blur(8px);cursor:pointer}
+    .flash{animation:hit .16s 1}
+    @keyframes spin{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+    @keyframes pulse{0%,100%{opacity:.35;transform:scale(1)}50%{opacity:.75;transform:scale(1.06)}}
+    @keyframes hit{0%{filter:brightness(1)}50%{filter:brightness(1.8)}100%{filter:brightness(1)}}
+    @media (max-width:900px){
+      .panel h1{font-size:36px}.panel p{font-size:16px}.tips{grid-template-columns:1fr}.mobileControls{display:flex}
+      .logo{font-size:20px}.value{font-size:22px}.card{min-width:92px}
+    }
+  </style>
 </head>
-<body class="bg-slate-950">
-  <div id="root"></div>
+<body>
+  <div class="hud">
+    <div class="logo">SNG <span>Subway Runner Pro</span></div>
+    <div class="stats">
+      <div class="card"><div class="label">Score</div><div class="value" id="score">0</div></div>
+      <div class="card"><div class="label">Best</div><div class="value" id="best">0</div></div>
+      <div class="card"><div class="label">Pièces</div><div class="value" id="coins">0</div></div>
+      <div class="card"><div class="label">Distance</div><div class="value" id="distance">0</div></div>
+    </div>
+  </div>
 
-  <script type="text/babel">
-    const { useEffect, useMemo, useRef, useState } = React;
-    const { motion, AnimatePresence } = window["framer-motion"];
+  <div id="game">
+    <div class="sky"></div>
+    <div class="buildings" id="buildings"></div>
+    <div class="trackWrap" id="trackWrap">
+      <div class="laneMark" style="left:33.33%"></div>
+      <div class="laneMark" style="left:66.66%"></div>
+    </div>
 
-    const Icon = ({ children, className = "" }) => <span className={`inline-flex items-center justify-center ${className}`}>{children}</span>;
-    const Play = (p) => <Icon {...p}>▶</Icon>;
-    const RotateCcw = (p) => <Icon {...p}>↺</Icon>;
-    const Trophy = (p) => <Icon {...p}>🏆</Icon>;
-    const Coins = (p) => <Icon {...p}>🪙</Icon>;
-    const Zap = (p) => <Icon {...p}>⚡</Icon>;
-    const Shield = (p) => <Icon {...p}>🛡</Icon>;
-    const ArrowLeft = (p) => <Icon {...p}>←</Icon>;
-    const ArrowRight = (p) => <Icon {...p}>→</Icon>;
-    const ArrowUp = (p) => <Icon {...p}>↑</Icon>;
-    const ArrowDown = (p) => <Icon {...p}>↓</Icon>;
-    const Sparkles = (p) => <Icon {...p}>✨</Icon>;
+    <div class="player" id="player">
+      <div class="shieldAura" id="shieldAura" style="display:none"></div>
+      <div class="head"></div>
+      <div class="hood"></div>
+      <div class="body"></div>
+      <div class="legs"></div>
+      <div class="armL"></div>
+      <div class="armR"></div>
+      <div class="legL"></div>
+      <div class="legR"></div>
+    </div>
 
-    const Button = ({ className = "", children, ...props }) => <button className={`inline-flex items-center justify-center px-4 py-2 ${className}`} {...props}>{children}</button>;
-    const Card = ({ className = "", children }) => <div className={`border ${className}`}>{children}</div>;
-    const CardContent = ({ className = "", children }) => <div className={className}>{children}</div>;
-    const Badge = ({ className = "", children }) => <span className={`inline-flex items-center ${className}`}>{children}</span>;
-    const Progress = ({ value = 0, className = "" }) => (
-      <div className={`w-full overflow-hidden rounded-full ${className}`}>
-        <div className="h-full rounded-full bg-orange-400 transition-all" style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
+    <div class="overlay" id="startOverlay">
+      <div class="panel">
+        <h1><span>SNG</span> Runner</h1>
+        <p>Version ultra pro style Subway Surfers pour ton site. Esquive les trains, prends les pièces et fais exploser le score.</p>
+        <div class="tips">
+          <div class="tip">← → : changer de voie</div>
+          <div class="tip">↑ : sauter</div>
+          <div class="tip">↓ : glisser</div>
+        </div>
+        <button class="btn" id="playBtn">JOUER MAINTENANT</button>
       </div>
-    );
+    </div>
 
-    const LANES = [-1, 0, 1];
-    const GAME_WIDTH = 920;
-    const GAME_HEIGHT = 620;
-    const TRACK_LEFT = 170;
-    const TRACK_WIDTH = 580;
-    const LANE_WIDTH = TRACK_WIDTH / 3;
-    const PLAYER_Y = 470;
-    const PLAYER_W = 86;
-    const PLAYER_H = 116;
-    const GROUND_SPEED_START = 16;
-    const SEGMENT_LENGTH = 140;
-    const MAX_LIVES = 1;
+    <div class="overlay" id="gameOverOverlay" style="display:none">
+      <div class="panel">
+        <h1>Fin <span>de course</span></h1>
+        <p id="finalText">Ton score est prêt.</p>
+        <button class="btn" id="restartBtn">REJOUER</button>
+      </div>
+    </div>
+  </div>
 
-    function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-    function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
-    function laneToX(lane) { return TRACK_LEFT + TRACK_WIDTH / 2 + lane * LANE_WIDTH; }
+  <div class="mobileControls">
+    <button class="ctrl" id="leftBtn">◀</button>
+    <button class="ctrl" id="upBtn">▲</button>
+    <button class="ctrl" id="downBtn">▼</button>
+    <button class="ctrl" id="rightBtn">▶</button>
+  </div>
 
-    function makeRow(z, difficulty = 1) {
-      const obstacleChance = Math.min(0.3 + difficulty * 0.015, 0.58);
-      const coinChance = 0.75;
-      const trainChance = Math.min(0.08 + difficulty * 0.01, 0.18);
-      const row = { id: `${z}-${Math.random().toString(36).slice(2, 8)}`, z, obstacles: [], coins: [], powerup: null };
-      const freeLane = LANES[rand(0, 2)];
-      LANES.forEach((lane) => {
-        if (Math.random() < obstacleChance && lane !== freeLane) row.obstacles.push({ id: `${row.id}-obs-${lane}`, lane, type: Math.random() < trainChance ? "train" : Math.random() < 0.5 ? "barrier" : "cone" });
-        if (Math.random() < coinChance) row.coins.push({ id: `${row.id}-coin-${lane}`, lane, height: Math.random() < 0.2 ? "high" : "normal" });
-      });
-      if (Math.random() < 0.08) row.powerup = { id: `${row.id}-power`, lane: freeLane, type: Math.random() < 0.5 ? "magnet" : "shield" };
-      return row;
+  <script>
+    const game = document.getElementById('game');
+    const trackWrap = document.getElementById('trackWrap');
+    const player = document.getElementById('player');
+    const shieldAura = document.getElementById('shieldAura');
+    const scoreEl = document.getElementById('score');
+    const bestEl = document.getElementById('best');
+    const coinsEl = document.getElementById('coins');
+    const distanceEl = document.getElementById('distance');
+    const startOverlay = document.getElementById('startOverlay');
+    const gameOverOverlay = document.getElementById('gameOverOverlay');
+    const finalText = document.getElementById('finalText');
+    const buildings = document.getElementById('buildings');
+
+    const lanes = [0.18, 0.5, 0.82];
+    const objects = [];
+    let started = false;
+    let gameOver = false;
+    let lane = 1;
+    let score = 0;
+    let coins = 0;
+    let distance = 0;
+    let speed = 8;
+    let jump = false;
+    let slide = false;
+    let shield = false;
+    let magnet = false;
+    let shieldTimer = 0;
+    let magnetTimer = 0;
+    let spawnTimer = 0;
+    let best = Number(localStorage.getItem('sng-subway-best') || 0);
+    bestEl.textContent = best;
+
+    function makeBuildings(){
+      buildings.innerHTML='';
+      for(let i=0;i<18;i++){
+        const b=document.createElement('div');
+        b.className='building';
+        b.style.left=(i*5.5)+'%';
+        b.style.width=(40+((i*13)%35))+'px';
+        b.style.height=(90+((i*31)%150))+'px';
+        const w=document.createElement('div');
+        w.className='windows';
+        for(let j=0;j<15;j++){const s=document.createElement('span');w.appendChild(s)}
+        b.appendChild(w);buildings.appendChild(b);
+      }
     }
 
-    function buildInitialRows() { const rows = []; for (let i = 0; i < 22; i++) rows.push(makeRow(i * SEGMENT_LENGTH, 1)); return rows; }
-
-    function Skyline() { return <div className="absolute inset-0 overflow-hidden rounded-[32px]"><div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,180,120,0.45),_transparent_35%),linear-gradient(180deg,#101726_0%,#13233e_40%,#1d3457_70%,#27466d_100%)]" /><div className="absolute inset-x-0 top-10 h-56 opacity-60">{[...Array(20)].map((_, i) => <div key={i} className="absolute bottom-0 rounded-t-2xl bg-white/10" style={{ left: `${i * 5.2}%`, width: `${3 + (i % 3)}%`, height: `${70 + ((i * 31) % 120)}px`, filter: "blur(0.4px)" }}><div className="grid grid-cols-3 gap-1 p-2">{[...Array(12)].map((__, j) => <div key={j} className={`h-1.5 rounded-full ${j % 4 === 0 ? "bg-amber-300/70" : "bg-white/20"}`} />)}</div></div>)}</div><div className="absolute inset-x-0 bottom-0 h-56 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.26))]" /></div>; }
-
-    function TrainTracks({ speed }) { const lineCount = 11; return <div className="absolute inset-0">{[...Array(lineCount)].map((_, i) => <div key={i} className="absolute left-1/2 -translate-x-1/2 rounded-3xl border border-white/5 bg-slate-900/45" style={{ bottom: `${i * 58 - (speed % 58)}px`, width: `${210 + i * 48}px`, height: `${34 + i * 10}px`, transform: `translateX(-50%) perspective(900px) rotateX(68deg)`, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)" }} />)}{[0,1,2,3].map((rail)=> <div key={rail} className="absolute top-0 bottom-0 w-1 rounded-full bg-white/20" style={{ left: `${TRACK_LEFT + rail * (TRACK_WIDTH / 3)}px` }} />)}</div>; }
-
-    function Runner({ lane, jumping, sliding, shield }) {
-      const x = laneToX(lane); const y = PLAYER_Y - (jumping ? 90 : 0) + (sliding ? 30 : 0); const scaleY = sliding ? 0.68 : 1;
-      return <motion.div className="absolute" animate={{ left: x - PLAYER_W / 2, top: y - PLAYER_H / 2, scaleY }} transition={{ type: "spring", stiffness: 240, damping: 18 }} style={{ width: PLAYER_W, height: PLAYER_H }}><div className="relative h-full w-full">{shield && <motion.div className="absolute inset-[-10px] rounded-[32px] border border-cyan-300/60 bg-cyan-300/10" animate={{ scale: [1, 1.06, 1], opacity: [0.35, 0.65, 0.35] }} transition={{ repeat: Infinity, duration: 1.2 }} /> }<div className="absolute left-1/2 top-1 -translate-x-1/2 h-8 w-8 rounded-full bg-amber-200 shadow-lg shadow-amber-200/30" /><div className="absolute left-1/2 top-8 -translate-x-1/2 h-12 w-10 rounded-2xl bg-slate-900/90" /><div className="absolute left-1/2 top-16 -translate-x-1/2 h-14 w-14 rounded-[22px] bg-orange-500 shadow-xl shadow-orange-500/30" /><div className="absolute left-1/2 top-24 -translate-x-1/2 h-16 w-16 rounded-[24px] bg-emerald-400/95" /><div className="absolute left-[8px] top-28 h-12 w-4 rounded-full bg-orange-400" /><div className="absolute right-[8px] top-28 h-12 w-4 rounded-full bg-orange-400" /><div className="absolute left-[20px] bottom-0 h-14 w-5 rounded-full bg-slate-950" /><div className="absolute right-[20px] bottom-0 h-14 w-5 rounded-full bg-slate-950" /></div></motion.div>;
+    function laneX(index){
+      return trackWrap.offsetLeft + trackWrap.offsetWidth * lanes[index] - 42;
     }
 
-    function Obstacle({ lane, z, type }) { const scale = clamp(1.5 - z / 900, 0.4, 1.4); const y = 120 + (1 - scale) * 360 + z * 0.08; const x = laneToX(lane); const width = type === "train" ? 120 * scale : 74 * scale; const height = type === "train" ? 210 * scale : type === "barrier" ? 75 * scale : 55 * scale; return <div className="absolute" style={{ left: x - width / 2, top: y, width, height, zIndex: Math.round(1000 - z) }}>{type === "train" ? <div className="h-full w-full rounded-[28px] border border-white/10 bg-gradient-to-b from-sky-400 via-sky-500 to-sky-700 shadow-2xl shadow-sky-950/40"><div className="mx-auto mt-4 h-6 w-3/4 rounded-full bg-white/30" /><div className="mt-4 grid grid-cols-2 gap-2 px-3">{[...Array(6)].map((_, i) => <div key={i} className="h-5 rounded-lg bg-white/30" />)}</div><div className="absolute inset-x-3 bottom-3 h-4 rounded-full bg-yellow-300/60" /></div> : type === "barrier" ? <div className="h-full w-full rounded-[18px] border border-white/10 bg-gradient-to-b from-red-400 to-red-700 shadow-xl shadow-red-950/40"><div className="mt-2 grid gap-2 px-2">{[...Array(3)].map((_, i) => <div key={i} className="h-2 rounded-full bg-white/70" />)}</div></div> : <div className="h-full w-full rounded-[18px] border border-white/10 bg-gradient-to-b from-orange-300 to-orange-600 shadow-xl shadow-orange-950/40"><div className="mx-auto mt-2 h-2 w-10 rounded-full bg-white/70" /></div>}</div>; }
-
-    function Coin({ lane, z, magnet }) { const scale = clamp(1.45 - z / 900, 0.4, 1.3); const y = 180 + (1 - scale) * 300 + z * 0.08; const x = laneToX(lane); return <motion.div className="absolute flex items-center justify-center rounded-full border border-yellow-100/40 bg-gradient-to-b from-yellow-200 to-amber-500 font-black text-amber-950 shadow-lg" animate={magnet ? { scale: [scale, scale * 1.14, scale], rotate: [0, 8, -8, 0] } : { rotateY: [0, 180, 360] }} transition={{ repeat: Infinity, duration: magnet ? 0.8 : 1.8, ease: "linear" }} style={{ left: x - 18 * scale, top: y, width: 36 * scale, height: 36 * scale, zIndex: Math.round(1000 - z) }}>S</motion.div>; }
-
-    function PowerUp({ lane, z, type }) { const scale = clamp(1.45 - z / 900, 0.4, 1.3); const y = 220 + (1 - scale) * 280 + z * 0.08; const x = laneToX(lane); return <motion.div className={`absolute rounded-2xl border shadow-xl ${type === "magnet" ? "border-fuchsia-300/50 bg-fuchsia-500/80" : "border-cyan-300/50 bg-cyan-500/80"}`} animate={{ y: [0, -8, 0], rotate: [0, 6, -6, 0] }} transition={{ repeat: Infinity, duration: 1.2 }} style={{ left: x - 25 * scale, top: y, width: 50 * scale, height: 50 * scale, zIndex: Math.round(1000 - z) }}><div className="flex h-full w-full items-center justify-center text-white">{type === "magnet" ? <Zap className="h-5 w-5" /> : <Shield className="h-5 w-5" />}</div></motion.div>; }
-
-    function SNGSubwayRunnerPro() {
-      const [started, setStarted] = useState(false), [gameOver, setGameOver] = useState(false), [score, setScore] = useState(0), [best, setBest] = useState(0), [coins, setCoins] = useState(0), [lane, setLane] = useState(0), [jumping, setJumping] = useState(false), [sliding, setSliding] = useState(false), [speed, setSpeed] = useState(GROUND_SPEED_START), [distance, setDistance] = useState(0), [rows, setRows] = useState(buildInitialRows()), [shieldUntil, setShieldUntil] = useState(0), [magnetUntil, setMagnetUntil] = useState(0), [flash, setFlash] = useState(false), [mission, setMission] = useState({ target: 100, reward: 30 });
-      const rafRef = useRef(null), lastTimeRef = useRef(0), scoreRef = useRef(0), distanceRef = useRef(0);
-      const now = Date.now(); const shieldActive = shieldUntil > now; const magnetActive = magnetUntil > now; const missionProgress = Math.min((coins / mission.target) * 100, 100);
-
-      useEffect(() => setBest(Number(localStorage.getItem("sng-subway-best") || 0)), []);
-      useEffect(() => { scoreRef.current = score; distanceRef.current = distance; }, [score, distance]);
-
-      const resetGame = () => { setStarted(false); setGameOver(false); setScore(0); setCoins(0); setLane(0); setJumping(false); setSliding(false); setSpeed(GROUND_SPEED_START); setDistance(0); setRows(buildInitialRows()); setShieldUntil(0); setMagnetUntil(0); setFlash(false); setMission({ target: rand(80, 150), reward: rand(25, 45) }); lastTimeRef.current = 0; };
-      useEffect(() => { resetGame(); }, []);
-
-      const moveLeft = () => setLane((l) => clamp(l - 1, -1, 1)); const moveRight = () => setLane((l) => clamp(l + 1, -1, 1));
-      const triggerJump = () => { if (jumping || !started || gameOver) return; setJumping(true); setTimeout(() => setJumping(false), 620); };
-      const triggerSlide = () => { if (sliding || !started || gameOver) return; setSliding(true); setTimeout(() => setSliding(false), 520); };
-
-      useEffect(() => {
-        const onKey = (e) => {
-          if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", " "].includes(e.key)) e.preventDefault();
-          if (!started && (e.key === " " || e.key === "Enter")) setStarted(true);
-          if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") moveLeft();
-          if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") moveRight();
-          if (e.key === "ArrowUp" || e.key.toLowerCase() === "w" || e.key === " ") triggerJump();
-          if (e.key === "ArrowDown" || e.key.toLowerCase() === "s") triggerSlide();
-        };
-        window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey);
-      }, [started, jumping, sliding, gameOver]);
-
-      useEffect(() => {
-        if (!started || gameOver) return;
-        const tick = (t) => {
-          if (!lastTimeRef.current) lastTimeRef.current = t;
-          const dt = Math.min((t - lastTimeRef.current) / 16.6667, 1.4); lastTimeRef.current = t;
-          setDistance((d) => d + speed * dt * 0.5); setScore((s) => s + Math.floor(speed * dt * 0.9)); setSpeed((s) => Math.min(s + 0.0025 * dt, 30));
-          setRows((prev) => {
-            let next = prev.map((row) => ({ ...row, z: row.z - speed * dt * 10, obstacles: row.obstacles.filter(Boolean), coins: row.coins.filter(Boolean) })).filter((row) => row.z > -120);
-            while (next.length < 22) { const lastZ = next.length ? next[next.length - 1].z : 0; const difficulty = 1 + Math.floor(distanceRef.current / 1000); next.push(makeRow(lastZ + SEGMENT_LENGTH, difficulty)); }
-            const hitWindow = (z) => z < 110 && z > -10;
-            next = next.map((row) => {
-              const updated = { ...row };
-              updated.coins = row.coins.filter((coin) => { const sameLane = coin.lane === lane; const nearLane = magnetActive && Math.abs(coin.lane - lane) <= 1; const withinRange = row.z < 160 && row.z > 10; if ((sameLane || nearLane) && withinRange) { setCoins((c) => c + 1); setScore((s) => s + 25); return false; } return true; });
-              if (row.powerup && row.powerup.lane === lane && row.z < 130 && row.z > 0) { if (row.powerup.type === "magnet") setMagnetUntil(Date.now() + 7000); if (row.powerup.type === "shield") setShieldUntil(Date.now() + 7000); setScore((s) => s + 100); updated.powerup = null; }
-              const collision = row.obstacles.some((obs) => { if (obs.lane !== lane || !hitWindow(row.z)) return false; if (obs.type === "cone" && jumping) return false; if (obs.type === "barrier" && sliding) return false; return true; });
-              if (collision) { if (shieldActive) { setShieldUntil(0); updated.obstacles = []; } else { setFlash(true); setTimeout(() => setFlash(false), 160); setGameOver(true); const finalScore = scoreRef.current; const bestScore = Math.max(best, finalScore); setBest(bestScore); localStorage.setItem("sng-subway-best", String(bestScore)); } }
-              return updated;
-            });
-            return next;
-          });
-          rafRef.current = requestAnimationFrame(tick);
-        };
-        rafRef.current = requestAnimationFrame(tick);
-        return () => cancelAnimationFrame(rafRef.current);
-      }, [started, gameOver, speed, lane, jumping, sliding, shieldActive, magnetActive, best]);
-
-      useEffect(() => { if (coins >= mission.target) { setScore((s) => s + mission.reward * 10); setCoins((c) => c + mission.reward); setMission({ target: rand(120, 220), reward: rand(35, 65) }); } }, [coins, mission]);
-      const renderedObjects = useMemo(() => rows.flatMap((row) => { const objs = []; row.obstacles.forEach((obs) => objs.push({ kind: "obstacle", ...obs, z: row.z, key: obs.id })); row.coins.forEach((coin) => objs.push({ kind: "coin", ...coin, z: row.z, key: coin.id })); if (row.powerup) objs.push({ kind: "powerup", ...row.powerup, z: row.z, key: row.powerup.id }); return objs; }), [rows]);
-
-      return <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#1f2b4d,_#080d16_60%)] p-4 text-white md:p-8"><div className="mx-auto max-w-[1280px]"><div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"><div><Badge className="mb-3 rounded-full border-0 bg-orange-500/20 px-4 py-1 text-orange-200">SNG ULTRA PRO</Badge><h1 className="text-3xl font-black tracking-tight md:text-5xl">Subway Runner <span className="text-orange-400">SNG Edition</span></h1><p className="mt-2 max-w-2xl text-sm text-slate-300 md:text-base">Version premium inspirée des endless runners urbains, optimisée pour ton site avec score, pièces, bonus, mission, écran d’accueil et commandes tactiles.</p></div><div className="grid grid-cols-2 gap-3 md:grid-cols-4"><Card className="rounded-3xl border-white/10 bg-white/5 backdrop-blur-xl"><CardContent className="p-4"><div className="text-xs text-slate-300">Score</div><div className="text-2xl font-black">{score}</div></CardContent></Card><Card className="rounded-3xl border-white/10 bg-white/5 backdrop-blur-xl"><CardContent className="p-4"><div className="text-xs text-slate-300">Meilleur</div><div className="text-2xl font-black">{best}</div></CardContent></Card><Card className="rounded-3xl border-white/10 bg-white/5 backdrop-blur-xl"><CardContent className="p-4"><div className="text-xs text-slate-300">Pièces</div><div className="flex items-center gap-2 text-2xl font-black"><Coins className="h-5 w-5 text-yellow-300" />{coins}</div></CardContent></Card><Card className="rounded-3xl border-white/10 bg-white/5 backdrop-blur-xl"><CardContent className="p-4"><div className="text-xs text-slate-300">Vitesse</div><div className="text-2xl font-black">{speed.toFixed(1)}x</div></CardContent></Card></div></div>
-
-      <div className="grid gap-5 xl:grid-cols-[1fr_320px]"><div><div className={`relative overflow-hidden rounded-[32px] border border-white/10 bg-black/20 shadow-2xl shadow-black/40 ${flash ? "ring-4 ring-red-400/50" : ""}`} style={{ width: "100%", maxWidth: GAME_WIDTH, height: GAME_HEIGHT }}><Skyline /><TrainTracks speed={distance} /><div className="absolute inset-x-0 top-0 z-30 flex items-center justify-between p-4"><div className="rounded-2xl border border-white/10 bg-black/30 px-4 py-2 backdrop-blur-xl"><div className="text-xs text-slate-300">Distance</div><div className="text-xl font-black">{Math.floor(distance)} m</div></div><div className="flex gap-2">{shieldActive && <Badge className="rounded-full bg-cyan-400/20 px-4 py-1 text-cyan-200"><Shield className="mr-1 h-3.5 w-3.5" /> Shield</Badge>}{magnetActive && <Badge className="rounded-full bg-fuchsia-400/20 px-4 py-1 text-fuchsia-200"><Zap className="mr-1 h-3.5 w-3.5" /> Magnet</Badge>}</div></div>
-      {renderedObjects.map((obj) => obj.kind === "obstacle" ? <Obstacle key={obj.key} lane={obj.lane} z={obj.z} type={obj.type} /> : obj.kind === "coin" ? <Coin key={obj.key} lane={obj.lane} z={obj.z} magnet={magnetActive} /> : <PowerUp key={obj.key} lane={obj.lane} z={obj.z} type={obj.type} />)}
-      <Runner lane={lane} jumping={jumping} sliding={sliding} shield={shieldActive} />
-      <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.45))]" />
-      <AnimatePresence>{!started && !gameOver && <motion.div className="absolute inset-0 z-40 flex items-center justify-center bg-slate-950/45 backdrop-blur-sm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><Card className="mx-4 w-full max-w-xl rounded-[32px] border-white/10 bg-slate-950/70 text-white shadow-2xl shadow-black/50"><CardContent className="p-8 text-center"><div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-orange-500/20"><Sparkles className="h-10 w-10 text-orange-400" /></div><h2 className="text-3xl font-black md:text-4xl">Lance la course SNG</h2><p className="mt-3 text-slate-300">Esquive les trains, prends les pièces, récupère les bonus et fais le meilleur score sur ton site.</p><Button className="mt-7 h-14 w-full rounded-2xl bg-orange-500 text-lg font-black hover:bg-orange-400" onClick={() => setStarted(true)}><Play className="mr-2 h-5 w-5" /> Jouer maintenant</Button></CardContent></Card></motion.div>}</AnimatePresence>
-      <AnimatePresence>{gameOver && <motion.div className="absolute inset-0 z-40 flex items-center justify-center bg-slate-950/55 backdrop-blur-sm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><Card className="mx-4 w-full max-w-lg rounded-[32px] border-white/10 bg-slate-950/80 text-white shadow-2xl shadow-black/50"><CardContent className="p-8 text-center"><div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-red-500/20"><Trophy className="h-10 w-10 text-yellow-300" /></div><h2 className="text-3xl font-black">Fin de course</h2><p className="mt-2 text-slate-300">Relance immédiatement et bats ton meilleur score.</p><div className="mt-6 grid grid-cols-3 gap-3"><div className="rounded-2xl border border-white/10 bg-white/5 p-4"><div className="text-xs text-slate-300">Score</div><div className="text-2xl font-black">{score}</div></div><div className="rounded-2xl border border-white/10 bg-white/5 p-4"><div className="text-xs text-slate-300">Pièces</div><div className="text-2xl font-black">{coins}</div></div><div className="rounded-2xl border border-white/10 bg-white/5 p-4"><div className="text-xs text-slate-300">Best</div><div className="text-2xl font-black">{best}</div></div></div><Button className="mt-7 h-14 w-full rounded-2xl bg-orange-500 text-lg font-black hover:bg-orange-400" onClick={resetGame}><RotateCcw className="mr-2 h-5 w-5" /> Rejouer</Button></CardContent></Card></motion.div>}</AnimatePresence>
-      <div className="absolute bottom-5 left-1/2 z-30 flex -translate-x-1/2 gap-2 md:hidden"><Button className="rounded-2xl bg-black/40 backdrop-blur-xl" onClick={moveLeft}><ArrowLeft className="h-5 w-5" /></Button><Button className="rounded-2xl bg-black/40 backdrop-blur-xl" onClick={triggerJump}><ArrowUp className="h-5 w-5" /></Button><Button className="rounded-2xl bg-black/40 backdrop-blur-xl" onClick={triggerSlide}><ArrowDown className="h-5 w-5" /></Button><Button className="rounded-2xl bg-black/40 backdrop-blur-xl" onClick={moveRight}><ArrowRight className="h-5 w-5" /></Button></div></div></div>
-      <div className="space-y-5"><Card className="rounded-[28px] border-white/10 bg-white/5 backdrop-blur-xl"><CardContent className="p-6"><div className="mb-2 text-sm text-slate-300">Mission active</div><div className="text-2xl font-black">Ramasse {mission.target} pièces</div><p className="mt-2 text-sm text-slate-300">Récompense: +{mission.reward} pièces bonus et gros boost de score.</p><Progress value={missionProgress} className="mt-4 h-3 bg-white/10" /><div className="mt-2 text-sm text-slate-400">{coins} / {mission.target}</div></CardContent></Card><Card className="rounded-[28px] border-white/10 bg-white/5 backdrop-blur-xl"><CardContent className="p-6"><div className="mb-3 text-sm text-slate-300">Bonus</div><div className="grid gap-3"><div className="rounded-2xl border border-white/10 bg-white/5 p-4"><div className="flex items-center gap-2 font-bold text-fuchsia-300"><Zap className="h-4 w-4" /> Magnet</div><div className="mt-1 text-sm text-slate-300">Attire les pièces autour de toi pendant 7 secondes.</div></div><div className="rounded-2xl border border-white/10 bg-white/5 p-4"><div className="flex items-center gap-2 font-bold text-cyan-300"><Shield className="h-4 w-4" /> Shield</div><div className="mt-1 text-sm text-slate-300">Encaisse une collision et continue la course.</div></div></div></CardContent></Card></div></div></div></div>;
+    function updatePlayer(){
+      player.style.left = laneX(lane) + 'px';
+      player.style.bottom = (jump ? 210 : slide ? 95 : 115) + 'px';
+      player.style.transform = slide ? 'scaleY(0.72)' : 'scaleY(1)';
+      shieldAura.style.display = shield ? 'block' : 'none';
     }
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<SNGSubwayRunnerPro />);
+    function makeRailLines(){
+      document.querySelectorAll('.rail').forEach(e=>e.remove());
+      for(let i=0;i<11;i++){
+        const r=document.createElement('div');
+        r.className='rail';
+        r.style.bottom=(i*68)+'px';
+        r.style.width=(220+i*48)+'px';
+        r.style.height=(34+i*10)+'px';
+        trackWrap.appendChild(r);
+      }
+    }
+
+    function spawnObject(){
+      const typeRand = Math.random();
+      const obj = document.createElement('div');
+      const laneId = Math.floor(Math.random()*3);
+      let kind = 'coin';
+      if(typeRand < 0.17) kind = 'train';
+      else if(typeRand < 0.29) kind = 'barrier';
+      else if(typeRand < 0.38) kind = 'cone';
+      else if(typeRand < 0.42) kind = Math.random() < .5 ? 'magnet' : 'shield';
+
+      obj.dataset.kind = kind;
+      obj.dataset.lane = laneId;
+      obj.dataset.depth = 100;
+
+      if(kind === 'coin'){
+        obj.className = 'coin';
+        obj.textContent = 'S';
+      }else if(kind === 'magnet' || kind === 'shield'){
+        obj.className = 'power ' + kind;
+        obj.textContent = kind === 'magnet' ? '⚡' : '🛡';
+      }else{
+        obj.className = 'obstacle ' + kind;
+        if(kind === 'train'){obj.style.width='115px';obj.style.height='190px';}
+        if(kind === 'barrier'){obj.style.width='74px';obj.style.height='68px';}
+        if(kind === 'cone'){obj.style.width='52px';obj.style.height='52px';}
+      }
+
+      trackWrap.appendChild(obj);
+      objects.push(obj);
+    }
+
+    function renderObjects(dt){
+      for(let i=objects.length-1;i>=0;i--){
+        const obj = objects[i];
+        let depth = parseFloat(obj.dataset.depth);
+        depth -= speed * dt * 0.9;
+        obj.dataset.depth = depth;
+
+        const scale = Math.max(0.35, 1.55 - depth / 85);
+        const laneId = Number(obj.dataset.lane);
+        const x = trackWrap.offsetWidth * lanes[laneId];
+        const y = 60 + (100-depth) * 7.2;
+
+        obj.style.left = `calc(${x}px - ${obj.offsetWidth/2}px)`;
+        obj.style.top = y + 'px';
+        obj.style.transform = `scale(${scale})`;
+        obj.style.zIndex = Math.floor(1000 - depth);
+
+        const hitZone = depth < 18 && depth > 4 && laneId === lane;
+        const nearMagnet = magnet && depth < 28 && Math.abs(laneId - lane) <= 1;
+
+        if(obj.dataset.kind === 'coin' && nearMagnet){
+          coins += 1; score += 25; obj.remove(); objects.splice(i,1); continue;
+        }
+
+        if(hitZone){
+          if(obj.dataset.kind === 'coin'){
+            coins += 1; score += 25; obj.remove(); objects.splice(i,1); continue;
+          }
+          if(obj.dataset.kind === 'magnet'){
+            magnet = true; magnetTimer = 7000; obj.remove(); objects.splice(i,1); continue;
+          }
+          if(obj.dataset.kind === 'shield'){
+            shield = true; shieldTimer = 7000; obj.remove(); objects.splice(i,1); continue;
+          }
+          if(obj.dataset.kind === 'cone' && jump){ obj.remove(); objects.splice(i,1); continue; }
+          if(obj.dataset.kind === 'barrier' && slide){ obj.remove(); objects.splice(i,1); continue; }
+          if(obj.dataset.kind === 'train' && jump){ endGame(); return; }
+          if(obj.dataset.kind === 'train' || obj.dataset.kind === 'barrier' || obj.dataset.kind === 'cone'){
+            if(shield){
+              shield = false; shieldTimer = 0; obj.remove(); objects.splice(i,1); continue;
+            }
+            endGame(); return;
+          }
+        }
+
+        if(depth <= 0){ obj.remove(); objects.splice(i,1); }
+      }
+    }
+
+    function endGame(){
+      gameOver = true;
+      started = false;
+      if(score > best){
+        best = score;
+        localStorage.setItem('sng-subway-best', best);
+        bestEl.textContent = best;
+      }
+      game.classList.add('flash');
+      setTimeout(()=>game.classList.remove('flash'), 160);
+      finalText.textContent = `Score : ${score} | Pièces : ${coins} | Distance : ${Math.floor(distance)} m`;
+      gameOverOverlay.style.display = 'flex';
+    }
+
+    function resetGame(){
+      objects.forEach(o=>o.remove());
+      objects.length = 0;
+      started = false;
+      gameOver = false;
+      lane = 1;
+      score = 0;
+      coins = 0;
+      distance = 0;
+      speed = 8;
+      jump = false;
+      slide = false;
+      shield = false;
+      magnet = false;
+      shieldTimer = 0;
+      magnetTimer = 0;
+      spawnTimer = 0;
+      scoreEl.textContent = 0;
+      coinsEl.textContent = 0;
+      distanceEl.textContent = 0;
+      gameOverOverlay.style.display = 'none';
+      startOverlay.style.display = 'flex';
+      updatePlayer();
+    }
+
+    function startGame(){
+      if(gameOver) return;
+      started = true;
+      startOverlay.style.display = 'none';
+    }
+
+    function jumpAction(){
+      if(!started || jump) return;
+      jump = true; updatePlayer();
+      setTimeout(()=>{jump=false;updatePlayer()}, 550);
+    }
+    function slideAction(){
+      if(!started || slide) return;
+      slide = true; updatePlayer();
+      setTimeout(()=>{slide=false;updatePlayer()}, 480);
+    }
+    function leftAction(){ if(started && lane>0){lane--;updatePlayer();} }
+    function rightAction(){ if(started && lane<2){lane++;updatePlayer();} }
+
+    document.getElementById('playBtn').onclick = startGame;
+    document.getElementById('restartBtn').onclick = resetGame;
+    document.getElementById('leftBtn').onclick = leftAction;
+    document.getElementById('rightBtn').onclick = rightAction;
+    document.getElementById('upBtn').onclick = jumpAction;
+    document.getElementById('downBtn').onclick = slideAction;
+
+    window.addEventListener('keydown', (e)=>{
+      if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key)) e.preventDefault();
+      if(!started && (e.key === ' ' || e.key === 'Enter')) startGame();
+      if(e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') leftAction();
+      if(e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') rightAction();
+      if(e.key === 'ArrowUp' || e.key.toLowerCase() === 'w' || e.key === ' ') jumpAction();
+      if(e.key === 'ArrowDown' || e.key.toLowerCase() === 's') slideAction();
+    });
+
+    let last = 0;
+    function loop(t){
+      const dt = Math.min((t-last)/16.666,1.5) || 1;
+      last = t;
+      if(started && !gameOver){
+        score += Math.floor(speed * dt);
+        distance += speed * dt * 0.7;
+        speed = Math.min(speed + 0.0025 * dt, 16);
+        spawnTimer += dt;
+        if(spawnTimer > 16){
+          spawnObject();
+          if(Math.random() < 0.55) spawnObject();
+          spawnTimer = 0;
+        }
+        if(shieldTimer > 0){ shieldTimer -= 16.666 * dt; if(shieldTimer <= 0) shield = false; }
+        if(magnetTimer > 0){ magnetTimer -= 16.666 * dt; if(magnetTimer <= 0) magnet = false; }
+        renderObjects(dt);
+        scoreEl.textContent = score;
+        coinsEl.textContent = coins;
+        distanceEl.textContent = Math.floor(distance);
+      }
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('resize', ()=>{updatePlayer();makeRailLines();});
+    makeBuildings();
+    makeRailLines();
+    updatePlayer();
+    requestAnimationFrame(loop);
   </script>
 </body>
 </html>
