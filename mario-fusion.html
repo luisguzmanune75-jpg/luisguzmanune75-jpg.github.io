@@ -3,744 +3,160 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SNG Mario Fusion Game</title>
-  <style>
-    :root{
-      --bg1:#050816;
-      --bg2:#0c1a38;
-      --bg3:#112d5f;
-      --accent:#38bdf8;
-      --accent2:#facc15;
-      --danger:#ef4444;
-      --good:#22c55e;
-      --card:rgba(255,255,255,.08);
-      --line:rgba(255,255,255,.12);
-      --text:#f8fafc;
-      --muted:rgba(248,250,252,.75);
-    }
-
-    *{box-sizing:border-box}
-    html,body{margin:0;height:100%;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at top,var(--bg3),var(--bg2) 45%,var(--bg1));color:var(--text)}
-    body{display:flex;flex-direction:column}
-
-    .topbar{
-      display:flex;align-items:center;justify-content:space-between;gap:16px;
-      padding:14px 18px;border-bottom:1px solid var(--line);
-      background:rgba(3,8,20,.7);backdrop-filter:blur(12px);position:sticky;top:0;z-index:20;
-    }
-    .brand{display:flex;align-items:center;gap:14px}
-    .logo{
-      width:50px;height:50px;border-radius:16px;
-      background:linear-gradient(135deg,#0ea5e9,#2563eb,#facc15);
-      display:grid;place-items:center;font-weight:900;font-size:18px;color:#fff;
-      box-shadow:0 10px 30px rgba(14,165,233,.35);
-    }
-    .brand h1{margin:0;font-size:20px;line-height:1.1}
-    .brand p{margin:2px 0 0;color:var(--muted);font-size:13px}
-
-    .hud{
-      display:flex;flex-wrap:wrap;justify-content:center;gap:10px;
-    }
-    .chip{
-      background:var(--card);border:1px solid var(--line);border-radius:999px;
-      padding:10px 14px;font-weight:700;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.15);
-    }
-    .chip strong{color:#fff}
-
-    .layout{
-      width:min(1400px,100%);
-      margin:0 auto;
-      display:grid;grid-template-columns:280px minmax(0,1fr) 280px;
-      gap:18px;padding:18px;
-      flex:1;
-    }
-
-    .panel{
-      background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;
-      box-shadow:0 16px 40px rgba(0,0,0,.22);
-    }
-    .panel h2{margin:0 0 10px;font-size:18px}
-    .panel p,.panel li{color:var(--muted);line-height:1.55}
-    .panel ul{padding-left:18px;margin:10px 0 0}
-
-    .game-shell{
-      background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));
-      border:1px solid var(--line);border-radius:28px;padding:14px;
-      box-shadow:0 20px 60px rgba(0,0,0,.28);
-      position:relative;overflow:hidden;
-    }
-
-    canvas{
-      width:100%;height:auto;display:block;border-radius:22px;
-      background:linear-gradient(180deg,#5dd6ff 0%,#8ae2ff 40%,#d5f1ff 100%);
-      border:1px solid rgba(255,255,255,.15);
-    }
-
-    .overlay{
-      position:absolute;inset:14px;display:flex;align-items:center;justify-content:center;
-      pointer-events:none;
-    }
-    .menu{
-      width:min(680px,92%);
-      text-align:center;background:rgba(2,8,23,.78);border:1px solid rgba(255,255,255,.12);
-      border-radius:28px;padding:28px;backdrop-filter:blur(16px);pointer-events:auto;
-      box-shadow:0 25px 70px rgba(0,0,0,.35);
-    }
-    .menu h2{font-size:38px;margin:0 0 10px}
-    .menu p{color:var(--muted);max-width:560px;margin:0 auto 18px;line-height:1.6}
-    .buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-    button{
-      border:none;border-radius:16px;padding:14px 20px;font-size:15px;font-weight:800;cursor:pointer;
-      transition:transform .2s ease,opacity .2s ease,background .2s ease;
-    }
-    button:hover{transform:translateY(-2px)}
-    .primary{background:linear-gradient(135deg,#0ea5e9,#2563eb);color:#fff}
-    .secondary{background:rgba(255,255,255,.09);color:#fff;border:1px solid rgba(255,255,255,.12)}
-    .gold{background:linear-gradient(135deg,#facc15,#f59e0b);color:#111827}
-
-    .touch{
-      display:none;
-      position:absolute;left:14px;right:14px;bottom:14px;
-      justify-content:space-between;align-items:end;pointer-events:none;
-    }
-    .touch .group{display:flex;gap:10px;pointer-events:auto}
-    .touch-btn{
-      width:68px;height:68px;border-radius:18px;border:1px solid rgba(255,255,255,.18);
-      background:rgba(2,8,23,.55);backdrop-filter:blur(8px);color:#fff;font-size:28px;font-weight:900;
-      display:grid;place-items:center;user-select:none;
-    }
-
-    .footer-note{padding:0 18px 18px;color:rgba(255,255,255,.58);font-size:12px;text-align:center}
-
-    @media (max-width:1100px){
-      .layout{grid-template-columns:1fr;}
-      .panel.side{display:none}
-    }
-    @media (max-width:840px){
-      .topbar{flex-direction:column;align-items:flex-start}
-      .hud{justify-content:flex-start}
-      .menu h2{font-size:28px}
-      .touch{display:flex}
-    }
-  </style>
+  <title>Sng-subway-runner-pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/framer-motion/dist/framer-motion.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
-<body>
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo">SNG</div>
-      <div>
-        <h1>SNG Mario Fusion Game</h1>
-        <p>Plateforme arcade premium pour ton site SNG Portal</p>
+<body class="bg-slate-950">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useEffect, useMemo, useRef, useState } = React;
+    const { motion, AnimatePresence } = window["framer-motion"];
+
+    const Icon = ({ children, className = "" }) => <span className={`inline-flex items-center justify-center ${className}`}>{children}</span>;
+    const Play = (p) => <Icon {...p}>▶</Icon>;
+    const RotateCcw = (p) => <Icon {...p}>↺</Icon>;
+    const Trophy = (p) => <Icon {...p}>🏆</Icon>;
+    const Coins = (p) => <Icon {...p}>🪙</Icon>;
+    const Zap = (p) => <Icon {...p}>⚡</Icon>;
+    const Shield = (p) => <Icon {...p}>🛡</Icon>;
+    const ArrowLeft = (p) => <Icon {...p}>←</Icon>;
+    const ArrowRight = (p) => <Icon {...p}>→</Icon>;
+    const ArrowUp = (p) => <Icon {...p}>↑</Icon>;
+    const ArrowDown = (p) => <Icon {...p}>↓</Icon>;
+    const Sparkles = (p) => <Icon {...p}>✨</Icon>;
+
+    const Button = ({ className = "", children, ...props }) => <button className={`inline-flex items-center justify-center px-4 py-2 ${className}`} {...props}>{children}</button>;
+    const Card = ({ className = "", children }) => <div className={`border ${className}`}>{children}</div>;
+    const CardContent = ({ className = "", children }) => <div className={className}>{children}</div>;
+    const Badge = ({ className = "", children }) => <span className={`inline-flex items-center ${className}`}>{children}</span>;
+    const Progress = ({ value = 0, className = "" }) => (
+      <div className={`w-full overflow-hidden rounded-full ${className}`}>
+        <div className="h-full rounded-full bg-orange-400 transition-all" style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
       </div>
-    </div>
-    <div class="hud">
-      <div class="chip">Niveau <strong id="levelLabel">1</strong>/10</div>
-      <div class="chip">Pièces <strong id="coinLabel">0</strong></div>
-      <div class="chip">Vies <strong id="lifeLabel">3</strong></div>
-      <div class="chip">Score <strong id="scoreLabel">0</strong></div>
-      <div class="chip">Boss <strong id="bossLabel">-</strong></div>
-    </div>
-  </header>
+    );
 
-  <main class="layout">
-    <aside class="panel side">
-      <h2>Mode SNG</h2>
-      <p>Un jeu de plateforme fusion inspiré des grands classiques arcade, pensé pour attirer du public directement sur ton site.</p>
-      <ul>
-        <li>10 niveaux évolutifs</li>
-        <li>Pièces, boosts et ennemis</li>
-        <li>Boss final au niveau 10</li>
-        <li>Compatible clavier et mobile</li>
-        <li>Page unique facile à intégrer</li>
-      </ul>
-    </aside>
+    const LANES = [-1, 0, 1];
+    const GAME_WIDTH = 920;
+    const GAME_HEIGHT = 620;
+    const TRACK_LEFT = 170;
+    const TRACK_WIDTH = 580;
+    const LANE_WIDTH = TRACK_WIDTH / 3;
+    const PLAYER_Y = 470;
+    const PLAYER_W = 86;
+    const PLAYER_H = 116;
+    const GROUND_SPEED_START = 16;
+    const SEGMENT_LENGTH = 140;
+    const MAX_LIVES = 1;
 
-    <section class="game-shell">
-      <canvas id="game" width="1100" height="620" aria-label="Jeu SNG Mario Fusion"></canvas>
+    function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+    function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+    function laneToX(lane) { return TRACK_LEFT + TRACK_WIDTH / 2 + lane * LANE_WIDTH; }
 
-      <div class="overlay" id="overlay">
-        <div class="menu" id="menuBox">
-          <h2 id="menuTitle">SNG Mario Fusion</h2>
-          <p id="menuText">Ramasse les pièces, évite les pièges, saute sur les ennemis et termine les 10 niveaux jusqu’au boss final. Flèches ou A/D pour bouger, Espace/W/↑ pour sauter.</p>
-          <div class="buttons">
-            <button class="primary" id="startBtn">Jouer maintenant</button>
-            <button class="secondary" id="restartBtn">Recommencer</button>
-            <button class="gold" id="nextBtn" style="display:none;">Niveau suivant</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="touch">
-        <div class="group">
-          <div class="touch-btn" id="leftBtn">◀</div>
-          <div class="touch-btn" id="rightBtn">▶</div>
-        </div>
-        <div class="group">
-          <div class="touch-btn" id="jumpBtn">⤒</div>
-        </div>
-      </div>
-    </section>
-
-    <aside class="panel side">
-      <h2>Ajout site web</h2>
-      <p>Place ce fichier comme <strong>mario-fusion.html</strong> et lie-le depuis ton bloc Jeux.</p>
-      <ul>
-        <li><strong>Entrée :</strong> bouton “Jouer maintenant”</li>
-        <li><strong>Objectif :</strong> augmenter le temps passé sur ton site</li>
-        <li><strong>Idée pro :</strong> ajouter pub ou classement plus tard</li>
-      </ul>
-    </aside>
-  </main>
-
-  <div class="footer-note">SNG Portal • version ultra PRO propre • jeu local HTML/CSS/JS</div>
-
-  <script>
-    const canvas = document.getElementById('game');
-    const ctx = canvas.getContext('2d');
-
-    const ui = {
-      overlay: document.getElementById('overlay'),
-      menuTitle: document.getElementById('menuTitle'),
-      menuText: document.getElementById('menuText'),
-      startBtn: document.getElementById('startBtn'),
-      restartBtn: document.getElementById('restartBtn'),
-      nextBtn: document.getElementById('nextBtn'),
-      levelLabel: document.getElementById('levelLabel'),
-      coinLabel: document.getElementById('coinLabel'),
-      lifeLabel: document.getElementById('lifeLabel'),
-      scoreLabel: document.getElementById('scoreLabel'),
-      bossLabel: document.getElementById('bossLabel'),
-    };
-
-    const keys = { left:false, right:false, jump:false };
-    const gravity = 0.75;
-    const groundH = 80;
-
-    const state = {
-      level:1,
-      maxLevel:10,
-      score:0,
-      coins:0,
-      lives:3,
-      running:false,
-      won:false,
-      bossHP:0,
-      cameraX:0,
-      worldWidth:3600,
-      player:null,
-      platforms:[],
-      coinsArr:[],
-      enemies:[],
-      spikes:[],
-      boosts:[],
-      exit:null,
-      clouds:[],
-      particles:[],
-      flagWave:0,
-      boss:null,
-    };
-
-    function rand(min,max){ return Math.random()*(max-min)+min; }
-    function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
-    function rects(a,b){ return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y; }
-
-    function createPlayer(){
-      return { x:80, y:220, w:42, h:54, vx:0, vy:0, onGround:false, color:'#ef4444', inv:0, power:0, dir:1 };
+    function makeRow(z, difficulty = 1) {
+      const obstacleChance = Math.min(0.3 + difficulty * 0.015, 0.58);
+      const coinChance = 0.75;
+      const trainChance = Math.min(0.08 + difficulty * 0.01, 0.18);
+      const row = { id: `${z}-${Math.random().toString(36).slice(2, 8)}`, z, obstacles: [], coins: [], powerup: null };
+      const freeLane = LANES[rand(0, 2)];
+      LANES.forEach((lane) => {
+        if (Math.random() < obstacleChance && lane !== freeLane) row.obstacles.push({ id: `${row.id}-obs-${lane}`, lane, type: Math.random() < trainChance ? "train" : Math.random() < 0.5 ? "barrier" : "cone" });
+        if (Math.random() < coinChance) row.coins.push({ id: `${row.id}-coin-${lane}`, lane, height: Math.random() < 0.2 ? "high" : "normal" });
+      });
+      if (Math.random() < 0.08) row.powerup = { id: `${row.id}-power`, lane: freeLane, type: Math.random() < 0.5 ? "magnet" : "shield" };
+      return row;
     }
 
-    function makeLevel(level){
-      state.level = level;
-      state.worldWidth = 3000 + level * 170;
-      state.player = createPlayer();
-      state.platforms = [];
-      state.coinsArr = [];
-      state.enemies = [];
-      state.spikes = [];
-      state.boosts = [];
-      state.exit = { x: state.worldWidth - 170, y: canvas.height - groundH - 120, w:26, h:120 };
-      state.clouds = Array.from({length:10}, (_,i)=>({ x:i*320+rand(0,140), y:rand(40,180), w:rand(90,180), s:rand(.15,.45) }));
-      state.particles = [];
-      state.flagWave = 0;
-      state.boss = null;
-      state.bossHP = 0;
-      state.cameraX = 0;
-      state.won = false;
+    function buildInitialRows() { const rows = []; for (let i = 0; i < 22; i++) rows.push(makeRow(i * SEGMENT_LENGTH, 1)); return rows; }
 
-      state.platforms.push({ x:0, y:canvas.height-groundH, w:state.worldWidth, h:groundH, type:'ground' });
+    function Skyline() { return <div className="absolute inset-0 overflow-hidden rounded-[32px]"><div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,180,120,0.45),_transparent_35%),linear-gradient(180deg,#101726_0%,#13233e_40%,#1d3457_70%,#27466d_100%)]" /><div className="absolute inset-x-0 top-10 h-56 opacity-60">{[...Array(20)].map((_, i) => <div key={i} className="absolute bottom-0 rounded-t-2xl bg-white/10" style={{ left: `${i * 5.2}%`, width: `${3 + (i % 3)}%`, height: `${70 + ((i * 31) % 120)}px`, filter: "blur(0.4px)" }}><div className="grid grid-cols-3 gap-1 p-2">{[...Array(12)].map((__, j) => <div key={j} className={`h-1.5 rounded-full ${j % 4 === 0 ? "bg-amber-300/70" : "bg-white/20"}`} />)}</div></div>)}</div><div className="absolute inset-x-0 bottom-0 h-56 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.26))]" /></div>; }
 
-      const baseCount = 9 + level * 2;
-      let px = 220;
-      for(let i=0;i<baseCount;i++){
-        const w = 110 + (i % 3) * 30;
-        const h = 18;
-        const y = 420 - ((i * 37 + level * 19) % 220);
-        state.platforms.push({ x:px, y, w, h, type:'plat' });
+    function TrainTracks({ speed }) { const lineCount = 11; return <div className="absolute inset-0">{[...Array(lineCount)].map((_, i) => <div key={i} className="absolute left-1/2 -translate-x-1/2 rounded-3xl border border-white/5 bg-slate-900/45" style={{ bottom: `${i * 58 - (speed % 58)}px`, width: `${210 + i * 48}px`, height: `${34 + i * 10}px`, transform: `translateX(-50%) perspective(900px) rotateX(68deg)`, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)" }} />)}{[0,1,2,3].map((rail)=> <div key={rail} className="absolute top-0 bottom-0 w-1 rounded-full bg-white/20" style={{ left: `${TRACK_LEFT + rail * (TRACK_WIDTH / 3)}px` }} />)}</div>; }
 
-        if(i % 2 === 0){
-          state.coinsArr.push({ x:px+w/2-10, y:y-34, w:20, h:20, taken:false, bob:rand(0,6.28) });
-        }
-        if(i % 3 === 1){
-          state.enemies.push({ x:px+w/2-20, y:y-34, w:34, h:34, vx:1.1 + level*0.08, min:px+8, max:px+w-42, alive:true, type: i%2 ? 'slime':'bot' });
-        }
-        if(i % 4 === 2){
-          state.boosts.push({ x:px+w/2-18, y:y-40, w:24, h:24, kind: (i%8===2 ? 'jump' : 'shield'), taken:false, bob:rand(0,6.28) });
-        }
-        px += 200 + rand(40,110);
-      }
-
-      for(let i=1;i<6+level;i++){
-        const x = 350 + i*330 + (i%2)*70;
-        if(x < state.worldWidth - 340){
-          state.spikes.push({ x, y:canvas.height-groundH-24, w:60, h:24 });
-        }
-      }
-
-      for(let i=0;i<10+level*3;i++){
-        state.coinsArr.push({ x:260+i*110, y:250+Math.sin(i*.9)*90, w:20, h:20, taken:false, bob:rand(0,6.28) });
-      }
-
-      if(level === 10){
-        state.boss = { x: state.worldWidth - 520, y: canvas.height-groundH-88, w:88, h:88, vx:2.2, hp:8, alive:true, jump:0 };
-        state.bossHP = state.boss.hp;
-        for(let i=0;i<5;i++){
-          state.platforms.push({ x: state.worldWidth - 850 + i*140, y: 320 - (i%2)*70, w:90, h:18, type:'boss' });
-        }
-      }
-
-      updateHud();
-      showOverlay(`Niveau ${level}`, `Prépare-toi pour le niveau ${level}. ${level===10 ? 'Boss final activé.' : 'Attrape les pièces et trouve le drapeau.'}`, true, false);
+    function Runner({ lane, jumping, sliding, shield }) {
+      const x = laneToX(lane); const y = PLAYER_Y - (jumping ? 90 : 0) + (sliding ? 30 : 0); const scaleY = sliding ? 0.68 : 1;
+      return <motion.div className="absolute" animate={{ left: x - PLAYER_W / 2, top: y - PLAYER_H / 2, scaleY }} transition={{ type: "spring", stiffness: 240, damping: 18 }} style={{ width: PLAYER_W, height: PLAYER_H }}><div className="relative h-full w-full">{shield && <motion.div className="absolute inset-[-10px] rounded-[32px] border border-cyan-300/60 bg-cyan-300/10" animate={{ scale: [1, 1.06, 1], opacity: [0.35, 0.65, 0.35] }} transition={{ repeat: Infinity, duration: 1.2 }} /> }<div className="absolute left-1/2 top-1 -translate-x-1/2 h-8 w-8 rounded-full bg-amber-200 shadow-lg shadow-amber-200/30" /><div className="absolute left-1/2 top-8 -translate-x-1/2 h-12 w-10 rounded-2xl bg-slate-900/90" /><div className="absolute left-1/2 top-16 -translate-x-1/2 h-14 w-14 rounded-[22px] bg-orange-500 shadow-xl shadow-orange-500/30" /><div className="absolute left-1/2 top-24 -translate-x-1/2 h-16 w-16 rounded-[24px] bg-emerald-400/95" /><div className="absolute left-[8px] top-28 h-12 w-4 rounded-full bg-orange-400" /><div className="absolute right-[8px] top-28 h-12 w-4 rounded-full bg-orange-400" /><div className="absolute left-[20px] bottom-0 h-14 w-5 rounded-full bg-slate-950" /><div className="absolute right-[20px] bottom-0 h-14 w-5 rounded-full bg-slate-950" /></div></motion.div>;
     }
 
-    function updateHud(){
-      ui.levelLabel.textContent = state.level;
-      ui.coinLabel.textContent = state.coins;
-      ui.lifeLabel.textContent = state.lives;
-      ui.scoreLabel.textContent = state.score;
-      ui.bossLabel.textContent = state.boss ? state.boss.hp : '-';
+    function Obstacle({ lane, z, type }) { const scale = clamp(1.5 - z / 900, 0.4, 1.4); const y = 120 + (1 - scale) * 360 + z * 0.08; const x = laneToX(lane); const width = type === "train" ? 120 * scale : 74 * scale; const height = type === "train" ? 210 * scale : type === "barrier" ? 75 * scale : 55 * scale; return <div className="absolute" style={{ left: x - width / 2, top: y, width, height, zIndex: Math.round(1000 - z) }}>{type === "train" ? <div className="h-full w-full rounded-[28px] border border-white/10 bg-gradient-to-b from-sky-400 via-sky-500 to-sky-700 shadow-2xl shadow-sky-950/40"><div className="mx-auto mt-4 h-6 w-3/4 rounded-full bg-white/30" /><div className="mt-4 grid grid-cols-2 gap-2 px-3">{[...Array(6)].map((_, i) => <div key={i} className="h-5 rounded-lg bg-white/30" />)}</div><div className="absolute inset-x-3 bottom-3 h-4 rounded-full bg-yellow-300/60" /></div> : type === "barrier" ? <div className="h-full w-full rounded-[18px] border border-white/10 bg-gradient-to-b from-red-400 to-red-700 shadow-xl shadow-red-950/40"><div className="mt-2 grid gap-2 px-2">{[...Array(3)].map((_, i) => <div key={i} className="h-2 rounded-full bg-white/70" />)}</div></div> : <div className="h-full w-full rounded-[18px] border border-white/10 bg-gradient-to-b from-orange-300 to-orange-600 shadow-xl shadow-orange-950/40"><div className="mx-auto mt-2 h-2 w-10 rounded-full bg-white/70" /></div>}</div>; }
+
+    function Coin({ lane, z, magnet }) { const scale = clamp(1.45 - z / 900, 0.4, 1.3); const y = 180 + (1 - scale) * 300 + z * 0.08; const x = laneToX(lane); return <motion.div className="absolute flex items-center justify-center rounded-full border border-yellow-100/40 bg-gradient-to-b from-yellow-200 to-amber-500 font-black text-amber-950 shadow-lg" animate={magnet ? { scale: [scale, scale * 1.14, scale], rotate: [0, 8, -8, 0] } : { rotateY: [0, 180, 360] }} transition={{ repeat: Infinity, duration: magnet ? 0.8 : 1.8, ease: "linear" }} style={{ left: x - 18 * scale, top: y, width: 36 * scale, height: 36 * scale, zIndex: Math.round(1000 - z) }}>S</motion.div>; }
+
+    function PowerUp({ lane, z, type }) { const scale = clamp(1.45 - z / 900, 0.4, 1.3); const y = 220 + (1 - scale) * 280 + z * 0.08; const x = laneToX(lane); return <motion.div className={`absolute rounded-2xl border shadow-xl ${type === "magnet" ? "border-fuchsia-300/50 bg-fuchsia-500/80" : "border-cyan-300/50 bg-cyan-500/80"}`} animate={{ y: [0, -8, 0], rotate: [0, 6, -6, 0] }} transition={{ repeat: Infinity, duration: 1.2 }} style={{ left: x - 25 * scale, top: y, width: 50 * scale, height: 50 * scale, zIndex: Math.round(1000 - z) }}><div className="flex h-full w-full items-center justify-center text-white">{type === "magnet" ? <Zap className="h-5 w-5" /> : <Shield className="h-5 w-5" />}</div></motion.div>; }
+
+    function SNGSubwayRunnerPro() {
+      const [started, setStarted] = useState(false), [gameOver, setGameOver] = useState(false), [score, setScore] = useState(0), [best, setBest] = useState(0), [coins, setCoins] = useState(0), [lane, setLane] = useState(0), [jumping, setJumping] = useState(false), [sliding, setSliding] = useState(false), [speed, setSpeed] = useState(GROUND_SPEED_START), [distance, setDistance] = useState(0), [rows, setRows] = useState(buildInitialRows()), [shieldUntil, setShieldUntil] = useState(0), [magnetUntil, setMagnetUntil] = useState(0), [flash, setFlash] = useState(false), [mission, setMission] = useState({ target: 100, reward: 30 });
+      const rafRef = useRef(null), lastTimeRef = useRef(0), scoreRef = useRef(0), distanceRef = useRef(0);
+      const now = Date.now(); const shieldActive = shieldUntil > now; const magnetActive = magnetUntil > now; const missionProgress = Math.min((coins / mission.target) * 100, 100);
+
+      useEffect(() => setBest(Number(localStorage.getItem("sng-subway-best") || 0)), []);
+      useEffect(() => { scoreRef.current = score; distanceRef.current = distance; }, [score, distance]);
+
+      const resetGame = () => { setStarted(false); setGameOver(false); setScore(0); setCoins(0); setLane(0); setJumping(false); setSliding(false); setSpeed(GROUND_SPEED_START); setDistance(0); setRows(buildInitialRows()); setShieldUntil(0); setMagnetUntil(0); setFlash(false); setMission({ target: rand(80, 150), reward: rand(25, 45) }); lastTimeRef.current = 0; };
+      useEffect(() => { resetGame(); }, []);
+
+      const moveLeft = () => setLane((l) => clamp(l - 1, -1, 1)); const moveRight = () => setLane((l) => clamp(l + 1, -1, 1));
+      const triggerJump = () => { if (jumping || !started || gameOver) return; setJumping(true); setTimeout(() => setJumping(false), 620); };
+      const triggerSlide = () => { if (sliding || !started || gameOver) return; setSliding(true); setTimeout(() => setSliding(false), 520); };
+
+      useEffect(() => {
+        const onKey = (e) => {
+          if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", " "].includes(e.key)) e.preventDefault();
+          if (!started && (e.key === " " || e.key === "Enter")) setStarted(true);
+          if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") moveLeft();
+          if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") moveRight();
+          if (e.key === "ArrowUp" || e.key.toLowerCase() === "w" || e.key === " ") triggerJump();
+          if (e.key === "ArrowDown" || e.key.toLowerCase() === "s") triggerSlide();
+        };
+        window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey);
+      }, [started, jumping, sliding, gameOver]);
+
+      useEffect(() => {
+        if (!started || gameOver) return;
+        const tick = (t) => {
+          if (!lastTimeRef.current) lastTimeRef.current = t;
+          const dt = Math.min((t - lastTimeRef.current) / 16.6667, 1.4); lastTimeRef.current = t;
+          setDistance((d) => d + speed * dt * 0.5); setScore((s) => s + Math.floor(speed * dt * 0.9)); setSpeed((s) => Math.min(s + 0.0025 * dt, 30));
+          setRows((prev) => {
+            let next = prev.map((row) => ({ ...row, z: row.z - speed * dt * 10, obstacles: row.obstacles.filter(Boolean), coins: row.coins.filter(Boolean) })).filter((row) => row.z > -120);
+            while (next.length < 22) { const lastZ = next.length ? next[next.length - 1].z : 0; const difficulty = 1 + Math.floor(distanceRef.current / 1000); next.push(makeRow(lastZ + SEGMENT_LENGTH, difficulty)); }
+            const hitWindow = (z) => z < 110 && z > -10;
+            next = next.map((row) => {
+              const updated = { ...row };
+              updated.coins = row.coins.filter((coin) => { const sameLane = coin.lane === lane; const nearLane = magnetActive && Math.abs(coin.lane - lane) <= 1; const withinRange = row.z < 160 && row.z > 10; if ((sameLane || nearLane) && withinRange) { setCoins((c) => c + 1); setScore((s) => s + 25); return false; } return true; });
+              if (row.powerup && row.powerup.lane === lane && row.z < 130 && row.z > 0) { if (row.powerup.type === "magnet") setMagnetUntil(Date.now() + 7000); if (row.powerup.type === "shield") setShieldUntil(Date.now() + 7000); setScore((s) => s + 100); updated.powerup = null; }
+              const collision = row.obstacles.some((obs) => { if (obs.lane !== lane || !hitWindow(row.z)) return false; if (obs.type === "cone" && jumping) return false; if (obs.type === "barrier" && sliding) return false; return true; });
+              if (collision) { if (shieldActive) { setShieldUntil(0); updated.obstacles = []; } else { setFlash(true); setTimeout(() => setFlash(false), 160); setGameOver(true); const finalScore = scoreRef.current; const bestScore = Math.max(best, finalScore); setBest(bestScore); localStorage.setItem("sng-subway-best", String(bestScore)); } }
+              return updated;
+            });
+            return next;
+          });
+          rafRef.current = requestAnimationFrame(tick);
+        };
+        rafRef.current = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(rafRef.current);
+      }, [started, gameOver, speed, lane, jumping, sliding, shieldActive, magnetActive, best]);
+
+      useEffect(() => { if (coins >= mission.target) { setScore((s) => s + mission.reward * 10); setCoins((c) => c + mission.reward); setMission({ target: rand(120, 220), reward: rand(35, 65) }); } }, [coins, mission]);
+      const renderedObjects = useMemo(() => rows.flatMap((row) => { const objs = []; row.obstacles.forEach((obs) => objs.push({ kind: "obstacle", ...obs, z: row.z, key: obs.id })); row.coins.forEach((coin) => objs.push({ kind: "coin", ...coin, z: row.z, key: coin.id })); if (row.powerup) objs.push({ kind: "powerup", ...row.powerup, z: row.z, key: row.powerup.id }); return objs; }), [rows]);
+
+      return <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#1f2b4d,_#080d16_60%)] p-4 text-white md:p-8"><div className="mx-auto max-w-[1280px]"><div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"><div><Badge className="mb-3 rounded-full border-0 bg-orange-500/20 px-4 py-1 text-orange-200">SNG ULTRA PRO</Badge><h1 className="text-3xl font-black tracking-tight md:text-5xl">Subway Runner <span className="text-orange-400">SNG Edition</span></h1><p className="mt-2 max-w-2xl text-sm text-slate-300 md:text-base">Version premium inspirée des endless runners urbains, optimisée pour ton site avec score, pièces, bonus, mission, écran d’accueil et commandes tactiles.</p></div><div className="grid grid-cols-2 gap-3 md:grid-cols-4"><Card className="rounded-3xl border-white/10 bg-white/5 backdrop-blur-xl"><CardContent className="p-4"><div className="text-xs text-slate-300">Score</div><div className="text-2xl font-black">{score}</div></CardContent></Card><Card className="rounded-3xl border-white/10 bg-white/5 backdrop-blur-xl"><CardContent className="p-4"><div className="text-xs text-slate-300">Meilleur</div><div className="text-2xl font-black">{best}</div></CardContent></Card><Card className="rounded-3xl border-white/10 bg-white/5 backdrop-blur-xl"><CardContent className="p-4"><div className="text-xs text-slate-300">Pièces</div><div className="flex items-center gap-2 text-2xl font-black"><Coins className="h-5 w-5 text-yellow-300" />{coins}</div></CardContent></Card><Card className="rounded-3xl border-white/10 bg-white/5 backdrop-blur-xl"><CardContent className="p-4"><div className="text-xs text-slate-300">Vitesse</div><div className="text-2xl font-black">{speed.toFixed(1)}x</div></CardContent></Card></div></div>
+
+      <div className="grid gap-5 xl:grid-cols-[1fr_320px]"><div><div className={`relative overflow-hidden rounded-[32px] border border-white/10 bg-black/20 shadow-2xl shadow-black/40 ${flash ? "ring-4 ring-red-400/50" : ""}`} style={{ width: "100%", maxWidth: GAME_WIDTH, height: GAME_HEIGHT }}><Skyline /><TrainTracks speed={distance} /><div className="absolute inset-x-0 top-0 z-30 flex items-center justify-between p-4"><div className="rounded-2xl border border-white/10 bg-black/30 px-4 py-2 backdrop-blur-xl"><div className="text-xs text-slate-300">Distance</div><div className="text-xl font-black">{Math.floor(distance)} m</div></div><div className="flex gap-2">{shieldActive && <Badge className="rounded-full bg-cyan-400/20 px-4 py-1 text-cyan-200"><Shield className="mr-1 h-3.5 w-3.5" /> Shield</Badge>}{magnetActive && <Badge className="rounded-full bg-fuchsia-400/20 px-4 py-1 text-fuchsia-200"><Zap className="mr-1 h-3.5 w-3.5" /> Magnet</Badge>}</div></div>
+      {renderedObjects.map((obj) => obj.kind === "obstacle" ? <Obstacle key={obj.key} lane={obj.lane} z={obj.z} type={obj.type} /> : obj.kind === "coin" ? <Coin key={obj.key} lane={obj.lane} z={obj.z} magnet={magnetActive} /> : <PowerUp key={obj.key} lane={obj.lane} z={obj.z} type={obj.type} />)}
+      <Runner lane={lane} jumping={jumping} sliding={sliding} shield={shieldActive} />
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.45))]" />
+      <AnimatePresence>{!started && !gameOver && <motion.div className="absolute inset-0 z-40 flex items-center justify-center bg-slate-950/45 backdrop-blur-sm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><Card className="mx-4 w-full max-w-xl rounded-[32px] border-white/10 bg-slate-950/70 text-white shadow-2xl shadow-black/50"><CardContent className="p-8 text-center"><div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-orange-500/20"><Sparkles className="h-10 w-10 text-orange-400" /></div><h2 className="text-3xl font-black md:text-4xl">Lance la course SNG</h2><p className="mt-3 text-slate-300">Esquive les trains, prends les pièces, récupère les bonus et fais le meilleur score sur ton site.</p><Button className="mt-7 h-14 w-full rounded-2xl bg-orange-500 text-lg font-black hover:bg-orange-400" onClick={() => setStarted(true)}><Play className="mr-2 h-5 w-5" /> Jouer maintenant</Button></CardContent></Card></motion.div>}</AnimatePresence>
+      <AnimatePresence>{gameOver && <motion.div className="absolute inset-0 z-40 flex items-center justify-center bg-slate-950/55 backdrop-blur-sm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><Card className="mx-4 w-full max-w-lg rounded-[32px] border-white/10 bg-slate-950/80 text-white shadow-2xl shadow-black/50"><CardContent className="p-8 text-center"><div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-red-500/20"><Trophy className="h-10 w-10 text-yellow-300" /></div><h2 className="text-3xl font-black">Fin de course</h2><p className="mt-2 text-slate-300">Relance immédiatement et bats ton meilleur score.</p><div className="mt-6 grid grid-cols-3 gap-3"><div className="rounded-2xl border border-white/10 bg-white/5 p-4"><div className="text-xs text-slate-300">Score</div><div className="text-2xl font-black">{score}</div></div><div className="rounded-2xl border border-white/10 bg-white/5 p-4"><div className="text-xs text-slate-300">Pièces</div><div className="text-2xl font-black">{coins}</div></div><div className="rounded-2xl border border-white/10 bg-white/5 p-4"><div className="text-xs text-slate-300">Best</div><div className="text-2xl font-black">{best}</div></div></div><Button className="mt-7 h-14 w-full rounded-2xl bg-orange-500 text-lg font-black hover:bg-orange-400" onClick={resetGame}><RotateCcw className="mr-2 h-5 w-5" /> Rejouer</Button></CardContent></Card></motion.div>}</AnimatePresence>
+      <div className="absolute bottom-5 left-1/2 z-30 flex -translate-x-1/2 gap-2 md:hidden"><Button className="rounded-2xl bg-black/40 backdrop-blur-xl" onClick={moveLeft}><ArrowLeft className="h-5 w-5" /></Button><Button className="rounded-2xl bg-black/40 backdrop-blur-xl" onClick={triggerJump}><ArrowUp className="h-5 w-5" /></Button><Button className="rounded-2xl bg-black/40 backdrop-blur-xl" onClick={triggerSlide}><ArrowDown className="h-5 w-5" /></Button><Button className="rounded-2xl bg-black/40 backdrop-blur-xl" onClick={moveRight}><ArrowRight className="h-5 w-5" /></Button></div></div></div>
+      <div className="space-y-5"><Card className="rounded-[28px] border-white/10 bg-white/5 backdrop-blur-xl"><CardContent className="p-6"><div className="mb-2 text-sm text-slate-300">Mission active</div><div className="text-2xl font-black">Ramasse {mission.target} pièces</div><p className="mt-2 text-sm text-slate-300">Récompense: +{mission.reward} pièces bonus et gros boost de score.</p><Progress value={missionProgress} className="mt-4 h-3 bg-white/10" /><div className="mt-2 text-sm text-slate-400">{coins} / {mission.target}</div></CardContent></Card><Card className="rounded-[28px] border-white/10 bg-white/5 backdrop-blur-xl"><CardContent className="p-6"><div className="mb-3 text-sm text-slate-300">Bonus</div><div className="grid gap-3"><div className="rounded-2xl border border-white/10 bg-white/5 p-4"><div className="flex items-center gap-2 font-bold text-fuchsia-300"><Zap className="h-4 w-4" /> Magnet</div><div className="mt-1 text-sm text-slate-300">Attire les pièces autour de toi pendant 7 secondes.</div></div><div className="rounded-2xl border border-white/10 bg-white/5 p-4"><div className="flex items-center gap-2 font-bold text-cyan-300"><Shield className="h-4 w-4" /> Shield</div><div className="mt-1 text-sm text-slate-300">Encaisse une collision et continue la course.</div></div></div></CardContent></Card></div></div></div></div>;
     }
 
-    function showOverlay(title,text,showStart=false,showNext=false){
-      ui.menuTitle.textContent = title;
-      ui.menuText.textContent = text;
-      ui.overlay.style.display = 'flex';
-      ui.startBtn.style.display = showStart ? 'inline-block' : 'none';
-      ui.nextBtn.style.display = showNext ? 'inline-block' : 'none';
-    }
-
-    function hideOverlay(){ ui.overlay.style.display = 'none'; }
-
-    function startGame(){ state.running = true; hideOverlay(); }
-
-    function loseLife(){
-      if(state.player.inv > 0) return;
-      state.lives--;
-      state.player.inv = 120;
-      if(state.lives <= 0){
-        state.running = false;
-        updateHud();
-        showOverlay('Game Over', 'Tu as perdu toutes tes vies. Recommence pour battre les 10 niveaux.', true, false);
-        return;
-      }
-      state.player.x = Math.max(80, state.player.x - 120);
-      state.player.y = 160;
-      state.player.vx = 0;
-      state.player.vy = -4;
-      updateHud();
-    }
-
-    function levelComplete(){
-      state.running = false;
-      state.score += 250;
-      updateHud();
-      if(state.level >= state.maxLevel){
-        showOverlay('Victoire SNG', 'Bravo. Tu as terminé SNG Mario Fusion jusqu’au niveau max avec le boss final battu.', false, false);
-        ui.startBtn.style.display = 'none';
-        ui.nextBtn.style.display = 'none';
-      } else {
-        showOverlay('Niveau terminé', `Excellent. Tu passes maintenant au niveau ${state.level + 1}.`, false, true);
-      }
-    }
-
-    function nextLevel(){
-      makeLevel(state.level + 1);
-    }
-
-    function restartAll(){
-      state.score = 0;
-      state.coins = 0;
-      state.lives = 3;
-      makeLevel(1);
-    }
-
-    function collectCoin(c){
-      c.taken = true;
-      state.coins++;
-      state.score += 10;
-      burst(c.x+10,c.y+10,'#facc15',8);
-      updateHud();
-    }
-
-    function takeBoost(b){
-      b.taken = true;
-      state.score += 35;
-      if(b.kind === 'jump') state.player.power = 500;
-      if(b.kind === 'shield') state.player.inv = 240;
-      burst(b.x+12,b.y+12,b.kind === 'jump' ? '#22c55e' : '#38bdf8',10);
-      updateHud();
-    }
-
-    function stompEnemy(e){
-      e.alive = false;
-      state.player.vy = -10;
-      state.score += 50;
-      burst(e.x+e.w/2,e.y+e.h/2,'#ef4444',12);
-      updateHud();
-    }
-
-    function hitBoss(){
-      if(!state.boss || !state.boss.alive) return;
-      state.boss.hp--;
-      state.bossHP = state.boss.hp;
-      state.player.vy = -11;
-      state.score += 120;
-      burst(state.boss.x+state.boss.w/2,state.boss.y+state.boss.h/2,'#f97316',18);
-      if(state.boss.hp <= 0){
-        state.boss.alive = false;
-        state.score += 500;
-      }
-      updateHud();
-    }
-
-    function burst(x,y,color,count){
-      for(let i=0;i<count;i++){
-        state.particles.push({ x,y,vx:rand(-4,4),vy:rand(-5,1),life:40+Math.random()*18,color,size:rand(3,7) });
-      }
-    }
-
-    function update(){
-      if(!state.running) return;
-      const p = state.player;
-      state.flagWave += 0.14;
-
-      const accel = 0.9;
-      const maxSpeed = 6.2;
-      const friction = 0.82;
-      const jumpPower = p.power > 0 ? -16.5 : -14;
-
-      if(keys.left){ p.vx -= accel; p.dir = -1; }
-      if(keys.right){ p.vx += accel; p.dir = 1; }
-      if(!keys.left && !keys.right) p.vx *= friction;
-      p.vx = clamp(p.vx, -maxSpeed, maxSpeed);
-
-      if(keys.jump && p.onGround){
-        p.vy = jumpPower;
-        p.onGround = false;
-      }
-
-      p.vy += gravity;
-      p.x += p.vx;
-      p.y += p.vy;
-      p.onGround = false;
-
-      if(p.inv > 0) p.inv--;
-      if(p.power > 0) p.power--;
-
-      for(const plat of state.platforms){
-        if(rects(p, plat)){
-          const prevBottom = p.y - p.vy + p.h;
-          const prevTop = p.y - p.vy;
-          const prevRight = p.x - p.vx + p.w;
-          const prevLeft = p.x - p.vx;
-
-          if(prevBottom <= plat.y + 10 && p.vy >= 0){
-            p.y = plat.y - p.h;
-            p.vy = 0;
-            p.onGround = true;
-          } else if(prevTop >= plat.y + plat.h - 10 && p.vy < 0){
-            p.y = plat.y + plat.h;
-            p.vy = 1;
-          } else if(prevRight <= plat.x + 10 && p.vx > 0){
-            p.x = plat.x - p.w;
-            p.vx = 0;
-          } else if(prevLeft >= plat.x + plat.w - 10 && p.vx < 0){
-            p.x = plat.x + plat.w;
-            p.vx = 0;
-          }
-        }
-      }
-
-      for(const c of state.coinsArr){
-        c.bob += .08;
-        if(!c.taken && rects(p, c)) collectCoin(c);
-      }
-      for(const b of state.boosts){
-        b.bob += .08;
-        if(!b.taken && rects(p, b)) takeBoost(b);
-      }
-
-      for(const s of state.spikes){
-        if(rects(p, s)) loseLife();
-      }
-
-      for(const e of state.enemies){
-        if(!e.alive) continue;
-        e.x += e.vx;
-        if(e.x <= e.min || e.x >= e.max) e.vx *= -1;
-        if(rects(p, e)){
-          if(p.vy > 0 && p.y + p.h - e.y < 24){
-            stompEnemy(e);
-          } else {
-            loseLife();
-          }
-        }
-      }
-
-      if(state.boss && state.boss.alive){
-        const b = state.boss;
-        b.x += b.vx;
-        if(b.x < state.worldWidth - 620 || b.x > state.worldWidth - 250) b.vx *= -1;
-        b.jump++;
-        if(b.jump > 90){ b.jump = 0; b.y -= 18; }
-        b.y += 1.3;
-        const floorY = canvas.height - groundH - b.h;
-        if(b.y > floorY) b.y = floorY;
-        if(rects(p, b)){
-          if(p.vy > 0 && p.y + p.h - b.y < 24){
-            hitBoss();
-          } else {
-            loseLife();
-          }
-        }
-      }
-
-      if(p.y > canvas.height + 120) loseLife();
-      p.x = clamp(p.x, 0, state.worldWidth - p.w);
-      state.cameraX = clamp(p.x - canvas.width * 0.35, 0, state.worldWidth - canvas.width);
-
-      if(!state.boss || !state.boss.alive){
-        if(rects(p, {x:state.exit.x-6,y:state.exit.y,w:40,h:120})){
-          levelComplete();
-        }
-      }
-
-      for(const part of state.particles){
-        part.x += part.vx;
-        part.y += part.vy;
-        part.vy += .18;
-        part.life--;
-      }
-      state.particles = state.particles.filter(p => p.life > 0);
-    }
-
-    function drawSky(){
-      const g = ctx.createLinearGradient(0,0,0,canvas.height);
-      g.addColorStop(0,'#60dbff');
-      g.addColorStop(.55,'#8fe6ff');
-      g.addColorStop(1,'#d8f3ff');
-      ctx.fillStyle = g;
-      ctx.fillRect(0,0,canvas.width,canvas.height);
-
-      ctx.fillStyle = 'rgba(255,255,255,.85)';
-      for(const c of state.clouds){
-        const x = c.x - state.cameraX * c.s;
-        const y = c.y;
-        ctx.beginPath();
-        ctx.arc(x, y, c.w*.18, 0, Math.PI*2);
-        ctx.arc(x + c.w*.16, y-16, c.w*.2, 0, Math.PI*2);
-        ctx.arc(x + c.w*.34, y, c.w*.17, 0, Math.PI*2);
-        ctx.fill();
-      }
-    }
-
-    function drawWorld(){
-      drawSky();
-      ctx.save();
-      ctx.translate(-state.cameraX,0);
-
-      // mountains
-      for(let i=0;i<14;i++){
-        const x = i*300;
-        ctx.fillStyle = i%2 ? '#77b7d5' : '#5fa1c4';
-        ctx.beginPath();
-        ctx.moveTo(x, canvas.height-groundH);
-        ctx.lineTo(x+120, 240+ (i%3)*40);
-        ctx.lineTo(x+260, canvas.height-groundH);
-        ctx.closePath();
-        ctx.fill();
-      }
-
-      // platforms
-      for(const plat of state.platforms){
-        if(plat.type === 'ground'){
-          ctx.fillStyle = '#16a34a';
-          ctx.fillRect(plat.x, plat.y, plat.w, 28);
-          ctx.fillStyle = '#8b5a2b';
-          ctx.fillRect(plat.x, plat.y+28, plat.w, plat.h-28);
-        } else {
-          ctx.fillStyle = '#7c3aed';
-          ctx.fillRect(plat.x, plat.y, plat.w, plat.h);
-          ctx.fillStyle = 'rgba(255,255,255,.15)';
-          ctx.fillRect(plat.x, plat.y, plat.w, 4);
-        }
-      }
-
-      // spikes
-      ctx.fillStyle = '#94a3b8';
-      for(const s of state.spikes){
-        for(let i=0;i<4;i++){
-          ctx.beginPath();
-          ctx.moveTo(s.x + i*15, s.y+s.h);
-          ctx.lineTo(s.x + i*15 + 7.5, s.y);
-          ctx.lineTo(s.x + i*15 + 15, s.y+s.h);
-          ctx.fill();
-        }
-      }
-
-      // coins
-      for(const c of state.coinsArr){
-        if(c.taken) continue;
-        const y = c.y + Math.sin(c.bob)*5;
-        ctx.fillStyle = '#facc15';
-        ctx.beginPath();
-        ctx.ellipse(c.x+10, y+10, 10, 13, 0, 0, Math.PI*2);
-        ctx.fill();
-        ctx.fillStyle = 'rgba(255,255,255,.4)';
-        ctx.fillRect(c.x+8, y+4, 4, 12);
-      }
-
-      // boosts
-      for(const b of state.boosts){
-        if(b.taken) continue;
-        const y = b.y + Math.sin(b.bob)*5;
-        ctx.fillStyle = b.kind === 'jump' ? '#22c55e' : '#38bdf8';
-        ctx.fillRect(b.x, y, b.w, b.h);
-        ctx.fillStyle = 'rgba(255,255,255,.9)';
-        ctx.font = 'bold 16px Arial';
-        ctx.fillText(b.kind === 'jump' ? 'J' : 'S', b.x+6, y+18);
-      }
-
-      // enemies
-      for(const e of state.enemies){
-        if(!e.alive) continue;
-        ctx.fillStyle = e.type === 'slime' ? '#16a34a' : '#ef4444';
-        ctx.fillRect(e.x, e.y, e.w, e.h);
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(e.x+6, e.y+8, 7, 7);
-        ctx.fillRect(e.x+21, e.y+8, 7, 7);
-        ctx.fillStyle = '#111827';
-        ctx.fillRect(e.x+8, e.y+10, 3, 3);
-        ctx.fillRect(e.x+23, e.y+10, 3, 3);
-      }
-
-      // exit flag
-      ctx.fillStyle = '#475569';
-      ctx.fillRect(state.exit.x, state.exit.y, state.exit.w, state.exit.h);
-      ctx.fillStyle = '#f43f5e';
-      ctx.beginPath();
-      ctx.moveTo(state.exit.x+state.exit.w, state.exit.y+14);
-      ctx.lineTo(state.exit.x+state.exit.w + 54 + Math.sin(state.flagWave)*6, state.exit.y+28);
-      ctx.lineTo(state.exit.x+state.exit.w, state.exit.y+42);
-      ctx.closePath();
-      ctx.fill();
-
-      // boss
-      if(state.boss && state.boss.alive){
-        const b = state.boss;
-        ctx.fillStyle = '#f97316';
-        ctx.fillRect(b.x,b.y,b.w,b.h);
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(b.x+15,b.y+20,16,16);
-        ctx.fillRect(b.x+56,b.y+20,16,16);
-        ctx.fillStyle = '#111';
-        ctx.fillRect(b.x+21,b.y+26,7,7);
-        ctx.fillRect(b.x+62,b.y+26,7,7);
-        ctx.fillStyle = '#7f1d1d';
-        ctx.fillRect(b.x+18,b.y+58,52,10);
-      }
-
-      // player
-      const p = state.player;
-      const alpha = p.inv > 0 && Math.floor(p.inv/8)%2 === 0 ? .5 : 1;
-      ctx.globalAlpha = alpha;
-      ctx.fillStyle = p.color;
-      ctx.fillRect(p.x, p.y, p.w, p.h);
-      ctx.fillStyle = '#1d4ed8';
-      ctx.fillRect(p.x, p.y+30, p.w, 24);
-      ctx.fillStyle = '#fbbf24';
-      ctx.fillRect(p.x+7,p.y+6,28,10);
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(p.x+8,p.y+16,8,8);
-      ctx.fillRect(p.x+24,p.y+16,8,8);
-      ctx.fillStyle = '#111827';
-      ctx.fillRect(p.x+10,p.y+18,3,3);
-      ctx.fillRect(p.x+26,p.y+18,3,3);
-      if(p.power > 0){
-        ctx.strokeStyle = '#22c55e';
-        ctx.lineWidth = 3;
-        ctx.strokeRect(p.x-4,p.y-4,p.w+8,p.h+8);
-      }
-      ctx.globalAlpha = 1;
-
-      // particles
-      for(const part of state.particles){
-        ctx.globalAlpha = clamp(part.life/50,0,1);
-        ctx.fillStyle = part.color;
-        ctx.fillRect(part.x,part.y,part.size,part.size);
-      }
-      ctx.globalAlpha = 1;
-
-      ctx.restore();
-
-      // top progress bar
-      const progress = clamp((state.player.x + 50) / state.worldWidth, 0, 1);
-      ctx.fillStyle = 'rgba(2,8,23,.25)';
-      ctx.fillRect(20,20,260,16);
-      ctx.fillStyle = '#0ea5e9';
-      ctx.fillRect(20,20,260*progress,16);
-      ctx.strokeStyle = 'rgba(255,255,255,.4)';
-      ctx.strokeRect(20,20,260,16);
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 13px Arial';
-      ctx.fillText('Progression', 20, 16);
-    }
-
-    function loop(){
-      update();
-      drawWorld();
-      requestAnimationFrame(loop);
-    }
-
-    window.addEventListener('keydown', e => {
-      const k = e.key.toLowerCase();
-      if(['arrowleft','a'].includes(k)) keys.left = true;
-      if(['arrowright','d'].includes(k)) keys.right = true;
-      if(['arrowup','w',' '].includes(k)) keys.jump = true;
-      if(['arrowleft','arrowright','arrowup',' '].includes(k)) e.preventDefault();
-    });
-    window.addEventListener('keyup', e => {
-      const k = e.key.toLowerCase();
-      if(['arrowleft','a'].includes(k)) keys.left = false;
-      if(['arrowright','d'].includes(k)) keys.right = false;
-      if(['arrowup','w',' '].includes(k)) keys.jump = false;
-    });
-
-    function bindTouch(id, key){
-      const el = document.getElementById(id);
-      const on = ev => { ev.preventDefault(); keys[key] = true; };
-      const off = ev => { ev.preventDefault(); keys[key] = false; };
-      ['touchstart','mousedown'].forEach(evt => el.addEventListener(evt,on,{passive:false}));
-      ['touchend','touchcancel','mouseup','mouseleave'].forEach(evt => el.addEventListener(evt,off,{passive:false}));
-    }
-    bindTouch('leftBtn','left');
-    bindTouch('rightBtn','right');
-    bindTouch('jumpBtn','jump');
-
-    ui.startBtn.addEventListener('click', startGame);
-    ui.restartBtn.addEventListener('click', restartAll);
-    ui.nextBtn.addEventListener('click', () => { nextLevel(); startGame(); });
-
-    makeLevel(1);
-    loop();
+    ReactDOM.createRoot(document.getElementById("root")).render(<SNGSubwayRunnerPro />);
   </script>
 </body>
 </html>
