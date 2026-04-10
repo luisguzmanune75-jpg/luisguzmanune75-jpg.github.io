@@ -149,9 +149,12 @@ const SITE = (() => {
         <a href="./satellites.html">Satellites</a>
         <a href="./planetes.html">Planetes</a>
         <a href="./publicite.html">Publicite</a>
+        <a href="./about.html">A propos</a>
+        <a href="./privacy.html">Confidentialite</a>
         <a href="./contact.html">Contact</a>
         <a href="./mentions-legales.html">Mentions legales</a>
-        <a href="./confidentialite.html">Confidentialite</a>
+        <a href="./politique-editoriale.html">Politique editoriale</a>
+        <a href="./confidentialite.html">Confidentialite (legacy)</a>
       </div>
       <div class="social-mini">
         <a href="https://www.youtube.com/" target="_blank" rel="noreferrer">YouTube</a>
