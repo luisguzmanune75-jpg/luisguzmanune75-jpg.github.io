@@ -98,6 +98,18 @@ const homeSearchTopics = [
     answer: "La page Planetes est la bonne destination pour le systeme solaire.",
   },
   {
+    href: "./about.html",
+    label: "A propos",
+    keywords: ["a propos", "apropos", "sng", "presentation", "qui sommes nous", "mission"],
+    answer: "La page A propos presente la ligne editoriale et la mission de SNG Portal.",
+  },
+  {
+    href: "./privacy.html",
+    label: "Confidentialite",
+    keywords: ["confidentialite", "privacy", "cookies", "donnees", "adsense"],
+    answer: "La page Confidentialite explique les cookies, la mesure d'audience et Google AdSense.",
+  },
+  {
     href: "./contact.html",
     label: "Contact",
     keywords: ["contact", "email", "partenariat", "youtube", "instagram", "tiktok"],
