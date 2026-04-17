@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SNG Portal — Cinéma CGR Style | Nouveaux Films & Séances</title>
+    <meta
+      name="description"
+      content="Découvrez les nouveaux films, affiches, séances, bandes-annonces et sorties à venir sur la page cinéma SNG Portal au style CGR moderne."
+    />
+    <style>
+      :root {
+        --bg: #07111f;
+        --bg2: #0c1a2d;
+        --card: rgba(255, 255, 255, 0.06);
+        --line: rgba(255, 255, 255, 0.12);
+        --text: #f4f7fb;
+        --muted: #b5c0d1;
+        --accent: #ff4d2d;
+        --accent2: #ffd36b;
+        --gold: #f6c453;
+        --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background:
+          radial-gradient(circle at top right, rgba(255, 77, 45, 0.22), transparent 30%),
+          radial-gradient(circle at left top, rgba(255, 179, 71, 0.16), transparent 35%),
+          linear-gradient(180deg, #07111f 0%, #081423 55%, #0b1626 100%);
+        color: var(--text);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      .container {
+        width: min(1240px, calc(100% - 28px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: blur(14px);
+        background: rgba(7, 17, 31, 0.74);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .topbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 0;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 800;
+        letter-spacing: 0.4px;
+      }
+
+      .brand-badge {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        color: #111;
+        font-weight: 900;
+        box-shadow: var(--shadow);
+      }
+
+      .menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .menu a {
+        color: var(--muted);
+        padding: 10px 14px;
+        border-radius: 999px;
+        transition: 0.25s ease;
+      }
+
+      .menu a:hover,
+      .menu a.active {
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+      }
+
+      .hero {
+        padding: 34px 0 26px;
+      }
+
+      .hero-card {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(246, 196, 83, 0.18);
+        border-radius: 30px;
+        min-height: 500px;
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        background:
+          linear-gradient(90deg, rgba(4, 8, 16, 0.98) 0%, rgba(7, 13, 24, 0.92) 46%, rgba(8, 17, 29, 0.38) 100%),
+          url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=80')
+            center/cover no-repeat;
+        box-shadow: 0 24px 50px rgba(0, 0, 0, 0.42);
+      }
+
+      .hero-content {
+        padding: 44px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 18px;
+      }
+
+      .chips,
+      .meta,
+      .filter-tags,
+      .card-meta,
+      .platforms {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .chip,
+      .meta span,
+      .tag,
+      .platform {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.07);
+        color: #fff;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+
+      .chip.hot {
+        background: rgba(255, 59, 48, 0.18);
+        border-color: rgba(255, 59, 48, 0.45);
+      }
+
+      .chip.new {
+        background: rgba(246, 196, 83, 0.16);
+        border-color: rgba(246, 196, 83, 0.36);
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(32px, 5vw, 58px);
+        line-height: 0.98;
+      }
+
+      .hero p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 10px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px 18px;
+        border-radius: 14px;
+        font-weight: 700;
+        border: 1px solid transparent;
+        transition: transform 0.25s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #d61f26, #ff5a36);
+        color: white;
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.12);
+      }
+
+      .hero-side {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding: 32px;
+      }
+
+      .mini-panel {
+        width: 100%;
+        max-width: 320px;
+        border-radius: 24px;
+        background: rgba(5, 10, 18, 0.84);
+        border: 1px solid rgba(246, 196, 83, 0.2);
+        padding: 18px;
+        box-shadow: var(--shadow);
+      }
+
+      .ticket-box {
+        margin-top: 16px;
+        border-radius: 18px;
+        border: 1px dashed rgba(246, 196, 83, 0.35);
+        padding: 14px;
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .ticket-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 8px 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .search-wrap {
+        margin-top: 22px;
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr 0.8fr 0.8fr;
+        gap: 14px;
+      }
+
+      .field,
+      select {
+        width: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.06);
+        color: white;
+        border-radius: 16px;
+        padding: 16px;
+      }
+
+      select option {
+        color: #111;
+      }
+
+      .section {
+        padding: 18px 0 14px;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+
+      .section-head p,
+      .mini-panel p,
+      .card p,
+      .coming-soon p,
+      .footer p {
+        color: var(--muted);
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        overflow: hidden;
+        transition: transform 0.25s ease;
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card:hover {
+        transform: translateY(-6px);
+      }
+
+      .poster {
+        position: relative;
+        aspect-ratio: 2 / 2.9;
+      }
+
+      .poster img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .badge-row {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        right: 12px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .badge {
+        background: linear-gradient(135deg, #d61f26, #ff5a36);
+        padding: 7px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .rating {
+        background: rgba(0, 0, 0, 0.76);
+        padding: 7px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .card-body {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        flex: 1;
+      }
+
+      .card h3 {
+        margin: 0;
+        font-size: 20px;
+      }
+
+      .showtimes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .showtime {
+        padding: 7px 10px;
+        border-radius: 10px;
+        background: rgba(246, 196, 83, 0.1);
+        border: 1px solid rgba(246, 196, 83, 0.18);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .reservation-bar {
+        padding: 10px 12px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 13px;
+      }
+
+      .reservation-bar strong {
+        color: var(--gold);
+      }
+
+      .card-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: auto;
+      }
+
+      .card-actions a {
+        text-align: center;
+        padding: 12px;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      .watch {
+        background: linear-gradient(135deg, var(--accent), #ff7645);
+      }
+
+      .trailer {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .coming-soon,
+      .empty-state {
+        border: 1px dashed rgba(255, 255, 255, 0.16);
+        border-radius: 24px;
+        padding: 26px;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .coming-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 18px;
+      }
+
+      .coming-item {
+        border-radius: 20px;
+        padding: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .footer {
+        padding: 34px 0 60px;
+      }
+
+      .footer-box {
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 24px;
+      }
+
+      @media (max-width: 1100px) {
+        .hero-card,
+        .search-wrap,
+        .cards,
+        .coming-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      @media (max-width: 860px) {
+        .topbar-inner,
+        .section-head,
+        .hero-card,
+        .search-wrap,
+        .cards,
+        .coming-grid,
+        .card-actions {
+          grid-template-columns: 1fr;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .hero-content {
+          padding: 28px;
+        }
+
+        .hero-side {
+          padding: 0 28px 28px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="brand">
+          <div class="brand-badge">SNG</div>
+          <div>
+            <div>SNG Portal</div>
+            <small style="color: var(--muted)">Cinéma moderne & premium</small>
+          </div>
+        </div>
+
+        <nav class="menu" aria-label="Navigation principale">
+          <a href="./index.html">Accueil</a>
+          <a href="#trending" class="active">Films</a>
+          <a href="#series">Séries / événements</a>
+          <a href="#coming">Prochaines sorties</a>
+          <a href="./contact.html">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <article class="hero-card">
+            <div class="hero-content">
+              <div class="chips">
+                <span class="chip hot">🔥 Tendance</span>
+                <span class="chip new">🎬 Nouveautés</span>
+                <span class="chip">⭐ Bandes-annonces</span>
+                <span class="chip">🍿 Séances</span>
+              </div>
+
+              <h1>Tous les nouveaux films, séries et séances dans une ambiance CGR premium</h1>
+              <p>
+                Une page cinéma immersive pour SNG Portal : affiches grand format, badges “Nouveau / Populaire”,
+                séances du jour, actions “Réserver” et “Bande-annonce”, plus une section “Prochaines sorties”.
+              </p>
+
+              <div class="meta">
+                <span>Films à l'affiche</span>
+                <span>Séances du jour</span>
+                <span>Bandes-annonces</span>
+                <span>Sorties à venir</span>
+              </div>
+
+              <div class="hero-actions">
+                <a class="btn btn-primary" href="#trending">Voir les films à l'affiche</a>
+                <a class="btn btn-secondary" href="#coming">Voir les prochaines sorties</a>
+              </div>
+            </div>
+
+            <aside class="hero-side">
+              <div class="mini-panel">
+                <h3>Billetterie cinéma</h3>
+                <p>Bloc prêt pour une connexion future à une API de séances et de disponibilité.</p>
+                <div class="platforms" style="margin-top: 14px">
+                  <span class="platform">À l'affiche</span>
+                  <span class="platform">Réserver</span>
+                  <span class="platform">Bande-annonce</span>
+                  <span class="platform">Sortie cinéma</span>
+                </div>
+                <div class="ticket-box">
+                  <div class="ticket-row"><span>Aujourd'hui</span><strong>18:20 · 20:45 · 22:10</strong></div>
+                  <div class="ticket-row"><span>Demain</span><strong>14:10 · 17:30 · 21:00</strong></div>
+                </div>
+              </div>
+            </aside>
+          </article>
+
+          <div class="search-wrap">
+            <input id="searchInput" class="field" type="text" placeholder="Rechercher un film, une série ou un genre..." />
+            <select id="typeFilter">
+              <option value="all">Tous les types</option>
+              <option value="film">Films</option>
+              <option value="serie">Séries</option>
+            </select>
+            <select id="genreFilter">
+              <option value="all">Tous les genres</option>
+              <option value="Action">Action</option>
+              <option value="Science-fiction">Science-fiction</option>
+              <option value="Aventure">Aventure</option>
+              <option value="Horreur">Horreur</option>
+              <option value="Drame">Drame</option>
+              <option value="Animation">Animation</option>
+            </select>
+            <select id="sortFilter">
+              <option value="popular">Trier : populaires</option>
+              <option value="rating">Trier : meilleure note</option>
+              <option value="year">Trier : plus récents</option>
+              <option value="title">Trier : A à Z</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section id="trending" class="section">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <h2>🎥 Films à l'affiche et tendances</h2>
+              <p>Grille premium avec affiche, note, description, séances et actions.</p>
+            </div>
+            <div class="filter-tags">
+              <span class="tag">Style CGR</span>
+              <span class="tag">Ambiance salle</span>
+              <span class="tag">Prêt API films</span>
+            </div>
+          </div>
+
+          <div id="cardsGrid" class="cards"></div>
+
+          <div id="emptyState" class="empty-state" style="display: none; margin-top: 18px">
+            <h3>Aucun résultat trouvé</h3>
+            <p>Essaie un autre mot-clé ou change les filtres.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="series" class="section">
+        <div class="container">
+          <div class="coming-soon">
+            <h2>📺 Séries & événements cinéma</h2>
+            <p>
+              Zone dédiée aux séries tendances, avant-premières, marathons et événements spéciaux pour un portail
+              cinéma complet.
+            </p>
+            <div class="coming-grid">
+              <article class="coming-item">
+                <h3>Top 10 du moment</h3>
+                <p>Bloc prévu pour une alimentation automatique (films/séries les plus vus).</p>
+              </article>
+              <article class="coming-item">
+                <h3>Bandes-annonces</h3>
+                <p>Intégration possible d'une vidéo intégrée par titre.</p>
+              </article>
+              <article class="coming-item">
+                <h3>Avant-premières</h3>
+                <p>Dates + horaires + capacité restante pour événements premium.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="coming" class="section">
+        <div class="container">
+          <div class="coming-soon">
+            <h2>🍿 Prochaines sorties</h2>
+            <p>Section adaptable pour afficher les films à venir, avec date, fiche et bande-annonce.</p>
+            <div class="coming-grid">
+              <article class="coming-item">
+                <h3>Chroniques Orbitales</h3>
+                <p>Date de sortie : 14/05/2026 · <a href="#">Voir la fiche</a></p>
+              </article>
+              <article class="coming-item">
+                <h3>Nexus Inversé</h3>
+                <p>Date de sortie : 28/05/2026 · <a href="#">Voir la fiche</a></p>
+              </article>
+              <article class="coming-item">
+                <h3>Ligne 404</h3>
+                <p>Date de sortie : 11/06/2026 · <a href="#">Voir la fiche</a></p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-box">
+          <h3>SNG Portal — Cinéma</h3>
+          <p>
+            Structure simple en HTML/CSS/JS, prête à brancher sur une source automatique (API, JSON, CMS), sans casser
+            les pages existantes du portail.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      /*
+        Données locales de démonstration.
+        Pour un branchement futur, remplacer ce tableau par une réponse API
+        (ex: /api/movies) puis relancer renderCards(getFilteredItems()).
+      */
+      const items = [
+        {
+          title: "Furie Stellaire",
+          type: "film",
+          genre: "Science-fiction",
+          year: 2026,
+          rating: 8.9,
+          popularity: 98,
+          badge: "Nouveau",
+          image: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=900&q=80",
+          description: "Un équipage part sauver une colonie oubliée au bord de l'effondrement cosmique.",
+          watchUrl: "#",
+          trailerUrl: "#",
+          showtimes: ["14:15", "17:40", "20:30"],
+        },
+        {
+          title: "Nuit Rouge",
+          type: "film",
+          genre: "Action",
+          year: 2026,
+          rating: 8.4,
+          popularity: 95,
+          badge: "Populaire",
+          image: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=900&q=80",
+          description: "Une course contre la montre dans une ville en feu, entre mafia et trahisons.",
+          watchUrl: "#",
+          trailerUrl: "#",
+          showtimes: ["13:30", "16:50", "21:10"],
+        },
+        {
+          title: "Le Royaume Perdu",
+          type: "film",
+          genre: "Aventure",
+          year: 2025,
+          rating: 8.1,
+          popularity: 88,
+          badge: "Top",
+          image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+          description: "Des explorateurs découvrent un monde caché où l'histoire n'a jamais disparu.",
+          watchUrl: "#",
+          trailerUrl: "#",
+          showtimes: ["12:00", "15:20", "19:45"],
+        },
+        {
+          title: "Écho Noir",
+          type: "serie",
+          genre: "Horreur",
+          year: 2026,
+          rating: 8.7,
+          popularity: 90,
+          badge: "Nouveau",
+          image: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?auto=format&fit=crop&w=900&q=80",
+          description: "Des voix venues d'un immeuble abandonné réveillent un secret terrifiant.",
+          watchUrl: "#",
+          trailerUrl: "#",
+          showtimes: ["Ép. 1", "Ép. 2", "Ép. 3"],
+        },
+        {
+          title: "Pixel Run",
+          type: "film",
+          genre: "Animation",
+          year: 2026,
+          rating: 8.3,
+          popularity: 86,
+          badge: "Famille",
+          image: "https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=900&q=80",
+          description: "Un héros virtuel tente de sauver son univers avant l'effacement total.",
+          watchUrl: "#",
+          trailerUrl: "#",
+          showtimes: ["10:40", "14:10", "17:00"],
+        },
+        {
+          title: "Zone 9",
+          type: "serie",
+          genre: "Science-fiction",
+          year: 2026,
+          rating: 9.1,
+          popularity: 99,
+          badge: "Top série",
+          image: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=900&q=80",
+          description: "Une station secrète surveille des anomalies qui menacent la planète entière.",
+          watchUrl: "#",
+          trailerUrl: "#",
+          showtimes: ["Ép. 4", "Ép. 5", "Ép. 6"],
+        },
+      ];
+
+      const cardsGrid = document.getElementById("cardsGrid");
+      const searchInput = document.getElementById("searchInput");
+      const typeFilter = document.getElementById("typeFilter");
+      const genreFilter = document.getElementById("genreFilter");
+      const sortFilter = document.getElementById("sortFilter");
+      const emptyState = document.getElementById("emptyState");
+
+      function renderCards(list) {
+        cardsGrid.innerHTML = "";
+
+        if (!list.length) {
+          emptyState.style.display = "block";
+          return;
+        }
+
+        emptyState.style.display = "none";
+
+        list.forEach((item) => {
+          const showtimesHtml = (item.showtimes || []).map((time) => `<span class="showtime">${time}</span>`).join("");
+          const label = item.type === "film" ? "Film" : "Série";
+          const actionText = item.type === "film" ? "Réserver" : "Voir la fiche";
+
+          const card = document.createElement("article");
+          card.className = "card";
+          card.innerHTML = `
+            <div class="poster">
+              <img src="${item.image}" alt="Affiche ${item.title}" loading="lazy" />
+              <div class="badge-row">
+                <span class="badge">${item.badge}</span>
+                <span class="rating">⭐ ${item.rating}</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <span>${label}</span>
+                <span>${item.genre}</span>
+                <span>${item.year}</span>
+              </div>
+              <h3>${item.title}</h3>
+              <p>${item.description}</p>
+              <div class="showtimes">${showtimesHtml}</div>
+              <div class="reservation-bar">
+                Disponible aujourd'hui · <strong>${item.type === "film" ? "Séances ouvertes" : "Nouveau contenu"}</strong>
+              </div>
+              <div class="card-actions">
+                <a class="watch" href="${item.watchUrl}">${actionText}</a>
+                <a class="trailer" href="${item.trailerUrl}">Bande-annonce</a>
+              </div>
+            </div>
+          `;
+
+          cardsGrid.appendChild(card);
+        });
+      }
+
+      function getFilteredItems() {
+        const search = searchInput.value.toLowerCase().trim();
+        const type = typeFilter.value;
+        const genre = genreFilter.value;
+        const sort = sortFilter.value;
+
+        const filtered = items.filter((item) => {
+          const matchSearch =
+            item.title.toLowerCase().includes(search) ||
+            item.genre.toLowerCase().includes(search) ||
+            item.description.toLowerCase().includes(search) ||
+            item.badge.toLowerCase().includes(search);
+
+          const matchType = type === "all" || item.type === type;
+          const matchGenre = genre === "all" || item.genre === genre;
+          return matchSearch && matchType && matchGenre;
+        });
+
+        if (sort === "rating") {
+          filtered.sort((a, b) => b.rating - a.rating);
+        } else if (sort === "year") {
+          filtered.sort((a, b) => b.year - a.year);
+        } else if (sort === "title") {
+          filtered.sort((a, b) => a.title.localeCompare(b.title));
+        } else {
+          filtered.sort((a, b) => b.popularity - a.popularity || b.rating - a.rating);
+        }
+
+        return filtered;
+      }
+
+      function updateView() {
+        renderCards(getFilteredItems());
+      }
+
+      searchInput.addEventListener("input", updateView);
+      typeFilter.addEventListener("change", updateView);
+      genreFilter.addEventListener("change", updateView);
+      sortFilter.addEventListener("change", updateView);
+
+      renderCards(getFilteredItems());
+    </script>
+  </body>
+</html>

@@ -86,6 +86,12 @@ const homeSearchTopics = [
     answer: "La page Blog est adaptee pour lire des contenus expliques et des tendances.",
   },
   {
+    href: "./cinema.html",
+    label: "Cinema",
+    keywords: ["cinema", "film", "films", "serie", "series", "bande annonce", "seance", "cgr", "netflix"],
+    answer: "La page Cinema regroupe les nouveautes films et series, les seances et les bandes-annonces.",
+  },
+  {
     href: "./satellites.html",
     label: "Satellites",
     keywords: ["satellite", "satellites", "espace", "orbite", "nasa"],
