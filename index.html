@@ -2282,6 +2282,9 @@
       </div>
     </footer>
 </main>
+    <p>
+En tant que Partenaire Amazon, SNG Portal réalise un bénéfice sur les achats remplissant les conditions requises.
+</p>
         <script src="./site.js"></script>
     <script src="./home.js"></script>
 
@@ -2389,6 +2392,14 @@
         });
       }
     </script>
+
+    <script>
+document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
+  if (!link.href.includes("tag=")) {
+    link.href += (link.href.includes("?") ? "&" : "?") + "tag=sngportal-21";
+  }
+});
+</script>
 
   </body>
 </html>
