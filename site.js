@@ -143,6 +143,7 @@ const SITE = (() => {
     utility.innerHTML = `
       <div class="footer-links">
         <a href="./blog.html">Blog</a>
+        <a href="./cinema.html">Cinema</a>
         <a href="./scolaire.html">Scolaire</a>
         <a href="./sports.html">Paris sportifs</a>
         <a href="./jeux.html">Jeux</a>
