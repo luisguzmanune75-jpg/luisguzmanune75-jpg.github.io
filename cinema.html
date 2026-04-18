@@ -949,14 +949,13 @@
     <div id="trailerNotice" class="trailer-notice" role="status" aria-live="polite"></div>
 
     <script>
-      // CONFIGURATION TMDB : remplacez "REPLACE_ME" par votre Bearer token TMDB.
-      window.TMDB_TOKEN = window.TMDB_TOKEN || "REPLACE_ME";
+      // CONFIGURATION TMDB API Key
+      window.TMDB_API_KEY = "b307cfedc9d4dd40512419f655bf4d26";
 
       const AFFILIATE_URL = "https://www.amazon.fr/?tag=sngportal-21";
       const CGR_BOOKING_URL = "https://www.cgrcinemas.fr/films-a-l-affiche/";
 
-      const TMDB_TOKEN = (window.TMDB_TOKEN || "").trim();
-      const TMDB_API_KEY = window.TMDB_API_KEY || "";
+      const TMDB_API_KEY = (window.TMDB_API_KEY || "").trim();
       const TMDB_BASE_URL = "https://api.themoviedb.org/3";
       const trailerCache = new Map();
       let films = [];
@@ -1035,52 +1034,45 @@
       }
 
       async function tmdbFetch(path, params = {}) {
-        const url = new URL(`${TMDB_BASE_URL}${path}`);
-        const searchParams = {
+        if (!TMDB_API_KEY) {
+          const keyError = "TMDB API key manquante";
+          console.error(keyError);
+          throw new Error(keyError);
+        }
+
+        const query = new URLSearchParams({
+          api_key: TMDB_API_KEY,
           language: "fr-FR",
           ...params,
-        };
-
-        if (!TMDB_TOKEN && TMDB_API_KEY) {
-          searchParams.api_key = TMDB_API_KEY;
-        }
-
-        Object.entries(searchParams).forEach(([key, value]) => {
-          if (value !== undefined && value !== null && value !== "") url.searchParams.set(key, value);
         });
+        const url = `${TMDB_BASE_URL}${path}?${query.toString()}`;
 
-        const headers = {
-          accept: "application/json",
-        };
-
-        if (TMDB_TOKEN) {
-          headers.Authorization = `Bearer ${TMDB_TOKEN}`;
-        }
-
-        const response = await fetch(url.toString(), { headers });
+        const response = await fetch(url, {
+          headers: {
+            accept: "application/json",
+          },
+        });
         console.log(`TMDB ${path} status HTTP:`, response.status);
 
-        const responseBody = await response.json().catch((jsonError) => {
+        const data = await response.json().catch((jsonError) => {
           console.error(`TMDB ${path} JSON invalide:`, jsonError);
           throw new Error(`TMDB ${path} JSON invalide: ${jsonError.message}`);
         });
 
+        console.log(`TMDB ${path} data:`, data);
+
         if (!response.ok) {
-          const exactError = responseBody?.status_message || responseBody?.message || `HTTP ${response.status}`;
+          const exactError = data?.status_message || data?.message || `HTTP ${response.status}`;
           console.error(`TMDB ${path} erreur exacte:`, exactError);
-          console.error(`TMDB ${path} réponse erreur JSON:`, responseBody);
+          console.error(`TMDB ${path} réponse erreur JSON:`, data);
           throw new Error(`TMDB ${path} error: ${exactError}`);
         }
 
-        return responseBody;
+        return data;
       }
 
       async function loadTmdbFilms() {
-        if (!TMDB_TOKEN || TMDB_TOKEN === "REPLACE_ME") {
-          console.error("TMDB token manquant");
-        }
-
-        if ((!TMDB_TOKEN || TMDB_TOKEN === "REPLACE_ME") && !TMDB_API_KEY) {
+        if (!TMDB_API_KEY) {
           films = [];
           updateHeroMovie(null);
           return;
@@ -1091,12 +1083,12 @@
           tmdbFetch("/genre/movie/list"),
         ]);
 
-        console.log("TMDB data.results:", popularData?.results);
-        console.log("TMDB genresData.genres:", genresData?.genres);
+        console.log("TMDB popular data:", popularData);
+        console.log("TMDB genres data:", genresData);
 
-        if (!popularData || !Array.isArray(popularData.results)) {
-          console.error("TMDB: data.results manquant ou invalide", popularData);
-          throw new Error("TMDB /movie/popular results manquant");
+        if (!popularData || !Array.isArray(popularData.results) || popularData.results.length === 0) {
+          console.error("TMDB: data.results manquant, invalide ou vide", popularData);
+          throw new Error("TMDB /movie/popular results manquant, invalide ou vide");
         }
 
         if (!genresData || !Array.isArray(genresData.genres)) {
@@ -1275,7 +1267,7 @@
         setLoading(true);
         try {
           await loadTmdbFilms();
-          setTmdbLiveBadge(Boolean(TMDB_TOKEN || TMDB_API_KEY) && films.length > 0);
+          setTmdbLiveBadge(Boolean(TMDB_API_KEY) && films.length > 0);
         } catch (error) {
           console.warn("Chargement TMDB impossible.", error);
           films = [];
