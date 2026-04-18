@@ -1106,9 +1106,14 @@
         ]);
         console.log("TMDB fetch /movie/popular OK", popularData);
 
+        if (!popularData || !Array.isArray(popularData.results)) {
+          console.warn("TMDB: data.results manquant ou invalide", popularData);
+          throw new Error("TMDB results unavailable");
+        }
+
         const genreMap = new Map(genresData.genres.map((genre) => [genre.id, genre.name]));
 
-        films = (popularData.results || []).slice(0, 12).map((movie) => ({
+        films = popularData.results.slice(0, 12).map((movie) => ({
           id: movie.id,
           title: movie.title,
           type: "film",
@@ -1162,23 +1167,22 @@
         emptyState.style.display = "none";
 
         list.forEach((movie) => {
-          if (movie.poster_path === undefined) {
-            console.log("movie.poster_path est undefined", movie);
-          }
+          console.log("movie.poster_path", movie.poster_path);
+          const hasPosterPath = movie.poster_path !== undefined && movie.poster_path !== null && movie.poster_path !== "";
 
           const mainAction = movie.type === "film" ? "🎟 Réserver CGR" : "📺 Voir la série";
           const mainActionUrl = movie.type === "film" ? CGR_BOOKING_URL : movie.watchUrl;
           const mainActionTarget = movie.type === "film" ? ' target="_blank" rel="noopener"' : "";
-          const posterUrl = movie.poster_path
+          const posterUrl = hasPosterPath
             ? `https://image.tmdb.org/t/p/w780${movie.poster_path}`
-            : "https://via.placeholder.com/780x1170/0f1720/f59e0b?text=SNG+Cinema";
+            : "https://dummyimage.com/780x1170/000/fff&text=SNG+Cinema";
           const badge = movie.badge ? `<span class="badge">${movie.badge}</span>` : "<span></span>";
 
           const card = document.createElement("article");
           card.className = "card";
           card.innerHTML = `
             <div class="poster">
-              <img src="${posterUrl}" alt="${movie.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/780x1170/0f1720/f59e0b?text=SNG+Cinema';">
+              <img src="${posterUrl}" alt="${movie.title}" loading="lazy" onerror="this.src='https://dummyimage.com/780x1170/000/fff&text=SNG+Cinema';">
               <div class="badge-row">
                 ${badge}
                 <span class="rating">⭐ ${movie.rating}</span>
