@@ -478,6 +478,95 @@
         background: rgba(255, 255, 255, 0.03);
       }
 
+      .loading-state {
+        margin: 16px 0;
+        border-radius: 18px;
+        padding: 16px;
+        border: 1px solid rgba(255, 209, 102, 0.25);
+        background: linear-gradient(135deg, rgba(255, 209, 102, 0.1), rgba(255, 159, 28, 0.08));
+        display: none;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .loading-state.show {
+        display: flex;
+      }
+
+      .loading-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--yellow);
+        box-shadow: 0 0 0 rgba(255, 209, 102, 0.6);
+        animation: pulse 1.3s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(0.85);
+          box-shadow: 0 0 0 0 rgba(255, 209, 102, 0.6);
+        }
+        70% {
+          transform: scale(1);
+          box-shadow: 0 0 0 14px rgba(255, 209, 102, 0);
+        }
+        100% {
+          transform: scale(0.85);
+          box-shadow: 0 0 0 0 rgba(255, 209, 102, 0);
+        }
+      }
+
+      .live-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        border-radius: 999px;
+        padding: 7px 10px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--muted);
+      }
+
+      .live-badge.active {
+        border-color: rgba(84, 255, 159, 0.4);
+        color: #9fffc2;
+        background: rgba(84, 255, 159, 0.12);
+      }
+
+      .live-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      .trailer-notice {
+        position: fixed;
+        right: 18px;
+        bottom: 20px;
+        z-index: 130;
+        max-width: min(420px, calc(100% - 36px));
+        border-radius: 14px;
+        padding: 12px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(8, 14, 26, 0.95);
+        color: #fff;
+        box-shadow: var(--shadow);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(10px);
+        transition: 0.25s ease;
+      }
+
+      .trailer-notice.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
       .trailer-modal {
         display: none;
         position: fixed;
@@ -745,8 +834,14 @@
             <div>
               <h2>🎥 Films à l'affiche</h2>
               <p>Cartes dynamiques générées automatiquement depuis JavaScript.</p>
+              <span id="tmdbLiveBadge" class="live-badge"><span class="live-dot"></span>TMDB hors ligne</span>
             </div>
             <div id="genrePills" class="genre-list"></div>
+          </div>
+
+          <div id="loadingState" class="loading-state" role="status" aria-live="polite">
+            <span class="loading-dot" aria-hidden="true"></span>
+            <strong>Chargement des films TMDB en direct…</strong>
           </div>
 
           <div id="cardsGrid" class="cards"></div>
@@ -785,11 +880,18 @@
         ></iframe>
       </div>
     </div>
+    <div id="trailerNotice" class="trailer-notice" role="status" aria-live="polite"></div>
 
     <script>
       const AFFILIATE_URL = "https://www.amazon.fr/?tag=sngportal-21";
+      const CGR_BOOKING_URL = "https://www.cgrcinemas.fr/films-a-l-affiche/";
 
-      const films = [
+      // Définir window.TMDB_API_KEY avant ce script pour activer la récupération TMDB en live.
+      const TMDB_API_KEY = window.TMDB_API_KEY || "";
+      const TMDB_BASE_URL = "https://api.themoviedb.org/3";
+      const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w780";
+      const trailerCache = new Map();
+      const FALLBACK_FILMS = [
         {
           title: "Furie Stellaire",
           type: "film",
@@ -800,7 +902,7 @@
           badge: "Nouveau",
           image: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=900&q=80",
           description: "Un équipage part sauver une colonie oubliée au bord de l'effondrement cosmique.",
-          watchUrl: "#",
+          watchUrl: CGR_BOOKING_URL,
           trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
           showtimes: ["14:15", "17:40", "20:30"],
         },
@@ -828,7 +930,7 @@
           badge: "Populaire",
           image: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=900&q=80",
           description: "Une course contre la montre dans une ville en feu, entre mafia et trahisons.",
-          watchUrl: "#",
+          watchUrl: CGR_BOOKING_URL,
           trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
           showtimes: ["13:30", "16:50", "21:10"],
         },
@@ -842,7 +944,7 @@
           badge: "Top",
           image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
           description: "Des explorateurs découvrent un monde caché où l'histoire n'a jamais disparu.",
-          watchUrl: "#",
+          watchUrl: CGR_BOOKING_URL,
           trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
           showtimes: ["12:00", "15:20", "19:45"],
         },
@@ -856,11 +958,12 @@
           badge: "Famille",
           image: "https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=900&q=80",
           description: "Un héros virtuel tente de sauver son univers avant l'effacement total.",
-          watchUrl: "#",
+          watchUrl: CGR_BOOKING_URL,
           trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
           showtimes: ["10:40", "14:10", "17:00"],
         },
       ];
+      let films = [...FALLBACK_FILMS];
 
       const cardsGrid = document.getElementById("cardsGrid");
       const searchInput = document.getElementById("searchInput");
@@ -872,8 +975,48 @@
       const trailerModal = document.getElementById("trailerModal");
       const trailerFrame = document.getElementById("trailerFrame");
       const genrePills = document.getElementById("genrePills");
+      const loadingState = document.getElementById("loadingState");
+      const tmdbLiveBadge = document.getElementById("tmdbLiveBadge");
+      const trailerNotice = document.getElementById("trailerNotice");
+      let trailerNoticeTimer;
+
+      const POSTER_PLACEHOLDER =
+        "data:image/svg+xml;utf8," +
+        encodeURIComponent(`
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1120">
+            <defs>
+              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#101d33"/>
+                <stop offset="100%" stop-color="#1f3559"/>
+              </linearGradient>
+            </defs>
+            <rect width="800" height="1120" fill="url(#g)"/>
+            <circle cx="640" cy="180" r="120" fill="rgba(255,159,28,0.25)"/>
+            <circle cx="160" cy="930" r="160" fill="rgba(255,59,48,0.22)"/>
+            <text x="50%" y="46%" dominant-baseline="middle" text-anchor="middle" fill="#f8fbff" font-size="66" font-family="Arial, sans-serif" font-weight="700">SNG CINÉMA</text>
+            <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#b6c1d4" font-size="34" font-family="Arial, sans-serif">Affiche indisponible</text>
+          </svg>
+        `);
+
+      function setLoading(isLoading) {
+        loadingState.classList.toggle("show", isLoading);
+      }
+
+      function setTmdbLiveBadge(isLive) {
+        tmdbLiveBadge.classList.toggle("active", isLive);
+        tmdbLiveBadge.innerHTML = `<span class="live-dot"></span>${isLive ? "TMDB en direct" : "TMDB hors ligne"}`;
+      }
+
+      function showTrailerNotice(message) {
+        trailerNotice.textContent = message;
+        trailerNotice.classList.add("show");
+        window.clearTimeout(trailerNoticeTimer);
+        trailerNoticeTimer = window.setTimeout(() => trailerNotice.classList.remove("show"), 2600);
+      }
 
       function initGenres() {
+        genreFilter.querySelectorAll("option:not([value='all'])").forEach((option) => option.remove());
+        genrePills.innerHTML = "";
         const genres = Array.from(new Set(films.map((film) => film.genre))).sort((a, b) => a.localeCompare(b));
         genres.forEach((genre) => {
           const option = document.createElement("option");
@@ -886,6 +1029,79 @@
           pill.textContent = genre;
           genrePills.appendChild(pill);
         });
+      }
+
+      async function tmdbFetch(path, params = {}) {
+        const url = new URL(`${TMDB_BASE_URL}${path}`);
+        const searchParams = {
+          api_key: TMDB_API_KEY,
+          language: "fr-FR",
+          ...params,
+        };
+
+        Object.entries(searchParams).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== "") url.searchParams.set(key, value);
+        });
+
+        const response = await fetch(url.toString());
+        if (!response.ok) throw new Error(`TMDB error: ${response.status}`);
+        return response.json();
+      }
+
+      async function loadTmdbFilms() {
+        if (!TMDB_API_KEY) return;
+
+        const [popularData, genresData] = await Promise.all([
+          tmdbFetch("/movie/popular", { page: 1 }),
+          tmdbFetch("/genre/movie/list"),
+        ]);
+
+        const genreMap = new Map(genresData.genres.map((genre) => [genre.id, genre.name]));
+
+        films = (popularData.results || []).slice(0, 12).map((movie) => ({
+          id: movie.id,
+          title: movie.title,
+          type: "film",
+          genre: movie.genre_ids.map((id) => genreMap.get(id)).filter(Boolean).slice(0, 2).join(" / ") || "Cinéma",
+          year: movie.release_date ? Number.parseInt(movie.release_date, 10) : "—",
+          rating: Number(movie.vote_average || 0).toFixed(1),
+          popularity: movie.popularity || 0,
+          badge: movie.vote_average >= 7.5 ? "Top" : "Populaire",
+          image: movie.poster_path
+            ? `${TMDB_IMAGE_BASE_URL}${movie.poster_path}`
+            : POSTER_PLACEHOLDER,
+          description: movie.overview || "Résumé indisponible pour ce film.",
+          watchUrl: CGR_BOOKING_URL,
+          trailerUrl: "",
+          showtimes: ["12:30", "16:00", "20:30"],
+        }));
+      }
+
+      async function getTrailerUrl(movieId) {
+        if (!movieId) return "";
+        if (trailerCache.has(movieId)) return trailerCache.get(movieId);
+
+        const pickTrailer = (videos) =>
+          videos.find((video) => video.site === "YouTube" && video.type === "Trailer") ||
+          videos.find((video) => video.site === "YouTube");
+
+        let trailerUrl = "";
+        try {
+          const frVideos = await tmdbFetch(`/movie/${movieId}/videos`);
+          let trailer = pickTrailer(frVideos.results || []);
+
+          if (!trailer) {
+            const enVideos = await tmdbFetch(`/movie/${movieId}/videos`, { language: "en-US" });
+            trailer = pickTrailer(enVideos.results || []);
+          }
+
+          if (trailer?.key) trailerUrl = `https://www.youtube.com/embed/${trailer.key}`;
+        } catch (error) {
+          trailerUrl = "";
+        }
+
+        trailerCache.set(movieId, trailerUrl);
+        return trailerUrl;
       }
 
       function renderCards(list) {
@@ -901,6 +1117,8 @@
           const showtimes = film.showtimes.map((time) => `<span class="showtime">${time}</span>`).join("");
           const typeLabel = film.type === "film" ? "Film" : "Série";
           const mainAction = film.type === "film" ? "🎟 Réserver" : "📺 Voir la série";
+          const mainActionUrl = film.type === "film" ? CGR_BOOKING_URL : film.watchUrl;
+          const mainActionTarget = film.type === "film" ? ' target="_blank" rel="noopener"' : "";
 
           const card = document.createElement("article");
           card.className = "card";
@@ -923,8 +1141,8 @@
               <div class="showtimes">${showtimes}</div>
               <div class="reservation-bar">Disponible aujourd'hui · <strong>Sessions ouvertes</strong></div>
               <div class="card-actions">
-                <a class="btn btn-red" href="${film.watchUrl}">${mainAction}</a>
-                <button class="btn btn-dark" type="button" onclick="openTrailer('${film.trailerUrl}')">▶ Bande-annonce</button>
+                <a href="${mainActionUrl}"${mainActionTarget} class="btn btn-red">${mainAction}</a>
+                <button class="btn btn-dark" type="button" onclick="openTrailerById(${film.id || 0}, ${JSON.stringify(film.title)}, ${JSON.stringify(film.trailerUrl || "")})">▶ Bande-annonce</button>
               </div>
               <div class="card-affiliate">
                 <a class="btn btn-orange" href="${AFFILIATE_URL}" target="_blank" rel="noopener noreferrer">🍿 Acheter snacks cinéma</a>
@@ -961,6 +1179,15 @@
         renderCards(getFilteredFilms());
       }
 
+      async function openTrailerById(movieId, title = "", fallbackTrailerUrl = "") {
+        const trailerUrl = movieId ? await getTrailerUrl(movieId) : fallbackTrailerUrl;
+        if (!trailerUrl) {
+          showTrailerNotice(`Aucune bande-annonce trouvée${title ? ` pour « ${title} »` : ""}.`);
+          return;
+        }
+        openTrailer(trailerUrl);
+      }
+
       function openTrailer(url) {
         trailerFrame.src = `${url}?autoplay=1`;
         trailerModal.classList.add("open");
@@ -973,6 +1200,7 @@
 
       window.openTrailer = openTrailer;
       window.closeTrailer = closeTrailer;
+      window.openTrailerById = openTrailerById;
 
       trailerModal.addEventListener("click", (event) => {
         if (event.target === trailerModal) closeTrailer();
@@ -999,8 +1227,23 @@
       genreFilter.addEventListener("change", updateView);
       sortFilter.addEventListener("change", updateView);
 
-      initGenres();
-      updateView();
+      async function initPage() {
+        setLoading(true);
+        try {
+          await loadTmdbFilms();
+          setTmdbLiveBadge(Boolean(TMDB_API_KEY));
+        } catch (error) {
+          console.warn("Chargement TMDB impossible, utilisation des données locales.", error);
+          films = [...FALLBACK_FILMS];
+          setTmdbLiveBadge(false);
+        } finally {
+          setLoading(false);
+        }
+        initGenres();
+        updateView();
+      }
+
+      initPage();
     </script>
   </body>
 </html>
