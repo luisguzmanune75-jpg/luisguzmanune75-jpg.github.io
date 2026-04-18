@@ -763,9 +763,9 @@
                 <span class="chip">🍿 Ambiance premium</span>
               </div>
 
-              <h1>Furie Stellaire</h1>
-              <p>Science-fiction • 2026 • Note 8.9</p>
-              <p>Un équipage part sauver une colonie oubliée au bord de l'effondrement cosmique.</p>
+              <h1 id="heroTitle">Chargement…</h1>
+              <p id="heroMeta">Films populaires TMDB</p>
+              <p id="heroOverview">Récupération des films en cours…</p>
 
               <div class="meta">
                 <span>Films à l'affiche</span>
@@ -776,7 +776,7 @@
 
               <div class="hero-actions">
                 <a class="btn btn-red" href="#trending">🎬 Voir les films</a>
-                <button class="btn btn-dark" type="button" onclick="openTrailer('https://www.youtube.com/embed/dQw4w9WgXcQ')">
+                <button id="heroTrailerBtn" class="btn btn-dark" type="button">
                   ▶ Bande-annonce
                 </button>
                 <a
@@ -956,79 +956,7 @@
       const TMDB_API_KEY = window.TMDB_API_KEY || "";
       const TMDB_BASE_URL = "https://api.themoviedb.org/3";
       const trailerCache = new Map();
-      const FALLBACK_FILMS = [
-        {
-          title: "Furie Stellaire",
-          type: "film",
-          genre: "Science-fiction",
-          year: 2026,
-          rating: 8.9,
-          popularity: 98,
-          badge: "Nouveau",
-          image: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=900&q=80",
-          description: "Un équipage part sauver une colonie oubliée au bord de l'effondrement cosmique.",
-          watchUrl: CGR_BOOKING_URL,
-          trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          showtimes: ["14:15", "17:40", "20:30"],
-        },
-        {
-          title: "Zone 9",
-          type: "serie",
-          genre: "Science-fiction",
-          year: 2026,
-          rating: 9.1,
-          popularity: 99,
-          badge: "Top série",
-          image: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=900&q=80",
-          description: "Une station secrète surveille des anomalies qui menacent la planète entière.",
-          watchUrl: "#",
-          trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          showtimes: ["Ép. 4", "Ép. 5", "Ép. 6"],
-        },
-        {
-          title: "Nuit Rouge",
-          type: "film",
-          genre: "Action",
-          year: 2026,
-          rating: 8.4,
-          popularity: 95,
-          badge: "Populaire",
-          image: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=900&q=80",
-          description: "Une course contre la montre dans une ville en feu, entre mafia et trahisons.",
-          watchUrl: CGR_BOOKING_URL,
-          trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          showtimes: ["13:30", "16:50", "21:10"],
-        },
-        {
-          title: "Le Royaume Perdu",
-          type: "film",
-          genre: "Aventure",
-          year: 2025,
-          rating: 8.1,
-          popularity: 88,
-          badge: "Top",
-          image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
-          description: "Des explorateurs découvrent un monde caché où l'histoire n'a jamais disparu.",
-          watchUrl: CGR_BOOKING_URL,
-          trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          showtimes: ["12:00", "15:20", "19:45"],
-        },
-        {
-          title: "Pixel Run",
-          type: "film",
-          genre: "Animation",
-          year: 2026,
-          rating: 8.3,
-          popularity: 86,
-          badge: "Famille",
-          image: "https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=900&q=80",
-          description: "Un héros virtuel tente de sauver son univers avant l'effacement total.",
-          watchUrl: CGR_BOOKING_URL,
-          trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-          showtimes: ["10:40", "14:10", "17:00"],
-        },
-      ];
-      let films = [...FALLBACK_FILMS];
+      let films = [];
 
       const cardsGrid = document.getElementById("cardsGrid");
       const searchInput = document.getElementById("searchInput");
@@ -1043,6 +971,10 @@
       const loadingState = document.getElementById("loadingState");
       const tmdbLiveBadge = document.getElementById("tmdbLiveBadge");
       const trailerNotice = document.getElementById("trailerNotice");
+      const heroTitle = document.getElementById("heroTitle");
+      const heroMeta = document.getElementById("heroMeta");
+      const heroOverview = document.getElementById("heroOverview");
+      const heroTrailerBtn = document.getElementById("heroTrailerBtn");
       let trailerNoticeTimer;
 
       const TOPBAR = document.querySelector(".topbar");
@@ -1080,6 +1012,25 @@
         });
       }
 
+      function updateHeroMovie(movie) {
+        if (!movie) {
+          heroTitle.textContent = "Aucun film disponible";
+          heroMeta.textContent = "Films populaires TMDB";
+          heroOverview.textContent = "Impossible de charger les données TMDB pour le moment.";
+          heroTrailerBtn.onclick = null;
+          heroTrailerBtn.disabled = true;
+          return;
+        }
+
+        const year = movie.release_date ? new Date(movie.release_date).getFullYear() : "—";
+        const rating = Number(movie.vote_average || 0).toFixed(1);
+        heroTitle.textContent = movie.title;
+        heroMeta.textContent = `Sortie ${year} • Note ${rating}`;
+        heroOverview.textContent = movie.overview || "Résumé indisponible pour ce film.";
+        heroTrailerBtn.disabled = false;
+        heroTrailerBtn.onclick = () => openTrailerById(movie.id, movie.title);
+      }
+
       async function tmdbFetch(path, params = {}) {
         const url = new URL(`${TMDB_BASE_URL}${path}`);
         const searchParams = {
@@ -1098,7 +1049,11 @@
       }
 
       async function loadTmdbFilms() {
-        if (!TMDB_API_KEY) return;
+        if (!TMDB_API_KEY) {
+          films = [];
+          updateHeroMovie(null);
+          return;
+        }
 
         const [popularData, genresData] = await Promise.all([
           tmdbFetch("/movie/popular", { page: 1 }),
@@ -1113,21 +1068,22 @@
 
         const genreMap = new Map(genresData.genres.map((genre) => [genre.id, genre.name]));
 
-        films = popularData.results.slice(0, 12).map((movie) => ({
+        films = popularData.results
+          .filter((movie) => movie.poster_path)
+          .slice(0, 12)
+          .map((movie) => ({
           id: movie.id,
           title: movie.title,
-          type: "film",
           genre: movie.genre_ids.map((id) => genreMap.get(id)).filter(Boolean).slice(0, 2).join(" / ") || "Cinéma",
-          year: movie.release_date ? Number.parseInt(movie.release_date, 10) : "—",
-          rating: Number(movie.vote_average || 0).toFixed(1),
+          vote_average: Number(movie.vote_average || 0),
           popularity: movie.popularity || 0,
           badge: movie.vote_average >= 7.5 ? "Top" : "Populaire",
-          poster_path: movie.poster_path || null,
-          description: movie.overview || "Résumé indisponible pour ce film.",
-          watchUrl: CGR_BOOKING_URL,
-          trailerUrl: "",
-          showtimes: ["12:30", "16:00", "20:30"],
+          poster_path: movie.poster_path,
+          overview: movie.overview || "Résumé indisponible pour ce film.",
+          release_date: movie.release_date || "",
         }));
+
+        updateHeroMovie(films[0] || null);
       }
 
       async function getTrailerUrl(movieId) {
@@ -1167,35 +1123,30 @@
         emptyState.style.display = "none";
 
         list.forEach((movie) => {
-          console.log("movie.poster_path", movie.poster_path);
-          const hasPosterPath = movie.poster_path !== undefined && movie.poster_path !== null && movie.poster_path !== "";
-
-          const mainAction = movie.type === "film" ? "🎟 Réserver CGR" : "📺 Voir la série";
-          const mainActionUrl = movie.type === "film" ? CGR_BOOKING_URL : movie.watchUrl;
-          const mainActionTarget = movie.type === "film" ? ' target="_blank" rel="noopener"' : "";
-          const posterUrl = hasPosterPath
-            ? `https://image.tmdb.org/t/p/w780${movie.poster_path}`
-            : "https://dummyimage.com/780x1170/000/fff&text=SNG+Cinema";
+          if (!movie.poster_path) return;
+          const posterUrl = `https://image.tmdb.org/t/p/w780${movie.poster_path}`;
           const badge = movie.badge ? `<span class="badge">${movie.badge}</span>` : "<span></span>";
+          const year = movie.release_date ? new Date(movie.release_date).getFullYear() : "—";
+          const rating = Number(movie.vote_average || 0).toFixed(1);
 
           const card = document.createElement("article");
           card.className = "card";
           card.innerHTML = `
             <div class="poster">
-              <img src="${posterUrl}" alt="${movie.title}" loading="lazy" onerror="this.src='https://dummyimage.com/780x1170/000/fff&text=SNG+Cinema';">
+              <img src="${posterUrl}" alt="${movie.title}" loading="lazy">
               <div class="badge-row">
                 ${badge}
-                <span class="rating">⭐ ${movie.rating}</span>
+                <span class="rating">⭐ ${rating}</span>
               </div>
               <div class="poster-overlay">
-                <a href="${mainActionUrl}"${mainActionTarget} class="overlay-btn book">${mainAction}</a>
-                <button class="overlay-btn trailer" type="button" onclick="openTrailerById(${movie.id || 0}, ${JSON.stringify(movie.title)}, ${JSON.stringify(movie.trailerUrl || "")})">▶ Bande-annonce</button>
+                <a href="${CGR_BOOKING_URL}" target="_blank" rel="noopener" class="overlay-btn book">🎟 Réserver CGR</a>
+                <button class="overlay-btn trailer" type="button" onclick="openTrailerById(${movie.id || 0}, ${JSON.stringify(movie.title)})">▶ Bande-annonce</button>
                 <a class="overlay-btn shop" href="${AFFILIATE_URL}" target="_blank" rel="noopener noreferrer">🍿 Acheter snacks cinéma</a>
               </div>
             </div>
             <div class="card-body">
               <h3 class="card-title">${movie.title}</h3>
-              <p class="card-sub">${movie.year} · ${movie.genre}</p>
+              <p class="card-sub">${year} · ${movie.genre}</p>
             </div>
           `;
           cardsGrid.appendChild(card);
@@ -1211,15 +1162,15 @@
           const matchQuery =
             film.title.toLowerCase().includes(query) ||
             film.genre.toLowerCase().includes(query) ||
-            film.description.toLowerCase().includes(query);
+            film.overview.toLowerCase().includes(query);
           const matchGenre = genre === "all" || film.genre === genre;
           return matchQuery && matchGenre;
         });
 
-        if (sort === "rating") filtered.sort((a, b) => b.rating - a.rating);
-        else if (sort === "year") filtered.sort((a, b) => b.year - a.year);
+        if (sort === "rating") filtered.sort((a, b) => b.vote_average - a.vote_average);
+        else if (sort === "year") filtered.sort((a, b) => (b.release_date || "").localeCompare(a.release_date || ""));
         else if (sort === "title") filtered.sort((a, b) => a.title.localeCompare(b.title));
-        else filtered.sort((a, b) => b.popularity - a.popularity || b.rating - a.rating);
+        else filtered.sort((a, b) => b.popularity - a.popularity || b.vote_average - a.vote_average);
 
         return filtered;
       }
@@ -1228,8 +1179,8 @@
         renderCards(getFilteredFilms());
       }
 
-      async function openTrailerById(movieId, title = "", fallbackTrailerUrl = "") {
-        const trailerUrl = movieId ? await getTrailerUrl(movieId) : fallbackTrailerUrl;
+      async function openTrailerById(movieId, title = "") {
+        const trailerUrl = movieId ? await getTrailerUrl(movieId) : "";
         if (!trailerUrl) {
           showTrailerNotice(`Aucune bande-annonce trouvée${title ? ` pour « ${title} »` : ""}.`);
           return;
@@ -1267,7 +1218,7 @@
 
       topNowBtn.addEventListener("click", () => {
         sortFilter.value = "popular";
-        const top = [...films].sort((a, b) => b.popularity - a.popularity || b.rating - a.rating).slice(0, 3);
+        const top = [...films].sort((a, b) => b.popularity - a.popularity || b.vote_average - a.vote_average).slice(0, 3);
         renderCards(top);
       });
 
@@ -1286,10 +1237,11 @@
         setLoading(true);
         try {
           await loadTmdbFilms();
-          setTmdbLiveBadge(Boolean(TMDB_API_KEY));
+          setTmdbLiveBadge(Boolean(TMDB_API_KEY) && films.length > 0);
         } catch (error) {
-          console.warn("Chargement TMDB impossible, utilisation des données locales.", error);
-          films = [...FALLBACK_FILMS];
+          console.warn("Chargement TMDB impossible.", error);
+          films = [];
+          updateHeroMovie(null);
           setTmdbLiveBadge(false);
         } finally {
           setLoading(false);
