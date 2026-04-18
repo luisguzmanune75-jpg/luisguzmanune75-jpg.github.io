@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SNG Portal — Cinéma CGR Style | Nouveaux Films & Séances</title>
+    <title>SNG Portal — Cinéma PRO</title>
     <meta
       name="description"
-      content="Découvrez les nouveaux films, affiches, séances, bandes-annonces et sorties à venir sur la page cinéma SNG Portal au style CGR moderne."
+      content="Page cinéma SNG Portal en version PRO : films dynamiques, bande-annonces en popup, filtres par genre et intégration Amazon affiliée."
     />
     <style>
       :root {
-        --bg: #07111f;
-        --bg2: #0c1a2d;
+        --bg: #060c16;
+        --bg-soft: #0f1a2c;
         --card: rgba(255, 255, 255, 0.06);
-        --line: rgba(255, 255, 255, 0.12);
-        --text: #f4f7fb;
-        --muted: #b5c0d1;
-        --accent: #ff4d2d;
-        --accent2: #ffd36b;
-        --gold: #f6c453;
-        --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+        --line: rgba(255, 255, 255, 0.14);
+        --text: #f8fbff;
+        --muted: #b6c1d4;
+        --red: #ff3b30;
+        --orange: #ff9f1c;
+        --yellow: #ffd166;
+        --shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
       }
 
       * {
@@ -33,11 +33,11 @@
       body {
         margin: 0;
         font-family: Arial, Helvetica, sans-serif;
-        background:
-          radial-gradient(circle at top right, rgba(255, 77, 45, 0.22), transparent 30%),
-          radial-gradient(circle at left top, rgba(255, 179, 71, 0.16), transparent 35%),
-          linear-gradient(180deg, #07111f 0%, #081423 55%, #0b1626 100%);
         color: var(--text);
+        background:
+          radial-gradient(circle at 18% 0%, rgba(255, 59, 48, 0.22), transparent 30%),
+          radial-gradient(circle at 85% 8%, rgba(255, 159, 28, 0.2), transparent 26%),
+          linear-gradient(180deg, #060c16 0%, #0a1322 55%, #0d1727 100%);
       }
 
       a {
@@ -58,9 +58,9 @@
       .topbar {
         position: sticky;
         top: 0;
-        z-index: 50;
-        backdrop-filter: blur(14px);
-        background: rgba(7, 17, 31, 0.74);
+        z-index: 80;
+        backdrop-filter: blur(12px);
+        background: rgba(8, 14, 26, 0.78);
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       }
 
@@ -77,16 +77,15 @@
         align-items: center;
         gap: 12px;
         font-weight: 800;
-        letter-spacing: 0.4px;
       }
 
       .brand-badge {
         width: 42px;
         height: 42px;
-        border-radius: 14px;
         display: grid;
         place-items: center;
-        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--red), var(--orange));
         color: #111;
         font-weight: 900;
         box-shadow: var(--shadow);
@@ -107,42 +106,42 @@
 
       .menu a:hover,
       .menu a.active {
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.1);
         color: #fff;
       }
 
       .hero {
-        padding: 34px 0 26px;
+        padding: 32px 0 22px;
       }
 
       .hero-card {
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba(246, 196, 83, 0.18);
-        border-radius: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 28px;
         min-height: 500px;
         display: grid;
         grid-template-columns: 1.2fr 0.8fr;
         background:
-          linear-gradient(90deg, rgba(4, 8, 16, 0.98) 0%, rgba(7, 13, 24, 0.92) 46%, rgba(8, 17, 29, 0.38) 100%),
-          url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=80')
+          linear-gradient(90deg, rgba(2, 5, 11, 0.97) 0%, rgba(5, 10, 19, 0.9) 52%, rgba(6, 12, 22, 0.36) 100%),
+          url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1800&q=80')
             center/cover no-repeat;
-        box-shadow: 0 24px 50px rgba(0, 0, 0, 0.42);
+        box-shadow: var(--shadow);
       }
 
       .hero-content {
-        padding: 44px;
+        padding: 42px;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        gap: 18px;
+        gap: 16px;
       }
 
       .chips,
       .meta,
-      .filter-tags,
       .card-meta,
-      .platforms {
+      .platforms,
+      .genre-list {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
@@ -150,92 +149,99 @@
 
       .chip,
       .meta span,
-      .tag,
-      .platform {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(255, 255, 255, 0.07);
-        color: #fff;
+      .platform,
+      .genre-pill,
+      .card-meta span {
+        border: 1px solid rgba(255, 255, 255, 0.15);
         border-radius: 999px;
         padding: 8px 12px;
+        background: rgba(255, 255, 255, 0.08);
         font-size: 13px;
       }
 
       .chip.hot {
-        background: rgba(255, 59, 48, 0.18);
         border-color: rgba(255, 59, 48, 0.45);
+        background: rgba(255, 59, 48, 0.22);
       }
 
-      .chip.new {
-        background: rgba(246, 196, 83, 0.16);
-        border-color: rgba(246, 196, 83, 0.36);
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
       }
 
       .hero h1 {
-        margin: 0;
         font-size: clamp(32px, 5vw, 58px);
-        line-height: 0.98;
+        line-height: 1;
       }
 
-      .hero p {
-        margin: 0;
+      .hero p,
+      .section-head p,
+      .card p,
+      .footer p,
+      .amazon-block p,
+      .mini-panel p {
         color: var(--muted);
-        font-size: 18px;
-        line-height: 1.6;
       }
 
       .hero-actions {
         display: flex;
         flex-wrap: wrap;
-        gap: 14px;
-        margin-top: 10px;
+        gap: 12px;
+        margin-top: 8px;
       }
 
       .btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 14px 18px;
         border-radius: 14px;
+        padding: 13px 18px;
         font-weight: 700;
         border: 1px solid transparent;
-        transition: transform 0.25s ease;
+        transition: 0.2s ease;
+        cursor: pointer;
       }
 
       .btn:hover {
         transform: translateY(-2px);
       }
 
-      .btn-primary {
-        background: linear-gradient(135deg, #d61f26, #ff5a36);
-        color: white;
+      .btn-red {
+        background: linear-gradient(135deg, #d61f26, #ff4b3e);
+        color: #fff;
       }
 
-      .btn-secondary {
+      .btn-orange {
+        background: linear-gradient(135deg, #ffb13b, #ff8f00);
+        color: #181818;
+      }
+
+      .btn-dark {
         background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.14);
+        color: #fff;
       }
 
       .hero-side {
+        padding: 30px;
         display: flex;
-        align-items: flex-end;
-        justify-content: center;
-        padding: 32px;
+        align-items: end;
       }
 
       .mini-panel {
         width: 100%;
-        max-width: 320px;
         border-radius: 24px;
-        background: rgba(5, 10, 18, 0.84);
-        border: 1px solid rgba(246, 196, 83, 0.2);
         padding: 18px;
-        box-shadow: var(--shadow);
+        background: rgba(5, 9, 18, 0.86);
+        border: 1px solid rgba(255, 255, 255, 0.14);
       }
 
       .ticket-box {
-        margin-top: 16px;
-        border-radius: 18px;
-        border: 1px dashed rgba(246, 196, 83, 0.35);
+        margin-top: 14px;
+        border: 1px dashed rgba(255, 209, 102, 0.44);
+        border-radius: 16px;
         padding: 14px;
         background: rgba(255, 255, 255, 0.03);
       }
@@ -248,29 +254,40 @@
         font-size: 14px;
       }
 
-      .search-wrap {
-        margin-top: 22px;
+      .ticket-row strong {
+        color: var(--yellow);
+      }
+
+      .controls {
+        margin-top: 20px;
         display: grid;
-        grid-template-columns: 1.2fr 0.8fr 0.8fr 0.8fr;
-        gap: 14px;
+        grid-template-columns: 1.1fr 0.9fr 0.9fr;
+        gap: 12px;
       }
 
       .field,
       select {
         width: 100%;
+        border-radius: 14px;
         border: 1px solid rgba(255, 255, 255, 0.12);
         background: rgba(255, 255, 255, 0.06);
-        color: white;
-        border-radius: 16px;
-        padding: 16px;
+        color: #fff;
+        padding: 14px;
       }
 
       select option {
         color: #111;
       }
 
+      .quick-actions {
+        margin-top: 12px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
       .section {
-        padding: 18px 0 14px;
+        padding: 20px 0 14px;
       }
 
       .section-head {
@@ -278,41 +295,35 @@
         align-items: end;
         justify-content: space-between;
         gap: 16px;
-        margin-bottom: 18px;
-      }
-
-      .section-head p,
-      .mini-panel p,
-      .card p,
-      .coming-soon p,
-      .footer p {
-        color: var(--muted);
+        margin-bottom: 16px;
       }
 
       .cards {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 18px;
       }
 
       .card {
         background: var(--card);
         border: 1px solid var(--line);
-        border-radius: 24px;
+        border-radius: 22px;
         overflow: hidden;
-        transition: transform 0.25s ease;
-        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
         display: flex;
         flex-direction: column;
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
       }
 
       .card:hover {
-        transform: translateY(-6px);
+        transform: translateY(-6px) scale(1.01);
+        box-shadow: 0 20px 34px rgba(0, 0, 0, 0.42);
+        border-color: rgba(255, 159, 28, 0.5);
       }
 
       .poster {
         position: relative;
-        aspect-ratio: 2 / 2.9;
+        aspect-ratio: 2 / 2.8;
       }
 
       .poster img {
@@ -323,40 +334,33 @@
 
       .badge-row {
         position: absolute;
-        top: 12px;
-        left: 12px;
-        right: 12px;
+        inset: 12px 12px auto 12px;
         display: flex;
         justify-content: space-between;
       }
 
       .badge {
-        background: linear-gradient(135deg, #d61f26, #ff5a36);
-        padding: 7px 10px;
         border-radius: 999px;
+        padding: 7px 10px;
         font-size: 12px;
         font-weight: 700;
+        background: linear-gradient(135deg, #d61f26, #ff5a36);
       }
 
       .rating {
-        background: rgba(0, 0, 0, 0.76);
-        padding: 7px 10px;
         border-radius: 999px;
+        padding: 7px 10px;
         font-size: 12px;
         font-weight: 700;
+        background: rgba(0, 0, 0, 0.72);
       }
 
       .card-body {
-        padding: 16px;
+        padding: 15px;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 10px;
         flex: 1;
-      }
-
-      .card h3 {
-        margin: 0;
-        font-size: 20px;
       }
 
       .showtimes {
@@ -366,99 +370,179 @@
       }
 
       .showtime {
-        padding: 7px 10px;
         border-radius: 10px;
-        background: rgba(246, 196, 83, 0.1);
-        border: 1px solid rgba(246, 196, 83, 0.18);
+        padding: 7px 10px;
         font-size: 12px;
         font-weight: 700;
+        background: rgba(255, 209, 102, 0.12);
+        border: 1px solid rgba(255, 209, 102, 0.26);
       }
 
       .reservation-bar {
+        margin-top: 2px;
+        border-radius: 12px;
         padding: 10px 12px;
-        border-radius: 14px;
         background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         font-size: 13px;
       }
 
       .reservation-bar strong {
-        color: var(--gold);
+        color: var(--yellow);
       }
 
       .card-actions {
+        margin-top: auto;
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 10px;
-        margin-top: auto;
       }
 
-      .card-actions a {
-        text-align: center;
+      .card-actions .btn {
         padding: 12px;
-        border-radius: 14px;
-        font-weight: 700;
         font-size: 14px;
       }
 
-      .watch {
-        background: linear-gradient(135deg, var(--accent), #ff7645);
+      .card-affiliate {
+        margin-top: 10px;
       }
 
-      .trailer {
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+      .card-affiliate .btn {
+        width: 100%;
       }
 
-      .coming-soon,
-      .empty-state {
-        border: 1px dashed rgba(255, 255, 255, 0.16);
-        border-radius: 24px;
-        padding: 26px;
-        background: rgba(255, 255, 255, 0.04);
+      .amazon-block {
+        margin: 10px 0 2px;
+        border: 1px solid rgba(255, 159, 28, 0.28);
+        background: linear-gradient(135deg, rgba(255, 159, 28, 0.14), rgba(255, 59, 48, 0.12));
+        border-radius: 22px;
+        padding: 24px;
+        text-align: center;
       }
 
-      .coming-grid {
+
+
+      .monetization-wrap {
+        margin-top: 16px;
+      }
+
+      .product-grid {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 16px;
-        margin-top: 18px;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 14px;
       }
 
-      .coming-item {
-        border-radius: 20px;
-        padding: 18px;
-        border: 1px solid rgba(255, 255, 255, 0.09);
-        background: rgba(255, 255, 255, 0.05);
+      .product-card {
+        border-radius: 18px;
+        padding: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
       }
 
+      .product-visual {
+        border-radius: 12px;
+        overflow: hidden;
+        aspect-ratio: 4 / 3;
+      }
+
+      .product-visual img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .product-meta {
+        color: var(--muted);
+        font-size: 13px;
+      }
       .footer {
-        padding: 34px 0 60px;
+        padding: 28px 0 58px;
       }
 
       .footer-box {
-        border-radius: 22px;
+        border-radius: 20px;
+        padding: 20px;
         background: rgba(255, 255, 255, 0.04);
         border: 1px solid rgba(255, 255, 255, 0.08);
-        padding: 24px;
+      }
+
+      .empty-state {
+        margin-top: 16px;
+        border: 1px dashed rgba(255, 255, 255, 0.2);
+        border-radius: 18px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .trailer-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 120;
+        background: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+        padding: 16px;
+      }
+
+      .trailer-modal.open {
+        display: flex;
+      }
+
+      .trailer-box {
+        width: min(920px, 100%);
+        background: #05080f;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        overflow: hidden;
+      }
+
+      .trailer-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .btn-close {
+        background: rgba(255, 255, 255, 0.09);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: #fff;
+        border-radius: 10px;
+        padding: 8px 10px;
+        cursor: pointer;
+      }
+
+      .trailer-video {
+        aspect-ratio: 16 / 9;
+        width: 100%;
+        border: 0;
       }
 
       @media (max-width: 1100px) {
         .hero-card,
-        .search-wrap,
-        .cards,
-        .coming-grid {
+        .controls,
+        .cards {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .product-grid {
           grid-template-columns: 1fr 1fr;
         }
       }
 
       @media (max-width: 860px) {
         .topbar-inner,
+        .menu,
         .section-head,
         .hero-card,
-        .search-wrap,
+        .controls,
         .cards,
-        .coming-grid,
         .card-actions {
           grid-template-columns: 1fr;
           flex-direction: column;
@@ -472,6 +556,24 @@
         .hero-side {
           padding: 0 28px 28px;
         }
+
+        .btn,
+        .quick-actions .btn,
+        .hero-actions .btn,
+        .card-actions .btn {
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .cards,
+        .product-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .container {
+          width: min(1240px, calc(100% - 20px));
+        }
       }
     </style>
   </head>
@@ -482,15 +584,14 @@
           <div class="brand-badge">SNG</div>
           <div>
             <div>SNG Portal</div>
-            <small style="color: var(--muted)">Cinéma moderne & premium</small>
+            <small style="color: var(--muted)">Cinéma Netflix / CGR premium</small>
           </div>
         </div>
 
         <nav class="menu" aria-label="Navigation principale">
           <a href="./index.html">Accueil</a>
           <a href="#trending" class="active">Films</a>
-          <a href="#series">Séries / événements</a>
-          <a href="#coming">Prochaines sorties</a>
+          <a href="#amazon">Soirée cinéma</a>
           <a href="./contact.html">Contact</a>
         </nav>
       </div>
@@ -502,40 +603,46 @@
           <article class="hero-card">
             <div class="hero-content">
               <div class="chips">
-                <span class="chip hot">🔥 Tendance</span>
-                <span class="chip new">🎬 Nouveautés</span>
-                <span class="chip">⭐ Bandes-annonces</span>
-                <span class="chip">🍿 Séances</span>
+                <span class="chip hot">🔥 Film du jour</span>
+                <span class="chip">🎬 Top tendances</span>
+                <span class="chip">🍿 Ambiance premium</span>
               </div>
 
-              <h1>Tous les nouveaux films, séries et séances dans une ambiance CGR premium</h1>
-              <p>
-                Une page cinéma immersive pour SNG Portal : affiches grand format, badges “Nouveau / Populaire”,
-                séances du jour, actions “Réserver” et “Bande-annonce”, plus une section “Prochaines sorties”.
-              </p>
+              <h1>Furie Stellaire</h1>
+              <p>Science-fiction • 2026 • Note 8.9</p>
+              <p>Un équipage part sauver une colonie oubliée au bord de l'effondrement cosmique.</p>
 
               <div class="meta">
                 <span>Films à l'affiche</span>
-                <span>Séances du jour</span>
-                <span>Bandes-annonces</span>
-                <span>Sorties à venir</span>
+                <span>Bande-annonces</span>
+                <span>Filtre par genre</span>
+                <span>Top du moment</span>
               </div>
 
               <div class="hero-actions">
-                <a class="btn btn-primary" href="#trending">Voir les films à l'affiche</a>
-                <a class="btn btn-secondary" href="#coming">Voir les prochaines sorties</a>
+                <a class="btn btn-red" href="#trending">🎬 Voir les films</a>
+                <button class="btn btn-dark" type="button" onclick="openTrailer('https://www.youtube.com/embed/dQw4w9WgXcQ')">
+                  ▶ Bande-annonce
+                </button>
+                <a
+                  class="btn btn-orange"
+                  href="https://www.amazon.fr/?tag=sngportal-21"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  🍿 Acheter snacks cinéma
+                </a>
               </div>
             </div>
 
             <aside class="hero-side">
               <div class="mini-panel">
                 <h3>Billetterie cinéma</h3>
-                <p>Bloc prêt pour une connexion future à une API de séances et de disponibilité.</p>
-                <div class="platforms" style="margin-top: 14px">
+                <p>Bloc prêt à connecter à une API de séances sans casser le site actuel.</p>
+                <div class="platforms" style="margin-top: 12px">
                   <span class="platform">À l'affiche</span>
                   <span class="platform">Réserver</span>
                   <span class="platform">Bande-annonce</span>
-                  <span class="platform">Sortie cinéma</span>
                 </div>
                 <div class="ticket-box">
                   <div class="ticket-row"><span>Aujourd'hui</span><strong>18:20 · 20:45 · 22:10</strong></div>
@@ -545,100 +652,108 @@
             </aside>
           </article>
 
-          <div class="search-wrap">
-            <input id="searchInput" class="field" type="text" placeholder="Rechercher un film, une série ou un genre..." />
-            <select id="typeFilter">
-              <option value="all">Tous les types</option>
-              <option value="film">Films</option>
-              <option value="serie">Séries</option>
-            </select>
-            <select id="genreFilter">
+          <div class="controls">
+            <input id="searchInput" class="field" type="text" placeholder="Rechercher un film, genre ou mot-clé..." />
+            <select id="genreFilter" aria-label="Filtrer par genre">
               <option value="all">Tous les genres</option>
-              <option value="Action">Action</option>
-              <option value="Science-fiction">Science-fiction</option>
-              <option value="Aventure">Aventure</option>
-              <option value="Horreur">Horreur</option>
-              <option value="Drame">Drame</option>
-              <option value="Animation">Animation</option>
             </select>
-            <select id="sortFilter">
+            <select id="sortFilter" aria-label="Trier les films">
               <option value="popular">Trier : populaires</option>
               <option value="rating">Trier : meilleure note</option>
               <option value="year">Trier : plus récents</option>
               <option value="title">Trier : A à Z</option>
             </select>
           </div>
+
+          <div class="quick-actions">
+            <button id="topNowBtn" type="button" class="btn btn-red">🔥 Top films du moment</button>
+            <button id="resetBtn" type="button" class="btn btn-dark">Réinitialiser</button>
+          </div>
         </div>
       </section>
+
+      <section id="amazon" class="section">
+        <div class="container">
+          <div class="amazon-block">
+            <h2>🍿 Prépare ta soirée cinéma</h2>
+            <p>Les meilleurs produits pour une expérience cinéma à la maison 👇</p>
+            <div style="margin-top: 14px">
+              <a
+                class="btn btn-orange"
+                href="https://www.amazon.fr/?tag=sngportal-21"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                🎬 Voir les produits Amazon
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="monetisation" class="section">
+        <div class="container">
+          <div class="amazon-block monetization-wrap">
+            <h2>🛍 Produits recommandés pour la soirée cinéma</h2>
+            <p>4 essentiels pour créer une vraie ambiance cinéma à la maison.</p>
+
+            <div class="product-grid">
+              <article class="product-card">
+                <div class="product-visual">
+                  <img src="https://images.unsplash.com/photo-1585647347384-2593bc35786b?auto=format&fit=crop&w=900&q=80" alt="Machine à popcorn" loading="lazy" />
+                </div>
+                <h3>Machine à popcorn</h3>
+                <p class="product-meta">Popcorn chaud en quelques minutes, style salle de cinéma.</p>
+                <a class="btn btn-orange" href="https://www.amazon.fr/?tag=sngportal-21" target="_blank" rel="noopener noreferrer">Voir sur Amazon</a>
+              </article>
+
+              <article class="product-card">
+                <div class="product-visual">
+                  <img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=80" alt="Snacks et friandises" loading="lazy" />
+                </div>
+                <h3>Pack snacks premium</h3>
+                <p class="product-meta">Sélection de snacks salés et sucrés pour toute la soirée.</p>
+                <a class="btn btn-orange" href="https://www.amazon.fr/?tag=sngportal-21" target="_blank" rel="noopener noreferrer">Voir sur Amazon</a>
+              </article>
+
+              <article class="product-card">
+                <div class="product-visual">
+                  <img src="https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?auto=format&fit=crop&w=900&q=80" alt="Projecteur home cinéma" loading="lazy" />
+                </div>
+                <h3>Mini projecteur HD</h3>
+                <p class="product-meta">Grand écran à la maison pour une immersion totale.</p>
+                <a class="btn btn-orange" href="https://www.amazon.fr/?tag=sngportal-21" target="_blank" rel="noopener noreferrer">Voir sur Amazon</a>
+              </article>
+
+              <article class="product-card">
+                <div class="product-visual">
+                  <img src="https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=900&q=80" alt="Couverture et coussins" loading="lazy" />
+                </div>
+                <h3>Kit confort canapé</h3>
+                <p class="product-meta">Plaid + coussins pour une séance cosy version VIP.</p>
+                <a class="btn btn-orange" href="https://www.amazon.fr/?tag=sngportal-21" target="_blank" rel="noopener noreferrer">Voir sur Amazon</a>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
 
       <section id="trending" class="section">
         <div class="container">
           <div class="section-head">
             <div>
-              <h2>🎥 Films à l'affiche et tendances</h2>
-              <p>Grille premium avec affiche, note, description, séances et actions.</p>
+              <h2>🎥 Films à l'affiche</h2>
+              <p>Cartes dynamiques générées automatiquement depuis JavaScript.</p>
             </div>
-            <div class="filter-tags">
-              <span class="tag">Style CGR</span>
-              <span class="tag">Ambiance salle</span>
-              <span class="tag">Prêt API films</span>
-            </div>
+            <div id="genrePills" class="genre-list"></div>
           </div>
 
           <div id="cardsGrid" class="cards"></div>
 
-          <div id="emptyState" class="empty-state" style="display: none; margin-top: 18px">
+          <div id="emptyState" class="empty-state" style="display: none">
             <h3>Aucun résultat trouvé</h3>
-            <p>Essaie un autre mot-clé ou change les filtres.</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="series" class="section">
-        <div class="container">
-          <div class="coming-soon">
-            <h2>📺 Séries & événements cinéma</h2>
-            <p>
-              Zone dédiée aux séries tendances, avant-premières, marathons et événements spéciaux pour un portail
-              cinéma complet.
-            </p>
-            <div class="coming-grid">
-              <article class="coming-item">
-                <h3>Top 10 du moment</h3>
-                <p>Bloc prévu pour une alimentation automatique (films/séries les plus vus).</p>
-              </article>
-              <article class="coming-item">
-                <h3>Bandes-annonces</h3>
-                <p>Intégration possible d'une vidéo intégrée par titre.</p>
-              </article>
-              <article class="coming-item">
-                <h3>Avant-premières</h3>
-                <p>Dates + horaires + capacité restante pour événements premium.</p>
-              </article>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="coming" class="section">
-        <div class="container">
-          <div class="coming-soon">
-            <h2>🍿 Prochaines sorties</h2>
-            <p>Section adaptable pour afficher les films à venir, avec date, fiche et bande-annonce.</p>
-            <div class="coming-grid">
-              <article class="coming-item">
-                <h3>Chroniques Orbitales</h3>
-                <p>Date de sortie : 14/05/2026 · <a href="#">Voir la fiche</a></p>
-              </article>
-              <article class="coming-item">
-                <h3>Nexus Inversé</h3>
-                <p>Date de sortie : 28/05/2026 · <a href="#">Voir la fiche</a></p>
-              </article>
-              <article class="coming-item">
-                <h3>Ligne 404</h3>
-                <p>Date de sortie : 11/06/2026 · <a href="#">Voir la fiche</a></p>
-              </article>
-            </div>
+            <p>Essaie un autre mot-clé ou change le filtre de genre.</p>
           </div>
         </div>
       </section>
@@ -647,22 +762,34 @@
     <footer class="footer">
       <div class="container">
         <div class="footer-box">
-          <h3>SNG Portal — Cinéma</h3>
-          <p>
-            Structure simple en HTML/CSS/JS, prête à brancher sur une source automatique (API, JSON, CMS), sans casser
-            les pages existantes du portail.
-          </p>
+          <h3>SNG Portal — Cinéma PRO</h3>
+          <p>Version premium responsive avec système de bande-annonce modal, filtres et monétisation Amazon.</p>
         </div>
       </div>
     </footer>
 
+    <div id="trailerModal" class="trailer-modal" role="dialog" aria-modal="true" aria-label="Bande-annonce">
+      <div class="trailer-box">
+        <div class="trailer-head">
+          <strong>Bande-annonce</strong>
+          <button class="btn-close" type="button" onclick="closeTrailer()">✕</button>
+        </div>
+        <iframe
+          id="trailerFrame"
+          class="trailer-video"
+          src=""
+          title="Lecteur bande-annonce YouTube"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+
     <script>
-      /*
-        Données locales de démonstration.
-        Pour un branchement futur, remplacer ce tableau par une réponse API
-        (ex: /api/movies) puis relancer renderCards(getFilteredItems()).
-      */
-      const items = [
+      const AFFILIATE_URL = "https://www.amazon.fr/?tag=sngportal-21";
+
+      const films = [
         {
           title: "Furie Stellaire",
           type: "film",
@@ -674,8 +801,22 @@
           image: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=900&q=80",
           description: "Un équipage part sauver une colonie oubliée au bord de l'effondrement cosmique.",
           watchUrl: "#",
-          trailerUrl: "#",
+          trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
           showtimes: ["14:15", "17:40", "20:30"],
+        },
+        {
+          title: "Zone 9",
+          type: "serie",
+          genre: "Science-fiction",
+          year: 2026,
+          rating: 9.1,
+          popularity: 99,
+          badge: "Top série",
+          image: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=900&q=80",
+          description: "Une station secrète surveille des anomalies qui menacent la planète entière.",
+          watchUrl: "#",
+          trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+          showtimes: ["Ép. 4", "Ép. 5", "Ép. 6"],
         },
         {
           title: "Nuit Rouge",
@@ -688,7 +829,7 @@
           image: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=900&q=80",
           description: "Une course contre la montre dans une ville en feu, entre mafia et trahisons.",
           watchUrl: "#",
-          trailerUrl: "#",
+          trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
           showtimes: ["13:30", "16:50", "21:10"],
         },
         {
@@ -702,22 +843,8 @@
           image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
           description: "Des explorateurs découvrent un monde caché où l'histoire n'a jamais disparu.",
           watchUrl: "#",
-          trailerUrl: "#",
+          trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
           showtimes: ["12:00", "15:20", "19:45"],
-        },
-        {
-          title: "Écho Noir",
-          type: "serie",
-          genre: "Horreur",
-          year: 2026,
-          rating: 8.7,
-          popularity: 90,
-          badge: "Nouveau",
-          image: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?auto=format&fit=crop&w=900&q=80",
-          description: "Des voix venues d'un immeuble abandonné réveillent un secret terrifiant.",
-          watchUrl: "#",
-          trailerUrl: "#",
-          showtimes: ["Ép. 1", "Ép. 2", "Ép. 3"],
         },
         {
           title: "Pixel Run",
@@ -730,35 +857,39 @@
           image: "https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=900&q=80",
           description: "Un héros virtuel tente de sauver son univers avant l'effacement total.",
           watchUrl: "#",
-          trailerUrl: "#",
+          trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
           showtimes: ["10:40", "14:10", "17:00"],
-        },
-        {
-          title: "Zone 9",
-          type: "serie",
-          genre: "Science-fiction",
-          year: 2026,
-          rating: 9.1,
-          popularity: 99,
-          badge: "Top série",
-          image: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=900&q=80",
-          description: "Une station secrète surveille des anomalies qui menacent la planète entière.",
-          watchUrl: "#",
-          trailerUrl: "#",
-          showtimes: ["Ép. 4", "Ép. 5", "Ép. 6"],
         },
       ];
 
       const cardsGrid = document.getElementById("cardsGrid");
       const searchInput = document.getElementById("searchInput");
-      const typeFilter = document.getElementById("typeFilter");
       const genreFilter = document.getElementById("genreFilter");
       const sortFilter = document.getElementById("sortFilter");
+      const topNowBtn = document.getElementById("topNowBtn");
+      const resetBtn = document.getElementById("resetBtn");
       const emptyState = document.getElementById("emptyState");
+      const trailerModal = document.getElementById("trailerModal");
+      const trailerFrame = document.getElementById("trailerFrame");
+      const genrePills = document.getElementById("genrePills");
+
+      function initGenres() {
+        const genres = Array.from(new Set(films.map((film) => film.genre))).sort((a, b) => a.localeCompare(b));
+        genres.forEach((genre) => {
+          const option = document.createElement("option");
+          option.value = genre;
+          option.textContent = genre;
+          genreFilter.appendChild(option);
+
+          const pill = document.createElement("span");
+          pill.className = "genre-pill";
+          pill.textContent = genre;
+          genrePills.appendChild(pill);
+        });
+      }
 
       function renderCards(list) {
         cardsGrid.innerHTML = "";
-
         if (!list.length) {
           emptyState.style.display = "block";
           return;
@@ -766,85 +897,110 @@
 
         emptyState.style.display = "none";
 
-        list.forEach((item) => {
-          const showtimesHtml = (item.showtimes || []).map((time) => `<span class="showtime">${time}</span>`).join("");
-          const label = item.type === "film" ? "Film" : "Série";
-          const actionText = item.type === "film" ? "Réserver" : "Voir la fiche";
+        list.forEach((film) => {
+          const showtimes = film.showtimes.map((time) => `<span class="showtime">${time}</span>`).join("");
+          const typeLabel = film.type === "film" ? "Film" : "Série";
+          const mainAction = film.type === "film" ? "🎟 Réserver" : "📺 Voir la série";
 
           const card = document.createElement("article");
           card.className = "card";
           card.innerHTML = `
             <div class="poster">
-              <img src="${item.image}" alt="Affiche ${item.title}" loading="lazy" />
+              <img src="${film.image}" alt="Affiche ${film.title}" loading="lazy" />
               <div class="badge-row">
-                <span class="badge">${item.badge}</span>
-                <span class="rating">⭐ ${item.rating}</span>
+                <span class="badge">${film.badge}</span>
+                <span class="rating">⭐ ${film.rating}</span>
               </div>
             </div>
             <div class="card-body">
               <div class="card-meta">
-                <span>${label}</span>
-                <span>${item.genre}</span>
-                <span>${item.year}</span>
+                <span>${typeLabel}</span>
+                <span>${film.genre}</span>
+                <span>${film.year}</span>
               </div>
-              <h3>${item.title}</h3>
-              <p>${item.description}</p>
-              <div class="showtimes">${showtimesHtml}</div>
-              <div class="reservation-bar">
-                Disponible aujourd'hui · <strong>${item.type === "film" ? "Séances ouvertes" : "Nouveau contenu"}</strong>
-              </div>
+              <h3>${film.title}</h3>
+              <p>${film.description}</p>
+              <div class="showtimes">${showtimes}</div>
+              <div class="reservation-bar">Disponible aujourd'hui · <strong>Sessions ouvertes</strong></div>
               <div class="card-actions">
-                <a class="watch" href="${item.watchUrl}">${actionText}</a>
-                <a class="trailer" href="${item.trailerUrl}">Bande-annonce</a>
+                <a class="btn btn-red" href="${film.watchUrl}">${mainAction}</a>
+                <button class="btn btn-dark" type="button" onclick="openTrailer('${film.trailerUrl}')">▶ Bande-annonce</button>
+              </div>
+              <div class="card-affiliate">
+                <a class="btn btn-orange" href="${AFFILIATE_URL}" target="_blank" rel="noopener noreferrer">🍿 Acheter snacks cinéma</a>
               </div>
             </div>
           `;
-
           cardsGrid.appendChild(card);
         });
       }
 
-      function getFilteredItems() {
-        const search = searchInput.value.toLowerCase().trim();
-        const type = typeFilter.value;
+      function getFilteredFilms() {
+        const query = searchInput.value.trim().toLowerCase();
         const genre = genreFilter.value;
         const sort = sortFilter.value;
 
-        const filtered = items.filter((item) => {
-          const matchSearch =
-            item.title.toLowerCase().includes(search) ||
-            item.genre.toLowerCase().includes(search) ||
-            item.description.toLowerCase().includes(search) ||
-            item.badge.toLowerCase().includes(search);
-
-          const matchType = type === "all" || item.type === type;
-          const matchGenre = genre === "all" || item.genre === genre;
-          return matchSearch && matchType && matchGenre;
+        const filtered = films.filter((film) => {
+          const matchQuery =
+            film.title.toLowerCase().includes(query) ||
+            film.genre.toLowerCase().includes(query) ||
+            film.description.toLowerCase().includes(query);
+          const matchGenre = genre === "all" || film.genre === genre;
+          return matchQuery && matchGenre;
         });
 
-        if (sort === "rating") {
-          filtered.sort((a, b) => b.rating - a.rating);
-        } else if (sort === "year") {
-          filtered.sort((a, b) => b.year - a.year);
-        } else if (sort === "title") {
-          filtered.sort((a, b) => a.title.localeCompare(b.title));
-        } else {
-          filtered.sort((a, b) => b.popularity - a.popularity || b.rating - a.rating);
-        }
+        if (sort === "rating") filtered.sort((a, b) => b.rating - a.rating);
+        else if (sort === "year") filtered.sort((a, b) => b.year - a.year);
+        else if (sort === "title") filtered.sort((a, b) => a.title.localeCompare(b.title));
+        else filtered.sort((a, b) => b.popularity - a.popularity || b.rating - a.rating);
 
         return filtered;
       }
 
       function updateView() {
-        renderCards(getFilteredItems());
+        renderCards(getFilteredFilms());
       }
 
+      function openTrailer(url) {
+        trailerFrame.src = `${url}?autoplay=1`;
+        trailerModal.classList.add("open");
+      }
+
+      function closeTrailer() {
+        trailerModal.classList.remove("open");
+        trailerFrame.src = "";
+      }
+
+      window.openTrailer = openTrailer;
+      window.closeTrailer = closeTrailer;
+
+      trailerModal.addEventListener("click", (event) => {
+        if (event.target === trailerModal) closeTrailer();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeTrailer();
+      });
+
+      topNowBtn.addEventListener("click", () => {
+        sortFilter.value = "popular";
+        const top = [...films].sort((a, b) => b.popularity - a.popularity || b.rating - a.rating).slice(0, 3);
+        renderCards(top);
+      });
+
+      resetBtn.addEventListener("click", () => {
+        searchInput.value = "";
+        genreFilter.value = "all";
+        sortFilter.value = "popular";
+        updateView();
+      });
+
       searchInput.addEventListener("input", updateView);
-      typeFilter.addEventListener("change", updateView);
       genreFilter.addEventListener("change", updateView);
       sortFilter.addEventListener("change", updateView);
 
-      renderCards(getFilteredItems());
+      initGenres();
+      updateView();
     </script>
   </body>
 </html>
