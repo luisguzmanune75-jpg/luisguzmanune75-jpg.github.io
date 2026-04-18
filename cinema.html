@@ -1104,6 +1104,7 @@
           tmdbFetch("/movie/popular", { page: 1 }),
           tmdbFetch("/genre/movie/list"),
         ]);
+        console.log("TMDB fetch /movie/popular OK", popularData);
 
         const genreMap = new Map(genresData.genres.map((genre) => [genre.id, genre.name]));
 
@@ -1160,33 +1161,37 @@
 
         emptyState.style.display = "none";
 
-        list.forEach((film) => {
-          const mainAction = film.type === "film" ? "🎟 Réserver CGR" : "📺 Voir la série";
-          const mainActionUrl = film.type === "film" ? CGR_BOOKING_URL : film.watchUrl;
-          const mainActionTarget = film.type === "film" ? ' target="_blank" rel="noopener"' : "";
-          const posterUrl = film.poster_path
-            ? `https://image.tmdb.org/t/p/w780${film.poster_path}`
+        list.forEach((movie) => {
+          if (movie.poster_path === undefined) {
+            console.log("movie.poster_path est undefined", movie);
+          }
+
+          const mainAction = movie.type === "film" ? "🎟 Réserver CGR" : "📺 Voir la série";
+          const mainActionUrl = movie.type === "film" ? CGR_BOOKING_URL : movie.watchUrl;
+          const mainActionTarget = movie.type === "film" ? ' target="_blank" rel="noopener"' : "";
+          const posterUrl = movie.poster_path
+            ? `https://image.tmdb.org/t/p/w780${movie.poster_path}`
             : "https://via.placeholder.com/780x1170/0f1720/f59e0b?text=SNG+Cinema";
-          const badge = film.badge ? `<span class="badge">${film.badge}</span>` : "<span></span>";
+          const badge = movie.badge ? `<span class="badge">${movie.badge}</span>` : "<span></span>";
 
           const card = document.createElement("article");
           card.className = "card";
           card.innerHTML = `
             <div class="poster">
-              <img src="${posterUrl}" alt="${film.title}" loading="lazy">
+              <img src="${posterUrl}" alt="${movie.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/780x1170/0f1720/f59e0b?text=SNG+Cinema';">
               <div class="badge-row">
                 ${badge}
-                <span class="rating">⭐ ${film.rating}</span>
+                <span class="rating">⭐ ${movie.rating}</span>
               </div>
               <div class="poster-overlay">
                 <a href="${mainActionUrl}"${mainActionTarget} class="overlay-btn book">${mainAction}</a>
-                <button class="overlay-btn trailer" type="button" onclick="openTrailerById(${film.id || 0}, ${JSON.stringify(film.title)}, ${JSON.stringify(film.trailerUrl || "")})">▶ Bande-annonce</button>
+                <button class="overlay-btn trailer" type="button" onclick="openTrailerById(${movie.id || 0}, ${JSON.stringify(movie.title)}, ${JSON.stringify(movie.trailerUrl || "")})">▶ Bande-annonce</button>
                 <a class="overlay-btn shop" href="${AFFILIATE_URL}" target="_blank" rel="noopener noreferrer">🍿 Acheter snacks cinéma</a>
               </div>
             </div>
             <div class="card-body">
-              <h3 class="card-title">${film.title}</h3>
-              <p class="card-sub">${film.year} · ${film.genre}</p>
+              <h3 class="card-title">${movie.title}</h3>
+              <p class="card-sub">${movie.year} · ${movie.genre}</p>
             </div>
           `;
           cardsGrid.appendChild(card);
