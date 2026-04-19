@@ -1620,11 +1620,16 @@
         display:flex;
         flex-direction:column;
         min-height:100%;
+        cursor:pointer;
       }
       .sng-card:hover{
         transform:translateY(-4px);
         box-shadow:0 14px 26px rgba(0,0,0,.08);
         border-color:#f59e0b;
+      }
+      .sng-card:focus-visible{
+        outline:3px solid rgba(245,158,11,.5);
+        outline-offset:2px;
       }
       .sng-thumb{
         height:190px;
@@ -1634,7 +1639,18 @@
         justify-content:center;
         position:relative;
       }
-      .sng-thumb span{
+      
+      .sng-thumb img{
+        width:100%;
+        max-width:100%;
+        height:100%;
+        max-height:100%;
+        object-fit:contain;
+        padding:14px;
+        background:#fff;
+        display:block;
+      }
+      .sng-thumb .sng-thumb-fallback{
         width:78px;
         height:78px;
         border-radius:50%;
@@ -2370,56 +2386,56 @@ En tant que Partenaire Amazon, SNG Portal réalise un bénéfice sur les achats 
 
     <script>
       const amazonProducts = [
-        { title: "🔥 Top Vente Amazon 01 – Offre Exclusive", asin: "B0B8C7VY4T", url: "https://amzn.to/48cpq6B" },
-        { title: "🔥 Top Vente Amazon 02 – Offre Exclusive", asin: "B08XW4FDJV", url: "https://amzn.to/3Oq74Z9" },
-        { title: "🔥 Top Vente Amazon 03 – Offre Exclusive", asin: "B07PGL2ZSL", url: "https://amzn.to/4dVPaI7" },
-        { title: "🔥 Top Vente Amazon 04 – Offre Exclusive", asin: "B09V4M6Z6F", url: "https://amzn.to/4sHkm1e" },
-        { title: "🔥 Top Vente Amazon 05 – Offre Exclusive", asin: "B08N5WRWNW", url: "https://amzn.to/4sEwuQz" },
-        { title: "🔥 Top Vente Amazon 06 – Offre Exclusive", asin: "B0B1J6Z9QK", url: "https://amzn.to/4vTC9W2" },
-        { title: "🔥 Top Vente Amazon 07 – Offre Exclusive", asin: "B07W7XQ3X2", url: "https://amzn.to/4cRK0eZ" },
-        { title: "🔥 Top Vente Amazon 08 – Offre Exclusive", asin: "B08L5TNJHG", url: "https://amzn.to/4mDaqVl" },
-        { title: "🔥 Top Vente Amazon 09 – Offre Exclusive", asin: "B09KNRH7XG", url: "https://amzn.to/3Og3AIF" },
-        { title: "🔥 Top Vente Amazon 10 – Offre Exclusive", asin: "B07Y5YF4KD", url: "https://amzn.to/4sINWUe" },
-        { title: "🔥 Top Vente Amazon 11 – Offre Exclusive", asin: "B08J5F3G18", url: "https://amzn.to/3QOAuRh" },
-        { title: "🔥 Top Vente Amazon 12 – Offre Exclusive", asin: "B0B7KX9Y8R", url: "https://amzn.to/4tR4QRu" },
-        { title: "🔥 Top Vente Amazon 13 – Offre Exclusive", asin: "B07ZPKN6YR", url: "https://amzn.to/4vTCMyS" },
-        { title: "🔥 Top Vente Amazon 14 – Offre Exclusive", asin: "B08QJ5Z9YB", url: "https://amzn.to/4mD4TOp" },
-        { title: "🔥 Top Vente Amazon 15 – Offre Exclusive", asin: "B0B3F8K2PL", url: "https://amzn.to/4tjHFPM" },
-        { title: "🔥 Top Vente Amazon 16 – Offre Exclusive", asin: "B08T1RZ8YH", url: "https://amzn.to/41HUFTq" },
-        { title: "🔥 Top Vente Amazon 17 – Offre Exclusive", asin: "B09V3F7W9M", url: "https://amzn.to/4tkK0Km" },
-        { title: "🔥 Top Vente Amazon 18 – Offre Exclusive", asin: "B07X9K6Y2Z", url: "https://amzn.to/4dXilud" },
-        { title: "🔥 Top Vente Amazon 19 – Offre Exclusive", asin: "B08Y7J2P1M", url: "https://amzn.to/4vJc6Ri" },
-        { title: "🔥 Top Vente Amazon 20 – Offre Exclusive", asin: "B09X5V3Z1F", url: "https://amzn.to/3OMwTCM" },
-        { title: "🔥 Top Vente Amazon 21 – Offre Exclusive", asin: "B07FZ8S74R", url: "https://amzn.to/4vEQKV5" },
-        { title: "🔥 Top Vente Amazon 22 – Offre Exclusive", asin: "B08M9X7K5P", url: "https://amzn.eu/d/08bxOJMo" },
-        { title: "🔥 Top Vente Amazon 23 – Offre Exclusive", asin: "B09J6Z8W2H", url: "https://amzn.eu/d/0cmfR1bt" },
-        { title: "🔥 Top Vente Amazon 24 – Offre Exclusive", asin: "B08P3K9L7X", url: "https://amzn.to/4mFjt8e" },
-        { title: "🔥 Top Vente Amazon 25 – Offre Exclusive", asin: "B07Z1R6W9Y", url: "https://amzn.to/3OKfzyh" },
-        { title: "🔥 Top Vente Amazon 26 – Offre Exclusive", asin: "B08XQ9J5T2", url: "https://amzn.to/4tgqdvz" },
-        { title: "🔥 Top Vente Amazon 27 – Offre Exclusive", asin: "B09F6V8K2R", url: "https://amzn.to/4twB6te" },
-        { title: "🔥 Top Vente Amazon 28 – Offre Exclusive", asin: "B08T7M9L3X", url: "https://amzn.to/4sO0AkX" },
-        { title: "🔥 Top Vente Amazon 29 – Offre Exclusive", asin: "B07Y6K3P2F", url: "https://amzn.to/4tR2F09" },
-        { title: "🔥 Top Vente Amazon 30 – Offre Exclusive", asin: "B09N8X7Z5L", url: "https://amzn.to/42hgd9y" },
-        { title: "🔥 Top Vente Amazon 31 – Offre Exclusive", asin: "B08K3F9X2M", url: "https://amzn.to/4tegCWa" },
-        { title: "🔥 Top Vente Amazon 32 – Offre Exclusive", asin: "B09V7J5L3P", url: "https://amzn.to/3OOZS8X" },
-        { title: "🔥 Top Vente Amazon 33 – Offre Exclusive", asin: "B07X5K8P9Y", url: "https://amzn.to/4tVepyM" },
-        { title: "🔥 Top Vente Amazon 34 – Offre Exclusive", asin: "B08N4T7Y2F", url: "https://amzn.to/4mE8Fap" },
-        { title: "🔥 Top Vente Amazon 35 – Offre Exclusive", asin: "B09X6K3L1M", url: "https://amzn.to/3QmLW6A" },
-        { title: "🔥 Top Vente Amazon 36 – Offre Exclusive", asin: "B08Y2P9K6X", url: "https://amzn.to/48bvtIF" },
-        { title: "🔥 Top Vente Amazon 37 – Offre Exclusive", asin: "B07T6M8X5P", url: "https://amzn.to/3OQn4ng" },
-        { title: "🔥 Top Vente Amazon 38 – Offre Exclusive", asin: "B09J7K2L3F", url: "https://amzn.to/4dS8F4f" },
-        { title: "🔥 Top Vente Amazon 39 – Offre Exclusive", asin: "B08F5X9K2M", url: "https://amzn.to/4evW4Uz" },
-        { title: "🔥 Top Vente Amazon 40 – Offre Exclusive", asin: "B07N8P6Y3L", url: "https://amzn.to/3Qx1x3r" },
-        { title: "🔥 Top Vente Amazon 41 – Offre Exclusive", asin: "B09K3X7L5P", url: "https://amzn.to/48c2T9V" },
-        { title: "🔥 Top Vente Amazon 42 – Offre Exclusive", asin: "B08T9K2F6X", url: "https://amzn.to/3QlTfLM" },
-        { title: "🔥 Top Vente Amazon 43 – Offre Exclusive", asin: "B07M5Y8P3L", url: "https://amzn.to/4cCPB7S" },
-        { title: "🔥 Top Vente Amazon 44 – Offre Exclusive", asin: "B09F8K2X6P", url: "https://amzn.to/4tU4w4i" },
-        { title: "🔥 Top Vente Amazon 45 – Offre Exclusive", asin: "B08V3Y7K2M", url: "https://amzn.to/4sEtrYH" },
-        { title: "🔥 Top Vente Amazon 46 – Offre Exclusive", asin: "B07P9X5L2F", url: "https://amzn.to/488vSvj" },
-        { title: "🔥 Top Vente Amazon 47 – Offre Exclusive", asin: "B09X2K7L5M", url: "https://amzn.to/4mJGUxg" },
-        { title: "🔥 Top Vente Amazon 48 – Offre Exclusive", asin: "B08Y5P3K9F", url: "https://amzn.to/4toTrbQ" },
-        { title: "🔥 Top Vente Amazon 49 – Offre Exclusive", asin: "B07K6X2L8M", url: "https://amzn.to/4vuw8yG" },
-        { title: "🔥 Top Vente Amazon 50 – Offre Exclusive", asin: "B09V8K3P2F", url: "https://amzn.to/4clv8Wi" }
+        { title: "fire tv stick 4k plus", asin: "B0F7ZFWVTC", url: "https://amzn.to/48cpq6B", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0F7ZFWVTC&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Biodance Bio Collagen Real Deep Mask", asin: "B0B2RM68G2", url: "https://amzn.to/3Oq74Z9", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0B2RM68G2&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Ordinary Glycolic Toning Solution 240ml", asin: "B071914GGL", url: "https://amzn.to/4dVPaI7", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B071914GGL&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "FM London T Shirts pour Hommes", asin: "B0C5D6ZDFZ", url: "https://amzn.to/4sHkm1e", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0C5D6ZDFZ&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Crocs Classic Clog Sabots Noir", asin: "B096423LXW", url: "https://amzn.to/4sEwuQz", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B096423LXW&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Helioclipse lunettes homologuees observation certifiees", asin: "B0C5S277BL", url: "https://amzn.to/4vTC9W2", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0C5S277BL&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Dim Ecodim Chaussettes paires Homme", asin: "B01K5NBVB8", url: "https://amzn.to/4cRK0eZ", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B01K5NBVB8&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "VOLTNGO lunettes eclipse certifiees securite", asin: "B0FW15RLDQ", url: "https://amzn.to/4mDaqVl", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0FW15RLDQ&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Moustiquaire Magnetique 120x220cm Magnetiques Automatique", asin: "B08QM9RKKT", url: "https://amzn.to/3Og3AIF", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B08QM9RKKT&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "MYCARBON Magnetique Moustiquaire Automatique Installation", asin: "B07BT87NNM", url: "https://amzn.to/4sINWUe", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B07BT87NNM&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Imou Surveillance Interieure Intelligent Bidirectionnel", asin: "B08X6DCJT2", url: "https://amzn.to/3QOAuRh", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B08X6DCJT2&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "ERKO 100 professionnelles resistante temperature", asin: "B08PQNRKPZ", url: "https://amzn.to/4tR4QRu", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B08PQNRKPZ&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Colle forte gel 50 universelle", asin: "B0C6R9G4ZW", url: "https://amzn.to/4vTCMyS", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0C6R9G4ZW&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "ARNOMED jetables pieces nitrile disponibles", asin: "B093SWH4D8", url: "https://amzn.to/4mD4TOp", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B093SWH4D8&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "GAUDER Moustiquaire Anti Moustique Auto Agrippante Moustiqaire", asin: "B0CC2RXHDG", url: "https://amzn.to/4tjHFPM", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0CC2RXHDG&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Mygoodprice Plaque Lettres autocollante personnalisee", asin: "B095WM4GYM", url: "https://amzn.to/41HUFTq", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B095WM4GYM&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "TapoC210Camera Interieure2KQHD Rotation360 Bidirectionnel Compatible", asin: "B095CLQ1PT", url: "https://amzn.to/4tkK0Km", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B095CLQ1PT&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "edding peinture toutes surfaces Transparent", asin: "B06XRFCS9X", url: "https://amzn.to/4dXilud", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B06XRFCS9X&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "LEGRAND Multiprise Frontales Positionnement Horizontal", asin: "B09BJTVZJ9", url: "https://amzn.to/4vJc6Ri", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B09BJTVZJ9&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Hevea vinyle jetables latex gants", asin: "B07TF59TWW", url: "https://amzn.to/3OMwTCM", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B07TF59TWW&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "JOREST Tournevis Precision Triwing Lunettes", asin: "B09PY8WQHJ", url: "https://amzn.to/4vEQKV5", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B09PY8WQHJ&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Produit Amazon B009H0KB30", asin: "B009H0KB30", url: "https://amzn.eu/d/08bxOJMo", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B009H0KB30&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Produit Amazon B0CJ5GW8RY", asin: "B0CJ5GW8RY", url: "https://amzn.eu/d/0cmfR1bt", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0CJ5GW8RY&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Garnier SkinActive Anti Taches Salicylique Niacinamide", asin: "B09BD7L35V", url: "https://amzn.to/4mFjt8e", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B09BD7L35V&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "GARNIER Ambre Solaire Autobronzante Hydratante", asin: "B083YF3QZL", url: "https://amzn.to/3OKfzyh", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B083YF3QZL&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Franck Provost Rincage Professionnel Protection", asin: "B0CQP9S97Y", url: "https://amzn.to/4tgqdvz", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0CQP9S97Y&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "TOCOL Magnetique iPhone 15 Translucide", asin: "B0DY1C8X92", url: "https://amzn.to/4twB6te", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0DY1C8X92&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Apple MYQY3ZM A EarPods USB C", asin: "B0DCNWN8NZ", url: "https://amzn.to/4sO0AkX", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0DCNWN8NZ&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Apple AirTag generation Portefeuille Configuration", asin: "B0GJTCB2QM", url: "https://amzn.to/4tR2F09", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0GJTCB2QM&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "INIU Batterie 10500mAh Chargeur Telephone", asin: "B08JTQ66K7", url: "https://amzn.to/42hgd9y", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B08JTQ66K7&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Apple Ecouteurs reduction detection Haute fidelite", asin: "B0FQF32239", url: "https://amzn.to/4tegCWa", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0FQF32239&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Produit Amazon B0GJZ92M6K", asin: "B0GJZ92M6K", url: "https://amzn.to/3OOZS8X", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0GJZ92M6K&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "PlayStation officielle DualSense rechargeable Compatible", asin: "B094WLFGD3", url: "https://amzn.to/4tVepyM", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B094WLFGD3&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Nintendo Switch Mario Kart World", asin: "B0F2JCL3NZ", url: "https://amzn.to/4mE8Fap", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0F2JCL3NZ&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "G502 HERO Performance Gaming Mouse", asin: "B07GS6ZB7T", url: "https://amzn.to/3QmLW6A", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B07GS6ZB7T&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "007 First Light Specialiste PS5", asin: "B0FPNJZWTL", url: "https://amzn.to/48bvtIF", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0FPNJZWTL&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "GRIFEMA GA1201 12 trotinette electrique Portails", asin: "B0C3YMHJ3R", url: "https://amzn.to/3OQn4ng", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0C3YMHJ3R&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Connectee Boitier dActivite Autonomie Boussole", asin: "B0DYF82545", url: "https://amzn.to/4dS8F4f", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0DYF82545&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "HUTCHINSON Standard Resistance Anti Crevaison Epaisseur", asin: "B07DTPZ399", url: "https://amzn.to/4evW4Uz", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B07DTPZ399&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "gastronomia dominicana Sngsluisguzman Spanish ebook", asin: "B0G6LMR271", url: "https://amzn.to/3Qx1x3r", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0G6LMR271&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "LEmpire Noir gouverne pas monde ebook", asin: "B0GPY2Q9D8", url: "https://amzn.to/48c2T9V", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0GPY2Q9D8&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Microphone telephone automatique reverberation enregistrement", asin: "B0DQTXPQRR", url: "https://amzn.to/3QlTfLM", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0DQTXPQRR&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "TONOR Professionnel Suppression Optimisation TD510", asin: "B0CCVBQRFX", url: "https://amzn.to/4cCPB7S", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0CCVBQRFX&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Microphone telephone automatique reverberation enregistrement", asin: "B0DQTXPQRR", url: "https://amzn.to/4tU4w4i", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0DQTXPQRR&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Lights Active Rotatives telecommande danniversaire", asin: "B09379LLZ7", url: "https://amzn.to/4sEtrYH", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B09379LLZ7&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Garnier SkinActive Solution Micellaire Sensibles", asin: "B082VV6PNX", url: "https://amzn.to/488vSvj", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B082VV6PNX&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Azzaro Pour Elle Gourmand Vaporisateur", asin: "B0FJXVBXV7", url: "https://amzn.to/4mJGUxg", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0FJXVBXV7&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Lolita Lempicka Parfum Femme Premier", asin: "B08CMR9SXW", url: "https://amzn.to/4toTrbQ", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B08CMR9SXW&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "RogerGallet Berlingot Intensite Concentration Roll", asin: "B0GLHX18XD", url: "https://amzn.to/4vuw8yG", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0GLHX18XD&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" },
+        { title: "Garnier Color Sensation Coloration Permanente", asin: "B0CQ2S1T9Q", url: "https://amzn.to/4clv8Wi", image: "https://ws-eu.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0CQ2S1T9Q&Format=_SL500_&ID=AsinImage&MarketPlace=FR&ServiceVersion=20070822&WS=1" }
       ];
 
       const grid = document.getElementById("sngAmazonGrid");
@@ -2438,9 +2454,19 @@ En tant que Partenaire Amazon, SNG Portal réalise un bénéfice sur les achats 
         grid.innerHTML = list
           .map(
             (item) => `
-          <article class="sng-card" data-asin="${item.asin}">
+          <article
+            class="sng-card sng-track-card"
+            data-asin="${item.asin}"
+            data-title="${item.title}"
+            data-url="${item.url}"
+            role="link"
+            tabindex="0"
+            aria-label="Ouvrir l’offre ${item.title}"
+            title="${item.title}"
+          >
             <div class="sng-thumb">
-              <span>🛒</span>
+              ${item.image ? `<img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async" width="500" height="500" onerror="this.remove(); this.parentElement.querySelector('.sng-thumb-fallback')?.removeAttribute('hidden');">` : ""}
+              <span class="sng-thumb-fallback" ${item.image ? "hidden" : ""}>🛒</span>
               <div class="sng-badge">Amazon</div>
               <div class="sng-promo-badge">⚡ PROMO LIMITÉE</div>
             </div>
@@ -2456,6 +2482,7 @@ En tant que Partenaire Amazon, SNG Portal réalise un bénéfice sur les achats 
                 href="${item.url}"
                 target="_blank"
                 rel="noopener noreferrer sponsored nofollow"
+                title="Voir l’offre : ${item.title}"
                 data-asin="${item.asin}"
                 data-title="${item.title}"
                 data-url="${item.url}"
@@ -2475,19 +2502,54 @@ En tant que Partenaire Amazon, SNG Portal réalise un bénéfice sur les achats 
             trackClick({
               asin: button.dataset.asin,
               title: button.dataset.title,
-              url: button.dataset.url
+              url: button.dataset.url,
+              source: "button"
             });
+          });
+        });
+
+        const trackCards = grid.querySelectorAll(".sng-track-card");
+        trackCards.forEach((card) => {
+          const openCardLink = () => {
+            trackClick({
+              asin: card.dataset.asin,
+              title: card.dataset.title,
+              url: card.dataset.url,
+              source: "card"
+            });
+            window.open(card.dataset.url, "_blank", "noopener,noreferrer");
+          };
+
+          card.addEventListener("click", (event) => {
+            if (event.target.closest("a, button, input, textarea, select")) {
+              return;
+            }
+            openCardLink();
+          });
+
+          card.addEventListener("keydown", (event) => {
+            if (event.key !== "Enter" && event.key !== " ") {
+              return;
+            }
+            if (event.target.closest("a, button, input, textarea, select")) {
+              return;
+            }
+            event.preventDefault();
+            openCardLink();
           });
         });
       }
 
       function trackClick(product) {
-        console.log("[SNG SHOP] Clic affilié:", {
+        const payload = {
           asin: product.asin,
           title: product.title,
           url: product.url,
+          source: product.source || "unknown",
           timestamp: new Date().toISOString()
-        });
+        };
+
+        console.log(`[SNG SHOP][TRACK] Clic ${payload.source.toUpperCase()} -> ${payload.asin} | ${payload.title}`, payload);
       }
 
       if (grid && search) {
