@@ -1691,15 +1691,42 @@
         display:inline-block;
         text-align:center;
         text-decoration:none;
-        background:#ffd814;
+        background:linear-gradient(135deg,#ffcc00,#ff9f1a);
         color:#111;
-        font-weight:800;
+        font-weight:900;
+        letter-spacing:.01em;
         padding:12px 14px;
         border-radius:12px;
-        transition:background .2s ease;
+        transition:transform .2s ease, box-shadow .2s ease, filter .2s ease;
+        box-shadow:0 8px 16px rgba(255,170,0,.28);
       }
       .sng-btn:hover{
-        background:#f7ca00;
+        transform:translateY(-1px) scale(1.01);
+        box-shadow:0 12px 20px rgba(255,145,0,.35);
+        filter:saturate(1.05);
+      }
+      .sng-promo-badge{
+        position:absolute;
+        top:12px;
+        right:12px;
+        background:#dc2626;
+        color:#fff;
+        font-size:11px;
+        font-weight:900;
+        padding:7px 10px;
+        border-radius:999px;
+        box-shadow:0 6px 14px rgba(220,38,38,.35);
+        animation:sngPulse 1.2s ease-in-out infinite;
+      }
+      .sng-stock{
+        margin:0;
+        font-size:13px;
+        font-weight:800;
+        color:#dc2626;
+      }
+      @keyframes sngPulse{
+        0%,100%{transform:scale(1); opacity:1;}
+        50%{transform:scale(1.05); opacity:.9;}
       }
       .sng-empty{
         padding:18px;
@@ -2343,56 +2370,56 @@ En tant que Partenaire Amazon, SNG Portal réalise un bénéfice sur les achats 
 
     <script>
       const amazonProducts = [
-        { title: "Produit Amazon 01", asin: "B0B8C7VY4T", url: "https://www.amazon.fr/dp/B0B8C7VY4T" },
-        { title: "Produit Amazon 02", asin: "B08XW4FDJV", url: "https://www.amazon.fr/dp/B08XW4FDJV" },
-        { title: "Produit Amazon 03", asin: "B07PGL2ZSL", url: "https://www.amazon.fr/dp/B07PGL2ZSL" },
-        { title: "Produit Amazon 04", asin: "B09V4M6Z6F", url: "https://www.amazon.fr/dp/B09V4M6Z6F" },
-        { title: "Produit Amazon 05", asin: "B08N5WRWNW", url: "https://www.amazon.fr/dp/B08N5WRWNW" },
-        { title: "Produit Amazon 06", asin: "B0B1J6Z9QK", url: "https://www.amazon.fr/dp/B0B1J6Z9QK" },
-        { title: "Produit Amazon 07", asin: "B07W7XQ3X2", url: "https://www.amazon.fr/dp/B07W7XQ3X2" },
-        { title: "Produit Amazon 08", asin: "B08L5TNJHG", url: "https://www.amazon.fr/dp/B08L5TNJHG" },
-        { title: "Produit Amazon 09", asin: "B09KNRH7XG", url: "https://www.amazon.fr/dp/B09KNRH7XG" },
-        { title: "Produit Amazon 10", asin: "B07Y5YF4KD", url: "https://www.amazon.fr/dp/B07Y5YF4KD" },
-        { title: "Produit Amazon 11", asin: "B08J5F3G18", url: "https://www.amazon.fr/dp/B08J5F3G18" },
-        { title: "Produit Amazon 12", asin: "B0B7KX9Y8R", url: "https://www.amazon.fr/dp/B0B7KX9Y8R" },
-        { title: "Produit Amazon 13", asin: "B07ZPKN6YR", url: "https://www.amazon.fr/dp/B07ZPKN6YR" },
-        { title: "Produit Amazon 14", asin: "B08QJ5Z9YB", url: "https://www.amazon.fr/dp/B08QJ5Z9YB" },
-        { title: "Produit Amazon 15", asin: "B0B3F8K2PL", url: "https://www.amazon.fr/dp/B0B3F8K2PL" },
-        { title: "Produit Amazon 16", asin: "B08T1RZ8YH", url: "https://www.amazon.fr/dp/B08T1RZ8YH" },
-        { title: "Produit Amazon 17", asin: "B09V3F7W9M", url: "https://www.amazon.fr/dp/B09V3F7W9M" },
-        { title: "Produit Amazon 18", asin: "B07X9K6Y2Z", url: "https://www.amazon.fr/dp/B07X9K6Y2Z" },
-        { title: "Produit Amazon 19", asin: "B08Y7J2P1M", url: "https://www.amazon.fr/dp/B08Y7J2P1M" },
-        { title: "Produit Amazon 20", asin: "B09X5V3Z1F", url: "https://www.amazon.fr/dp/B09X5V3Z1F" },
-        { title: "Produit Amazon 21", asin: "B07FZ8S74R", url: "https://www.amazon.fr/dp/B07FZ8S74R" },
-        { title: "Produit Amazon 22", asin: "B08M9X7K5P", url: "https://www.amazon.fr/dp/B08M9X7K5P" },
-        { title: "Produit Amazon 23", asin: "B09J6Z8W2H", url: "https://www.amazon.fr/dp/B09J6Z8W2H" },
-        { title: "Produit Amazon 24", asin: "B08P3K9L7X", url: "https://www.amazon.fr/dp/B08P3K9L7X" },
-        { title: "Produit Amazon 25", asin: "B07Z1R6W9Y", url: "https://www.amazon.fr/dp/B07Z1R6W9Y" },
-        { title: "Produit Amazon 26", asin: "B08XQ9J5T2", url: "https://www.amazon.fr/dp/B08XQ9J5T2" },
-        { title: "Produit Amazon 27", asin: "B09F6V8K2R", url: "https://www.amazon.fr/dp/B09F6V8K2R" },
-        { title: "Produit Amazon 28", asin: "B08T7M9L3X", url: "https://www.amazon.fr/dp/B08T7M9L3X" },
-        { title: "Produit Amazon 29", asin: "B07Y6K3P2F", url: "https://www.amazon.fr/dp/B07Y6K3P2F" },
-        { title: "Produit Amazon 30", asin: "B09N8X7Z5L", url: "https://www.amazon.fr/dp/B09N8X7Z5L" },
-        { title: "Produit Amazon 31", asin: "B08K3F9X2M", url: "https://www.amazon.fr/dp/B08K3F9X2M" },
-        { title: "Produit Amazon 32", asin: "B09V7J5L3P", url: "https://www.amazon.fr/dp/B09V7J5L3P" },
-        { title: "Produit Amazon 33", asin: "B07X5K8P9Y", url: "https://www.amazon.fr/dp/B07X5K8P9Y" },
-        { title: "Produit Amazon 34", asin: "B08N4T7Y2F", url: "https://www.amazon.fr/dp/B08N4T7Y2F" },
-        { title: "Produit Amazon 35", asin: "B09X6K3L1M", url: "https://www.amazon.fr/dp/B09X6K3L1M" },
-        { title: "Produit Amazon 36", asin: "B08Y2P9K6X", url: "https://www.amazon.fr/dp/B08Y2P9K6X" },
-        { title: "Produit Amazon 37", asin: "B07T6M8X5P", url: "https://www.amazon.fr/dp/B07T6M8X5P" },
-        { title: "Produit Amazon 38", asin: "B09J7K2L3F", url: "https://www.amazon.fr/dp/B09J7K2L3F" },
-        { title: "Produit Amazon 39", asin: "B08F5X9K2M", url: "https://www.amazon.fr/dp/B08F5X9K2M" },
-        { title: "Produit Amazon 40", asin: "B07N8P6Y3L", url: "https://www.amazon.fr/dp/B07N8P6Y3L" },
-        { title: "Produit Amazon 41", asin: "B09K3X7L5P", url: "https://www.amazon.fr/dp/B09K3X7L5P" },
-        { title: "Produit Amazon 42", asin: "B08T9K2F6X", url: "https://www.amazon.fr/dp/B08T9K2F6X" },
-        { title: "Produit Amazon 43", asin: "B07M5Y8P3L", url: "https://www.amazon.fr/dp/B07M5Y8P3L" },
-        { title: "Produit Amazon 44", asin: "B09F8K2X6P", url: "https://www.amazon.fr/dp/B09F8K2X6P" },
-        { title: "Produit Amazon 45", asin: "B08V3Y7K2M", url: "https://www.amazon.fr/dp/B08V3Y7K2M" },
-        { title: "Produit Amazon 46", asin: "B07P9X5L2F", url: "https://www.amazon.fr/dp/B07P9X5L2F" },
-        { title: "Produit Amazon 47", asin: "B09X2K7L5M", url: "https://www.amazon.fr/dp/B09X2K7L5M" },
-        { title: "Produit Amazon 48", asin: "B08Y5P3K9F", url: "https://www.amazon.fr/dp/B08Y5P3K9F" },
-        { title: "Produit Amazon 49", asin: "B07K6X2L8M", url: "https://www.amazon.fr/dp/B07K6X2L8M" },
-        { title: "Produit Amazon 50", asin: "B09V8K3P2F", url: "https://www.amazon.fr/dp/B09V8K3P2F" }
+        { title: "🔥 Top Vente Amazon 01 – Offre Exclusive", asin: "B0B8C7VY4T", url: "https://amzn.to/48cpq6B" },
+        { title: "🔥 Top Vente Amazon 02 – Offre Exclusive", asin: "B08XW4FDJV", url: "https://amzn.to/3Oq74Z9" },
+        { title: "🔥 Top Vente Amazon 03 – Offre Exclusive", asin: "B07PGL2ZSL", url: "https://amzn.to/4dVPaI7" },
+        { title: "🔥 Top Vente Amazon 04 – Offre Exclusive", asin: "B09V4M6Z6F", url: "https://amzn.to/4sHkm1e" },
+        { title: "🔥 Top Vente Amazon 05 – Offre Exclusive", asin: "B08N5WRWNW", url: "https://amzn.to/4sEwuQz" },
+        { title: "🔥 Top Vente Amazon 06 – Offre Exclusive", asin: "B0B1J6Z9QK", url: "https://amzn.to/4vTC9W2" },
+        { title: "🔥 Top Vente Amazon 07 – Offre Exclusive", asin: "B07W7XQ3X2", url: "https://amzn.to/4cRK0eZ" },
+        { title: "🔥 Top Vente Amazon 08 – Offre Exclusive", asin: "B08L5TNJHG", url: "https://amzn.to/4mDaqVl" },
+        { title: "🔥 Top Vente Amazon 09 – Offre Exclusive", asin: "B09KNRH7XG", url: "https://amzn.to/3Og3AIF" },
+        { title: "🔥 Top Vente Amazon 10 – Offre Exclusive", asin: "B07Y5YF4KD", url: "https://amzn.to/4sINWUe" },
+        { title: "🔥 Top Vente Amazon 11 – Offre Exclusive", asin: "B08J5F3G18", url: "https://amzn.to/3QOAuRh" },
+        { title: "🔥 Top Vente Amazon 12 – Offre Exclusive", asin: "B0B7KX9Y8R", url: "https://amzn.to/4tR4QRu" },
+        { title: "🔥 Top Vente Amazon 13 – Offre Exclusive", asin: "B07ZPKN6YR", url: "https://amzn.to/4vTCMyS" },
+        { title: "🔥 Top Vente Amazon 14 – Offre Exclusive", asin: "B08QJ5Z9YB", url: "https://amzn.to/4mD4TOp" },
+        { title: "🔥 Top Vente Amazon 15 – Offre Exclusive", asin: "B0B3F8K2PL", url: "https://amzn.to/4tjHFPM" },
+        { title: "🔥 Top Vente Amazon 16 – Offre Exclusive", asin: "B08T1RZ8YH", url: "https://amzn.to/41HUFTq" },
+        { title: "🔥 Top Vente Amazon 17 – Offre Exclusive", asin: "B09V3F7W9M", url: "https://amzn.to/4tkK0Km" },
+        { title: "🔥 Top Vente Amazon 18 – Offre Exclusive", asin: "B07X9K6Y2Z", url: "https://amzn.to/4dXilud" },
+        { title: "🔥 Top Vente Amazon 19 – Offre Exclusive", asin: "B08Y7J2P1M", url: "https://amzn.to/4vJc6Ri" },
+        { title: "🔥 Top Vente Amazon 20 – Offre Exclusive", asin: "B09X5V3Z1F", url: "https://amzn.to/3OMwTCM" },
+        { title: "🔥 Top Vente Amazon 21 – Offre Exclusive", asin: "B07FZ8S74R", url: "https://amzn.to/4vEQKV5" },
+        { title: "🔥 Top Vente Amazon 22 – Offre Exclusive", asin: "B08M9X7K5P", url: "https://amzn.eu/d/08bxOJMo" },
+        { title: "🔥 Top Vente Amazon 23 – Offre Exclusive", asin: "B09J6Z8W2H", url: "https://amzn.eu/d/0cmfR1bt" },
+        { title: "🔥 Top Vente Amazon 24 – Offre Exclusive", asin: "B08P3K9L7X", url: "https://amzn.to/4mFjt8e" },
+        { title: "🔥 Top Vente Amazon 25 – Offre Exclusive", asin: "B07Z1R6W9Y", url: "https://amzn.to/3OKfzyh" },
+        { title: "🔥 Top Vente Amazon 26 – Offre Exclusive", asin: "B08XQ9J5T2", url: "https://amzn.to/4tgqdvz" },
+        { title: "🔥 Top Vente Amazon 27 – Offre Exclusive", asin: "B09F6V8K2R", url: "https://amzn.to/4twB6te" },
+        { title: "🔥 Top Vente Amazon 28 – Offre Exclusive", asin: "B08T7M9L3X", url: "https://amzn.to/4sO0AkX" },
+        { title: "🔥 Top Vente Amazon 29 – Offre Exclusive", asin: "B07Y6K3P2F", url: "https://amzn.to/4tR2F09" },
+        { title: "🔥 Top Vente Amazon 30 – Offre Exclusive", asin: "B09N8X7Z5L", url: "https://amzn.to/42hgd9y" },
+        { title: "🔥 Top Vente Amazon 31 – Offre Exclusive", asin: "B08K3F9X2M", url: "https://amzn.to/4tegCWa" },
+        { title: "🔥 Top Vente Amazon 32 – Offre Exclusive", asin: "B09V7J5L3P", url: "https://amzn.to/3OOZS8X" },
+        { title: "🔥 Top Vente Amazon 33 – Offre Exclusive", asin: "B07X5K8P9Y", url: "https://amzn.to/4tVepyM" },
+        { title: "🔥 Top Vente Amazon 34 – Offre Exclusive", asin: "B08N4T7Y2F", url: "https://amzn.to/4mE8Fap" },
+        { title: "🔥 Top Vente Amazon 35 – Offre Exclusive", asin: "B09X6K3L1M", url: "https://amzn.to/3QmLW6A" },
+        { title: "🔥 Top Vente Amazon 36 – Offre Exclusive", asin: "B08Y2P9K6X", url: "https://amzn.to/48bvtIF" },
+        { title: "🔥 Top Vente Amazon 37 – Offre Exclusive", asin: "B07T6M8X5P", url: "https://amzn.to/3OQn4ng" },
+        { title: "🔥 Top Vente Amazon 38 – Offre Exclusive", asin: "B09J7K2L3F", url: "https://amzn.to/4dS8F4f" },
+        { title: "🔥 Top Vente Amazon 39 – Offre Exclusive", asin: "B08F5X9K2M", url: "https://amzn.to/4evW4Uz" },
+        { title: "🔥 Top Vente Amazon 40 – Offre Exclusive", asin: "B07N8P6Y3L", url: "https://amzn.to/3Qx1x3r" },
+        { title: "🔥 Top Vente Amazon 41 – Offre Exclusive", asin: "B09K3X7L5P", url: "https://amzn.to/48c2T9V" },
+        { title: "🔥 Top Vente Amazon 42 – Offre Exclusive", asin: "B08T9K2F6X", url: "https://amzn.to/3QlTfLM" },
+        { title: "🔥 Top Vente Amazon 43 – Offre Exclusive", asin: "B07M5Y8P3L", url: "https://amzn.to/4cCPB7S" },
+        { title: "🔥 Top Vente Amazon 44 – Offre Exclusive", asin: "B09F8K2X6P", url: "https://amzn.to/4tU4w4i" },
+        { title: "🔥 Top Vente Amazon 45 – Offre Exclusive", asin: "B08V3Y7K2M", url: "https://amzn.to/4sEtrYH" },
+        { title: "🔥 Top Vente Amazon 46 – Offre Exclusive", asin: "B07P9X5L2F", url: "https://amzn.to/488vSvj" },
+        { title: "🔥 Top Vente Amazon 47 – Offre Exclusive", asin: "B09X2K7L5M", url: "https://amzn.to/4mJGUxg" },
+        { title: "🔥 Top Vente Amazon 48 – Offre Exclusive", asin: "B08Y5P3K9F", url: "https://amzn.to/4toTrbQ" },
+        { title: "🔥 Top Vente Amazon 49 – Offre Exclusive", asin: "B07K6X2L8M", url: "https://amzn.to/4vuw8yG" },
+        { title: "🔥 Top Vente Amazon 50 – Offre Exclusive", asin: "B09V8K3P2F", url: "https://amzn.to/4clv8Wi" }
       ];
 
       const grid = document.getElementById("sngAmazonGrid");
@@ -2415,6 +2442,7 @@ En tant que Partenaire Amazon, SNG Portal réalise un bénéfice sur les achats 
             <div class="sng-thumb">
               <span>🛒</span>
               <div class="sng-badge">Amazon</div>
+              <div class="sng-promo-badge">⚡ PROMO LIMITÉE</div>
             </div>
             <div class="sng-content">
               <h3 class="sng-title">${item.title}</h3>
@@ -2423,14 +2451,43 @@ En tant que Partenaire Amazon, SNG Portal réalise un bénéfice sur les achats 
                 <span class="sng-stars" aria-label="5 étoiles">★★★★★</span>
                 <span>Voir l’offre</span>
               </p>
-              <a class="sng-btn" href="${item.url}" target="_blank" rel="noopener sponsored nofollow">
-                Acheter sur Amazon
+              <a
+                class="sng-btn sng-track-btn"
+                href="${item.url}"
+                target="_blank"
+                rel="noopener noreferrer sponsored nofollow"
+                data-asin="${item.asin}"
+                data-title="${item.title}"
+                data-url="${item.url}"
+              >
+                🔥 VOIR L’OFFRE MAINTENANT
               </a>
+              <p class="sng-stock">⏳ Plus que 7 en stock</p>
             </div>
           </article>
         `
           )
           .join("");
+
+        const trackButtons = grid.querySelectorAll(".sng-track-btn");
+        trackButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            trackClick({
+              asin: button.dataset.asin,
+              title: button.dataset.title,
+              url: button.dataset.url
+            });
+          });
+        });
+      }
+
+      function trackClick(product) {
+        console.log("[SNG SHOP] Clic affilié:", {
+          asin: product.asin,
+          title: product.title,
+          url: product.url,
+          timestamp: new Date().toISOString()
+        });
       }
 
       if (grid && search) {
