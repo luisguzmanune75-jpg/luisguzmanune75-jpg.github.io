@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>TITRE DE L’ARTICLE | SNG Portal</title>
+  <meta name="description" content="DESCRIPTION COURTE ET SEO DE L’ARTICLE." />
+  <meta name="keywords" content="mot-clé 1, mot-clé 2, mot-clé 3" />
+  <meta name="author" content="Rédaction SNG Portal" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta name="theme-color" content="#0d0d0d" />
+  <link rel="canonical" href="https://luisguzmanune75-jpg.github.io/nom-de-larticle.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:site_name" content="SNG Portal" />
+  <meta property="og:title" content="TITRE DE L’ARTICLE | SNG Portal" />
+  <meta property="og:description" content="DESCRIPTION COURTE ET SEO DE L’ARTICLE." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://luisguzmanune75-jpg.github.io/nom-de-larticle.html" />
+  <meta property="og:image" content="https://luisguzmanune75-jpg.github.io/images/image-article.jpg" />
+  <meta property="og:image:alt" content="Description de l’image principale" />
+  <meta property="article:published_time" content="2026-04-21" />
+  <meta property="article:modified_time" content="2026-04-21" />
+  <meta property="article:author" content="Rédaction SNG Portal" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="TITRE DE L’ARTICLE | SNG Portal" />
+  <meta name="twitter:description" content="DESCRIPTION COURTE ET SEO DE L’ARTICLE." />
+  <meta name="twitter:image" content="https://luisguzmanune75-jpg.github.io/images/image-article.jpg" />
+  <meta name="twitter:image:alt" content="Description de l’image principale" />
+
+  <!-- Données structurées SEO -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "TITRE COMPLET DE L’ARTICLE",
+      "description": "DESCRIPTION COURTE ET SEO DE L’ARTICLE.",
+      "image": [
+        "https://luisguzmanune75-jpg.github.io/images/image-article.jpg"
+      ],
+      "datePublished": "2026-04-21",
+      "dateModified": "2026-04-21",
+      "author": {
+        "@type": "Organization",
+        "name": "Rédaction SNG Portal"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "SNG Portal",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://luisguzmanune75-jpg.github.io/logo-sng.svg"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://luisguzmanune75-jpg.github.io/nom-de-larticle.html"
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --bg-card: #141414;
+      --bg-soft: #1a1a1a;
+      --text: #e8e8e8;
+      --text-muted: #a0a0a0;
+      --accent: #c0a060;
+      --border: #2b2b2b;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      text-rendering: optimizeLegibility;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 20px 24px 60px;
+    }
+
+    nav {
+      background: #111;
+      padding: 14px 18px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      border: 1px solid #1f1f1f;
+    }
+
+    nav a {
+      color: var(--accent);
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-size: 0.92rem;
+    }
+
+    nav a:hover,
+    nav a:focus-visible { color: #fff; }
+
+    .tag {
+      display: inline-block;
+      background: var(--bg-soft);
+      color: var(--accent);
+      border: 1px solid #333;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 0.8rem;
+      font-family: Arial, sans-serif;
+      margin: 0 8px 10px 0;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 4.2vw, 2.4rem);
+      line-height: 1.25;
+      color: #fff;
+      margin: 10px 0;
+    }
+
+    .meta {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      font-family: Arial, sans-serif;
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .meta time { color: #bcbcbc; }
+
+    .hero-image {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-radius: 14px;
+      display: block;
+      margin: 24px 0 10px;
+      border: 1px solid #222;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+
+    .image-caption {
+      color: #888;
+      font-size: 0.85rem;
+      font-family: Arial, sans-serif;
+      margin-bottom: 28px;
+    }
+
+    .intro {
+      font-size: 1.08rem;
+      color: #d0d0d0;
+      border-left: 4px solid #444;
+      padding-left: 16px;
+      margin-bottom: 30px;
+    }
+
+    .summary-box,
+    .encadre,
+    .share-box,
+    .note {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .summary-box {
+      padding: 18px 20px;
+      margin: 28px 0 34px;
+    }
+
+    .summary-box h3 {
+      margin: 0 0 12px;
+      color: var(--accent);
+      font-size: 1rem;
+      font-family: Arial, sans-serif;
+    }
+
+    .summary-box ul { margin: 0; padding-left: 20px; color: #cfcfcf; }
+    .summary-box li { margin-bottom: 8px; }
+
+    h2 {
+      font-size: 1.35rem;
+      color: var(--accent);
+      margin-top: 38px;
+      margin-bottom: 14px;
+      border-left: 4px solid var(--accent);
+      padding-left: 12px;
+    }
+
+    p { margin-bottom: 18px; color: #d2d2d2; }
+    ul, ol { color: #d2d2d2; padding-left: 24px; }
+    li { margin-bottom: 10px; }
+
+    .encadre { padding: 20px 22px; margin: 28px 0; }
+
+    .encadre h3 {
+      margin-top: 0;
+      color: var(--accent);
+      font-family: Arial, sans-serif;
+      font-size: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-family: Arial, sans-serif;
+      font-size: 0.95rem;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    th {
+      background: var(--bg-soft);
+      color: var(--accent);
+      padding: 12px;
+      text-align: left;
+      border: 1px solid #333;
+    }
+
+    td {
+      padding: 12px;
+      border: 1px solid #222;
+      color: #ccc;
+    }
+
+    tr:nth-child(even) { background: #131313; }
+
+    .share-box {
+      margin-top: 40px;
+      padding: 18px 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    .share-box h3 {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    .share-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .share-links a {
+      color: #fff;
+      text-decoration: none;
+      border: 1px solid #333;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+    }
+
+    .share-links a:hover,
+    .share-links a:focus-visible {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .related { margin-top: 46px; }
+    .related h2 { margin-bottom: 18px; }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .related-card {
+      background: var(--bg-card);
+      border: 1px solid #292929;
+      border-radius: 12px;
+      padding: 18px;
+      text-decoration: none;
+      color: var(--text);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .related-card:hover,
+    .related-card:focus-visible {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      outline: none;
+    }
+
+    .related-card h3 {
+      margin: 0 0 10px;
+      color: #fff;
+      font-size: 1.05rem;
+      line-height: 1.35;
+      font-family: Arial, sans-serif;
+    }
+
+    .related-card p {
+      margin: 0;
+      color: #aaa;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      font-family: Arial, sans-serif;
+    }
+
+    .note {
+      padding: 16px 20px;
+      font-size: 0.9rem;
+      color: #a5a5a5;
+      font-family: Arial, sans-serif;
+      margin-top: 40px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #000;
+      padding: 11px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      border: 1px solid transparent;
+    }
+
+    .back-btn:hover,
+    .back-btn:focus-visible { background: #e0c070; }
+
+    .back-btn.secondary {
+      background: #222;
+      color: var(--accent);
+      border-color: #2f2f2f;
+    }
+
+    .back-btn.secondary:hover,
+    .back-btn.secondary:focus-visible { background: #2d2d2d; }
+
+    footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid #222;
+      color: #777;
+      font-size: 0.88rem;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 16px 16px 50px; }
+      .meta { font-size: 0.88rem; }
+      .share-links a { width: 100%; text-align: center; }
+      table { font-size: 0.88rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav aria-label="Navigation principale">
+      <a href="https://luisguzmanune75-jpg.github.io/index.html">🏠 Accueil</a>
+      <a href="https://luisguzmanune75-jpg.github.io/blog.html">📰 Blog</a>
+      <a href="https://luisguzmanune75-jpg.github.io/crypto.html">₿ Crypto</a>
+      <a href="https://luisguzmanune75-jpg.github.io/contact.html">✉ Contact</a>
+    </nav>
+
+    <main>
+      <article itemscope itemtype="https://schema.org/BlogPosting">
+        <header>
+          <span class="tag">Catégorie 1</span>
+          <span class="tag">Catégorie 2</span>
+          <span class="tag">Catégorie 3</span>
+
+          <h1 itemprop="headline">TITRE COMPLET DE L’ARTICLE</h1>
+
+          <p class="meta">
+            Auteur : <strong itemprop="author">Rédaction SNG Portal</strong> ·
+            Publication : <time itemprop="datePublished" datetime="2026-04-21">21 avril 2026</time> ·
+            Mise à jour : <time itemprop="dateModified" datetime="2026-04-21">21 avril 2026</time> ·
+            Lecture : 7 min
+          </p>
+
+          <figure>
+            <img
+              class="hero-image"
+              src="https://luisguzmanune75-jpg.github.io/images/image-article.jpg"
+              alt="Description de l’image principale"
+              loading="eager"
+              fetchpriority="high"
+              itemprop="image"
+            />
+            <figcaption class="image-caption">Illustration : SNG Portal</figcaption>
+          </figure>
+        </header>
+
+        <p class="intro" itemprop="description">
+          INTRODUCTION FORTE DE L’ARTICLE. ICI TU RÉSUMES EN 3 À 4 LIGNES LE SUJET, CE QUI CHANGE, ET POURQUOI C’EST IMPORTANT.
+        </p>
+
+        <section class="summary-box" aria-labelledby="en-bref-title">
+          <h3 id="en-bref-title">📌 En bref</h3>
+          <ul>
+            <li>Point clé numéro 1</li>
+            <li>Point clé numéro 2</li>
+            <li>Point clé numéro 3</li>
+            <li>Point clé numéro 4</li>
+          </ul>
+        </section>
+
+        <section itemprop="articleBody">
+          <h2>Premier grand sous-titre</h2>
+          <p>
+            Premier paragraphe de contenu. Tu peux ici développer l’idée principale de manière claire, simple et sérieuse.
+            Le but est d’avoir un vrai article de portail, lisible et crédible.
+          </p>
+          <p>
+            Deuxième paragraphe pour approfondir le sujet. Ajoute des explications concrètes, des nuances, des exemples ou des cas réels.
+          </p>
+
+          <h2>Deuxième sous-titre important</h2>
+          <p>
+            Ici tu continues ton développement avec une structure propre. Chaque bloc doit répondre à une vraie question que le lecteur peut se poser.
+          </p>
+
+          <div class="encadre">
+            <h3>💡 Point important</h3>
+            <p>
+              Tu peux mettre ici un résumé, une alerte, une astuce, ou un passage important à mettre en valeur.
+            </p>
+          </div>
+
+          <h2>Tableau ou comparaison</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Élément</th>
+                <th>Description</th>
+                <th>Niveau</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Exemple 1</td>
+                <td>Description de l’exemple 1</td>
+                <td>Faible</td>
+              </tr>
+              <tr>
+                <td>Exemple 2</td>
+                <td>Description de l’exemple 2</td>
+                <td>Moyen</td>
+              </tr>
+              <tr>
+                <td>Exemple 3</td>
+                <td>Description de l’exemple 3</td>
+                <td>Élevé</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>Troisième sous-titre</h2>
+          <p>
+            Continue avec un contenu utile, concret et bien organisé. Évite les paragraphes trop longs.
+            Garde toujours un ton propre, clair et professionnel.
+          </p>
+
+          <ul>
+            <li>Idée importante 1</li>
+            <li>Idée importante 2</li>
+            <li>Idée importante 3</li>
+          </ul>
+
+          <h2>Conclusion</h2>
+          <p>
+            La conclusion doit résumer clairement l’article et laisser une impression sérieuse.
+            Elle peut aussi préparer le lecteur à lire un autre article lié sur ton blog.
+          </p>
+        </section>
+
+        <div class="note">
+          ⚠️ Ce contenu est publié à titre informatif uniquement. Il ne constitue pas un conseil professionnel,
+          financier, juridique ou médical selon le sujet traité.
+        </div>
+
+        <section class="share-box" aria-labelledby="partager-title">
+          <h3 id="partager-title">📣 Partager cet article</h3>
+          <div class="share-links">
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://luisguzmanune75-jpg.github.io/nom-de-larticle.html" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://twitter.com/intent/tweet?url=https://luisguzmanune75-jpg.github.io/nom-de-larticle.html&text=TITRE%20DE%20L%E2%80%99ARTICLE" target="_blank" rel="noopener noreferrer">X / Twitter</a>
+            <a href="https://api.whatsapp.com/send?text=TITRE%20DE%20L%E2%80%99ARTICLE%20https://luisguzmanune75-jpg.github.io/nom-de-larticle.html" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a href="https://t.me/share/url?url=https://luisguzmanune75-jpg.github.io/nom-de-larticle.html&text=TITRE%20DE%20L%E2%80%99ARTICLE" target="_blank" rel="noopener noreferrer">Telegram</a>
+          </div>
+        </section>
+
+        <section class="related" aria-labelledby="related-title">
+          <h2 id="related-title">Articles similaires</h2>
+          <div class="related-grid">
+            <a class="related-card" href="article-1.html">
+              <h3>Titre article similaire 1</h3>
+              <p>Petite description courte de l’article lié.</p>
+            </a>
+
+            <a class="related-card" href="article-2.html">
+              <h3>Titre article similaire 2</h3>
+              <p>Petite description courte de l’article lié.</p>
+            </a>
+
+            <a class="related-card" href="article-3.html">
+              <h3>Titre article similaire 3</h3>
+              <p>Petite description courte de l’article lié.</p>
+            </a>
+          </div>
+        </section>
+
+        <div class="buttons">
+          <a class="back-btn" href="https://luisguzmanune75-jpg.github.io/blog.html">← Retour au Blog</a>
+          <a class="back-btn secondary" href="https://luisguzmanune75-jpg.github.io/index.html">🏠 Accueil</a>
+        </div>
+      </article>
+    </main>
+
+    <footer>
+      © 2026 SNG Portal — Article éditorial publié par la rédaction.
+    </footer>
+  </div>
+</body>
+</html>
