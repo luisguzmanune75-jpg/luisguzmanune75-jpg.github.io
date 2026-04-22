@@ -473,18 +473,14 @@
   </footer>
 
   <script>
-    // ⚠️ Test rapide côté front : remplacez ici la clé si besoin.
-    // Version plus sûre à prévoir : passer par un proxy/serverless qui masque la clé.
-    const NEWS_API_KEY = "e68eaffdb5f74b6da3764910fe1c610c";
-    const USE_PROXY = false;
-    const NEWS_PROXY_URL = "https://your-serverless-proxy.example.com/news";
+    const NEWS_PROXY_BASE_URL = window.SNG_NEWS_PROXY_URL;
     const REFRESH_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
 
     const categoryMap = {
-      top: { label: "À la une", endpoint: "top-headlines?country=us&pageSize=18" },
-      world: { label: "Monde", endpoint: "everything?q=monde&language=fr&sortBy=publishedAt&pageSize=18" },
-      business: { label: "Business", endpoint: "top-headlines?country=us&category=business&pageSize=18" },
-      sports: { label: "Sports", endpoint: "top-headlines?country=us&category=sports&pageSize=18" }
+      top: { label: "À la une", proxyCategory: "general" },
+      world: { label: "Monde", proxyCategory: "general" },
+      business: { label: "Business", proxyCategory: "business" },
+      sports: { label: "Sports", proxyCategory: "sports" }
     };
 
     let currentCategory = "top";
@@ -524,20 +520,19 @@
       const category = categoryMap[categoryKey];
       if (!category) throw new Error("Catégorie inconnue");
 
-      // Si proxy activé, la clé reste côté serveur (recommandé en production).
-      const baseUrl = USE_PROXY
-        ? `${NEWS_PROXY_URL}?category=${encodeURIComponent(categoryKey)}`
-        : `https://newsapi.org/v2/${category.endpoint}&apiKey=${NEWS_API_KEY}`;
+      if (!NEWS_PROXY_BASE_URL) {
+        throw new Error("Proxy news non configuré");
+      }
+
+      const baseUrl = `${NEWS_PROXY_BASE_URL}/api/news?category=${encodeURIComponent(category.proxyCategory)}`;
 
       const response = await fetch(baseUrl, { method: "GET" });
       if (!response.ok) throw new Error(`Erreur API (${response.status})`);
 
       const data = await response.json();
-      if (data.status !== "ok") {
-        throw new Error(data.message || "Réponse API invalide");
-      }
+      const articles = Array.isArray(data) ? data : [];
 
-      return (data.articles || []).filter(article => article?.title && article?.url);
+      return articles.filter(article => article?.title && article?.url);
     }
 
     function articleCardTemplate(article, label) {
