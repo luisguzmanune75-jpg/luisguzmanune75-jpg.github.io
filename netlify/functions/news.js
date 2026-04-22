@@ -1,4 +1,22 @@
 const MAX_ARTICLES = 100;
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Methods": "GET, OPTIONS"
+};
+const TOP_HEADLINES_STRATEGIES = [
+  { pageSize: 100, pages: [1] },
+  { pageSize: 50, pages: [1, 2] }
+];
+const EVERYTHING_STRATEGIES = [
+  { pageSize: 100, pages: [1] },
+  { pageSize: 50, pages: [1, 2] }
+];
+const FALLBACK_QUERY_BY_CATEGORY = {
+  general: "actualité OR world OR breaking",
+  business: "business OR economy OR market",
+  sports: "sports OR football OR basketball"
+};
 
 function dedupeArticles(articles = []) {
   const seen = new Set();
@@ -23,97 +41,130 @@ function dedupeArticles(articles = []) {
 
 async function fetchNewsPages(buildUrl, apiKey, sourceLabel) {
   let mergedArticles = [];
+  let lastError = null;
 
-  for (const page of [1, 2]) {
-    const url = buildUrl(page);
-    const maskedUrl = apiKey ? url.replace(apiKey, `${apiKey.slice(0, 4)}***`) : url;
-    console.log(`${sourceLabel} request URL (page ${page}):`, maskedUrl);
+  for (const strategy of buildUrl.strategies) {
+    for (const page of strategy.pages) {
+      const url = buildUrl.fn(page, strategy.pageSize);
+      const maskedUrl = apiKey ? url.replace(apiKey, `${apiKey.slice(0, 4)}***`) : url;
+      console.log(
+        `${sourceLabel} request URL (page ${page}, pageSize ${strategy.pageSize}):`,
+        maskedUrl
+      );
 
-    const res = await fetch(url);
-    console.log(`${sourceLabel} response status (page ${page}):`, res.status);
+      const res = await fetch(url);
+      console.log(
+        `${sourceLabel} response status (page ${page}, pageSize ${strategy.pageSize}):`,
+        res.status
+      );
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.status === "error") {
-      console.log(`${sourceLabel} error payload (page ${page}):`, data);
-      if (page === 1) {
-        return { error: data };
+      if (data.status === "error") {
+        console.log(
+          `${sourceLabel} error payload (page ${page}, pageSize ${strategy.pageSize}):`,
+          data
+        );
+        lastError = data;
+        break;
       }
-      break;
+
+      const pageArticles = data.articles || [];
+      console.log(
+        `${sourceLabel} articles fetched (page ${page}, pageSize ${strategy.pageSize}):`,
+        pageArticles.length
+      );
+
+      if (pageArticles.length === 0) {
+        break;
+      }
+
+      mergedArticles = dedupeArticles([...mergedArticles, ...pageArticles]);
+
+      if (mergedArticles.length >= MAX_ARTICLES) {
+        return { articles: mergedArticles };
+      }
+
+      if (pageArticles.length < strategy.pageSize) {
+        break;
+      }
     }
 
-    const pageArticles = data.articles || [];
-    console.log(`${sourceLabel} articles fetched (page ${page}):`, pageArticles.length);
-
-    if (pageArticles.length === 0) {
-      break;
-    }
-
-    mergedArticles = dedupeArticles([...mergedArticles, ...pageArticles]);
-
-    if (mergedArticles.length >= MAX_ARTICLES || pageArticles.length < MAX_ARTICLES) {
+    if (mergedArticles.length > 0 || lastError === null) {
       break;
     }
   }
 
-  return { articles: mergedArticles };
+  if (mergedArticles.length === 0 && lastError) {
+    return { error: lastError };
+  }
+
+  return { articles: mergedArticles.slice(0, MAX_ARTICLES) };
 }
 
 export async function handler(event) {
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 204,
+      headers: CORS_HEADERS,
+      body: ""
+    };
+  }
+
   const API_KEY = process.env.NEWS_API_KEY;
-  const category = event.queryStringParameters.category || "general";
+  const category = event.queryStringParameters?.category || "general";
+  const fallbackQuery = FALLBACK_QUERY_BY_CATEGORY[category] || FALLBACK_QUERY_BY_CATEGORY.general;
 
   console.log("NEWS_API_KEY present:", Boolean(API_KEY));
 
   try {
     const topHeadlinesResult = await fetchNewsPages(
-      (page) => `https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=${MAX_ARTICLES}&page=${page}&apiKey=${API_KEY}`,
+      {
+        strategies: TOP_HEADLINES_STRATEGIES,
+        fn: (page, pageSize) =>
+          `https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=${pageSize}&page=${page}&apiKey=${API_KEY}`
+      },
       API_KEY,
       "top-headlines"
     );
-
-    if (topHeadlinesResult.error) {
-      return {
-        statusCode: 200,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Access-Control-Allow-Methods": "GET"
-        },
-        body: JSON.stringify(topHeadlinesResult.error)
-      };
-    }
-
     let finalArticles = topHeadlinesResult.articles || [];
 
-    if (finalArticles.length === 0) {
-      console.log("No articles from top-headlines, fallback to everything");
+    if (finalArticles.length < MAX_ARTICLES) {
+      console.log(
+        `Top-headlines insuffisant (${finalArticles.length}/${MAX_ARTICLES}), complément everything`
+      );
 
-      const fallbackResult = await fetchNewsPages(
-        (page) => `https://newsapi.org/v2/everything?q=actualité&language=fr&sortBy=publishedAt&pageSize=${MAX_ARTICLES}&page=${page}&apiKey=${API_KEY}`,
+      const everythingResult = await fetchNewsPages(
+        {
+          strategies: EVERYTHING_STRATEGIES,
+          fn: (page, pageSize) =>
+            `https://newsapi.org/v2/everything?q=${encodeURIComponent(
+              fallbackQuery
+            )}&language=fr&sortBy=publishedAt&pageSize=${pageSize}&page=${page}&apiKey=${API_KEY}`
+        },
         API_KEY,
         "everything"
       );
 
-      finalArticles = fallbackResult.articles || [];
+      const everythingArticles = everythingResult.articles || [];
+      finalArticles = dedupeArticles([...finalArticles, ...everythingArticles]).slice(0, MAX_ARTICLES);
+    } else {
+      finalArticles = dedupeArticles(finalArticles).slice(0, MAX_ARTICLES);
     }
 
-    finalArticles = dedupeArticles(finalArticles).slice(0, MAX_ARTICLES);
     console.log("Final articles count returned:", finalArticles.length);
 
     return {
       statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "GET"
-      },
+      headers: CORS_HEADERS,
       body: JSON.stringify(finalArticles)
     };
 
   } catch (error) {
+    console.error("News function error:", error);
     return {
       statusCode: 500,
+      headers: CORS_HEADERS,
       body: JSON.stringify({ error: "Erreur serveur" })
     };
   }
