@@ -5,7 +5,7 @@ export async function handler(event) {
   console.log("NEWS_API_KEY present:", Boolean(API_KEY));
 
   try {
-    const url = `https://newsapi.org/v2/top-headlines?country=fr&category=${category}&pageSize=6&apiKey=${API_KEY}`;
+    const url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${API_KEY}`;
     const maskedUrl = API_KEY ? url.replace(API_KEY, `${API_KEY.slice(0, 4)}***`) : url;
     console.log("NewsAPI request URL:", maskedUrl);
 
@@ -27,15 +27,22 @@ export async function handler(event) {
       };
     }
 
-    if (!data.articles) {
+    if (!data.articles || data.articles.length === 0) {
+      console.log("No articles from top-headlines, fallback to everything");
+
+      const fallbackUrl = `https://newsapi.org/v2/everything?q=actualité&language=fr&sortBy=publishedAt&pageSize=20&apiKey=${API_KEY}`;
+
+      const fallbackRes = await fetch(fallbackUrl);
+      const fallbackData = await fallbackRes.json();
+
       return {
         statusCode: 200,
         headers: {
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Headers": "*",
           "Access-Control-Allow-Methods": "GET"
         },
-        body: JSON.stringify({ error: "No articles returned", newsApiResponse: data })
+        body: JSON.stringify(fallbackData.articles || [])
       };
     }
 
