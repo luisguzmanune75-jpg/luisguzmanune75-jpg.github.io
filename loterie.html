@@ -275,6 +275,36 @@
       text-shadow: 0 1px 4px rgba(0,0,0,0.35);
     }
 
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255, 95, 143, 0.18);
+      border: 1px solid rgba(255, 95, 143, 0.55);
+      color: #ffd7e6;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ff5f8f;
+      box-shadow: 0 0 0 0 rgba(255, 95, 143, 0.75);
+      animation: pulse 1.4s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 95, 143, 0.75); }
+      70% { box-shadow: 0 0 0 12px rgba(255, 95, 143, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 95, 143, 0); }
+    }
+
     .results-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -347,6 +377,13 @@
       margin-bottom: 14px;
     }
 
+    .numbers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
     .ball {
       width: 48px;
       height: 48px;
@@ -362,6 +399,28 @@
     .ball.special {
       background: linear-gradient(135deg, #ffd45b, #ffac35);
       color: #2e1700;
+    }
+
+    .number-ball{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:42px;
+      height:42px;
+      margin:0 8px 8px 0;
+      border-radius:50%;
+      background:#f3f3f3;
+      color:#111;
+      font-weight:700;
+      box-shadow: inset 0 -6px 10px rgba(0,0,0,0.08), 0 10px 18px rgba(0,0,0,0.18);
+    }
+    .number-ball.muted{
+      opacity:.6;
+    }
+
+    .number-ball.bonus {
+      background: linear-gradient(135deg, #ffd45b, #ff9d2f);
+      color: #2d1300;
     }
 
     .meta {
@@ -477,151 +536,154 @@
 
     <div class="section-title">
       <h2>Derniers résultats par endroit</h2>
-      <span>16 loteries affichées · Mise a jour: 7 avril 2026</span>
+      <span>
+        16 loteries affichées · Mise a jour: <strong data-global-last-update>Chargement...</strong>
+        <span class="live-badge"><span class="live-dot"></span><span data-live-status>LIVE</span></span>
+      </span>
     </div>
 
     <section class="results-grid">
-      <article class="result-card">
+      <article class="result-card lottery-card" data-lottery="New York">
         <div class="place"><h3>New York</h3><span class="mini-tag">NY</span></div>
-        <div class="lottery-name">New York Loteria </div>
+        <div class="lottery-name">New York Loteria</div>
         <span class="label">Derniers numéros</span>
-        <div class="balls"><div class="ball">08</div><div class="ball">14</div><div class="ball">22</div><div class="ball">31</div><div class="ball">47</div><div class="ball">59</div></div>
-        <div class="meta"><div class="meta-row"><span>Date</span><strong>7 avril 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>$8.1M</strong></div></div>
-        <div class="direct-links">Site officiel visible: nylottery.ny.gov</div>
+        <div class="numbers" data-field="numbers"></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong data-field="date">Chargement...</strong></div><div class="meta-row"><span>Jackpot</span><strong data-field="jackpot">Chargement...</strong></div></div>
+        <div class="direct-links">Site officiel visible: <strong data-field="site">Chargement...</strong></div>
       </article>
-      <article class="result-card">
+      <article class="result-card lottery-card" data-lottery="République dominicaine">
         <div class="place"><h3>République dominicaine</h3><span class="mini-tag">RD</span></div>
         <div class="lottery-name">Lotería Nacional Dominicana</div>
         <span class="label">Derniers numéros</span>
-        <div class="balls"><div class="ball">09</div><div class="ball">27</div><div class="ball">68</div></div>
-        <div class="meta"><div class="meta-row"><span>Date</span><strong>7 avril 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>Non communiqué</strong></div></div>
-        <div class="direct-links">Site officiel visible: www.loterianacional.gob.do</div>
+        <div class="numbers" data-field="numbers"></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong data-field="date">Chargement...</strong></div><div class="meta-row"><span>Jackpot</span><strong data-field="jackpot">Chargement...</strong></div></div>
+        <div class="direct-links">Site officiel visible: <strong data-field="site">Chargement...</strong></div>
       </article>
 
-      <article class="result-card">
+      <article class="result-card lottery-card" data-lottery="Powerball">
         <div class="place"><h3>Powerball</h3><span class="mini-tag">USA</span></div>
         <div class="lottery-name">Résultat principal Powerball</div>
         <span class="label">Derniers numéros</span>
-        <div class="balls"><div class="ball">07</div><div class="ball">28</div><div class="ball">35</div><div class="ball">46</div><div class="ball">63</div><div class="ball special">18</div></div>
-        <div class="meta"><div class="meta-row"><span>Date</span><strong>7 avril 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>$431M</strong></div></div>
-        <div class="direct-links">Site officiel visible: www.powerball.com</div>
+        <div class="numbers" data-field="numbers"></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong data-field="date">Chargement...</strong></div><div class="meta-row"><span>Jackpot</span><strong data-field="jackpot">Chargement...</strong></div></div>
+        <div class="direct-links">Site officiel visible: <strong data-field="site">Chargement...</strong></div>
       </article>
 
-      <article class="result-card">
+      <article class="result-card lottery-card" data-lottery="EuroMillions">
         <div class="place"><h3>EuroMillions</h3><span class="mini-tag">EU</span></div>
         <div class="lottery-name">Dernier tirage EuroMillions</div>
         <span class="label">Derniers numéros</span>
-        <div class="balls"><div class="ball">05</div><div class="ball">19</div><div class="ball">27</div><div class="ball">36</div><div class="ball">49</div><div class="ball special">03</div><div class="ball special">11</div></div>
-        <div class="meta"><div class="meta-row"><span>Date</span><strong>7 avril 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>€72M</strong></div></div>
-        <div class="direct-links">Site officiel visible: www.euro-millions.com</div>
+        <div class="numbers" data-field="numbers"></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong data-field="date">Chargement...</strong></div><div class="meta-row"><span>Jackpot</span><strong data-field="jackpot">Chargement...</strong></div></div>
+        <div class="direct-links">Site officiel visible: <strong data-field="site">Chargement...</strong></div>
       </article>
 
-      <article class="result-card">
+      <article class="result-card lottery-card" data-lottery="France">
         <div class="place"><h3>France</h3><span class="mini-tag">FR</span></div>
         <div class="lottery-name">Loto France</div>
         <span class="label">Derniers numéros</span>
-        <div class="balls"><div class="ball">04</div><div class="ball">13</div><div class="ball">25</div><div class="ball">37</div><div class="ball">44</div><div class="ball special">09</div></div>
-        <div class="meta"><div class="meta-row"><span>Date</span><strong>7 avril 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>€10M</strong></div></div>
-        <div class="direct-links">Site officiel visible: www.fdj.fr</div>
+        <div class="numbers" data-field="numbers"></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong data-field="date">Chargement...</strong></div><div class="meta-row"><span>Jackpot</span><strong data-field="jackpot">Chargement...</strong></div></div>
+        <div class="direct-links">Site officiel visible: <strong data-field="site">Chargement...</strong></div>
       </article>
 
-      <article class="result-card">
+      <article class="result-card lottery-card" data-lottery="Italie">
         <div class="place"><h3>Italie</h3><span class="mini-tag">IT</span></div>
         <div class="lottery-name">SuperEnalotto</div>
         <span class="label">Derniers numéros</span>
-        <div class="balls"><div class="ball">09</div><div class="ball">18</div><div class="ball">27</div><div class="ball">55</div><div class="ball">72</div><div class="ball">88</div></div>
-        <div class="meta"><div class="meta-row"><span>Date</span><strong>7 avril 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>€24M</strong></div></div>
-        <div class="direct-links">Site officiel visible: www.superenalotto.it</div>
+        <div class="numbers" data-field="numbers"></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong data-field="date">Chargement...</strong></div><div class="meta-row"><span>Jackpot</span><strong data-field="jackpot">Chargement...</strong></div></div>
+        <div class="direct-links">Site officiel visible: <strong data-field="site">Chargement...</strong></div>
       </article>
 
-      <article class="result-card">
+      <article class="result-card lottery-card" data-lottery="Brésil">
         <div class="place"><h3>Brésil</h3><span class="mini-tag">BR</span></div>
         <div class="lottery-name">Mega-Sena</div>
         <span class="label">Derniers numéros</span>
-        <div class="balls"><div class="ball">06</div><div class="ball">17</div><div class="ball">28</div><div class="ball">39</div><div class="ball">52</div><div class="ball">60</div></div>
-        <div class="meta"><div class="meta-row"><span>Date</span><strong>7 avril 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>R$42M</strong></div></div>
-        <div class="direct-links">Site officiel visible: www.loterias.caixa.gov.br</div>
+        <div class="numbers" data-field="numbers"></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong data-field="date">Chargement...</strong></div><div class="meta-row"><span>Jackpot</span><strong data-field="jackpot">Chargement...</strong></div></div>
+        <div class="direct-links">Site officiel visible: <strong data-field="site">Chargement...</strong></div>
       </article>
 
-      <article class="result-card">
+      <article class="result-card lottery-card" data-lottery="Canada">
         <div class="place"><h3>Canada</h3><span class="mini-tag">CA</span></div>
         <div class="lottery-name">Lotto Max</div>
         <span class="label">Derniers numéros</span>
-        <div class="balls"><div class="ball">03</div><div class="ball">09</div><div class="ball">16</div><div class="ball">24</div><div class="ball">35</div><div class="ball">41</div><div class="ball">48</div></div>
-        <div class="meta"><div class="meta-row"><span>Date</span><strong>7 avril 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>CA$31M</strong></div></div>
-        <div class="direct-links">Site officiel visible: www.olg.ca</div>
+        <div class="numbers" data-field="numbers"></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong data-field="date">Chargement...</strong></div><div class="meta-row"><span>Jackpot</span><strong data-field="jackpot">Chargement...</strong></div></div>
+        <div class="direct-links">Site officiel visible: <strong data-field="site">Chargement...</strong></div>
       </article>
 
-      <article class="result-card">
+      <article class="result-card lottery-card" data-lottery="Royaume-Uni">
         <div class="place"><h3>Royaume-Uni</h3><span class="mini-tag">UK</span></div>
         <div class="lottery-name">UK Lotto</div>
         <span class="label">Derniers numéros</span>
-        <div class="balls"><div class="ball">02</div><div class="ball">15</div><div class="ball">26</div><div class="ball">38</div><div class="ball">47</div><div class="ball">54</div></div>
-        <div class="meta"><div class="meta-row"><span>Date</span><strong>7 avril 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>£11M</strong></div></div>
-        <div class="direct-links">Site officiel visible: www.national-lottery.co.uk</div>
+        <div class="numbers" data-field="numbers"></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong data-field="date">Chargement...</strong></div><div class="meta-row"><span>Jackpot</span><strong data-field="jackpot">Chargement...</strong></div></div>
+        <div class="direct-links">Site officiel visible: <strong data-field="site">Chargement...</strong></div>
       </article>
 
-      <article class="result-card">
+      <article class="result-card lottery-card" data-lottery="Allemagne">
         <div class="place"><h3>Allemagne</h3><span class="mini-tag">DE</span></div>
         <div class="lottery-name">Lotto 6aus49</div>
         <span class="label">Derniers numéros</span>
-        <div class="balls"><div class="ball">05</div><div class="ball">12</div><div class="ball">19</div><div class="ball">33</div><div class="ball">42</div><div class="ball">46</div><div class="ball special">08</div></div>
-        <div class="meta"><div class="meta-row"><span>Date</span><strong>7 avril 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>€15M</strong></div></div>
-        <div class="direct-links">Site officiel visible: www.lotto.de</div>
+        <div class="numbers" data-field="numbers"></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong data-field="date">Chargement...</strong></div><div class="meta-row"><span>Jackpot</span><strong data-field="jackpot">Chargement...</strong></div></div>
+        <div class="direct-links">Site officiel visible: <strong data-field="site">Chargement...</strong></div>
       </article>
 
-      <article class="result-card">
+      <article class="result-card lottery-card" data-lottery="Espagne">
         <div class="place"><h3>Espagne</h3><span class="mini-tag">ES</span></div>
         <div class="lottery-name">La Primitiva</div>
         <span class="label">Derniers numéros</span>
-        <div class="balls"><div class="ball">07</div><div class="ball">14</div><div class="ball">23</div><div class="ball">31</div><div class="ball">40</div><div class="ball">49</div></div>
-        <div class="meta"><div class="meta-row"><span>Date</span><strong>7 avril 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>€16M</strong></div></div>
-        <div class="direct-links">Site officiel visible: www.loteriasyapuestas.es</div>
+        <div class="numbers" data-field="numbers"></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong data-field="date">Chargement...</strong></div><div class="meta-row"><span>Jackpot</span><strong data-field="jackpot">Chargement...</strong></div></div>
+        <div class="direct-links">Site officiel visible: <strong data-field="site">Chargement...</strong></div>
       </article>
 
-      <article class="result-card">
+      <article class="result-card lottery-card" data-lottery="Mexique">
         <div class="place"><h3>Mexique</h3><span class="mini-tag">MX</span></div>
         <div class="lottery-name">Melate</div>
         <span class="label">Derniers numéros</span>
-        <div class="balls"><div class="ball">11</div><div class="ball">20</div><div class="ball">29</div><div class="ball">37</div><div class="ball">46</div><div class="ball">54</div></div>
-        <div class="meta"><div class="meta-row"><span>Date</span><strong>7 avril 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>MX$99M</strong></div></div>
-        <div class="direct-links">Site officiel visible: www.pronosticos.gob.mx</div>
+        <div class="numbers" data-field="numbers"></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong data-field="date">Chargement...</strong></div><div class="meta-row"><span>Jackpot</span><strong data-field="jackpot">Chargement...</strong></div></div>
+        <div class="direct-links">Site officiel visible: <strong data-field="site">Chargement...</strong></div>
       </article>
 
-      <article class="result-card">
+      <article class="result-card lottery-card" data-lottery="Argentine">
         <div class="place"><h3>Argentine</h3><span class="mini-tag">AR</span></div>
         <div class="lottery-name">Quini 6</div>
         <span class="label">Derniers numéros</span>
-        <div class="balls"><div class="ball">03</div><div class="ball">10</div><div class="ball">21</div><div class="ball">34</div><div class="ball">42</div><div class="ball">45</div></div>
-        <div class="meta"><div class="meta-row"><span>Date</span><strong>7 avril 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>AR$2.4B</strong></div></div>
-        <div class="direct-links">Site officiel visible: www.loteriasantafe.gov.ar</div>
+        <div class="numbers" data-field="numbers"></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong data-field="date">Chargement...</strong></div><div class="meta-row"><span>Jackpot</span><strong data-field="jackpot">Chargement...</strong></div></div>
+        <div class="direct-links">Site officiel visible: <strong data-field="site">Chargement...</strong></div>
       </article>
 
-      <article class="result-card">
+      <article class="result-card lottery-card" data-lottery="Japon">
         <div class="place"><h3>Japon</h3><span class="mini-tag">JP</span></div>
         <div class="lottery-name">Loto 6 Japon</div>
         <span class="label">Derniers numéros</span>
-        <div class="balls"><div class="ball">04</div><div class="ball">12</div><div class="ball">20</div><div class="ball">27</div><div class="ball">36</div><div class="ball">43</div></div>
-        <div class="meta"><div class="meta-row"><span>Date</span><strong>7 avril 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>¥340M</strong></div></div>
-        <div class="direct-links">Site officiel visible: www.takarakuji-official.jp</div>
+        <div class="numbers" data-field="numbers"></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong data-field="date">Chargement...</strong></div><div class="meta-row"><span>Jackpot</span><strong data-field="jackpot">Chargement...</strong></div></div>
+        <div class="direct-links">Site officiel visible: <strong data-field="site">Chargement...</strong></div>
       </article>
 
-      <article class="result-card">
+      <article class="result-card lottery-card" data-lottery="Australie">
         <div class="place"><h3>Australie</h3><span class="mini-tag">AU</span></div>
         <div class="lottery-name">Saturday Lotto</div>
         <span class="label">Derniers numéros</span>
-        <div class="balls"><div class="ball">01</div><div class="ball">08</div><div class="ball">17</div><div class="ball">25</div><div class="ball">38</div><div class="ball">44</div><div class="ball special">10</div><div class="ball special">29</div></div>
-        <div class="meta"><div class="meta-row"><span>Date</span><strong>7 avril 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>A$7M</strong></div></div>
-        <div class="direct-links">Site officiel visible: www.thelott.com</div>
+        <div class="numbers" data-field="numbers"></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong data-field="date">Chargement...</strong></div><div class="meta-row"><span>Jackpot</span><strong data-field="jackpot">Chargement...</strong></div></div>
+        <div class="direct-links">Site officiel visible: <strong data-field="site">Chargement...</strong></div>
       </article>
 
-      <article class="result-card">
+      <article class="result-card lottery-card" data-lottery="Portugal">
         <div class="place"><h3>Portugal</h3><span class="mini-tag">PT</span></div>
         <div class="lottery-name">Totoloto</div>
         <span class="label">Derniers numéros</span>
-        <div class="balls"><div class="ball">02</div><div class="ball">16</div><div class="ball">24</div><div class="ball">35</div><div class="ball">47</div><div class="ball special">09</div></div>
-        <div class="meta"><div class="meta-row"><span>Date</span><strong>7 avril 2026</strong></div><div class="meta-row"><span>Jackpot</span><strong>€4M</strong></div></div>
-        <div class="direct-links">Site officiel visible: www.jogossantacasa.pt</div>
+        <div class="numbers" data-field="numbers"></div>
+        <div class="meta"><div class="meta-row"><span>Date</span><strong data-field="date">Chargement...</strong></div><div class="meta-row"><span>Jackpot</span><strong data-field="jackpot">Chargement...</strong></div></div>
+        <div class="direct-links">Site officiel visible: <strong data-field="site">Chargement...</strong></div>
       </article>
     </section>
   </main>
@@ -629,5 +691,242 @@
   <div class="footer">
     SNG Portal — fond bien placé et 16 loteries visibles sur la page.
   </div>
+  <script>
+    const APIVERVE_API_KEY = "TA_CLE_API_ICI";
+    const APIVERVE_URL = "https://api.apiverve.com/v1/lottery";
+
+    const LOTTERY_ALIASES = {
+      "New York": ["New York", "New York Loteria", "NY Lottery"],
+      "République dominicaine": ["République dominicaine", "Dominican Republic", "Lotería Nacional Dominicana"],
+      "Powerball": ["Powerball"],
+      "EuroMillions": ["EuroMillions", "Euromillions"],
+      "France": ["France", "Loto France", "FDJ Loto"],
+      "Italie": ["Italie", "Italy", "SuperEnalotto"],
+      "Brésil": ["Brésil", "Brazil", "Mega-Sena", "Mega Sena"],
+      "Canada": ["Canada", "Lotto Max"],
+      "Royaume-Uni": ["Royaume-Uni", "United Kingdom", "UK Lotto"],
+      "Allemagne": ["Allemagne", "Germany", "Lotto 6aus49", "Lotto 6 aus 49"],
+      "Espagne": ["Espagne", "Spain", "La Primitiva"],
+      "Mexique": ["Mexique", "Mexico", "Melate"],
+      "Argentine": ["Argentine", "Argentina", "Quini 6"],
+      "Japon": ["Japon", "Japan", "Loto 6 Japan", "Loto 6"],
+      "Australie": ["Australie", "Australia", "Saturday Lotto"],
+      "Portugal": ["Portugal", "Totoloto"]
+    };
+
+    function normalizeText(value) {
+      return String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toLowerCase();
+    }
+
+    function formatDateFR(value) {
+      if (!value) return "Indisponible";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return String(value);
+      return d.toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      });
+    }
+
+    function formatJackpot(value) {
+      if (value === null || value === undefined || value === "") return "Non communiqué";
+      return String(value);
+    }
+
+    function renderNumbers(container, numbers) {
+      if (!container) return;
+      const safeNumbers = Array.isArray(numbers) ? numbers : [];
+      const bonusNumbers = safeNumbers
+        .filter((entry) => entry && typeof entry === "object" && entry.isBonus)
+        .map((entry) => entry.value);
+      const mainNumbers = safeNumbers
+        .map((entry) => {
+          if (entry && typeof entry === "object" && entry.isBonus) return null;
+          return entry && typeof entry === "object" ? entry.value : entry;
+        })
+        .filter((n) => n !== undefined && n !== null && n !== "");
+
+      if (!mainNumbers.length && !bonusNumbers.length) {
+        container.innerHTML = "<span class='number-ball muted'>--</span>";
+        return;
+      }
+
+      const mainMarkup = mainNumbers
+        .map((n) => `<span class="number-ball">${String(n).padStart(2, "0")}</span>`)
+        .join("");
+      const bonusMarkup = bonusNumbers
+        .map((n) => `<span class="number-ball bonus">${String(n).padStart(2, "0")}</span>`)
+        .join("");
+      container.innerHTML = `${mainMarkup}${bonusMarkup}`;
+    }
+
+    function pickLotteryItem(apiData, wantedName) {
+      if (!apiData) return null;
+
+      const aliases = (LOTTERY_ALIASES[wantedName] || [wantedName]).map(normalizeText);
+
+      const items =
+        Array.isArray(apiData) ? apiData :
+        Array.isArray(apiData.data) ? apiData.data :
+        Array.isArray(apiData.results) ? apiData.results :
+        Array.isArray(apiData.lotteries) ? apiData.lotteries :
+        [];
+
+      for (const item of items) {
+        const candidates = [
+          item.name,
+          item.lottery,
+          item.title,
+          item.country,
+          item.game,
+          item.displayName
+        ].map(normalizeText);
+
+        if (candidates.some((c) => aliases.includes(c))) {
+          return item;
+        }
+      }
+
+      return null;
+    }
+
+    function extractNumbers(item) {
+      if (!item) return [];
+      const mainNumbers = item.numbers || item.results || item.draw || item.mainNumbers || [];
+      const bonusNumbers = item.bonusNumbers || item.specialNumbers || item.stars || item.powerball || item.extra || [];
+
+      const asArray = Array.isArray(mainNumbers) ? mainNumbers : [mainNumbers];
+      const main = asArray.filter((n) => n !== undefined && n !== null && n !== "");
+
+      if (Array.isArray(bonusNumbers)) {
+        return [
+          ...main,
+          ...bonusNumbers.map((n) => ({ value: n, isBonus: true }))
+        ];
+      }
+
+      if (bonusNumbers !== undefined && bonusNumbers !== null && bonusNumbers !== "") {
+        return [...main, { value: bonusNumbers, isBonus: true }];
+      }
+
+      return main;
+    }
+
+    function extractDate(item) {
+      if (!item) return "";
+      return item.date || item.drawDate || item.lastDrawDate || item.updatedAt || item.updated_at || "";
+    }
+
+    function extractJackpot(item) {
+      if (!item) return "";
+      return item.jackpot || item.prize || item.amount || item.topPrize || "";
+    }
+
+    function extractSite(item) {
+      if (!item) return "";
+      return item.site || item.website || item.url || item.officialSite || "";
+    }
+
+    function setUnavailable(card) {
+      renderNumbers(card.querySelector('[data-field="numbers"]'), []);
+      const dateEl = card.querySelector('[data-field="date"]');
+      const jackpotEl = card.querySelector('[data-field="jackpot"]');
+      const siteEl = card.querySelector('[data-field="site"]');
+
+      if (dateEl) dateEl.textContent = "Indisponible";
+      if (jackpotEl) jackpotEl.textContent = "Indisponible";
+      if (siteEl) siteEl.textContent = "Indisponible";
+    }
+
+    async function loadLotteries() {
+      try {
+        const statusEl = document.querySelector("[data-live-status]");
+        if (statusEl) statusEl.textContent = "Chargement...";
+        document.querySelectorAll(".lottery-card[data-lottery]").forEach((card) => {
+          const dateEl = card.querySelector('[data-field="date"]');
+          const jackpotEl = card.querySelector('[data-field="jackpot"]');
+          const siteEl = card.querySelector('[data-field="site"]');
+          if (dateEl) dateEl.textContent = "Chargement...";
+          if (jackpotEl) jackpotEl.textContent = "Chargement...";
+          if (siteEl) siteEl.textContent = "Chargement...";
+          renderNumbers(card.querySelector('[data-field="numbers"]'), []);
+        });
+
+        console.log("[lottery] Chargement APIVerve démarré", {
+          url: APIVERVE_URL,
+          hasApiKey: Boolean(APIVERVE_API_KEY) && APIVERVE_API_KEY !== "TA_CLE_API_ICI",
+          apiKeyPreview: APIVERVE_API_KEY ? `${APIVERVE_API_KEY.slice(0, 4)}...` : "(vide)"
+        });
+
+        const response = await fetch(APIVERVE_URL, {
+          method: "GET",
+          headers: {
+            "X-API-Key": APIVERVE_API_KEY
+          }
+        });
+        console.log("[lottery] Réponse brute API", response);
+        console.log("[lottery] HTTP status", response.status);
+
+        if (!response.ok) {
+          throw new Error(`API HTTP ${response.status}`);
+        }
+
+        const apiJson = await response.json();
+        console.log("[lottery] JSON API brut", apiJson);
+        const cards = document.querySelectorAll(".lottery-card[data-lottery]");
+        console.log("[lottery] Nombre de cartes trouvées", cards.length);
+
+        cards.forEach((card) => {
+          const wantedName = card.getAttribute("data-lottery");
+          const item = pickLotteryItem(apiJson, wantedName);
+          console.log("[lottery] Mapping carte", {
+            requestedLottery: wantedName,
+            apiItem: item
+          });
+
+          if (!item) {
+            setUnavailable(card);
+            return;
+          }
+
+          renderNumbers(card.querySelector('[data-field="numbers"]'), extractNumbers(item));
+
+          const dateEl = card.querySelector('[data-field="date"]');
+          const jackpotEl = card.querySelector('[data-field="jackpot"]');
+          const siteEl = card.querySelector('[data-field="site"]');
+
+          if (dateEl) dateEl.textContent = formatDateFR(extractDate(item));
+          if (jackpotEl) jackpotEl.textContent = formatJackpot(extractJackpot(item));
+          if (siteEl) siteEl.textContent = extractSite(item) || "Indisponible";
+        });
+
+        const globalUpdated = document.querySelector("[data-global-last-update]");
+        if (globalUpdated) {
+          globalUpdated.textContent = new Date().toLocaleString("fr-FR", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+          });
+        }
+        if (statusEl) statusEl.textContent = "LIVE";
+      } catch (error) {
+        console.error("Erreur chargement loteries:", error);
+        document.querySelectorAll(".lottery-card[data-lottery]").forEach(setUnavailable);
+        const statusEl = document.querySelector("[data-live-status]");
+        if (statusEl) statusEl.textContent = "Hors ligne";
+      }
+    }
+
+    loadLotteries();
+    setInterval(loadLotteries, 60000);
+  </script>
 </body>
 </html>
