@@ -229,6 +229,56 @@
     }
 
     /* NEWS GRID */
+    .featured-news {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr;
+      gap: 18px;
+      margin-top: 16px;
+    }
+
+    .featured-main,
+    .side-card,
+    .news-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .featured-main img,
+    .side-card img,
+    .news-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .side-card img {
+      height: 120px;
+    }
+
+    .featured-main-body,
+    .side-card-body,
+    .news-card-body {
+      padding: 18px;
+    }
+
+    .featured-main h2 {
+      font-size: 1.35rem;
+      line-height: 1.45;
+      margin-bottom: 10px;
+    }
+
+    .featured-side {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
     #news-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
@@ -236,14 +286,7 @@
       margin-top: 20px;
     }
 
-    .news-card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 26px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      transition: transform 0.25s ease, border-color 0.25s ease;
-    }
+    .news-card { transition: transform 0.25s ease, border-color 0.25s ease; }
 
     .news-card:hover {
       transform: translateY(-4px);
@@ -308,6 +351,39 @@
       padding: 8px 2px;
     }
 
+    .muted-chip {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: rgba(125, 211, 252, 0.16);
+      border: 1px solid rgba(125, 211, 252, 0.28);
+      color: #d7f2ff;
+    }
+
+    .skeleton {
+      position: relative;
+      overflow: hidden;
+      background: rgba(255,255,255,0.06);
+      min-height: 220px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.09);
+    }
+
+    .skeleton::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      100% { transform: translateX(100%); }
+    }
+
     .error-msg {
       padding: 24px;
       border-radius: 18px;
@@ -326,6 +402,10 @@
     @media (max-width: 700px) {
       .hero {
         padding-top: 26px;
+      }
+
+      .featured-news {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -360,9 +440,9 @@
       <div class="hero-top">
         <div>
           <h1>Actualites SNG Portal</h1>
-          <p>Les titres se chargent automatiquement depuis Google Actualités en français.</p>
+          <p>Les titres se chargent automatiquement depuis News API avec filtrage par catégorie.</p>
         </div>
-        <div class="source-badge">Google Actualités RSS FR</div>
+        <div class="source-badge">News API • Live</div>
       </div>
 
       <img src="sng-news.png" class="hero-news-image" alt="Banniere SNG News" loading="lazy">
@@ -375,13 +455,14 @@
     <section class="layout">
       <div class="main-column">
         <div class="news-tabs">
-          <button class="news-tab active">A la une</button>
-          <button class="news-tab">Monde</button>
-          <button class="news-tab">Business</button>
-          <button class="news-tab">Sports</button>
+          <button class="news-tab active" data-category="top">A la une</button>
+          <button class="news-tab" data-category="world">Monde</button>
+          <button class="news-tab" data-category="business">Business</button>
+          <button class="news-tab" data-category="sports">Sports</button>
         </div>
 
         <div id="news-status">Chargement...</div>
+        <div id="featured-news" class="featured-news"></div>
         <div id="news-container"></div>
       </div>
     </section>
@@ -392,146 +473,171 @@
   </footer>
 
   <script>
-    const feeds = {
-      "A la une": "https://news.google.com/rss?hl=fr&gl=FR&ceid=FR:fr",
-      "Monde": "https://news.google.com/rss/headlines/section/topic/WORLD?hl=fr&gl=FR&ceid=FR:fr",
-      "Business": "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=fr&gl=FR&ceid=FR:fr",
-      "Sports": "https://news.google.com/rss/headlines/section/topic/SPORTS?hl=fr&gl=FR&ceid=FR:fr"
+    // ⚠️ Test rapide côté front : remplacez ici la clé si besoin.
+    // Version plus sûre à prévoir : passer par un proxy/serverless qui masque la clé.
+    const NEWS_API_KEY = "e68eaffdb5f74b6da3764910fe1c610c";
+    const USE_PROXY = false;
+    const NEWS_PROXY_URL = "https://your-serverless-proxy.example.com/news";
+    const REFRESH_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
+
+    const categoryMap = {
+      top: { label: "À la une", endpoint: "top-headlines?country=us&pageSize=18" },
+      world: { label: "Monde", endpoint: "everything?q=monde&language=fr&sortBy=publishedAt&pageSize=18" },
+      business: { label: "Business", endpoint: "top-headlines?country=us&category=business&pageSize=18" },
+      sports: { label: "Sports", endpoint: "top-headlines?country=us&category=sports&pageSize=18" }
     };
 
-    async function fetchRss(feedUrl) {
-      const proxies = [
-        `https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`,
-        `https://corsproxy.io/?${encodeURIComponent(feedUrl)}`
-      ];
+    let currentCategory = "top";
+    let refreshTimerId;
 
-      for (const url of proxies) {
-        try {
-          const res = await fetch(url);
-          if (!res.ok) continue;
+    function shortText(text = "", size = 140) {
+      const clean = text.replace(/\s+/g, " ").trim();
+      return clean.length > size ? `${clean.slice(0, size)}...` : clean;
+    }
 
-          const text = await res.text();
-          if (text && (text.includes("<item") || text.includes("<entry"))) {
-            return text;
-          }
-        } catch (error) {
-          // on essaie le proxy suivant
-        }
+    function formatDate(dateString) {
+      if (!dateString) return "Date indisponible";
+      const date = new Date(dateString);
+      if (Number.isNaN(date.getTime())) return "Date indisponible";
+      return date.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" });
+    }
+
+    function renderLoadingState() {
+      const featured = document.getElementById("featured-news");
+      const container = document.getElementById("news-container");
+      const status = document.getElementById("news-status");
+      status.textContent = "Chargement des actualités...";
+      featured.innerHTML = `
+        <div class="skeleton"></div>
+        <div class="featured-side">
+          <div class="skeleton" style="min-height:160px;"></div>
+          <div class="skeleton" style="min-height:160px;"></div>
+          <div class="skeleton" style="min-height:160px;"></div>
+        </div>
+      `;
+      container.innerHTML = Array.from({ length: 6 })
+        .map(() => '<div class="skeleton" style="min-height:250px;"></div>')
+        .join("");
+    }
+
+    async function fetchNews(categoryKey) {
+      const category = categoryMap[categoryKey];
+      if (!category) throw new Error("Catégorie inconnue");
+
+      // Si proxy activé, la clé reste côté serveur (recommandé en production).
+      const baseUrl = USE_PROXY
+        ? `${NEWS_PROXY_URL}?category=${encodeURIComponent(categoryKey)}`
+        : `https://newsapi.org/v2/${category.endpoint}&apiKey=${NEWS_API_KEY}`;
+
+      const response = await fetch(baseUrl, { method: "GET" });
+      if (!response.ok) throw new Error(`Erreur API (${response.status})`);
+
+      const data = await response.json();
+      if (data.status !== "ok") {
+        throw new Error(data.message || "Réponse API invalide");
       }
 
-      throw new Error("Erreur de chargement RSS");
+      return (data.articles || []).filter(article => article?.title && article?.url);
     }
 
-    function nettoyerTexte(html = "") {
-      const div = document.createElement("div");
-      div.innerHTML = html;
-      return (div.textContent || div.innerText || "")
-        .replace(/\s+/g, " ")
-        .trim();
+    function articleCardTemplate(article, label) {
+      const image = article.urlToImage || "sng-news.png";
+      const source = article.source?.name || "Source inconnue";
+      return `
+        <img src="${image}" alt="${article.title}" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='sng-news.png'">
+        <div class="news-card-body">
+          <span class="tag">${label}</span>
+          <h3>${article.title}</h3>
+          <p>${shortText(article.description || "Aucune description disponible.", 140)}</p>
+          <div class="news-meta">${source} • ${formatDate(article.publishedAt)}</div>
+          <a class="read-more" href="${article.url}" target="_blank" rel="noopener noreferrer">Lire plus</a>
+        </div>
+      `;
     }
 
-    function creerLienGoogleNews(titre) {
-      return `https://news.google.com/search?q=${encodeURIComponent(titre)}&hl=fr&gl=FR&ceid=FR:fr`;
-    }
-
-    async function loadNews(categorie = "A la une") {
+    function renderNews(articles, categoryKey) {
+      const featured = document.getElementById("featured-news");
       const container = document.getElementById("news-container");
       const status = document.getElementById("news-status");
       const ticker = document.getElementById("ticker-inner");
+      const label = categoryMap[categoryKey].label;
 
-      status.textContent = "Chargement...";
-      container.innerHTML = "";
-
-      try {
-        const text = await fetchRss(feeds[categorie]);
-
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(text, "text/xml");
-
-        const parseError = xml.querySelector("parsererror");
-        if (parseError) {
-          throw new Error("Flux RSS invalide");
-        }
-
-        let items = [...xml.querySelectorAll("item")];
-
-        if (!items.length) {
-          items = [...xml.querySelectorAll("entry")];
-        }
-
-        if (!items.length) {
-          throw new Error("Aucune actualité trouvée");
-        }
-
-        ticker.textContent = items
-          .slice(0, 8)
-          .map(item => {
-            const titre = item.querySelector("title")?.textContent || "Sans titre";
-            return titre;
-          })
-          .join("   •   ");
-
-        items.slice(0, 8).forEach(item => {
-          const titre = item.querySelector("title")?.textContent || "Sans titre";
-
-          const descBrut =
-            item.querySelector("description")?.textContent ||
-            item.querySelector("summary")?.textContent ||
-            "";
-
-          const desc = nettoyerTexte(descBrut).slice(0, 160);
-          const pubDate =
-            item.querySelector("pubDate")?.textContent ||
-            item.querySelector("published")?.textContent ||
-            item.querySelector("updated")?.textContent ||
-            "";
-
-          const googleNewsLink = creerLienGoogleNews(titre);
-
-          const card = document.createElement("div");
-          card.className = "news-card";
-
-          card.innerHTML = `
-            <div class="news-card-body">
-              <span class="tag">${categorie}</span>
-              <h3>
-                <a href="${googleNewsLink}" target="_blank" rel="noopener noreferrer">
-                  ${titre}
-                </a>
-              </h3>
-              <p>${desc || "Cliquez pour voir cette actualité sur Google Actualités."}...</p>
-              <div class="news-meta">${pubDate}</div>
-              <a class="read-more" href="${googleNewsLink}" target="_blank" rel="noopener noreferrer">
-                Lire sur Google Actualités
-              </a>
-            </div>
-          `;
-
-          container.appendChild(card);
-        });
-
-        status.textContent = "Actualités chargées";
-      } catch (error) {
-        ticker.textContent = "Chargement des actualites en direct...";
-        status.textContent = "Erreur de chargement";
-        container.innerHTML = `
-          <div class="error-msg">
-            <strong>⚠ Impossible de charger les actualités.</strong>
-            <p style="margin-top:10px;">${error.message}</p>
-          </div>
-        `;
+      if (!articles.length) {
+        throw new Error("Aucun article disponible pour cette catégorie.");
       }
+
+      ticker.textContent = articles.slice(0, 8).map(a => a.title).join("   •   ");
+      status.innerHTML = `Actualités mises à jour <span class="muted-chip">${label}</span>`;
+
+      const [mainArticle, ...others] = articles;
+      const sideArticles = others.slice(0, 3);
+      const gridArticles = others.slice(3);
+
+      featured.innerHTML = `
+        <article class="featured-main">
+          <img src="${mainArticle.urlToImage || "sng-news.png"}" alt="${mainArticle.title}" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='sng-news.png'">
+          <div class="featured-main-body">
+            <span class="tag">${label}</span>
+            <h2>${mainArticle.title}</h2>
+            <p>${shortText(mainArticle.description || "Aucune description disponible.", 200)}</p>
+            <div class="news-meta">${mainArticle.source?.name || "Source inconnue"} • ${formatDate(mainArticle.publishedAt)}</div>
+            <a class="read-more" href="${mainArticle.url}" target="_blank" rel="noopener noreferrer">Lire plus</a>
+          </div>
+        </article>
+        <div class="featured-side">
+          ${sideArticles.map(article => `<article class="side-card">${articleCardTemplate(article, label)}</article>`).join("")}
+        </div>
+      `;
+
+      container.innerHTML = gridArticles
+        .map(article => `<article class="news-card">${articleCardTemplate(article, label)}</article>`)
+        .join("");
+    }
+
+    function renderError(error) {
+      const featured = document.getElementById("featured-news");
+      const container = document.getElementById("news-container");
+      const ticker = document.getElementById("ticker-inner");
+      const status = document.getElementById("news-status");
+      ticker.textContent = "Le flux en direct est temporairement indisponible.";
+      status.textContent = "Erreur de chargement";
+      featured.innerHTML = "";
+      container.innerHTML = `
+        <div class="error-msg">
+          <strong>⚠ Impossible de charger les actualités.</strong>
+          <p style="margin-top:10px;">${error.message}</p>
+          <p style="margin-top:10px;">Vérifiez la clé News API, la limite de requêtes ou la connexion réseau.</p>
+        </div>
+      `;
+    }
+
+    async function loadNews(categoryKey = "top") {
+      currentCategory = categoryKey;
+      renderLoadingState();
+      try {
+        const articles = await fetchNews(categoryKey);
+        renderNews(articles, categoryKey);
+      } catch (error) {
+        renderError(error);
+      }
+    }
+
+    function resetAutoRefresh() {
+      clearInterval(refreshTimerId);
+      refreshTimerId = setInterval(() => loadNews(currentCategory), REFRESH_INTERVAL_MS);
     }
 
     document.querySelectorAll(".news-tab").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".news-tab").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
-        loadNews(btn.textContent.trim());
+        loadNews(btn.dataset.category);
+        resetAutoRefresh();
       });
     });
 
-    loadNews("A la une");
+    loadNews("top");
+    resetAutoRefresh();
   </script>
 </body>
 </html>
