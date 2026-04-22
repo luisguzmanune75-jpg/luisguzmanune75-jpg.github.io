@@ -373,6 +373,19 @@
       padding: 8px 2px;
     }
 
+    #news-scroll-status {
+      margin-top: 18px;
+      color: var(--muted);
+      font-weight: 600;
+      text-align: center;
+      min-height: 22px;
+    }
+
+    #news-scroll-sentinel {
+      width: 100%;
+      height: 2px;
+    }
+
     .muted-chip {
       display: inline-block;
       margin-left: 8px;
@@ -486,6 +499,8 @@
         <div id="news-status">Chargement...</div>
         <div id="featured-news" class="featured-news"></div>
         <div id="news-container"></div>
+        <div id="news-scroll-status"></div>
+        <div id="news-scroll-sentinel" aria-hidden="true"></div>
       </div>
     </section>
   </main>
@@ -500,6 +515,9 @@
   <script>
   const NEWS_PROXY_BASE_URL = window.SNG_NEWS_PROXY_URL;
   const REFRESH_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
+  const FEATURED_COUNT = 4;
+  const INITIAL_GRID_BATCH_SIZE = 20;
+  const GRID_BATCH_SIZE = 12;
 
   const categoryMap = {
     top: { label: "À la une", proxyCategory: "general" },
@@ -510,6 +528,9 @@
 
   let currentCategory = "top";
   let refreshTimerId;
+  let currentArticles = [];
+  let gridRenderedCount = 0;
+  let scrollObserver;
 
   function shortText(text = "", size = 140) {
     const clean = text.replace(/\s+/g, " ").trim();
@@ -553,8 +574,10 @@
     const featured = document.getElementById("featured-news");
     const container = document.getElementById("news-container");
     const status = document.getElementById("news-status");
+    const scrollStatus = document.getElementById("news-scroll-status");
 
     status.textContent = "Chargement des actualités...";
+    scrollStatus.textContent = "";
     featured.innerHTML = `
       <div class="skeleton"></div>
       <div class="featured-side">
@@ -591,8 +614,10 @@
     const featured = document.getElementById("featured-news");
     const container = document.getElementById("news-container");
     const status = document.getElementById("news-status");
+    const scrollStatus = document.getElementById("news-scroll-status");
 
     status.textContent = "Erreur de chargement";
+    scrollStatus.textContent = "";
     featured.innerHTML = "";
     container.innerHTML = `
       <div class="news-error">
@@ -632,7 +657,7 @@
     }
 
     const mainArticle = articles[0];
-    const sideArticles = articles.slice(1, 4);
+    const sideArticles = articles.slice(1, FEATURED_COUNT);
 
     status.textContent = `${categoryLabel} • ${articles.length} article(s)`;
 
@@ -667,10 +692,66 @@
     `;
   }
 
-  function renderNewsGrid(articles) {
+  function updateScrollStatus() {
+    const scrollStatus = document.getElementById("news-scroll-status");
+    const availableGridArticles = Math.max(currentArticles.length - FEATURED_COUNT, 0);
+
+    if (!availableGridArticles) {
+      scrollStatus.textContent = "";
+      return;
+    }
+
+    if (gridRenderedCount >= availableGridArticles) {
+      scrollStatus.textContent = `Toutes les actualités sont affichées (${gridRenderedCount}).`;
+      return;
+    }
+
+    scrollStatus.textContent = `Défilez pour charger plus d'actualités (${gridRenderedCount}/${availableGridArticles}).`;
+  }
+
+  function appendNewsBatch(batchSize) {
     const container = document.getElementById("news-container");
-    const gridArticles = articles.slice(4, 10);
-    container.innerHTML = gridArticles.map(createArticleCard).join("");
+    const start = FEATURED_COUNT + gridRenderedCount;
+    const nextArticles = currentArticles.slice(start, start + batchSize);
+
+    if (!nextArticles.length) {
+      updateScrollStatus();
+      return;
+    }
+
+    container.insertAdjacentHTML("beforeend", nextArticles.map(createArticleCard).join(""));
+    gridRenderedCount += nextArticles.length;
+    updateScrollStatus();
+  }
+
+  function resetGrid(articles) {
+    const container = document.getElementById("news-container");
+    currentArticles = articles;
+    gridRenderedCount = 0;
+    container.innerHTML = "";
+    appendNewsBatch(INITIAL_GRID_BATCH_SIZE);
+  }
+
+  function setupInfiniteScroll() {
+    const sentinel = document.getElementById("news-scroll-sentinel");
+    if (!sentinel) return;
+
+    if (scrollObserver) {
+      scrollObserver.disconnect();
+    }
+
+    scrollObserver = new IntersectionObserver((entries) => {
+      const [entry] = entries;
+      if (!entry?.isIntersecting) return;
+
+      appendNewsBatch(GRID_BATCH_SIZE);
+    }, {
+      root: null,
+      rootMargin: "0px 0px 400px 0px",
+      threshold: 0
+    });
+
+    scrollObserver.observe(sentinel);
   }
 
   async function loadNews(categoryKey = currentCategory) {
@@ -686,7 +767,8 @@
       }
 
       renderFeaturedNews(articles, categoryKey);
-      renderNewsGrid(articles);
+      resetGrid(articles);
+      setupInfiniteScroll();
     } catch (error) {
       console.error("Erreur actualités :", error);
       renderError(error.message || "Erreur inconnue");
