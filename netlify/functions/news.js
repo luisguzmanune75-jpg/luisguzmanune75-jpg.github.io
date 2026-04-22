@@ -1,3 +1,64 @@
+const MAX_ARTICLES = 100;
+
+function dedupeArticles(articles = []) {
+  const seen = new Set();
+  const unique = [];
+
+  for (const article of articles) {
+    const key = (article?.url || article?.title || "").trim().toLowerCase();
+    if (!key || seen.has(key)) {
+      continue;
+    }
+
+    seen.add(key);
+    unique.push(article);
+
+    if (unique.length >= MAX_ARTICLES) {
+      break;
+    }
+  }
+
+  return unique;
+}
+
+async function fetchNewsPages(buildUrl, apiKey, sourceLabel) {
+  let mergedArticles = [];
+
+  for (const page of [1, 2]) {
+    const url = buildUrl(page);
+    const maskedUrl = apiKey ? url.replace(apiKey, `${apiKey.slice(0, 4)}***`) : url;
+    console.log(`${sourceLabel} request URL (page ${page}):`, maskedUrl);
+
+    const res = await fetch(url);
+    console.log(`${sourceLabel} response status (page ${page}):`, res.status);
+
+    const data = await res.json();
+
+    if (data.status === "error") {
+      console.log(`${sourceLabel} error payload (page ${page}):`, data);
+      if (page === 1) {
+        return { error: data };
+      }
+      break;
+    }
+
+    const pageArticles = data.articles || [];
+    console.log(`${sourceLabel} articles fetched (page ${page}):`, pageArticles.length);
+
+    if (pageArticles.length === 0) {
+      break;
+    }
+
+    mergedArticles = dedupeArticles([...mergedArticles, ...pageArticles]);
+
+    if (mergedArticles.length >= MAX_ARTICLES || pageArticles.length < MAX_ARTICLES) {
+      break;
+    }
+  }
+
+  return { articles: mergedArticles };
+}
+
 export async function handler(event) {
   const API_KEY = process.env.NEWS_API_KEY;
   const category = event.queryStringParameters.category || "general";
@@ -5,17 +66,13 @@ export async function handler(event) {
   console.log("NEWS_API_KEY present:", Boolean(API_KEY));
 
   try {
-    const url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${API_KEY}`;
-    const maskedUrl = API_KEY ? url.replace(API_KEY, `${API_KEY.slice(0, 4)}***`) : url;
-    console.log("NewsAPI request URL:", maskedUrl);
+    const topHeadlinesResult = await fetchNewsPages(
+      (page) => `https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=${MAX_ARTICLES}&page=${page}&apiKey=${API_KEY}`,
+      API_KEY,
+      "top-headlines"
+    );
 
-    const res = await fetch(url);
-    console.log("NewsAPI response status:", res.status);
-
-    const data = await res.json();
-    console.log("NewsAPI raw payload:", data);
-
-    if (data.status === "error") {
+    if (topHeadlinesResult.error) {
       return {
         statusCode: 200,
         headers: {
@@ -23,28 +80,26 @@ export async function handler(event) {
           "Access-Control-Allow-Headers": "Content-Type",
           "Access-Control-Allow-Methods": "GET"
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(topHeadlinesResult.error)
       };
     }
 
-    if (!data.articles || data.articles.length === 0) {
+    let finalArticles = topHeadlinesResult.articles || [];
+
+    if (finalArticles.length === 0) {
       console.log("No articles from top-headlines, fallback to everything");
 
-      const fallbackUrl = `https://newsapi.org/v2/everything?q=actualité&language=fr&sortBy=publishedAt&pageSize=20&apiKey=${API_KEY}`;
+      const fallbackResult = await fetchNewsPages(
+        (page) => `https://newsapi.org/v2/everything?q=actualité&language=fr&sortBy=publishedAt&pageSize=${MAX_ARTICLES}&page=${page}&apiKey=${API_KEY}`,
+        API_KEY,
+        "everything"
+      );
 
-      const fallbackRes = await fetch(fallbackUrl);
-      const fallbackData = await fallbackRes.json();
-
-      return {
-        statusCode: 200,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Headers": "*",
-          "Access-Control-Allow-Methods": "GET"
-        },
-        body: JSON.stringify(fallbackData.articles || [])
-      };
+      finalArticles = fallbackResult.articles || [];
     }
+
+    finalArticles = dedupeArticles(finalArticles).slice(0, MAX_ARTICLES);
+    console.log("Final articles count returned:", finalArticles.length);
 
     return {
       statusCode: 200,
@@ -53,7 +108,7 @@ export async function handler(event) {
         "Access-Control-Allow-Headers": "Content-Type",
         "Access-Control-Allow-Methods": "GET"
       },
-      body: JSON.stringify(data.articles)
+      body: JSON.stringify(finalArticles)
     };
 
   } catch (error) {
