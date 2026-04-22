@@ -472,64 +472,194 @@
     <div class="container">&copy; 2026 SNG Portal. Tous droits reservés.</div>
   </footer>
 
-  <script>
-    const NEWS_PROXY_URL = `${window.SNG_NEWS_PROXY_URL || ""}/api/news`;
-    const REFRESH_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
+ <script>
+  const NEWS_PROXY_BASE_URL = window.SNG_NEWS_PROXY_URL;
+  const REFRESH_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
 
-    const categoryMap = {
-      top: { label: "À la une", proxyCategory: "general" },
-      world: { label: "Monde", proxyCategory: "general" },
-      business: { label: "Business", proxyCategory: "business" },
-      sports: { label: "Sports", proxyCategory: "sports" }
-    };
+  const categoryMap = {
+    top: { label: "À la une", proxyCategory: "general" },
+    world: { label: "Monde", proxyCategory: "general" },
+    business: { label: "Business", proxyCategory: "business" },
+    sports: { label: "Sports", proxyCategory: "sports" }
+  };
 
-    let currentCategory = "top";
-    let refreshTimerId;
+  let currentCategory = "top";
+  let refreshTimerId;
 
-    function shortText(text = "", size = 140) {
-      const clean = text.replace(/\s+/g, " ").trim();
-      return clean.length > size ? `${clean.slice(0, size)}...` : clean;
+  function shortText(text = "", size = 140) {
+    const clean = text.replace(/\s+/g, " ").trim();
+    return clean.length > size ? `${clean.slice(0, size)}...` : clean;
+  }
+
+  function formatDate(dateString) {
+    if (!dateString) return "Date indisponible";
+    const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) return "Date indisponible";
+    return date.toLocaleDateString("fr-FR", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    });
+  }
+
+  function renderLoadingState() {
+    const featured = document.getElementById("featured-news");
+    const container = document.getElementById("news-container");
+    const status = document.getElementById("news-status");
+
+    status.textContent = "Chargement des actualités...";
+    featured.innerHTML = `
+      <div class="skeleton"></div>
+      <div class="featured-side">
+        <div class="skeleton" style="min-height:160px;"></div>
+        <div class="skeleton" style="min-height:160px;"></div>
+        <div class="skeleton" style="min-height:160px;"></div>
+      </div>
+    `;
+    container.innerHTML = Array.from({ length: 6 })
+      .map(() => '<div class="skeleton" style="min-height:250px;"></div>')
+      .join("");
+  }
+
+  async function fetchNews(categoryKey) {
+    const category = categoryMap[categoryKey];
+    if (!category) throw new Error("Catégorie inconnue");
+
+    if (!NEWS_PROXY_BASE_URL) {
+      throw new Error("Proxy news non configuré");
     }
 
-    function formatDate(dateString) {
-      if (!dateString) return "Date indisponible";
-      const date = new Date(dateString);
-      if (Number.isNaN(date.getTime())) return "Date indisponible";
-      return date.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" });
-    }
+    const baseUrl = `${NEWS_PROXY_BASE_URL}/api/news?category=${encodeURIComponent(category.proxyCategory)}`;
 
-    function renderLoadingState() {
-      const featured = document.getElementById("featured-news");
-      const container = document.getElementById("news-container");
-      const status = document.getElementById("news-status");
-      status.textContent = "Chargement des actualités...";
-      featured.innerHTML = `
-        <div class="skeleton"></div>
-        <div class="featured-side">
-          <div class="skeleton" style="min-height:160px;"></div>
-          <div class="skeleton" style="min-height:160px;"></div>
-          <div class="skeleton" style="min-height:160px;"></div>
+    const response = await fetch(baseUrl, { method: "GET" });
+    if (!response.ok) throw new Error(`Erreur API (${response.status})`);
+
+    const data = await response.json();
+    const articles = Array.isArray(data) ? data : [];
+
+    return articles.filter(article => article?.title && article?.url);
+  }
+
+  function renderError(message) {
+    const featured = document.getElementById("featured-news");
+    const container = document.getElementById("news-container");
+    const status = document.getElementById("news-status");
+
+    status.textContent = "Erreur de chargement";
+    featured.innerHTML = "";
+    container.innerHTML = `
+      <div class="news-error">
+        <strong>⚠ Impossible de charger les actualités.</strong>
+        <p>${message}</p>
+      </div>
+    `;
+  }
+
+  function createArticleCard(article) {
+    return `
+      <article class="news-card">
+        <img src="${article.urlToImage || article.image || 'https://via.placeholder.com/600x400?text=Actualités'}" alt="${article.title}">
+        <div class="news-card-content">
+          <span class="news-source">${article.source?.name || article.source || "Source inconnue"}</span>
+          <h3>${article.title}</h3>
+          <p>${shortText(article.description || "Pas de description disponible.", 110)}</p>
+          <div class="news-meta">
+            <span>${formatDate(article.publishedAt)}</span>
+            <a href="${article.url}" target="_blank" rel="noopener noreferrer">Lire plus</a>
+          </div>
         </div>
-      `;
-      container.innerHTML = Array.from({ length: 6 })
-        .map(() => '<div class="skeleton" style="min-height:250px;"></div>')
-        .join("");
+      </article>
+    `;
+  }
+
+  function renderFeaturedNews(articles, categoryKey) {
+    const featured = document.getElementById("featured-news");
+    const status = document.getElementById("news-status");
+    const categoryLabel = categoryMap[categoryKey]?.label || "Actualités";
+
+    if (!articles.length) {
+      status.textContent = "Aucune actualité trouvée";
+      featured.innerHTML = "";
+      return;
     }
 
-    async function fetchNews(categoryKey) {
-      const category = categoryMap[categoryKey];
-      if (!category) throw new Error("Catégorie inconnue");
+    const mainArticle = articles[0];
+    const sideArticles = articles.slice(1, 4);
 
-      const baseUrl = `${NEWS_PROXY_URL}?category=${encodeURIComponent(category.proxyCategory)}`;
+    status.textContent = `${categoryLabel} • ${articles.length} article(s)`;
 
-      const response = await fetch(baseUrl, { method: "GET" });
-      if (!response.ok) throw new Error(`Erreur API (${response.status})`);
+    featured.innerHTML = `
+      <article class="featured-main">
+        <img src="${mainArticle.urlToImage || mainArticle.image || 'https://via.placeholder.com/900x500?text=Actualité'}" alt="${mainArticle.title}">
+        <div class="featured-content">
+          <span class="badge">À LA UNE</span>
+          <h2>${mainArticle.title}</h2>
+          <p>${shortText(mainArticle.description || "Pas de description disponible.", 180)}</p>
+          <div class="news-meta">
+            <span>${mainArticle.source?.name || mainArticle.source || "Source inconnue"} • ${formatDate(mainArticle.publishedAt)}</span>
+            <a href="${mainArticle.url}" target="_blank" rel="noopener noreferrer">Lire l'article</a>
+          </div>
+        </div>
+      </article>
 
-      const data = await response.json();
-      const articles = Array.isArray(data) ? data : [];
+      <div class="featured-side">
+        ${sideArticles.map(article => `
+          <article class="side-card">
+            <span class="news-source">${article.source?.name || article.source || "Source inconnue"}</span>
+            <h3>${article.title}</h3>
+            <p>${shortText(article.description || "Pas de description disponible.", 90)}</p>
+            <a href="${article.url}" target="_blank" rel="noopener noreferrer">Lire plus</a>
+          </article>
+        `).join("")}
+      </div>
+    `;
+  }
 
-      return articles.filter(article => article?.title && article?.url);
+  function renderNewsGrid(articles) {
+    const container = document.getElementById("news-container");
+    const gridArticles = articles.slice(4, 10);
+    container.innerHTML = gridArticles.map(createArticleCard).join("");
+  }
+
+  async function loadNews(categoryKey = currentCategory) {
+    currentCategory = categoryKey;
+    renderLoadingState();
+
+    try {
+      const articles = await fetchNews(categoryKey);
+
+      if (!articles.length) {
+        renderError("Aucune actualité disponible pour le moment.");
+        return;
+      }
+
+      renderFeaturedNews(articles, categoryKey);
+      renderNewsGrid(articles);
+    } catch (error) {
+      console.error("Erreur actualités :", error);
+      renderError(error.message || "Erreur inconnue");
     }
+  }
+
+  function startAutoRefresh() {
+    clearInterval(refreshTimerId);
+    refreshTimerId = setInterval(() => {
+      loadNews(currentCategory);
+    }, REFRESH_INTERVAL_MS);
+  }
+
+  document.querySelectorAll(".news-tab").forEach(button => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll(".news-tab").forEach(tab => tab.classList.remove("active"));
+      button.classList.add("active");
+      loadNews(button.dataset.category);
+      startAutoRefresh();
+    });
+  });
+
+  loadNews();
+  startAutoRefresh();
+</script>
 
     function articleCardTemplate(article, label) {
       const image = article.urlToImage || "sng-news.png";
