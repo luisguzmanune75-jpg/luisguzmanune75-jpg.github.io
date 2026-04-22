@@ -246,6 +246,16 @@
       overflow: hidden;
     }
 
+    .card-link-wrapper {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .card-link-wrapper.is-clickable {
+      cursor: pointer;
+    }
+
     .featured-main img,
     .side-card img,
     .news-card img {
@@ -286,11 +296,19 @@
       margin-top: 20px;
     }
 
-    .news-card { transition: transform 0.25s ease, border-color 0.25s ease; }
+    .news-card,
+    .featured-main,
+    .side-card {
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
 
-    .news-card:hover {
+    .news-card:hover,
+    .card-link-wrapper.is-clickable:hover .news-card,
+    .card-link-wrapper.is-clickable:hover .featured-main,
+    .card-link-wrapper.is-clickable:hover .side-card {
       transform: translateY(-4px);
       border-color: rgba(255,255,255,0.18);
+      box-shadow: 0 24px 62px rgba(0,0,0,0.4);
     }
 
     .news-card-body {
@@ -332,7 +350,9 @@
       margin-bottom: 10px;
     }
 
-    .news-card a.read-more {
+    .news-card .read-more,
+    .featured-main .read-more,
+    .side-card .read-more {
       display: inline-block;
       margin-top: 8px;
       color: #ff6aa2;
@@ -340,7 +360,9 @@
       text-decoration: none;
     }
 
-    .news-card a.read-more:hover {
+    .news-card .read-more:hover,
+    .featured-main .read-more:hover,
+    .side-card .read-more:hover {
       color: #ffd1e1;
     }
 
@@ -505,6 +527,28 @@
     });
   }
 
+  function getSafeUrl(url) {
+    return typeof url === "string" && url.trim() ? url.trim() : "";
+  }
+
+  function wrapArticleCard(content, articleUrl, className = "") {
+    const safeUrl = getSafeUrl(articleUrl);
+    if (safeUrl) {
+      const wrapperClass = `card-link-wrapper is-clickable ${className}`.trim();
+      return `
+        <a class="${wrapperClass}" href="${safeUrl}" target="_blank" rel="noopener noreferrer">
+          ${content}
+        </a>
+      `;
+    }
+
+    return `
+      <div class="card-link-wrapper ${className}" aria-disabled="true">
+        ${content}
+      </div>
+    `;
+  }
+
   function renderLoadingState() {
     const featured = document.getElementById("featured-news");
     const container = document.getElementById("news-container");
@@ -540,7 +584,7 @@
     const data = await response.json();
     const articles = Array.isArray(data) ? data : [];
 
-    return articles.filter(article => article?.title && article?.url);
+    return articles.filter(article => article?.title);
   }
 
   function renderError(message) {
@@ -559,7 +603,7 @@
   }
 
   function createArticleCard(article) {
-    return `
+    const cardHtml = `
       <article class="news-card">
         <img src="${article.urlToImage || article.image || 'https://via.placeholder.com/600x400?text=Actualités'}" alt="${article.title}">
         <div class="news-card-content">
@@ -568,11 +612,12 @@
           <p>${shortText(article.description || "Pas de description disponible.", 110)}</p>
           <div class="news-meta">
             <span>${formatDate(article.publishedAt)}</span>
-            <a href="${article.url}" target="_blank" rel="noopener noreferrer">Lire plus</a>
+            <span class="read-more">Lire plus</span>
           </div>
         </div>
       </article>
     `;
+    return wrapArticleCard(cardHtml, article.url, "news-card-link");
   }
 
   function renderFeaturedNews(articles, categoryKey) {
@@ -591,7 +636,7 @@
 
     status.textContent = `${categoryLabel} • ${articles.length} article(s)`;
 
-    featured.innerHTML = `
+    const featuredMainHtml = `
       <article class="featured-main">
         <img src="${mainArticle.urlToImage || mainArticle.image || 'https://via.placeholder.com/900x500?text=Actualité'}" alt="${mainArticle.title}">
         <div class="featured-content">
@@ -600,20 +645,24 @@
           <p>${shortText(mainArticle.description || "Pas de description disponible.", 180)}</p>
           <div class="news-meta">
             <span>${mainArticle.source?.name || mainArticle.source || "Source inconnue"} • ${formatDate(mainArticle.publishedAt)}</span>
-            <a href="${mainArticle.url}" target="_blank" rel="noopener noreferrer">Lire l'article</a>
+            <span class="read-more">Lire l'article</span>
           </div>
         </div>
       </article>
+    `;
+
+    featured.innerHTML = `
+      ${wrapArticleCard(featuredMainHtml, mainArticle.url, "featured-main-link")}
 
       <div class="featured-side">
-        ${sideArticles.map(article => `
+        ${sideArticles.map(article => wrapArticleCard(`
           <article class="side-card">
             <span class="news-source">${article.source?.name || article.source || "Source inconnue"}</span>
             <h3>${article.title}</h3>
             <p>${shortText(article.description || "Pas de description disponible.", 90)}</p>
-            <a href="${article.url}" target="_blank" rel="noopener noreferrer">Lire plus</a>
+            <span class="read-more">Lire plus</span>
           </article>
-        `).join("")}
+        `, article.url, "side-card-link")).join("")}
       </div>
     `;
   }
