@@ -482,6 +482,41 @@
 
       <img src="sng-news.png" class="hero-news-image" alt="Banniere SNG News" loading="lazy">
 
+
+      <div style="margin-top:20px; text-align:center;">
+  <p style="opacity:0.8;">🔥 Partage cette page pour rester informé en temps réel</p>
+
+  <button onclick="sharePage()" style="
+    padding:12px 20px;
+    background:#ff0055;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+    margin:5px;">
+    🔗 Partager
+  </button>
+
+  <button onclick="copyLink()" style="
+    padding:12px 20px;
+    background:#222;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+    margin:5px;">
+    📋 Copier le lien
+  </button>
+</div>
+
+<div style="margin-top:15px; text-align:center;">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https://luisguzmanune75-jpg.github.io/actualites.html" target="_blank">📘 Facebook</a> |
+  <a href="https://twitter.com/intent/tweet?url=https://luisguzmanune75-jpg.github.io/actualites.html&text=Actualités%20SNG%20Portal%20🔥" target="_blank">🐦 Twitter</a> |
+  <a href="https://api.whatsapp.com/send?text=Actualités%20SNG%20Portal%20🔥%20https://luisguzmanune75-jpg.github.io/actualites.html" target="_blank">📱 WhatsApp</a>
+</div>
+
       <div class="ticker">
         <span class="ticker-inner" id="ticker-inner">Chargement des actualites en direct...</span>
       </div>
@@ -794,5 +829,24 @@
   loadNews();
   startAutoRefresh();
   </script>
+
+  <script>
+function sharePage() {
+  if (navigator.share) {
+    navigator.share({
+      title: 'Actualités SNG Portal',
+      text: 'Regarde les actualités en direct 🔴',
+      url: window.location.href
+    });
+  } else {
+    alert("Partage non supporté ici, utilise copier le lien !");
+  }
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href);
+  alert("Lien copié 🔥");
+}
+</script>
 </body>
 </html>
