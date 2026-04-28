@@ -1802,6 +1802,7 @@
         right:20px;
         bottom:20px;
         z-index:120;
+        filter:drop-shadow(0 10px 28px rgba(112,161,255,.18));
       }
 
       .sng-ai-toggle{
@@ -1832,7 +1833,7 @@
         border-radius:18px;
         border:1px solid rgba(255,255,255,.12);
         background:rgba(7,17,28,.95);
-        box-shadow:0 18px 42px rgba(0,0,0,.45);
+        box-shadow:0 20px 50px rgba(0,0,0,.5), 0 0 0 1px rgba(112,161,255,.08), 0 0 26px rgba(255,95,143,.15);
         overflow:hidden;
         display:none;
         transition:width .28s ease, height .28s ease, transform .2s ease, box-shadow .2s ease;
@@ -1901,45 +1902,73 @@
         flex-direction:column;
         gap:12px;
         scrollbar-width:thin;
-        scrollbar-color:rgba(255,255,255,.25) transparent;
+        scrollbar-color:rgba(112,161,255,.55) transparent;
+        scroll-behavior:smooth;
       }
 
       .sng-ai-body::-webkit-scrollbar{
-        width:8px;
+        width:6px;
       }
 
       .sng-ai-body::-webkit-scrollbar-thumb{
-        background:rgba(255,255,255,.24);
+        background:linear-gradient(180deg, rgba(112,161,255,.85), rgba(255,95,143,.72));
         border-radius:999px;
       }
 
       .sng-ai-msg{
-        max-width:94%;
+        max-width:96%;
         padding:13px 14px;
-        border-radius:14px;
-        line-height:1.65;
+        border-radius:16px;
+        line-height:1.7;
         font-size:15px;
         white-space:pre-wrap;
         word-break:break-word;
-        margin-bottom:2px;
+        margin-bottom:4px;
+        animation:sngAiMessageIn .24s ease both;
+      }
+
+      .sng-ai-row{
+        display:flex;
+        gap:10px;
+        align-items:flex-end;
+        max-width:96%;
+      }
+
+      .sng-ai-row.user{
+        align-self:flex-end;
+        justify-content:flex-end;
+      }
+
+      .sng-ai-row.bot{
+        align-self:flex-start;
+      }
+
+      .sng-ai-avatar{
+        width:30px;
+        height:30px;
+        border-radius:50%;
+        border:1px solid rgba(255,255,255,.2);
+        object-fit:cover;
+        flex-shrink:0;
+        box-shadow:0 5px 16px rgba(0,0,0,.3);
       }
 
       .sng-ai-msg.bot,
       .sng-ai-message.bot{
-        align-self:flex-start;
-        background:rgba(255,255,255,.09);
-        color:#eaf3ff;
-        line-height:1.7;
+        background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.07));
+        color:#eef5ff;
+        line-height:1.72;
         font-size:14px;
-        padding:14px 16px;
+        padding:15px 16px;
         max-width:92%;
         white-space:normal;
+        border:1px solid rgba(255,255,255,.12);
       }
 
       .sng-ai-msg.user{
-        align-self:flex-end;
-        background:rgba(255,95,143,.3);
+        background:linear-gradient(135deg, rgba(255,95,143,.42), rgba(112,161,255,.36));
         color:#fff;
+        border:1px solid rgba(255,255,255,.16);
       }
 
       .sng-ai-msg a{
@@ -2130,8 +2159,34 @@
         color:#fff;
         background:rgba(255,255,255,.08);
         border-radius:999px;
-        padding:5px 11px;
+        padding:6px 12px;
         font-size:12px;
+        cursor:pointer;
+        transition:all .2s ease;
+      }
+
+      .sng-ai-link-btn:hover{
+        background:rgba(255,255,255,.18);
+        border-color:rgba(112,161,255,.75);
+        transform:translateY(-1px);
+      }
+
+      .sng-ai-typing{
+        font-size:12px;
+        color:rgba(255,255,255,.76);
+        padding:0 14px 8px;
+      }
+
+      .sng-ai-suggestions{
+        margin-top:10px;
+        display:flex;
+        flex-wrap:wrap;
+        gap:7px;
+      }
+
+      @keyframes sngAiMessageIn{
+        from{opacity:0; transform:translateY(6px) scale(.99);}
+        to{opacity:1; transform:translateY(0) scale(1);}
       }
 
       .sng-ai-notice{
@@ -2978,6 +3033,7 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
           <button class="sng-ai-quick-btn" type="button" data-prompt="Traduis ce texte en anglais avec un ton naturel et professionnel :">🌍 Traduire un texte</button>
         </div>
         <p id="sngAiNotice" class="sng-ai-notice" hidden></p>
+        <p id="sngAiTyping" class="sng-ai-typing" hidden>SNG AI est en train d’écrire...</p>
         <div class="sng-ai-preview" id="sngAiPreview" hidden>
           <img id="sngAiPreviewImg" alt="Aperçu image" />
           <div class="sng-ai-preview-meta" id="sngAiPreviewMeta"></div>
@@ -3017,6 +3073,7 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
         const previewMeta = document.getElementById("sngAiPreviewMeta");
         const removeImageButton = document.getElementById("sngAiRemoveImage");
         const notice = document.getElementById("sngAiNotice");
+        const typing = document.getElementById("sngAiTyping");
         const sendButton = form?.querySelector(".sng-ai-send");
         const quickButtons = document.querySelectorAll(".sng-ai-quick-btn");
         const localEndpoint = "/.netlify/functions/sng-ai";
@@ -3024,15 +3081,30 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
         const apiEndpoint = window.location.hostname.includes("github.io") ? proxyEndpoint : localEndpoint;
         const STORAGE_HISTORY_KEY = "sngAiHistory";
         const STORAGE_STATS_KEY = "sngAiStats";
-        const MAX_HISTORY_ITEMS = 8;
+        const MAX_HISTORY_ITEMS = 10;
         const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
+        const REQUEST_TIMEOUT_MS = 10000;
+        const AVATAR_PATH = "./mon-avatar.png";
+        const NAV_KEYWORDS = {
+          actualite: "/actualites.html",
+          actualités: "/actualites.html",
+          actu: "/actualites.html",
+          crypto: "/crypto.html",
+          loterie: "/loterie.html",
+          sport: "/sports.html",
+          météo: "/meteo.html",
+          meteo: "/meteo.html",
+          cinema: "/cinema.html",
+          voyage: "/voyages.html"
+        };
+
         let pendingImageData = "";
         let pendingImageName = "";
         let lastAssistantReply = "";
         let speechRecognition = null;
         let isListening = false;
 
-        if (!toggle || !chat || !form || !input || !body || !sendButton || !widget || !expandButton || !closeButton || !clearButton || !voiceButton || !speakButton || !imageButton || !imageInput || !preview || !previewImage || !previewMeta || !removeImageButton || !notice) {
+        if (!toggle || !chat || !form || !input || !body || !sendButton || !widget || !expandButton || !closeButton || !clearButton || !voiceButton || !speakButton || !imageButton || !imageInput || !preview || !previewImage || !previewMeta || !removeImageButton || !notice || !typing) {
           return;
         }
 
@@ -3043,6 +3115,10 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#39;");
+        }
+
+        function scrollToLatest(smooth = true) {
+          body.scrollTo({ top: body.scrollHeight, behavior: smooth ? "smooth" : "auto" });
         }
 
         function updateStats(patch) {
@@ -3056,17 +3132,13 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
             messagesSent: Number(current.messagesSent || 0),
             linkClicks: Number(current.linkClicks || 0),
             imageUploads: Number(current.imageUploads || 0),
+            buttonClicks: Number(current.buttonClicks || 0),
             lastUsage: current.lastUsage || null
           };
-          if (typeof patch.messagesSent === "number") {
-            next.messagesSent += patch.messagesSent;
-          }
-          if (typeof patch.linkClicks === "number") {
-            next.linkClicks += patch.linkClicks;
-          }
-          if (typeof patch.imageUploads === "number") {
-            next.imageUploads += patch.imageUploads;
-          }
+          if (typeof patch.messagesSent === "number") next.messagesSent += patch.messagesSent;
+          if (typeof patch.linkClicks === "number") next.linkClicks += patch.linkClicks;
+          if (typeof patch.imageUploads === "number") next.imageUploads += patch.imageUploads;
+          if (typeof patch.buttonClicks === "number") next.buttonClicks += patch.buttonClicks;
           next.lastUsage = new Date().toISOString();
           localStorage.setItem(STORAGE_STATS_KEY, JSON.stringify(next));
         }
@@ -3100,6 +3172,10 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
           notice.textContent = "";
         }
 
+        function showTyping(isVisible) {
+          typing.hidden = !isVisible;
+        }
+
         function formatAIReply(text) {
           const safeText = escapeHTML(text || "");
           const withListBreaks = safeText
@@ -3120,17 +3196,11 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
                 .split(/\n/)
                 .map((line) => line.trim())
                 .filter(Boolean);
-              if (!lines.length) {
-                return "";
-              }
+              if (!lines.length) return "";
               const isOrdered = lines.every((line) => /^\d+\.\s+/.test(line));
-              if (isOrdered) {
-                return `<ol>${lines.map((line) => `<li>${line.replace(/^\d+\.\s+/, "")}</li>`).join("")}</ol>`;
-              }
+              if (isOrdered) return `<ol>${lines.map((line) => `<li>${line.replace(/^\d+\.\s+/, "")}</li>`).join("")}</ol>`;
               const isUnordered = lines.every((line) => /^[-•]\s+/.test(line));
-              if (isUnordered) {
-                return `<ul>${lines.map((line) => `<li>${line.replace(/^[-•]\s+/, "")}</li>`).join("")}</ul>`;
-              }
+              if (isUnordered) return `<ul>${lines.map((line) => `<li>${line.replace(/^[-•]\s+/, "")}</li>`).join("")}</ul>`;
               return `<p>${lines.join("<br>")}</p>`;
             })
             .join("");
@@ -3143,26 +3213,101 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
           let match;
           while ((match = regex.exec(text || ""))) {
             let url = match[0].trim();
-            if (url.startsWith("/")) {
-              url = `${window.location.origin}${url}`;
-            }
-            if (!url.includes("sng") && !url.includes(window.location.hostname)) {
-              continue;
-            }
-            if (seen.has(url)) {
-              continue;
-            }
+            if (url.startsWith("/")) url = `${window.location.origin}${url}`;
+            if (!url.includes("sng") && !url.includes(window.location.hostname)) continue;
+            if (seen.has(url)) continue;
             seen.add(url);
             links.push(url);
           }
           return links.slice(0, 4);
         }
 
-        function appendSngLinkActions(container, text) {
-          const links = extractSngLinks(text);
-          if (!links.length) {
-            return;
+        function inferNavigationLink(prompt) {
+          const text = String(prompt || "").toLowerCase();
+          const key = Object.keys(NAV_KEYWORDS).find((item) => text.includes(item));
+          return key ? `${window.location.origin}${NAV_KEYWORDS[key]}` : "";
+        }
+
+        function getSmartSuggestions(seedText) {
+          const text = String(seedText || "").toLowerCase();
+          if (text.includes("business") || text.includes("stratég") || text.includes("startup") || text.includes("marketing")) {
+            return ["Créer un plan", "Voir idées", "Stratégie complète"];
           }
+          if (text.includes("cv") || text.includes("entretien") || text.includes("lettre")) {
+            return ["Améliorer CV", "Créer lettre", "Préparer entretien"];
+          }
+          if (text.includes("étude") || text.includes("cours") || text.includes("exercice")) {
+            return ["Explique simplement", "Donne un quiz", "Créer une fiche"];
+          }
+          if (text.includes("code") || text.includes("bug") || text.includes("api")) {
+            return ["Corriger le code", "Exemple concret", "Plan de debug"];
+          }
+          return ["Continue", "Explique mieux", "Donne une version pro"];
+        }
+
+        function appendActionButtons(messageEl, text) {
+          const actions = document.createElement("div");
+          actions.className = "sng-ai-msg-actions";
+          const createBtn = (label, onClick) => {
+            const btn = document.createElement("button");
+            btn.className = "sng-ai-link-btn";
+            btn.type = "button";
+            btn.textContent = label;
+            btn.addEventListener("click", onClick);
+            return btn;
+          };
+
+          actions.appendChild(
+            createBtn("Copier", async () => {
+              try {
+                await navigator.clipboard.writeText(String(text || ""));
+                showNotice("Réponse copiée ✅");
+              } catch {
+                showNotice("Impossible de copier automatiquement.");
+              }
+              updateStats({ buttonClicks: 1 });
+            })
+          );
+          actions.appendChild(
+            createBtn("Modifier", () => {
+              input.value = String(text || "");
+              autoResizeInput();
+              input.focus();
+              updateStats({ buttonClicks: 1 });
+            })
+          );
+          actions.appendChild(
+            createBtn("Continuer", async () => {
+              updateStats({ buttonClicks: 1 });
+              await submitQuery("continue");
+            })
+          );
+
+          messageEl.appendChild(actions);
+        }
+
+        function appendSuggestionButtons(messageEl, text) {
+          const suggestions = getSmartSuggestions(text);
+          if (!suggestions.length) return;
+          const wrap = document.createElement("div");
+          wrap.className = "sng-ai-suggestions";
+          suggestions.forEach((label) => {
+            const btn = document.createElement("button");
+            btn.className = "sng-ai-link-btn";
+            btn.type = "button";
+            btn.textContent = label;
+            btn.addEventListener("click", async () => {
+              updateStats({ buttonClicks: 1 });
+              await submitQuery(label);
+            });
+            wrap.appendChild(btn);
+          });
+          messageEl.appendChild(wrap);
+        }
+
+        function appendSngLinkActions(container, text, forcedUrl = "") {
+          const links = forcedUrl ? [forcedUrl] : extractSngLinks(text);
+          if (!links.length) return;
           const actions = document.createElement("div");
           actions.className = "sng-ai-msg-actions";
           links.forEach((url) => {
@@ -3172,30 +3317,50 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
             button.target = "_blank";
             button.rel = "noopener noreferrer";
             button.textContent = "Ouvrir la page";
-            button.addEventListener("click", () => updateStats({ linkClicks: 1 }));
+            button.addEventListener("click", () => updateStats({ linkClicks: 1, buttonClicks: 1 }));
             actions.appendChild(button);
           });
           container.appendChild(actions);
         }
 
-        function appendMessage(text, who) {
+        function appendMessage(text, who, options = {}) {
+          const row = document.createElement("div");
+          row.className = `sng-ai-row ${who}`;
+
+          if (who === "bot") {
+            const avatar = document.createElement("img");
+            avatar.className = "sng-ai-avatar";
+            avatar.src = AVATAR_PATH;
+            avatar.alt = "Avatar SNG AI";
+            avatar.loading = "lazy";
+            avatar.addEventListener("error", () => {
+              avatar.style.display = "none";
+            });
+            row.appendChild(avatar);
+          }
+
           const message = document.createElement("div");
           message.className = `sng-ai-msg ${who}`;
+
           if (who === "bot") {
             message.innerHTML = formatAIReply(text);
-            appendSngLinkActions(message, text);
+            appendSngLinkActions(message, text, options.forcedLink || "");
+            appendActionButtons(message, text);
+            appendSuggestionButtons(message, text);
             message.querySelectorAll("a").forEach((link) => {
               link.addEventListener("click", () => updateStats({ linkClicks: 1 }));
             });
           } else {
             message.textContent = text;
           }
-          body.appendChild(message);
-          body.scrollTop = body.scrollHeight;
+
+          row.appendChild(message);
+          body.appendChild(row);
+          scrollToLatest(true);
         }
 
-        function appendAndStore(text, who) {
-          appendMessage(text, who === "assistant" ? "bot" : who);
+        function appendAndStore(text, who, options = {}) {
+          appendMessage(text, who === "assistant" ? "bot" : who, options);
           const history = getStoredHistory();
           history.push({ role: who === "bot" ? "assistant" : who, content: String(text || "").slice(0, 1400) });
           saveHistory(history);
@@ -3203,15 +3368,11 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
 
         function renderStoredHistory() {
           const history = getStoredHistory();
-          if (!history.length) {
-            return;
-          }
+          if (!history.length) return;
           body.innerHTML = "";
           history.forEach((item) => {
             appendMessage(item.content, item.role === "assistant" ? "bot" : "user");
-            if (item.role === "assistant") {
-              lastAssistantReply = item.content;
-            }
+            if (item.role === "assistant") lastAssistantReply = item.content;
           });
         }
 
@@ -3228,28 +3389,48 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
           sendButton.disabled = isLoading;
           voiceButton.disabled = isLoading;
           imageButton.disabled = isLoading;
+          input.disabled = isLoading;
           quickButtons.forEach((button) => {
             button.disabled = isLoading;
           });
         }
 
+        function normalizeFollowUp(query) {
+          const clean = String(query || "").trim();
+          const lowered = clean.toLowerCase();
+          if (lowered === "continue") {
+            return `Continue à partir de ta dernière réponse et approfondis les points clés:
+
+${lastAssistantReply || ""}`;
+          }
+          if (lowered === "explique mieux") {
+            return `Explique mieux de façon simple et actionnable, avec exemples concrets, en repartant de:
+
+${lastAssistantReply || ""}`;
+          }
+          return clean;
+        }
+
         async function submitQuery(rawQuery) {
-          const query = (rawQuery || "").trim();
+          const query = normalizeFollowUp(rawQuery);
+          const navigationLink = inferNavigationLink(rawQuery);
 
           if (!query && !pendingImageData) {
             appendAndStore("Merci d’entrer une question ou d’ajouter une image avant d’envoyer.", "assistant");
             return;
           }
 
-          appendAndStore(query || "🖼️ Image envoyée pour analyse.", "user");
+          appendAndStore(rawQuery?.trim() || "🖼️ Image envoyée pour analyse.", "user");
           updateStats({ messagesSent: 1 });
           input.value = "";
           input.style.height = "auto";
           setUiLoadingState(true);
           sendButton.textContent = "Envoi...";
-          appendMessage("SNG AI réfléchit…", "bot");
-          const thinkingMessage = body.lastElementChild;
+          showTyping(true);
           clearNotice();
+
+          const timeoutController = new AbortController();
+          const timeoutId = setTimeout(() => timeoutController.abort(), REQUEST_TIMEOUT_MS);
 
           try {
             const response = await fetch(apiEndpoint, {
@@ -3259,20 +3440,27 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
               },
               body: JSON.stringify({
                 message: query,
-                history: getStoredHistory().slice(-8),
+                history: getStoredHistory().slice(-MAX_HISTORY_ITEMS),
                 image: pendingImageData || undefined
-              })
+              }),
+              signal: timeoutController.signal
             });
 
-            const payload = await response.json();
-            thinkingMessage?.remove();
+            const payload = await response.json().catch(() => ({}));
             const reply = payload.reply || "Je n’ai pas pu répondre pour le moment.";
             lastAssistantReply = reply;
-            appendAndStore(reply, "assistant");
+            appendAndStore(reply, "assistant", { forcedLink: navigationLink });
           } catch (error) {
-            thinkingMessage?.remove();
-            appendAndStore("Erreur : service IA indisponible pour le moment. Réessaie dans un instant.", "assistant");
+            const isTimeout = error?.name === "AbortError";
+            appendAndStore(
+              isTimeout
+                ? "Le serveur met trop de temps à répondre (10s). Réessaie avec une demande plus courte."
+                : "Erreur : service IA indisponible pour le moment. Réessaie dans un instant.",
+              "assistant"
+            );
           } finally {
+            clearTimeout(timeoutId);
+            showTyping(false);
             setUiLoadingState(false);
             sendButton.textContent = "Envoyer";
             clearImageSelection();
@@ -3289,7 +3477,7 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
           chat.classList.toggle("open");
           if (chat.classList.contains("open")) {
             input.focus();
-            body.scrollTop = body.scrollHeight;
+            scrollToLatest(false);
           }
         });
 
@@ -3299,6 +3487,7 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
           appendMessage("Historique effacé ✅", "bot");
           clearImageSelection();
           clearNotice();
+          showTyping(false);
         });
 
         expandButton.addEventListener("click", () => {
@@ -3306,7 +3495,7 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
           const expanded = widget.classList.contains("sng-ai-expanded");
           expandButton.textContent = expanded ? "🗗" : "⛶";
           expandButton.title = expanded ? "Réduire" : "Agrandir";
-          body.scrollTop = body.scrollHeight;
+          scrollToLatest(false);
         });
 
         closeButton.addEventListener("click", () => {
@@ -3334,9 +3523,7 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
 
         imageInput.addEventListener("change", () => {
           const file = imageInput.files?.[0];
-          if (!file) {
-            return;
-          }
+          if (!file) return;
           if (file.size > MAX_IMAGE_BYTES) {
             showNotice("Image trop lourde (max 4 MB).");
             clearImageSelection();
@@ -3344,15 +3531,13 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
           }
           const reader = new FileReader();
           reader.onload = () => {
-            if (typeof reader.result !== "string") {
-              return;
-            }
+            if (typeof reader.result !== "string") return;
             pendingImageData = reader.result;
             pendingImageName = file.name;
             previewImage.src = reader.result;
             previewMeta.textContent = `${pendingImageName} • ${(file.size / 1024 / 1024).toFixed(2)} MB`;
             preview.hidden = false;
-            updateStats({ imageUploads: 1 });
+            updateStats({ imageUploads: 1, buttonClicks: 1 });
             clearNotice();
           };
           reader.onerror = () => showNotice("Impossible de lire l’image.");
@@ -3394,6 +3579,7 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
             return;
           }
           speechRecognition.start();
+          updateStats({ buttonClicks: 1 });
         });
 
         speakButton.addEventListener("click", () => {
@@ -3407,12 +3593,14 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
           window.speechSynthesis.cancel();
           window.speechSynthesis.speak(utterance);
           clearNotice();
+          updateStats({ buttonClicks: 1 });
         });
 
         quickButtons.forEach((button) => {
           button.addEventListener("click", async () => {
             const prompt = button.dataset.prompt || "";
             input.value = prompt;
+            updateStats({ buttonClicks: 1 });
             await submitQuery(prompt);
           });
         });
