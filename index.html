@@ -1875,6 +1875,29 @@
         color:#fff;
       }
 
+      .sng-ai-quick{
+        display:grid;
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+        gap:8px;
+        padding:0 12px 12px;
+      }
+
+      .sng-ai-quick-btn{
+        border:1px solid rgba(255,255,255,.14);
+        background:rgba(255,255,255,.06);
+        color:#fff;
+        border-radius:12px;
+        padding:8px 10px;
+        font-size:12px;
+        font-weight:700;
+        cursor:pointer;
+        text-align:left;
+      }
+
+      .sng-ai-quick-btn:hover{
+        background:rgba(255,255,255,.13);
+      }
+
       .sng-ai-form{
         display:flex;
         gap:8px;
@@ -1914,6 +1937,10 @@
         .sng-ai-chat{
           bottom:72px;
           width:min(360px, calc(100vw - 24px));
+        }
+
+        .sng-ai-quick{
+          grid-template-columns:1fr;
         }
       }
 
@@ -2696,9 +2723,17 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
     <div class="sng-ai-widget" aria-live="polite">
       <button class="sng-ai-toggle" id="sngAiToggle" aria-label="Ouvrir Assistant SNG IA">🤖</button>
       <div class="sng-ai-chat" id="sngAiChat">
-        <div class="sng-ai-head">Assistant SNG IA</div>
+        <div class="sng-ai-head">SNG AI • Assistant intelligent</div>
         <div class="sng-ai-body" id="sngAiBody">
-          <div class="sng-ai-msg bot">Salut 👋 Je suis l’assistant SNG. Que veux-tu chercher ?</div>
+          <div class="sng-ai-msg bot">Salut 👋 Je peux t’aider pour travail, études, business, rédaction, contenu, traduction, code et plus. Que veux-tu faire ?</div>
+        </div>
+        <div class="sng-ai-quick" id="sngAiQuickActions">
+          <button class="sng-ai-quick-btn" type="button" data-prompt="Rédige un email professionnel pour demander un rendez-vous cette semaine.">✉️ Écrire un email</button>
+          <button class="sng-ai-quick-btn" type="button" data-prompt="Aide-moi à créer un CV moderne pour un poste de commercial débutant.">💼 Créer un CV</button>
+          <button class="sng-ai-quick-btn" type="button" data-prompt="Explique ce cours simplement avec des exemples concrets et un mini quiz :">📚 Expliquer un cours</button>
+          <button class="sng-ai-quick-btn" type="button" data-prompt="Propose 5 idées business rentables à lancer en 2026 avec petit budget.">💰 Idée business</button>
+          <button class="sng-ai-quick-btn" type="button" data-prompt="Écris un script TikTok court et viral sur ce sujet :">🎬 Script TikTok</button>
+          <button class="sng-ai-quick-btn" type="button" data-prompt="Traduis ce texte en anglais avec un ton naturel et professionnel :">🌍 Traduire un texte</button>
         </div>
         <form class="sng-ai-form" id="sngAiForm">
           <input class="sng-ai-input" id="sngAiInput" type="text" placeholder="Écris ici..." autocomplete="off" />
@@ -2715,6 +2750,7 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
         const input = document.getElementById("sngAiInput");
         const body = document.getElementById("sngAiBody");
         const sendButton = form?.querySelector(".sng-ai-send");
+        const quickButtons = document.querySelectorAll(".sng-ai-quick-btn");
         const localEndpoint = "/.netlify/functions/sng-ai";
         const proxyEndpoint = "https://sng-news-proxy.netlify.app/.netlify/functions/sng-ai";
         const apiEndpoint = window.location.hostname.includes("github.io") ? proxyEndpoint : localEndpoint;
@@ -2731,16 +2767,8 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
           body.scrollTop = body.scrollHeight;
         }
 
-        toggle.addEventListener("click", () => {
-          chat.classList.toggle("open");
-          if (chat.classList.contains("open")) {
-            input.focus();
-          }
-        });
-
-        form.addEventListener("submit", async (event) => {
-          event.preventDefault();
-          const query = input.value.trim();
+        async function submitQuery(rawQuery) {
+          const query = (rawQuery || "").trim();
 
           if (!query) {
             appendMessage("Merci d’entrer une question avant d’envoyer.", "bot");
@@ -2752,6 +2780,10 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
           sendButton.disabled = true;
           sendButton.textContent = "...";
 
+          quickButtons.forEach((button) => {
+            button.disabled = true;
+          });
+
           try {
             const response = await fetch(apiEndpoint, {
               method: "POST",
@@ -2762,18 +2794,37 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
             });
 
             const payload = await response.json();
-            if (!response.ok) {
-              appendMessage(payload.reply || "Je n’ai pas pu répondre pour le moment.", "bot");
-            } else {
-              appendMessage(payload.reply || "Je n’ai pas pu répondre pour le moment.", "bot");
-            }
+            appendMessage(payload.reply || "Je n’ai pas pu répondre pour le moment.", "bot");
           } catch (error) {
             appendMessage("Service IA indisponible pour le moment. Réessaie dans un instant.", "bot");
           } finally {
             sendButton.disabled = false;
             sendButton.textContent = "Envoyer";
+            quickButtons.forEach((button) => {
+              button.disabled = false;
+            });
             input.focus();
           }
+        }
+
+        toggle.addEventListener("click", () => {
+          chat.classList.toggle("open");
+          if (chat.classList.contains("open")) {
+            input.focus();
+          }
+        });
+
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          await submitQuery(input.value);
+        });
+
+        quickButtons.forEach((button) => {
+          button.addEventListener("click", async () => {
+            const prompt = button.dataset.prompt || "";
+            input.value = prompt;
+            await submitQuery(prompt);
+          });
         });
       })();
     </script>
