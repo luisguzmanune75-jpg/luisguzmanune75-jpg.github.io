@@ -1827,40 +1827,94 @@
         position:absolute;
         right:0;
         bottom:76px;
-        width:min(360px, calc(100vw - 30px));
+        width:min(390px, calc(100vw - 30px));
+        height:min(640px, 78vh);
         border-radius:18px;
         border:1px solid rgba(255,255,255,.12);
         background:rgba(7,17,28,.95);
         box-shadow:0 18px 42px rgba(0,0,0,.45);
         overflow:hidden;
         display:none;
+        transition:width .28s ease, height .28s ease, transform .2s ease, box-shadow .2s ease;
+        transform-origin:bottom right;
+        backdrop-filter: blur(8px);
       }
 
       .sng-ai-chat.open{
-        display:block;
+        display:flex;
+        flex-direction:column;
       }
 
       .sng-ai-head{
-        padding:14px 16px;
+        padding:13px 14px;
         border-bottom:1px solid rgba(255,255,255,.12);
         font-weight:800;
-      }
-
-      .sng-ai-body{
-        max-height:260px;
-        overflow-y:auto;
-        padding:14px;
         display:flex;
-        flex-direction:column;
+        align-items:center;
+        justify-content:space-between;
         gap:10px;
       }
 
-      .sng-ai-msg{
-        max-width:92%;
-        padding:10px 12px;
-        border-radius:12px;
-        line-height:1.45;
+      .sng-ai-head-title{
         font-size:14px;
+        letter-spacing:.2px;
+      }
+
+      .sng-ai-head-actions{
+        display:flex;
+        align-items:center;
+        gap:8px;
+      }
+
+      .sng-ai-head-btn{
+        width:32px;
+        height:32px;
+        border-radius:10px;
+        border:1px solid rgba(255,255,255,.18);
+        background:rgba(255,255,255,.08);
+        color:#fff;
+        cursor:pointer;
+        display:grid;
+        place-items:center;
+        font-size:16px;
+        transition:background .2s ease, transform .2s ease;
+      }
+
+      .sng-ai-head-btn:hover{
+        background:rgba(255,255,255,.16);
+        transform:translateY(-1px);
+      }
+
+      .sng-ai-body{
+        flex:1;
+        min-height:0;
+        overflow-y:auto;
+        padding:16px;
+        display:flex;
+        flex-direction:column;
+        gap:12px;
+        scrollbar-width:thin;
+        scrollbar-color:rgba(255,255,255,.25) transparent;
+      }
+
+      .sng-ai-body::-webkit-scrollbar{
+        width:8px;
+      }
+
+      .sng-ai-body::-webkit-scrollbar-thumb{
+        background:rgba(255,255,255,.24);
+        border-radius:999px;
+      }
+
+      .sng-ai-msg{
+        max-width:94%;
+        padding:13px 14px;
+        border-radius:14px;
+        line-height:1.65;
+        font-size:15px;
+        white-space:pre-wrap;
+        word-break:break-word;
+        margin-bottom:2px;
       }
 
       .sng-ai-msg.bot{
@@ -1871,13 +1925,31 @@
 
       .sng-ai-msg.user{
         align-self:flex-end;
-        background:rgba(255,95,143,.25);
+        background:rgba(255,95,143,.3);
         color:#fff;
+      }
+
+      .sng-ai-msg a{
+        color:#91cbff;
+        text-decoration:underline;
+      }
+
+      .sng-ai-msg p + p{
+        margin-top:10px;
+      }
+
+      .sng-ai-msg ul,
+      .sng-ai-msg ol{
+        margin:8px 0 8px 20px;
+      }
+
+      .sng-ai-msg li + li{
+        margin-top:4px;
       }
 
       .sng-ai-quick{
         display:grid;
-        grid-template-columns:repeat(2, minmax(0, 1fr));
+        grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
         gap:8px;
         padding:0 12px 12px;
       }
@@ -1887,15 +1959,24 @@
         background:rgba(255,255,255,.06);
         color:#fff;
         border-radius:12px;
-        padding:8px 10px;
+        padding:9px 10px;
         font-size:12px;
         font-weight:700;
         cursor:pointer;
         text-align:left;
+        transition:background .2s ease, border-color .2s ease, transform .2s ease;
       }
 
       .sng-ai-quick-btn:hover{
         background:rgba(255,255,255,.13);
+        border-color:rgba(255,255,255,.28);
+        transform:translateY(-1px);
+      }
+
+      .sng-ai-quick-btn:disabled{
+        opacity:.6;
+        cursor:not-allowed;
+        transform:none;
       }
 
       .sng-ai-form{
@@ -1903,29 +1984,133 @@
         gap:8px;
         padding:12px;
         border-top:1px solid rgba(255,255,255,.12);
+        align-items:flex-end;
       }
 
       .sng-ai-input{
         flex:1;
         min-width:0;
-        height:42px;
-        border-radius:999px;
+        min-height:48px;
+        max-height:120px;
+        border-radius:14px;
         border:1px solid rgba(255,255,255,.14);
         background:rgba(255,255,255,.06);
         color:#fff;
-        padding:0 14px;
+        padding:12px 14px;
         outline:none;
+        resize:none;
+        line-height:1.45;
+      }
+
+      .sng-ai-tools{
+        display:flex;
+        gap:7px;
+      }
+
+      .sng-ai-tool-btn{
+        width:42px;
+        height:42px;
+        border-radius:12px;
+        border:1px solid rgba(255,255,255,.16);
+        background:rgba(255,255,255,.07);
+        color:#fff;
+        cursor:pointer;
+      }
+
+      .sng-ai-tool-btn:disabled{
+        opacity:.55;
+        cursor:not-allowed;
       }
 
       .sng-ai-send{
-        height:42px;
+        height:46px;
         border:none;
-        border-radius:999px;
-        padding:0 14px;
+        border-radius:12px;
+        padding:0 16px;
         font-weight:800;
         color:#fff;
         background:linear-gradient(135deg, #ff5f8f, #ff8fab);
         cursor:pointer;
+      }
+
+      .sng-ai-send:disabled{
+        opacity:.55;
+        cursor:not-allowed;
+      }
+
+      .sng-ai-widget.sng-ai-expanded{
+        right:24px;
+        bottom:24px;
+        z-index:9998;
+      }
+
+      .sng-ai-widget.sng-ai-expanded .sng-ai-chat{
+        width:min(760px, 94vw);
+        height:min(780px, 88vh);
+      }
+
+      .sng-ai-preview{
+        margin:0 12px 10px;
+        padding:8px;
+        border:1px solid rgba(255,255,255,.14);
+        border-radius:12px;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        background:rgba(255,255,255,.04);
+      }
+
+      .sng-ai-preview[hidden]{
+        display:none;
+      }
+
+      .sng-ai-preview img{
+        width:56px;
+        height:56px;
+        object-fit:cover;
+        border-radius:10px;
+        border:1px solid rgba(255,255,255,.2);
+      }
+
+      .sng-ai-preview-meta{
+        flex:1;
+        min-width:0;
+        font-size:12px;
+        color:rgba(255,255,255,.85);
+      }
+
+      .sng-ai-msg-actions{
+        margin-top:10px;
+        display:flex;
+        flex-wrap:wrap;
+        gap:7px;
+      }
+
+      .sng-ai-link-btn{
+        border:1px solid rgba(255,255,255,.2);
+        color:#fff;
+        background:rgba(255,255,255,.08);
+        border-radius:999px;
+        padding:5px 11px;
+        font-size:12px;
+      }
+
+      .sng-ai-notice{
+        margin:0 12px 10px;
+        font-size:12px;
+        color:#ffd58b;
+      }
+
+      .sr-only{
+        position:absolute;
+        width:1px;
+        height:1px;
+        padding:0;
+        margin:-1px;
+        overflow:hidden;
+        clip:rect(0,0,0,0);
+        border:0;
       }
 
       @media (max-width:700px){
@@ -1941,6 +2126,16 @@
 
         .sng-ai-quick{
           grid-template-columns:1fr;
+        }
+
+        .sng-ai-widget.sng-ai-expanded{
+          right:10px;
+          bottom:10px;
+        }
+
+        .sng-ai-widget.sng-ai-expanded .sng-ai-chat{
+          width:calc(100vw - 20px);
+          height:calc(100vh - 20px);
         }
       }
 
@@ -2723,7 +2918,14 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
     <div class="sng-ai-widget" aria-live="polite">
       <button class="sng-ai-toggle" id="sngAiToggle" aria-label="Ouvrir Assistant SNG IA">🤖</button>
       <div class="sng-ai-chat" id="sngAiChat">
-        <div class="sng-ai-head">SNG AI • Assistant intelligent</div>
+        <div class="sng-ai-head">
+          <div class="sng-ai-head-title">SNG AI • Assistant intelligent</div>
+          <div class="sng-ai-head-actions">
+            <button class="sng-ai-head-btn" id="sngAiClear" type="button" aria-label="Effacer l'historique">🧹</button>
+            <button class="sng-ai-head-btn" id="sngAiExpand" type="button" aria-label="Agrandir ou réduire">⛶</button>
+            <button class="sng-ai-head-btn" id="sngAiClose" type="button" aria-label="Fermer le widget">✕</button>
+          </div>
+        </div>
         <div class="sng-ai-body" id="sngAiBody">
           <div class="sng-ai-msg bot">Salut 👋 Je peux t’aider pour travail, études, business, rédaction, contenu, traduction, code et plus. Que veux-tu faire ?</div>
         </div>
@@ -2735,8 +2937,21 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
           <button class="sng-ai-quick-btn" type="button" data-prompt="Écris un script TikTok court et viral sur ce sujet :">🎬 Script TikTok</button>
           <button class="sng-ai-quick-btn" type="button" data-prompt="Traduis ce texte en anglais avec un ton naturel et professionnel :">🌍 Traduire un texte</button>
         </div>
+        <p id="sngAiNotice" class="sng-ai-notice" hidden></p>
+        <div class="sng-ai-preview" id="sngAiPreview" hidden>
+          <img id="sngAiPreviewImg" alt="Aperçu image" />
+          <div class="sng-ai-preview-meta" id="sngAiPreviewMeta"></div>
+          <button class="sng-ai-head-btn" id="sngAiRemoveImage" type="button" aria-label="Retirer l'image">✕</button>
+        </div>
         <form class="sng-ai-form" id="sngAiForm">
-          <input class="sng-ai-input" id="sngAiInput" type="text" placeholder="Écris ici..." autocomplete="off" />
+          <div class="sng-ai-tools">
+            <button class="sng-ai-tool-btn" id="sngAiVoiceBtn" type="button" aria-label="Dicter un message">🎙️</button>
+            <button class="sng-ai-tool-btn" id="sngAiSpeakBtn" type="button" aria-label="Lire la dernière réponse">🔊</button>
+            <button class="sng-ai-tool-btn" id="sngAiImageBtn" type="button" aria-label="Ajouter une image">🖼️</button>
+          </div>
+          <label class="sr-only" for="sngAiImageInput">Ajouter une image</label>
+          <input id="sngAiImageInput" type="file" accept="image/*" hidden />
+          <textarea class="sng-ai-input" id="sngAiInput" rows="1" placeholder="Écris ici..." autocomplete="off"></textarea>
           <button class="sng-ai-send" type="submit">Envoyer</button>
         </form>
       </div>
@@ -2749,40 +2964,260 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
         const form = document.getElementById("sngAiForm");
         const input = document.getElementById("sngAiInput");
         const body = document.getElementById("sngAiBody");
+        const widget = document.querySelector(".sng-ai-widget");
+        const clearButton = document.getElementById("sngAiClear");
+        const expandButton = document.getElementById("sngAiExpand");
+        const closeButton = document.getElementById("sngAiClose");
+        const voiceButton = document.getElementById("sngAiVoiceBtn");
+        const speakButton = document.getElementById("sngAiSpeakBtn");
+        const imageButton = document.getElementById("sngAiImageBtn");
+        const imageInput = document.getElementById("sngAiImageInput");
+        const preview = document.getElementById("sngAiPreview");
+        const previewImage = document.getElementById("sngAiPreviewImg");
+        const previewMeta = document.getElementById("sngAiPreviewMeta");
+        const removeImageButton = document.getElementById("sngAiRemoveImage");
+        const notice = document.getElementById("sngAiNotice");
         const sendButton = form?.querySelector(".sng-ai-send");
         const quickButtons = document.querySelectorAll(".sng-ai-quick-btn");
         const localEndpoint = "/.netlify/functions/sng-ai";
         const proxyEndpoint = "https://sng-news-proxy.netlify.app/.netlify/functions/sng-ai";
         const apiEndpoint = window.location.hostname.includes("github.io") ? proxyEndpoint : localEndpoint;
+        const STORAGE_HISTORY_KEY = "sngAiHistory";
+        const STORAGE_STATS_KEY = "sngAiStats";
+        const MAX_HISTORY_ITEMS = 8;
+        const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
+        let pendingImageData = "";
+        let pendingImageName = "";
+        let lastAssistantReply = "";
+        let speechRecognition = null;
+        let isListening = false;
 
-        if (!toggle || !chat || !form || !input || !body || !sendButton) {
+        if (!toggle || !chat || !form || !input || !body || !sendButton || !widget || !expandButton || !closeButton || !clearButton || !voiceButton || !speakButton || !imageButton || !imageInput || !preview || !previewImage || !previewMeta || !removeImageButton || !notice) {
           return;
+        }
+
+        function escapeHTML(value) {
+          return String(value || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+        }
+
+        function updateStats(patch) {
+          let current = {};
+          try {
+            current = JSON.parse(localStorage.getItem(STORAGE_STATS_KEY) || "{}");
+          } catch {
+            current = {};
+          }
+          const next = {
+            messagesSent: Number(current.messagesSent || 0),
+            linkClicks: Number(current.linkClicks || 0),
+            imageUploads: Number(current.imageUploads || 0),
+            lastUsage: current.lastUsage || null
+          };
+          if (typeof patch.messagesSent === "number") {
+            next.messagesSent += patch.messagesSent;
+          }
+          if (typeof patch.linkClicks === "number") {
+            next.linkClicks += patch.linkClicks;
+          }
+          if (typeof patch.imageUploads === "number") {
+            next.imageUploads += patch.imageUploads;
+          }
+          next.lastUsage = new Date().toISOString();
+          localStorage.setItem(STORAGE_STATS_KEY, JSON.stringify(next));
+        }
+
+        function getStoredHistory() {
+          let raw = [];
+          try {
+            raw = JSON.parse(localStorage.getItem(STORAGE_HISTORY_KEY) || "[]");
+          } catch {
+            raw = [];
+          }
+          if (!Array.isArray(raw)) {
+            return [];
+          }
+          return raw
+            .filter((item) => item && (item.role === "user" || item.role === "assistant") && typeof item.content === "string")
+            .slice(-MAX_HISTORY_ITEMS);
+        }
+
+        function saveHistory(history) {
+          localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(history.slice(-MAX_HISTORY_ITEMS)));
+        }
+
+        function showNotice(text) {
+          notice.textContent = text;
+          notice.hidden = !text;
+        }
+
+        function clearNotice() {
+          notice.hidden = true;
+          notice.textContent = "";
+        }
+
+        function formatAIReply(text) {
+          const safeText = escapeHTML(text);
+          const lines = safeText.split(/\r?\n/);
+          let html = "";
+          let inList = false;
+
+          for (const rawLine of lines) {
+            const line = rawLine.trim();
+            const listItem = line.match(/^([-*•]|\d+\.)\s+(.+)/);
+
+            if (listItem) {
+              if (!inList) {
+                html += "<ul>";
+                inList = true;
+              }
+              html += `<li>${listItem[2]}</li>`;
+              continue;
+            }
+
+            if (inList) {
+              html += "</ul>";
+              inList = false;
+            }
+
+            if (!line) {
+              html += "<p></p>";
+              continue;
+            }
+
+            html += `<p>${line}</p>`;
+          }
+
+          if (inList) {
+            html += "</ul>";
+          }
+
+          html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+          html = html.replace(/(https?:\/\/[^\s<]+)/g, (url) => {
+            return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+          });
+
+          return html;
+        }
+
+        function extractSngLinks(text) {
+          const links = [];
+          const regex = /(https?:\/\/[^\s]+|\/[a-z0-9-]+\.html)/gi;
+          const seen = new Set();
+          let match;
+          while ((match = regex.exec(text || ""))) {
+            let url = match[0].trim();
+            if (url.startsWith("/")) {
+              url = `${window.location.origin}${url}`;
+            }
+            if (!url.includes("sng") && !url.includes(window.location.hostname)) {
+              continue;
+            }
+            if (seen.has(url)) {
+              continue;
+            }
+            seen.add(url);
+            links.push(url);
+          }
+          return links.slice(0, 4);
+        }
+
+        function appendSngLinkActions(container, text) {
+          const links = extractSngLinks(text);
+          if (!links.length) {
+            return;
+          }
+          const actions = document.createElement("div");
+          actions.className = "sng-ai-msg-actions";
+          links.forEach((url) => {
+            const button = document.createElement("a");
+            button.className = "sng-ai-link-btn";
+            button.href = url;
+            button.target = "_blank";
+            button.rel = "noopener noreferrer";
+            button.textContent = "Ouvrir la page";
+            button.addEventListener("click", () => updateStats({ linkClicks: 1 }));
+            actions.appendChild(button);
+          });
+          container.appendChild(actions);
         }
 
         function appendMessage(text, who) {
           const message = document.createElement("div");
           message.className = `sng-ai-msg ${who}`;
-          message.textContent = text;
+          if (who === "bot") {
+            message.innerHTML = formatAIReply(text);
+            appendSngLinkActions(message, text);
+            message.querySelectorAll("a").forEach((link) => {
+              link.addEventListener("click", () => updateStats({ linkClicks: 1 }));
+            });
+          } else {
+            message.textContent = text;
+          }
           body.appendChild(message);
           body.scrollTop = body.scrollHeight;
+        }
+
+        function appendAndStore(text, who) {
+          appendMessage(text, who === "assistant" ? "bot" : who);
+          const history = getStoredHistory();
+          history.push({ role: who === "bot" ? "assistant" : who, content: String(text || "").slice(0, 1400) });
+          saveHistory(history);
+        }
+
+        function renderStoredHistory() {
+          const history = getStoredHistory();
+          if (!history.length) {
+            return;
+          }
+          body.innerHTML = "";
+          history.forEach((item) => {
+            appendMessage(item.content, item.role === "assistant" ? "bot" : "user");
+            if (item.role === "assistant") {
+              lastAssistantReply = item.content;
+            }
+          });
+        }
+
+        function clearImageSelection() {
+          pendingImageData = "";
+          pendingImageName = "";
+          imageInput.value = "";
+          preview.hidden = true;
+          previewMeta.textContent = "";
+          previewImage.removeAttribute("src");
+        }
+
+        function setUiLoadingState(isLoading) {
+          sendButton.disabled = isLoading;
+          voiceButton.disabled = isLoading;
+          imageButton.disabled = isLoading;
+          quickButtons.forEach((button) => {
+            button.disabled = isLoading;
+          });
         }
 
         async function submitQuery(rawQuery) {
           const query = (rawQuery || "").trim();
 
-          if (!query) {
-            appendMessage("Merci d’entrer une question avant d’envoyer.", "bot");
+          if (!query && !pendingImageData) {
+            appendAndStore("Merci d’entrer une question ou d’ajouter une image avant d’envoyer.", "assistant");
             return;
           }
 
-          appendMessage(query, "user");
+          appendAndStore(query || "🖼️ Image envoyée pour analyse.", "user");
+          updateStats({ messagesSent: 1 });
           input.value = "";
-          sendButton.disabled = true;
-          sendButton.textContent = "...";
-
-          quickButtons.forEach((button) => {
-            button.disabled = true;
-          });
+          input.style.height = "auto";
+          setUiLoadingState(true);
+          sendButton.textContent = "Envoi...";
+          appendMessage("SNG AI réfléchit…", "bot");
+          const thinkingMessage = body.lastElementChild;
+          clearNotice();
 
           try {
             const response = await fetch(apiEndpoint, {
@@ -2790,33 +3225,151 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
               headers: {
                 "Content-Type": "application/json"
               },
-              body: JSON.stringify({ message: query })
+              body: JSON.stringify({
+                message: query,
+                history: getStoredHistory().slice(-8),
+                image: pendingImageData || undefined
+              })
             });
 
             const payload = await response.json();
-            appendMessage(payload.reply || "Je n’ai pas pu répondre pour le moment.", "bot");
+            thinkingMessage?.remove();
+            const reply = payload.reply || "Je n’ai pas pu répondre pour le moment.";
+            lastAssistantReply = reply;
+            appendAndStore(reply, "assistant");
           } catch (error) {
-            appendMessage("Service IA indisponible pour le moment. Réessaie dans un instant.", "bot");
+            thinkingMessage?.remove();
+            appendAndStore("Erreur : service IA indisponible pour le moment. Réessaie dans un instant.", "assistant");
           } finally {
-            sendButton.disabled = false;
+            setUiLoadingState(false);
             sendButton.textContent = "Envoyer";
-            quickButtons.forEach((button) => {
-              button.disabled = false;
-            });
+            clearImageSelection();
             input.focus();
           }
+        }
+
+        function autoResizeInput() {
+          input.style.height = "auto";
+          input.style.height = `${Math.min(input.scrollHeight, 120)}px`;
         }
 
         toggle.addEventListener("click", () => {
           chat.classList.toggle("open");
           if (chat.classList.contains("open")) {
             input.focus();
+            body.scrollTop = body.scrollHeight;
           }
+        });
+
+        clearButton.addEventListener("click", () => {
+          localStorage.removeItem(STORAGE_HISTORY_KEY);
+          body.innerHTML = "";
+          appendMessage("Historique effacé ✅", "bot");
+          clearImageSelection();
+          clearNotice();
+        });
+
+        expandButton.addEventListener("click", () => {
+          widget.classList.toggle("sng-ai-expanded");
+          body.scrollTop = body.scrollHeight;
+        });
+
+        closeButton.addEventListener("click", () => {
+          chat.classList.remove("open");
+          widget.classList.remove("sng-ai-expanded");
         });
 
         form.addEventListener("submit", async (event) => {
           event.preventDefault();
           await submitQuery(input.value);
+        });
+
+        input.addEventListener("input", autoResizeInput);
+        input.addEventListener("keydown", async (event) => {
+          if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            await submitQuery(input.value);
+          }
+        });
+
+        imageButton.addEventListener("click", () => imageInput.click());
+        removeImageButton.addEventListener("click", clearImageSelection);
+
+        imageInput.addEventListener("change", () => {
+          const file = imageInput.files?.[0];
+          if (!file) {
+            return;
+          }
+          if (file.size > MAX_IMAGE_BYTES) {
+            showNotice("Image trop lourde (max 4 MB).");
+            clearImageSelection();
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = () => {
+            if (typeof reader.result !== "string") {
+              return;
+            }
+            pendingImageData = reader.result;
+            pendingImageName = file.name;
+            previewImage.src = reader.result;
+            previewMeta.textContent = `${pendingImageName} • ${(file.size / 1024 / 1024).toFixed(2)} MB`;
+            preview.hidden = false;
+            updateStats({ imageUploads: 1 });
+            clearNotice();
+          };
+          reader.onerror = () => showNotice("Impossible de lire l’image.");
+          reader.readAsDataURL(file);
+        });
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+          speechRecognition = new SpeechRecognition();
+          speechRecognition.lang = "fr-FR";
+          speechRecognition.interimResults = false;
+          speechRecognition.onstart = () => {
+            isListening = true;
+            voiceButton.textContent = "⏹️";
+            showNotice("Écoute en cours...");
+          };
+          speechRecognition.onresult = (event) => {
+            const transcript = event.results?.[0]?.[0]?.transcript || "";
+            input.value = transcript;
+            autoResizeInput();
+            clearNotice();
+          };
+          speechRecognition.onend = () => {
+            isListening = false;
+            voiceButton.textContent = "🎙️";
+          };
+          speechRecognition.onerror = () => {
+            showNotice("La dictée vocale a échoué.");
+          };
+        }
+
+        voiceButton.addEventListener("click", () => {
+          if (!speechRecognition) {
+            showNotice("Votre navigateur ne supporte pas la reconnaissance vocale.");
+            return;
+          }
+          if (isListening) {
+            speechRecognition.stop();
+            return;
+          }
+          speechRecognition.start();
+        });
+
+        speakButton.addEventListener("click", () => {
+          if (!window.speechSynthesis) {
+            showNotice("Votre navigateur ne supporte pas la lecture vocale.");
+            return;
+          }
+          const text = lastAssistantReply || "Aucune réponse à lire pour le moment.";
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = "fr-FR";
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(utterance);
+          clearNotice();
         });
 
         quickButtons.forEach((button) => {
@@ -2826,6 +3379,8 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
             await submitQuery(prompt);
           });
         });
+
+        renderStoredHistory();
       })();
     </script>
 
