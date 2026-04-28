@@ -4,7 +4,10 @@ const CORS_HEADERS = {
   "Access-Control-Allow-Methods": "POST, OPTIONS"
 };
 
-const MAX_MESSAGE_LENGTH = 500;
+const MAX_MESSAGE_LENGTH = 1200;
+const MAX_HISTORY_MESSAGES = 8;
+const MAX_HISTORY_CONTENT_LENGTH = 1000;
+const MAX_IMAGE_DATA_URL_LENGTH = 5_600_000;
 const FALLBACK_REPLY = "Je n’ai pas pu répondre pour le moment.";
 
 function jsonResponse(statusCode, reply) {
@@ -40,14 +43,41 @@ export async function handler(event) {
   }
 
   const message = typeof body?.message === "string" ? body.message.trim() : "";
+  const rawHistory = Array.isArray(body?.history) ? body.history : [];
+  const image = typeof body?.image === "string" ? body.image.trim() : "";
 
-  if (!message) {
+  if (!message && !image) {
     return jsonResponse(400, "Le message ne peut pas être vide.");
   }
 
   if (message.length > MAX_MESSAGE_LENGTH) {
     return jsonResponse(400, `Message trop long. Maximum ${MAX_MESSAGE_LENGTH} caractères.`);
   }
+
+  if (image && image.length > MAX_IMAGE_DATA_URL_LENGTH) {
+    return jsonResponse(400, "Image trop volumineuse.");
+  }
+
+  if (image && !/^data:image\/[a-zA-Z0-9.+-]+;base64,[A-Za-z0-9+/=]+$/.test(image)) {
+    return jsonResponse(400, "Format image invalide.");
+  }
+
+  const history = rawHistory
+    .slice(-MAX_HISTORY_MESSAGES)
+    .filter((item) => item && typeof item === "object")
+    .map((item) => {
+      const role = item.role === "assistant" ? "assistant" : item.role === "user" ? "user" : null;
+      const content = typeof item.content === "string" ? item.content.trim().slice(0, MAX_HISTORY_CONTENT_LENGTH) : "";
+      return role && content ? { role, content } : null;
+    })
+    .filter(Boolean);
+
+  const userMessageContent = image
+    ? [
+        { type: "text", text: message || "Analyse cette image." },
+        { type: "image_url", image_url: { url: image } }
+      ]
+    : message;
 
   try {
     const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -57,19 +87,20 @@ export async function handler(event) {
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
       },
       body: JSON.stringify({
-        model: "gpt-4.1-mini",
+        model: "gpt-4o-mini",
         messages: [
           {
             role: "system",
             content:
-              "Tu es SNG AI, l’assistant intelligent officiel de SNG Portal.\n\nTu aides l’utilisateur dans :\n- rédaction professionnelle et personnelle : emails, relances, candidatures, réclamations, rendez-vous, mails commerciaux\n- CV et emploi : CV moderne, amélioration de CV, lettres de motivation, LinkedIn, préparation entretien\n- études : cours, fiches, quiz, dissertations, commentaires, plans, problématiques, rapports de stage\n- analyse de documents : résumé, simplification, idées clés, synthèse, risques, compte rendu\n- programmation : HTML, CSS, JavaScript, Python, React, Node.js, PHP, SQL, APIs, debug\n- business : idées, stratégie, marketing, acquisition client, prix, branding, lancement\n- création de contenu : TikTok, YouTube, Instagram, Facebook, LinkedIn, hooks, scripts, storytelling\n- vente et persuasion : page de vente, pitch, prospection, scripts, objections, copywriting\n- philosophie et réflexion profonde\n- traduction et langues : français, anglais, espagnol et autres langues\n- organisation personnelle : planning, routines, objectifs, productivité\n- décisions importantes : carrière, business, orientation, choix stratégiques\n\nRègles :\n- Réponds en français par défaut.\n- Réponds clairement, professionnellement et simplement.\n- Donne des réponses utiles, concrètes et actionnables.\n- Si l’utilisateur demande un texte, écris directement le texte.\n- Si l’utilisateur demande un plan, donne un plan structuré.\n- Si l’utilisateur demande du code, donne du code propre et expliqué simplement.\n- Si la demande concerne SNG Portal, propose les liens internes utiles : /actualites.html, /crypto.html, /meteo.html, /loterie.html, /sports.html, /cinema.html, /voyages.html, /etudes.html.\n- Réponses courtes sauf si l’utilisateur demande un contenu long.\n- Style : moderne, intelligent, direct, utile, professionnel."
+              "Tu es SNG AI, l’assistant intelligent officiel de SNG Portal.\n\nCompétences prioritaires :\n- rédaction d’emails, lettres, CV, contenus marketing et textes pro\n- aide aux études : explications simples, fiches, quiz, plans, dissertations\n- assistance code : debug, exemples et explications claires\n- analyse d’images, captures d’écran et visuels\n- recommandations de pages utiles SNG Portal quand pertinent\n\nRègles de réponse :\n- Réponds en français par défaut.\n- Réponses structurées, lisibles, utiles et actionnables.\n- Utilise des listes/étapes quand nécessaire.\n- Si l’utilisateur demande du texte prêt à copier, produis-le directement.\n- Si la demande concerne SNG Portal, suggère des liens internes utiles : /actualites.html, /crypto.html, /meteo.html, /loterie.html, /sports.html, /cinema.html, /voyages.html, /etudes.html.\n- N’invente pas de faits non vérifiables.\n- Ton : moderne, professionnel, clair."
           },
+          ...history,
           {
             role: "user",
-            content: message
+            content: userMessageContent
           }
         ],
-        max_tokens: 180,
+        max_tokens: 380,
         temperature: 0.5
       })
     });
