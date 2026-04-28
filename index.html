@@ -2763,9 +2763,9 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
 
             const payload = await response.json();
             if (!response.ok) {
-              appendMessage(payload.error || "Erreur temporaire du service IA SNG.", "bot");
+              appendMessage(payload.reply || "Je n’ai pas pu répondre pour le moment.", "bot");
             } else {
-              appendMessage(payload.reply || "Je peux t’aider avec les rubriques SNG Portal.", "bot");
+              appendMessage(payload.reply || "Je n’ai pas pu répondre pour le moment.", "bot");
             }
           } catch (error) {
             appendMessage("Service IA indisponible pour le moment. Réessaie dans un instant.", "bot");

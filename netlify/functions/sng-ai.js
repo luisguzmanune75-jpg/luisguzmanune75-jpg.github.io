@@ -5,12 +5,13 @@ const CORS_HEADERS = {
 };
 
 const MAX_MESSAGE_LENGTH = 500;
+const FALLBACK_REPLY = "Je n’ai pas pu répondre pour le moment.";
 
-function jsonResponse(statusCode, payload) {
+function jsonResponse(statusCode, reply) {
   return {
     statusCode,
     headers: CORS_HEADERS,
-    body: JSON.stringify(payload)
+    body: JSON.stringify({ reply })
   };
 }
 
@@ -24,34 +25,32 @@ export async function handler(event) {
   }
 
   if (event.httpMethod !== "POST") {
-    return jsonResponse(405, { error: "Méthode non autorisée" });
+    return jsonResponse(405, "Méthode non autorisée.");
   }
 
   if (!process.env.OPENAI_API_KEY) {
-    return jsonResponse(500, { error: "Configuration IA manquante" });
+    return jsonResponse(500, FALLBACK_REPLY);
   }
 
   let body;
   try {
     body = JSON.parse(event.body || "{}");
   } catch {
-    return jsonResponse(400, { error: "Format de requête invalide" });
+    return jsonResponse(400, "JSON invalide.");
   }
 
-  const message = (body?.message || "").trim();
+  const message = typeof body?.message === "string" ? body.message.trim() : "";
 
   if (!message) {
-    return jsonResponse(400, { error: "Le message ne peut pas être vide." });
+    return jsonResponse(400, "Le message ne peut pas être vide.");
   }
 
   if (message.length > MAX_MESSAGE_LENGTH) {
-    return jsonResponse(400, {
-      error: `Message trop long. Maximum ${MAX_MESSAGE_LENGTH} caractères.`
-    });
+    return jsonResponse(400, `Message trop long. Maximum ${MAX_MESSAGE_LENGTH} caractères.`);
   }
 
   try {
-    const openaiResponse = await fetch("https://api.openai.com/v1/responses", {
+    const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +58,7 @@ export async function handler(event) {
       },
       body: JSON.stringify({
         model: "gpt-4.1-mini",
-        input: [
+        messages: [
           {
             role: "system",
             content:
@@ -70,27 +69,28 @@ export async function handler(event) {
             content: message
           }
         ],
-        max_output_tokens: 180,
+        max_tokens: 180,
         temperature: 0.5
       })
     });
 
+    const data = await openaiResponse.json().catch(() => null);
+    console.log("OpenAI raw response:", data);
+
     if (!openaiResponse.ok) {
-      const err = await openaiResponse.text();
-      console.error("OpenAI error:", err);
-      return jsonResponse(502, { error: "Le service IA est momentanément indisponible." });
+      console.error("OpenAI error response:", data);
+      return jsonResponse(502, FALLBACK_REPLY);
     }
 
-    const data = await openaiResponse.json();
-    const reply = (data?.output_text || "").trim();
+    const reply = (data?.choices?.[0]?.message?.content || "").trim();
 
     if (!reply) {
-      return jsonResponse(502, { error: "Réponse IA vide." });
+      return jsonResponse(502, FALLBACK_REPLY);
     }
 
-    return jsonResponse(200, { reply });
+    return jsonResponse(200, reply);
   } catch (error) {
     console.error("sng-ai function error:", error);
-    return jsonResponse(500, { error: "Erreur serveur IA." });
+    return jsonResponse(500, FALLBACK_REPLY);
   }
 }
