@@ -1852,12 +1852,18 @@
         display:flex;
         align-items:center;
         justify-content:space-between;
-        gap:10px;
+        gap:8px;
+        overflow:visible;
       }
 
       .sng-ai-head-title{
         font-size:14px;
         letter-spacing:.2px;
+        flex:1;
+        min-width:0;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
       }
 
       .sng-ai-head-actions{
@@ -1885,11 +1891,12 @@
         transform:translateY(-1px);
       }
 
-      .sng-ai-body{
+      .sng-ai-body,
+      .sng-ai-messages{
         flex:1;
         min-height:0;
         overflow-y:auto;
-        padding:16px;
+        padding:14px;
         display:flex;
         flex-direction:column;
         gap:12px;
@@ -1917,10 +1924,16 @@
         margin-bottom:2px;
       }
 
-      .sng-ai-msg.bot{
+      .sng-ai-msg.bot,
+      .sng-ai-message.bot{
         align-self:flex-start;
         background:rgba(255,255,255,.09);
         color:#eaf3ff;
+        line-height:1.7;
+        font-size:14px;
+        padding:14px 16px;
+        max-width:92%;
+        white-space:normal;
       }
 
       .sng-ai-msg.user{
@@ -1936,6 +1949,29 @@
 
       .sng-ai-msg p + p{
         margin-top:10px;
+      }
+
+      .sng-ai-message.bot p,
+      .sng-ai-msg.bot p{
+        margin:0 0 12px;
+      }
+
+      .sng-ai-message.bot p:last-child,
+      .sng-ai-msg.bot p:last-child{
+        margin-bottom:0;
+      }
+
+      .sng-ai-message.bot strong,
+      .sng-ai-msg.bot strong{
+        color:#fff;
+        font-weight:800;
+      }
+
+      .sng-ai-message.bot a,
+      .sng-ai-msg.bot a{
+        color:#7aa8ff;
+        font-weight:700;
+        text-decoration:underline;
       }
 
       .sng-ai-msg ul,
@@ -2041,6 +2077,8 @@
       .sng-ai-widget.sng-ai-expanded{
         right:24px;
         bottom:24px;
+        width:min(760px, 94vw);
+        height:min(780px, 88vh);
         z-index:9998;
       }
 
@@ -2131,6 +2169,8 @@
         .sng-ai-widget.sng-ai-expanded{
           right:10px;
           bottom:10px;
+          width:calc(100vw - 20px);
+          height:calc(100vh - 20px);
         }
 
         .sng-ai-widget.sng-ai-expanded .sng-ai-chat{
@@ -2922,8 +2962,8 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
           <div class="sng-ai-head-title">SNG AI • Assistant intelligent</div>
           <div class="sng-ai-head-actions">
             <button class="sng-ai-head-btn" id="sngAiClear" type="button" aria-label="Effacer l'historique">🧹</button>
-            <button class="sng-ai-head-btn" id="sngAiExpand" type="button" aria-label="Agrandir ou réduire">⛶</button>
-            <button class="sng-ai-head-btn" id="sngAiClose" type="button" aria-label="Fermer le widget">✕</button>
+            <button class="sng-ai-head-btn" id="sngAiExpandBtn" type="button" title="Agrandir" aria-label="Agrandir ou réduire">⛶</button>
+            <button class="sng-ai-head-btn" id="sngAiCloseBtn" type="button" title="Fermer" aria-label="Fermer le widget">✕</button>
           </div>
         </div>
         <div class="sng-ai-body" id="sngAiBody">
@@ -2966,8 +3006,8 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
         const body = document.getElementById("sngAiBody");
         const widget = document.querySelector(".sng-ai-widget");
         const clearButton = document.getElementById("sngAiClear");
-        const expandButton = document.getElementById("sngAiExpand");
-        const closeButton = document.getElementById("sngAiClose");
+        const expandButton = document.getElementById("sngAiExpandBtn");
+        const closeButton = document.getElementById("sngAiCloseBtn");
         const voiceButton = document.getElementById("sngAiVoiceBtn");
         const speakButton = document.getElementById("sngAiSpeakBtn");
         const imageButton = document.getElementById("sngAiImageBtn");
@@ -3061,47 +3101,39 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
         }
 
         function formatAIReply(text) {
-          const safeText = escapeHTML(text);
-          const lines = safeText.split(/\r?\n/);
-          let html = "";
-          let inList = false;
-
-          for (const rawLine of lines) {
-            const line = rawLine.trim();
-            const listItem = line.match(/^([-*•]|\d+\.)\s+(.+)/);
-
-            if (listItem) {
-              if (!inList) {
-                html += "<ul>";
-                inList = true;
-              }
-              html += `<li>${listItem[2]}</li>`;
-              continue;
-            }
-
-            if (inList) {
-              html += "</ul>";
-              inList = false;
-            }
-
-            if (!line) {
-              html += "<p></p>";
-              continue;
-            }
-
-            html += `<p>${line}</p>`;
-          }
-
-          if (inList) {
-            html += "</ul>";
-          }
-
-          html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-          html = html.replace(/(https?:\/\/[^\s<]+)/g, (url) => {
+          const safeText = escapeHTML(text || "");
+          const withListBreaks = safeText
+            .replace(/([^\n])(\s)(\d+\.\s+)/g, "$1\n$3")
+            .replace(/([^\n])(\s)([-•]\s+)/g, "$1\n$3");
+          const withStrong = withListBreaks.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+          const withLinks = withStrong.replace(/(https?:\/\/[^\s<]+)/g, (url) => {
             return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
           });
+          const blocks = withLinks
+            .split(/\n{2,}/)
+            .map((block) => block.trim())
+            .filter(Boolean);
 
-          return html;
+          return blocks
+            .map((block) => {
+              const lines = block
+                .split(/\n/)
+                .map((line) => line.trim())
+                .filter(Boolean);
+              if (!lines.length) {
+                return "";
+              }
+              const isOrdered = lines.every((line) => /^\d+\.\s+/.test(line));
+              if (isOrdered) {
+                return `<ol>${lines.map((line) => `<li>${line.replace(/^\d+\.\s+/, "")}</li>`).join("")}</ol>`;
+              }
+              const isUnordered = lines.every((line) => /^[-•]\s+/.test(line));
+              if (isUnordered) {
+                return `<ul>${lines.map((line) => `<li>${line.replace(/^[-•]\s+/, "")}</li>`).join("")}</ul>`;
+              }
+              return `<p>${lines.join("<br>")}</p>`;
+            })
+            .join("");
         }
 
         function extractSngLinks(text) {
@@ -3271,12 +3303,17 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
 
         expandButton.addEventListener("click", () => {
           widget.classList.toggle("sng-ai-expanded");
+          const expanded = widget.classList.contains("sng-ai-expanded");
+          expandButton.textContent = expanded ? "🗗" : "⛶";
+          expandButton.title = expanded ? "Réduire" : "Agrandir";
           body.scrollTop = body.scrollHeight;
         });
 
         closeButton.addEventListener("click", () => {
           chat.classList.remove("open");
           widget.classList.remove("sng-ai-expanded");
+          expandButton.textContent = "⛶";
+          expandButton.title = "Agrandir";
         });
 
         form.addEventListener("submit", async (event) => {
