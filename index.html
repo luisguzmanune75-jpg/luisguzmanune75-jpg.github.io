@@ -1797,6 +1797,126 @@
         #sngSearch{width:100%; min-width:unset}
       }
 
+      .sng-ai-widget{
+        position:fixed;
+        right:20px;
+        bottom:20px;
+        z-index:120;
+      }
+
+      .sng-ai-toggle{
+        width:62px;
+        height:62px;
+        border:none;
+        border-radius:50%;
+        background:linear-gradient(135deg, #ff5f8f, #70a1ff);
+        color:#fff;
+        font-size:27px;
+        font-weight:800;
+        box-shadow:0 14px 26px rgba(0,0,0,.35);
+        cursor:pointer;
+        transition:transform .2s ease, box-shadow .2s ease;
+      }
+
+      .sng-ai-toggle:hover{
+        transform:translateY(-2px) scale(1.02);
+        box-shadow:0 16px 32px rgba(0,0,0,.42);
+      }
+
+      .sng-ai-chat{
+        position:absolute;
+        right:0;
+        bottom:76px;
+        width:min(360px, calc(100vw - 30px));
+        border-radius:18px;
+        border:1px solid rgba(255,255,255,.12);
+        background:rgba(7,17,28,.95);
+        box-shadow:0 18px 42px rgba(0,0,0,.45);
+        overflow:hidden;
+        display:none;
+      }
+
+      .sng-ai-chat.open{
+        display:block;
+      }
+
+      .sng-ai-head{
+        padding:14px 16px;
+        border-bottom:1px solid rgba(255,255,255,.12);
+        font-weight:800;
+      }
+
+      .sng-ai-body{
+        max-height:260px;
+        overflow-y:auto;
+        padding:14px;
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+      }
+
+      .sng-ai-msg{
+        max-width:92%;
+        padding:10px 12px;
+        border-radius:12px;
+        line-height:1.45;
+        font-size:14px;
+      }
+
+      .sng-ai-msg.bot{
+        align-self:flex-start;
+        background:rgba(255,255,255,.09);
+        color:#eaf3ff;
+      }
+
+      .sng-ai-msg.user{
+        align-self:flex-end;
+        background:rgba(255,95,143,.25);
+        color:#fff;
+      }
+
+      .sng-ai-form{
+        display:flex;
+        gap:8px;
+        padding:12px;
+        border-top:1px solid rgba(255,255,255,.12);
+      }
+
+      .sng-ai-input{
+        flex:1;
+        min-width:0;
+        height:42px;
+        border-radius:999px;
+        border:1px solid rgba(255,255,255,.14);
+        background:rgba(255,255,255,.06);
+        color:#fff;
+        padding:0 14px;
+        outline:none;
+      }
+
+      .sng-ai-send{
+        height:42px;
+        border:none;
+        border-radius:999px;
+        padding:0 14px;
+        font-weight:800;
+        color:#fff;
+        background:linear-gradient(135deg, #ff5f8f, #ff8fab);
+        cursor:pointer;
+      }
+
+      @media (max-width:700px){
+        .sng-ai-widget{
+          right:12px;
+          bottom:12px;
+        }
+
+        .sng-ai-chat{
+          bottom:72px;
+          width:min(360px, calc(100vw - 24px));
+        }
+      }
+
     </style>
   </head>
   <body data-page="home">
@@ -2565,13 +2685,98 @@ En tant que Partenaire Amazon, SNG Portal réalise un bénéfice sur les achats 
       }
     </script>
 
-    <script>
+<script>
 document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
   if (!link.href.includes("tag=")) {
     link.href += (link.href.includes("?") ? "&" : "?") + "tag=sngportal-21";
   }
 });
 </script>
+
+    <div class="sng-ai-widget" aria-live="polite">
+      <button class="sng-ai-toggle" id="sngAiToggle" aria-label="Ouvrir Assistant SNG IA">🤖</button>
+      <div class="sng-ai-chat" id="sngAiChat">
+        <div class="sng-ai-head">Assistant SNG IA</div>
+        <div class="sng-ai-body" id="sngAiBody">
+          <div class="sng-ai-msg bot">Salut 👋 Je suis l’assistant SNG. Que veux-tu chercher ?</div>
+        </div>
+        <form class="sng-ai-form" id="sngAiForm">
+          <input class="sng-ai-input" id="sngAiInput" type="text" placeholder="Écris ici..." autocomplete="off" />
+          <button class="sng-ai-send" type="submit">Envoyer</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const toggle = document.getElementById("sngAiToggle");
+        const chat = document.getElementById("sngAiChat");
+        const form = document.getElementById("sngAiForm");
+        const input = document.getElementById("sngAiInput");
+        const body = document.getElementById("sngAiBody");
+        const sendButton = form?.querySelector(".sng-ai-send");
+        const localEndpoint = "/.netlify/functions/sng-ai";
+        const proxyEndpoint = "https://sng-news-proxy.netlify.app/.netlify/functions/sng-ai";
+        const apiEndpoint = window.location.hostname.includes("github.io") ? proxyEndpoint : localEndpoint;
+
+        if (!toggle || !chat || !form || !input || !body || !sendButton) {
+          return;
+        }
+
+        function appendMessage(text, who) {
+          const message = document.createElement("div");
+          message.className = `sng-ai-msg ${who}`;
+          message.textContent = text;
+          body.appendChild(message);
+          body.scrollTop = body.scrollHeight;
+        }
+
+        toggle.addEventListener("click", () => {
+          chat.classList.toggle("open");
+          if (chat.classList.contains("open")) {
+            input.focus();
+          }
+        });
+
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const query = input.value.trim();
+
+          if (!query) {
+            appendMessage("Merci d’entrer une question avant d’envoyer.", "bot");
+            return;
+          }
+
+          appendMessage(query, "user");
+          input.value = "";
+          sendButton.disabled = true;
+          sendButton.textContent = "...";
+
+          try {
+            const response = await fetch(apiEndpoint, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ message: query })
+            });
+
+            const payload = await response.json();
+            if (!response.ok) {
+              appendMessage(payload.error || "Erreur temporaire du service IA SNG.", "bot");
+            } else {
+              appendMessage(payload.reply || "Je peux t’aider avec les rubriques SNG Portal.", "bot");
+            }
+          } catch (error) {
+            appendMessage("Service IA indisponible pour le moment. Réessaie dans un instant.", "bot");
+          } finally {
+            sendButton.disabled = false;
+            sendButton.textContent = "Envoyer";
+            input.focus();
+          }
+        });
+      })();
+    </script>
 
   </body>
 </html>
