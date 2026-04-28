@@ -1806,22 +1806,27 @@
       }
 
       .sng-ai-toggle{
-        width:62px;
-        height:62px;
+        width:68px;
+        height:68px;
         border:none;
         border-radius:50%;
-        background:linear-gradient(135deg, #ff5f8f, #70a1ff);
-        color:#fff;
-        font-size:27px;
-        font-weight:800;
-        box-shadow:0 14px 26px rgba(0,0,0,.35);
+        overflow:hidden;
+        padding:0;
+        background:none;
         cursor:pointer;
+        box-shadow:0 14px 26px rgba(0,0,0,.35);
         transition:transform .2s ease, box-shadow .2s ease;
       }
 
+      .sng-ai-toggle img{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+      }
+
       .sng-ai-toggle:hover{
-        transform:translateY(-2px) scale(1.02);
-        box-shadow:0 16px 32px rgba(0,0,0,.42);
+        transform:scale(1.1);
+        box-shadow:0 0 25px rgba(0,200,255,.7);
       }
 
       .sng-ai-chat{
@@ -3011,7 +3016,9 @@ document.querySelectorAll("a[href*='amazon.fr/dp/']").forEach(link => {
 </script>
 
     <div class="sng-ai-widget" aria-live="polite">
-      <button class="sng-ai-toggle" id="sngAiToggle" aria-label="Ouvrir Assistant SNG IA">🤖</button>
+      <button class="sng-ai-toggle" id="sngAiToggle" aria-label="Ouvrir Assistant SNG IA">
+        <img src="mon-avatar.png" alt="SNG AI">
+      </button>
       <div class="sng-ai-chat" id="sngAiChat">
         <div class="sng-ai-head">
           <div class="sng-ai-head-title">SNG AI • Assistant intelligent</div>
