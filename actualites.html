@@ -410,28 +410,29 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 9px 13px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.08);
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
-      transition: .2s ease;
-    }
+.share-btn {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: .2s ease;
+}
 
-    .share-btn:hover {
-      background: linear-gradient(135deg, #ff2f7d, #3aa7ff);
-      box-shadow: 0 0 18px rgba(255,47,125,.35);
-      transform: translateY(-1px);
-    }
+.share-btn:hover {
+  background: linear-gradient(135deg, #ff2f7d, #3aa7ff);
+  box-shadow: 0 0 18px rgba(255,47,125,.35);
+  transform: translateY(-1px);
+}
 
-    .share-msg {
-      margin-left: 8px;
-      color: #4ade80;
-      font-size: 13px;
-      font-weight: 700;
-    }
+.share-msg {
+  margin-left: 8px;
+  color: #4ade80;
+  font-size: 12px;
+  font-weight: 700;
+}
 
     .news-container {
       display: grid;
@@ -744,7 +745,7 @@
     const cardHtml = `
       <article class="news-card">
         <img src="${article.urlToImage || article.image || 'https://via.placeholder.com/600x400?text=Actualités'}" alt="${article.title || "Titre indisponible"}">
-        <div class="news-card-content">
+        <div class="news-card-body">
           <span class="news-source">${article.source?.name || article.source || "Source inconnue"}</span>
           <h3>${article.title || "Titre indisponible"}</h3>
           <p>${shortText(article.description || "Pas de description disponible.", 110)}</p>
