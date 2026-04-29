@@ -229,215 +229,123 @@
     }
 
     /* NEWS GRID */
-    .featured-news {
-      display: grid;
-      grid-template-columns: 1.45fr 1fr;
-      gap: 18px;
-      margin-top: 16px;
-    }
-
-    .featured-main,
-    .side-card,
-    .news-card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .card-link-wrapper {
-      display: block;
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .card-link-wrapper.is-clickable {
-      cursor: pointer;
-    }
-
-    .featured-main img,
-    .side-card img,
-    .news-card img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-      display: block;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.08);
-    }
-
-    .side-card img {
-      height: 120px;
-    }
-
-    .featured-main-body,
-    .side-card-body,
-    .news-card-body {
-      padding: 18px;
-    }
-
-    .featured-main h2 {
-      font-size: 1.35rem;
-      line-height: 1.45;
-      margin-bottom: 10px;
-    }
-
-    .featured-side {
-      display: grid;
-      gap: 14px;
-      align-content: start;
-    }
-
     #news-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 28px;
+      align-items: stretch;
       margin-top: 20px;
     }
 
-    .news-card,
-    .featured-main,
-    .side-card {
+    .article-card {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 16px;
+      overflow: hidden;
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
       transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
 
-    .news-card:hover,
-    .card-link-wrapper.is-clickable:hover .news-card,
-    .card-link-wrapper.is-clickable:hover .featured-main,
-    .card-link-wrapper.is-clickable:hover .side-card {
+    .article-card-link {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+      height: 100%;
+    }
+
+    .article-card-link:hover .article-card {
       transform: translateY(-4px);
-      border-color: rgba(255,255,255,0.18);
+      border-color: rgba(255,255,255,0.2);
       box-shadow: 0 24px 62px rgba(0,0,0,0.4);
     }
 
-    .news-card-body {
-      padding: 22px;
+    .article-card img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      display: block;
+      background: rgba(255,255,255,0.08);
     }
 
-    .tag {
-      display: inline-block;
-      padding: 5px 10px;
-      border-radius: 999px;
-      background: rgba(255,95,143,0.16);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: #ffd6e1;
-      font-size: 0.78rem;
-      font-weight: 800;
-      margin-bottom: 12px;
+    .article-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 10px;
     }
 
-    .news-card h3 {
-      font-size: 18px;
-      line-height: 1.45;
-      margin-bottom: 10px;
-    }
-
-    .news-card h3 a:hover {
-      color: var(--accent-2);
-    }
-
-    .news-card p {
-      font-size: 14px;
-      color: #d6d6d6;
-      line-height: 1.6;
-      margin-bottom: 12px;
-    }
-
-    .news-meta {
+    .article-source {
       font-size: 12px;
       color: #9ca3af;
-      margin-bottom: 10px;
-    }
-
-    .news-card .read-more,
-    .featured-main .read-more,
-    .side-card .read-more {
-      display: inline-block;
-      margin-top: 8px;
-      color: #ff6aa2;
       font-weight: 700;
-      text-decoration: none;
     }
 
-    .news-card .read-more:hover,
-    .featured-main .read-more:hover,
-    .side-card .read-more:hover {
-      color: #ffd1e1;
+    .article-title {
+      font-size: 18px;
+      line-height: 1.4;
+      font-weight: 700;
     }
 
-
-    .news-card {
-      background: rgba(255,255,255,0.05);
-      border-radius: 12px;
-      padding: 15px;
-      margin: 10px;
-      color: white;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      transition: transform 0.2s;
+    .article-desc {
+      flex: 1;
+      font-size: 14px;
+      line-height: 1.5;
+      opacity: .8;
     }
 
-    .news-card:hover {
-      transform: scale(1.03);
+    .article-actions {
+      margin-top: auto;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
-    .news-card img {
-      width: 100%;
-      border-radius: 10px;
-      margin-bottom: 10px;
-    }
-
-    .news-card h3 {
-      font-size: 16px;
-      margin-bottom: 8px;
-    }
-
-    .news-card p {
-      font-size: 13px;
-      opacity: 0.8;
-    }
-
-    .news-card a {
-      display: inline-block;
-      margin-top: 10px;
-      color: #ff4d6d;
-      font-weight: bold;
-    }
-
-
-    .share-btn {
-      margin-top: 10px;
+    .read-more {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-.share-btn {
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.16);
-  background: rgba(255,255,255,.08);
-  color: #fff;
-  font-weight: 700;
-  cursor: pointer;
-  transition: .2s ease;
-}
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
 
-.share-btn:hover {
-  background: linear-gradient(135deg, #ff2f7d, #3aa7ff);
-  box-shadow: 0 0 18px rgba(255,47,125,.35);
-  transform: translateY(-1px);
-}
+    .share-btn {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: transparent;
+      color: rgba(255,255,255,.88);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s ease;
+    }
 
-.share-msg {
-  margin-left: 8px;
-  color: #4ade80;
-  font-size: 12px;
-  font-weight: 700;
-}
+    .share-btn:hover {
+      background: rgba(255,255,255,.12);
+      color: #fff;
+    }
 
-    .news-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 15px;
+    .share-msg {
+      color: #86efac;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1100px) {
+      #news-container { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 640px) {
+      #news-container { grid-template-columns: 1fr; }
     }
 
     /* STATUS */
@@ -511,10 +419,6 @@
     @media (max-width: 700px) {
       .hero {
         padding-top: 26px;
-      }
-
-      .featured-news {
-        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -606,8 +510,7 @@
         </div>
 
         <div id="news-status">Chargement...</div>
-        <div id="featured-news" class="featured-news"></div>
-        <div id="news-container" class="news-container"></div>
+        <div id="news-container"></div>
         <div id="news-scroll-status"></div>
         <div id="news-scroll-sentinel" aria-hidden="true"></div>
       </div>
@@ -624,7 +527,6 @@
   <script>
   const NEWS_PROXY_BASE_URL = window.SNG_NEWS_PROXY_URL;
   const REFRESH_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
-  const FEATURED_COUNT = 4;
   const INITIAL_GRID_BATCH_SIZE = 20;
   const GRID_BATCH_SIZE = 12;
 
@@ -684,22 +586,13 @@
   }
 
   function renderLoadingState() {
-    const featured = document.getElementById("featured-news");
     const container = document.getElementById("news-container");
     const status = document.getElementById("news-status");
     const scrollStatus = document.getElementById("news-scroll-status");
 
     status.textContent = "Chargement des actualités...";
     scrollStatus.textContent = "";
-    featured.innerHTML = `
-      <div class="skeleton"></div>
-      <div class="featured-side">
-        <div class="skeleton" style="min-height:160px;"></div>
-        <div class="skeleton" style="min-height:160px;"></div>
-        <div class="skeleton" style="min-height:160px;"></div>
-      </div>
-    `;
-    container.innerHTML = Array.from({ length: 6 })
+    container.innerHTML = Array.from({ length: 8 })
       .map(() => '<div class="skeleton" style="min-height:250px;"></div>')
       .join("");
   }
@@ -724,14 +617,12 @@
   }
 
   function renderError(message) {
-    const featured = document.getElementById("featured-news");
     const container = document.getElementById("news-container");
     const status = document.getElementById("news-status");
     const scrollStatus = document.getElementById("news-scroll-status");
 
     status.textContent = "Erreur de chargement";
     scrollStatus.textContent = "";
-    featured.innerHTML = "";
     container.innerHTML = `
       <div class="news-error">
         <strong>⚠ Impossible de charger les actualités.</strong>
@@ -742,75 +633,32 @@
 
   function createArticleCard(article) {
     const articleUrl = getArticleUrl(article);
-    const cardHtml = `
-      <article class="news-card">
-        <img src="${article.urlToImage || article.image || 'https://via.placeholder.com/600x400?text=Actualités'}" alt="${article.title || "Titre indisponible"}">
-        <div class="news-card-body">
-          <span class="news-source">${article.source?.name || article.source || "Source inconnue"}</span>
-          <h3>${article.title || "Titre indisponible"}</h3>
-          <p>${shortText(article.description || "Pas de description disponible.", 110)}</p>
-          <div class="news-meta">
-            <span>${formatDate(article.publishedAt)}</span>
-            <span class="read-more">Lire plus</span>
+    return `
+      <article class="article-card">
+        <img src="${article.urlToImage || article.image || "https://via.placeholder.com/600x400?text=Actualités"}" alt="${article.title || "Titre indisponible"}">
+        <div class="article-body">
+          <span class="article-source">${article.source?.name || article.source || "Source inconnue"} • ${formatDate(article.publishedAt)}</span>
+          <h3 class="article-title">${article.title || "Titre indisponible"}</h3>
+          <p class="article-desc">${shortText(article.description || "Pas de description disponible.", 130)}</p>
+          <div class="article-actions">
+            <a class="read-more" href="${articleUrl}" target="_blank" rel="noopener noreferrer">Lire plus</a>
+            <button class="share-btn" type="button" data-url="${articleUrl}">Partager</button>
+            <span class="share-msg" hidden>Lien copié ✅</span>
           </div>
-          <button class="share-btn" type="button" data-url="${articleUrl}">🔗 Partager</button>
-          <span class="share-msg" hidden>Lien copié ✅</span>
         </div>
       </article>
     `;
-    return wrapArticleCard(cardHtml, articleUrl, "news-card-link");
   }
 
-  function renderFeaturedNews(articles, categoryKey) {
-    const featured = document.getElementById("featured-news");
+  function updateNewsHeader(articles, categoryKey) {
     const status = document.getElementById("news-status");
     const categoryLabel = categoryMap[categoryKey]?.label || "Actualités";
-
-    if (!Array.isArray(articles) || articles.length === 0) {
-      status.textContent = "Aucune actualité trouvée";
-      featured.innerHTML = "";
-      return;
-    }
-
-    const mainArticle = articles[0];
-    const sideArticles = articles.slice(1, FEATURED_COUNT);
-
     status.textContent = `${categoryLabel} • ${articles.length} article(s)`;
-
-    const featuredMainHtml = `
-      <article class="featured-main">
-        <img src="${mainArticle.urlToImage || mainArticle.image || 'https://via.placeholder.com/900x500?text=Actualité'}" alt="${mainArticle.title || "Titre indisponible"}">
-        <div class="featured-content">
-          <span class="badge">À LA UNE</span>
-          <h2>${mainArticle.title || "Titre indisponible"}</h2>
-          <p>${shortText(mainArticle.description || "Pas de description disponible.", 180)}</p>
-          <div class="news-meta">
-            <span>${mainArticle.source?.name || mainArticle.source || "Source inconnue"} • ${formatDate(mainArticle.publishedAt)}</span>
-            <span class="read-more">Lire l'article</span>
-          </div>
-        </div>
-      </article>
-    `;
-
-    featured.innerHTML = `
-      ${wrapArticleCard(featuredMainHtml, getArticleUrl(mainArticle), "featured-main-link")}
-
-      <div class="featured-side">
-        ${sideArticles.map(article => wrapArticleCard(`
-          <article class="side-card">
-            <span class="news-source">${article.source?.name || article.source || "Source inconnue"}</span>
-            <h3>${article.title || "Titre indisponible"}</h3>
-            <p>${shortText(article.description || "Pas de description disponible.", 90)}</p>
-            <span class="read-more">Lire plus</span>
-          </article>
-        `, getArticleUrl(article), "side-card-link")).join("")}
-      </div>
-    `;
   }
 
   function updateScrollStatus() {
     const scrollStatus = document.getElementById("news-scroll-status");
-    const availableGridArticles = Math.max(currentArticles.length - FEATURED_COUNT, 0);
+    const availableGridArticles = currentArticles.length;
 
     if (!availableGridArticles) {
       scrollStatus.textContent = "";
@@ -827,7 +675,7 @@
 
   function appendNewsBatch(batchSize) {
     const container = document.getElementById("news-container");
-    const start = FEATURED_COUNT + gridRenderedCount;
+    const start = gridRenderedCount;
     const nextArticles = currentArticles.slice(start, start + batchSize);
 
     if (!nextArticles.length) {
@@ -910,7 +758,7 @@
       const articles = await fetchNews(categoryKey);
 
       if (Array.isArray(articles) && articles.length > 0) {
-        renderFeaturedNews(articles, categoryKey);
+        updateNewsHeader(articles, categoryKey);
         renderArticles(articles);
         setupInfiniteScroll();
         return;
