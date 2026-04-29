@@ -675,6 +675,7 @@
 
   function appendNewsBatch(batchSize) {
     const container = document.getElementById("news-container");
+    if (!container) return;
     const start = gridRenderedCount;
     const nextArticles = currentArticles.slice(start, start + batchSize);
 
@@ -695,9 +696,16 @@
   }
 
   function renderArticles(articles) {
-    const container = document.getElementById("news-container");
-    container.innerHTML = "";
+    const newsContainer = document.getElementById("news-container");
+    console.log("news-container:", newsContainer);
+    console.log("articles to render:", articles.length);
+    if (!newsContainer) return;
+
+    currentArticles = articles;
+    gridRenderedCount = 0;
+    newsContainer.innerHTML = "";
     appendNewsBatch(INITIAL_GRID_BATCH_SIZE);
+    console.log("rendered cards:", document.querySelectorAll(".article-card").length);
   }
 
 
