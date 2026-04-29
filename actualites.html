@@ -404,6 +404,35 @@
       font-weight: bold;
     }
 
+
+    .share-btn {
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .share-btn:hover {
+      background: linear-gradient(135deg, #ff2f7d, #3aa7ff);
+      box-shadow: 0 0 18px rgba(255,47,125,.35);
+      transform: translateY(-1px);
+    }
+
+    .share-msg {
+      margin-left: 8px;
+      color: #4ade80;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
     .news-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -631,6 +660,10 @@
     return typeof url === "string" && url.trim() ? url.trim() : "";
   }
 
+  function getArticleUrl(article = {}) {
+    return getSafeUrl(article.url || article.link || "");
+  }
+
   function wrapArticleCard(content, articleUrl, className = "") {
     const safeUrl = getSafeUrl(articleUrl);
     if (safeUrl) {
@@ -679,16 +712,13 @@
     }
 
     const baseUrl = `${NEWS_PROXY_BASE_URL}/api/news?category=${encodeURIComponent(category.proxyCategory)}`;
-    console.log("News API URL:", baseUrl);
 
     const response = await fetch(baseUrl, { method: "GET" });
     if (!response.ok) throw new Error(`Erreur API (${response.status})`);
 
     const data = await response.json();
-    console.log("News API response:", data);
 
     const articles = data.articles;
-    console.log("Articles length:", Array.isArray(articles) ? articles.length : 0);
     return articles;
   }
 
@@ -710,10 +740,11 @@
   }
 
   function createArticleCard(article) {
+    const articleUrl = getArticleUrl(article);
     const cardHtml = `
       <article class="news-card">
         <img src="${article.urlToImage || article.image || 'https://via.placeholder.com/600x400?text=Actualités'}" alt="${article.title || "Titre indisponible"}">
-        <div class="news-card-content">
+        <div class="news-card-body">
           <span class="news-source">${article.source?.name || article.source || "Source inconnue"}</span>
           <h3>${article.title || "Titre indisponible"}</h3>
           <p>${shortText(article.description || "Pas de description disponible.", 110)}</p>
@@ -721,10 +752,12 @@
             <span>${formatDate(article.publishedAt)}</span>
             <span class="read-more">Lire plus</span>
           </div>
+          <button class="share-btn" type="button" data-url="${articleUrl}">🔗 Partager</button>
+          <span class="share-msg" hidden>Lien copié ✅</span>
         </div>
       </article>
     `;
-    return wrapArticleCard(cardHtml, article.url, "news-card-link");
+    return wrapArticleCard(cardHtml, articleUrl, "news-card-link");
   }
 
   function renderFeaturedNews(articles, categoryKey) {
@@ -759,7 +792,7 @@
     `;
 
     featured.innerHTML = `
-      ${wrapArticleCard(featuredMainHtml, mainArticle.url, "featured-main-link")}
+      ${wrapArticleCard(featuredMainHtml, getArticleUrl(mainArticle), "featured-main-link")}
 
       <div class="featured-side">
         ${sideArticles.map(article => wrapArticleCard(`
@@ -769,7 +802,7 @@
             <p>${shortText(article.description || "Pas de description disponible.", 90)}</p>
             <span class="read-more">Lire plus</span>
           </article>
-        `, article.url, "side-card-link")).join("")}
+        `, getArticleUrl(article), "side-card-link")).join("")}
       </div>
     `;
   }
@@ -815,19 +848,35 @@
   function renderArticles(articles) {
     const container = document.getElementById("news-container");
     container.innerHTML = "";
-
-    articles.forEach((article) => {
-      container.innerHTML += `
-        <div class="news-card">
-          <img src="${article.urlToImage || 'https://via.placeholder.com/300x180'}" alt="image">
-          <h3>${article.title || 'Sans titre'}</h3>
-          <p>${article.description || 'Aucune description disponible'}</p>
-          <a href="${article.url}" target="_blank">Lire plus</a>
-        </div>
-      `;
-    });
-
     appendNewsBatch(INITIAL_GRID_BATCH_SIZE);
+  }
+
+
+  async function shareArticle(url, button) {
+    const shareMsg = button?.nextElementSibling;
+    if (!url) return;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: "Actualités SNG Portal",
+          text: "Découvre cet article sur SNG Portal",
+          url
+        });
+        return;
+      }
+
+      await navigator.clipboard.writeText(url);
+      if (shareMsg) {
+        shareMsg.hidden = false;
+        clearTimeout(shareMsg._hideTimeout);
+        shareMsg._hideTimeout = setTimeout(() => {
+          shareMsg.hidden = true;
+        }, 1600);
+      }
+    } catch (error) {
+      console.warn("Partage annulé ou indisponible", error);
+    }
   }
 
   function setupInfiniteScroll() {
@@ -880,6 +929,16 @@
       loadNews(currentCategory);
     }, REFRESH_INTERVAL_MS);
   }
+
+  document.getElementById("news-container")?.addEventListener("click", (event) => {
+    const shareButton = event.target.closest(".share-btn");
+    if (!shareButton) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    shareArticle(shareButton.dataset.url || "", shareButton);
+  });
 
   document.querySelectorAll(".news-tab").forEach(button => {
     button.addEventListener("click", () => {
