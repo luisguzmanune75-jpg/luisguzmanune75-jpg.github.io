@@ -545,7 +545,7 @@
   </footer>
 
   <script>
-    window.SNG_NEWS_PROXY_URL = "https://sng-news-proxy.netlify.app";
+    window.SNG_NEWS_PROXY_URL = "https://luisguzmanune75-jpg-github-io.vercel.app";
   </script>
   <script>
   const NEWS_PROXY_BASE_URL = window.SNG_NEWS_PROXY_URL;
@@ -635,6 +635,7 @@
     }
 
     const baseUrl = `${NEWS_PROXY_BASE_URL}/api/news?category=${encodeURIComponent(category.proxyCategory)}`;
+    console.log("News API URL:", baseUrl);
 
     const response = await fetch(baseUrl, { method: "GET" });
     if (!response.ok) throw new Error(`Erreur API (${response.status})`);
