@@ -17,13 +17,20 @@ module.exports = async function handler(req, res) {
   }
 
   const category = typeof req.query?.category === 'string' ? req.query.category : '';
-  const topHeadlinesParams = new URLSearchParams({ country: 'fr', category, apiKey });
+  const requestedPageRaw = Number.parseInt(req.query?.page, 10);
+  const page = Number.isFinite(requestedPageRaw) && requestedPageRaw > 0 ? String(requestedPageRaw) : '1';
+  const pageSizeRaw = Number.parseInt(req.query?.pageSize, 10);
+  const pageSize = Number.isFinite(pageSizeRaw) && pageSizeRaw > 0 ? String(Math.min(pageSizeRaw, 100)) : '100';
+
+  const topHeadlinesParams = new URLSearchParams({ country: 'fr', category, page, pageSize, apiKey });
   const topHeadlinesUrl = `https://newsapi.org/v2/top-headlines?${topHeadlinesParams.toString()}`;
 
   const fallbackParams = new URLSearchParams({
     q: 'actualité OR news',
     language: 'fr',
     sortBy: 'publishedAt',
+    page,
+    pageSize,
     apiKey
   });
   const fallbackUrl = `https://newsapi.org/v2/everything?${fallbackParams.toString()}`;
