@@ -641,9 +641,10 @@
     if (!response.ok) throw new Error(`Erreur API (${response.status})`);
 
     const data = await response.json();
-    const articles = Array.isArray(data) ? data : [];
+    console.log("News API response:", data);
 
-    return articles.filter(article => article?.title);
+    const articles = Array.isArray(data?.articles) ? data.articles : [];
+    return articles;
   }
 
   function renderError(message) {
@@ -666,10 +667,10 @@
   function createArticleCard(article) {
     const cardHtml = `
       <article class="news-card">
-        <img src="${article.urlToImage || article.image || 'https://via.placeholder.com/600x400?text=Actualités'}" alt="${article.title}">
+        <img src="${article.urlToImage || article.image || 'https://via.placeholder.com/600x400?text=Actualités'}" alt="${article.title || "Titre indisponible"}">
         <div class="news-card-content">
           <span class="news-source">${article.source?.name || article.source || "Source inconnue"}</span>
-          <h3>${article.title}</h3>
+          <h3>${article.title || "Titre indisponible"}</h3>
           <p>${shortText(article.description || "Pas de description disponible.", 110)}</p>
           <div class="news-meta">
             <span>${formatDate(article.publishedAt)}</span>
@@ -686,7 +687,7 @@
     const status = document.getElementById("news-status");
     const categoryLabel = categoryMap[categoryKey]?.label || "Actualités";
 
-    if (!articles.length) {
+    if (!articles || articles.length === 0) {
       status.textContent = "Aucune actualité trouvée";
       featured.innerHTML = "";
       return;
@@ -699,10 +700,10 @@
 
     const featuredMainHtml = `
       <article class="featured-main">
-        <img src="${mainArticle.urlToImage || mainArticle.image || 'https://via.placeholder.com/900x500?text=Actualité'}" alt="${mainArticle.title}">
+        <img src="${mainArticle.urlToImage || mainArticle.image || 'https://via.placeholder.com/900x500?text=Actualité'}" alt="${mainArticle.title || "Titre indisponible"}">
         <div class="featured-content">
           <span class="badge">À LA UNE</span>
-          <h2>${mainArticle.title}</h2>
+          <h2>${mainArticle.title || "Titre indisponible"}</h2>
           <p>${shortText(mainArticle.description || "Pas de description disponible.", 180)}</p>
           <div class="news-meta">
             <span>${mainArticle.source?.name || mainArticle.source || "Source inconnue"} • ${formatDate(mainArticle.publishedAt)}</span>
@@ -719,7 +720,7 @@
         ${sideArticles.map(article => wrapArticleCard(`
           <article class="side-card">
             <span class="news-source">${article.source?.name || article.source || "Source inconnue"}</span>
-            <h3>${article.title}</h3>
+            <h3>${article.title || "Titre indisponible"}</h3>
             <p>${shortText(article.description || "Pas de description disponible.", 90)}</p>
             <span class="read-more">Lire plus</span>
           </article>
@@ -797,7 +798,7 @@
     try {
       const articles = await fetchNews(categoryKey);
 
-      if (!articles.length) {
+      if (!articles || articles.length === 0) {
         renderError("Aucune actualité disponible pour le moment.");
         return;
       }
