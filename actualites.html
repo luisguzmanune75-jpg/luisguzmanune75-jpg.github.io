@@ -697,15 +697,12 @@
 
   function renderArticles(articles) {
     const newsContainer = document.getElementById("news-container");
-    console.log("news-container:", newsContainer);
-    console.log("articles to render:", articles.length);
     if (!newsContainer) return;
 
     currentArticles = articles;
     gridRenderedCount = 0;
     newsContainer.innerHTML = "";
     appendNewsBatch(INITIAL_GRID_BATCH_SIZE);
-    console.log("rendered cards:", document.querySelectorAll(".article-card").length);
   }
 
 
