@@ -643,7 +643,8 @@
     const data = await response.json();
     console.log("News API response:", data);
 
-    const articles = Array.isArray(data?.articles) ? data.articles : [];
+    const articles = data.articles;
+    console.log("Articles length:", Array.isArray(articles) ? articles.length : 0);
     return articles;
   }
 
@@ -687,7 +688,7 @@
     const status = document.getElementById("news-status");
     const categoryLabel = categoryMap[categoryKey]?.label || "Actualités";
 
-    if (!articles || articles.length === 0) {
+    if (!Array.isArray(articles) || articles.length === 0) {
       status.textContent = "Aucune actualité trouvée";
       featured.innerHTML = "";
       return;
@@ -762,10 +763,19 @@
   }
 
   function resetGrid(articles) {
-    const container = document.getElementById("news-container");
     currentArticles = articles;
     gridRenderedCount = 0;
+    renderArticles(articles);
+  }
+
+  function renderArticles(articles) {
+    const container = document.getElementById("news-container");
     container.innerHTML = "";
+
+    articles.forEach((article) => {
+      container.innerHTML += `<p>${article.title || "Titre indisponible"}</p>`;
+    });
+
     appendNewsBatch(INITIAL_GRID_BATCH_SIZE);
   }
 
@@ -798,14 +808,15 @@
     try {
       const articles = await fetchNews(categoryKey);
 
-      if (!articles || articles.length === 0) {
+      if (Array.isArray(articles) && articles.length > 0) {
+        renderFeaturedNews(articles, categoryKey);
+        renderArticles(articles);
+        setupInfiniteScroll();
+        return;
+      } else {
         renderError("Aucune actualité disponible pour le moment.");
         return;
       }
-
-      renderFeaturedNews(articles, categoryKey);
-      resetGrid(articles);
-      setupInfiniteScroll();
     } catch (error) {
       console.error("Erreur actualités :", error);
       renderError(error.message || "Erreur inconnue");
