@@ -16,19 +16,47 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ message: 'NEWS_API_KEY is not configured' });
   }
 
-  const params = new URLSearchParams(req.query || {});
-  params.set('apiKey', apiKey);
+  const category = typeof req.query?.category === 'string' ? req.query.category : '';
+  const topHeadlinesParams = new URLSearchParams({ country: 'fr', category, apiKey });
+  const topHeadlinesUrl = `https://newsapi.org/v2/top-headlines?${topHeadlinesParams.toString()}`;
 
-  const url = `https://newsapi.org/v2/top-headlines?${params.toString()}`;
+  const fallbackParams = new URLSearchParams({
+    q: 'actualité OR news',
+    language: 'fr',
+    sortBy: 'publishedAt',
+    apiKey
+  });
+  const fallbackUrl = `https://newsapi.org/v2/everything?${fallbackParams.toString()}`;
 
   try {
-    const response = await fetch(url);
-    const contentType = response.headers.get('content-type') || 'application/json';
-    const body = await response.text();
+    const topHeadlinesResponse = await fetch(topHeadlinesUrl);
+    const topHeadlinesContentType = topHeadlinesResponse.headers.get('content-type') || 'application/json';
+    const topHeadlinesBody = await topHeadlinesResponse.text();
 
-    res.status(response.status);
-    res.setHeader('Content-Type', contentType);
-    return res.send(body);
+    let topHeadlinesData;
+    if (topHeadlinesContentType.includes('application/json')) {
+      try {
+        topHeadlinesData = JSON.parse(topHeadlinesBody);
+      } catch {
+        topHeadlinesData = undefined;
+      }
+    }
+
+    const shouldFallback = !Array.isArray(topHeadlinesData?.articles) || topHeadlinesData.articles.length === 0;
+
+    if (!shouldFallback) {
+      res.status(topHeadlinesResponse.status);
+      res.setHeader('Content-Type', topHeadlinesContentType);
+      return res.send(topHeadlinesBody);
+    }
+
+    const fallbackResponse = await fetch(fallbackUrl);
+    const fallbackContentType = fallbackResponse.headers.get('content-type') || 'application/json';
+    const fallbackBody = await fallbackResponse.text();
+
+    res.status(fallbackResponse.status);
+    res.setHeader('Content-Type', fallbackContentType);
+    return res.send(fallbackBody);
   } catch (error) {
     return res.status(502).json({
       status: 'error',
