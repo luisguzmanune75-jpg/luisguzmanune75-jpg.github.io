@@ -542,6 +542,10 @@
   let currentArticles = [];
   let gridRenderedCount = 0;
   let scrollObserver;
+  let currentPage = 1;
+  let isLoadingMore = false;
+  let hasMoreArticles = true;
+  const seenArticleUrls = new Set();
 
   function shortText(text = "", size = 140) {
     const clean = text.replace(/\s+/g, " ").trim();
@@ -597,7 +601,18 @@
       .join("");
   }
 
-  async function fetchNews(categoryKey) {
+  function dedupeByUrl(articles = []) {
+    const unique = [];
+    for (const article of articles) {
+      const url = getArticleUrl(article);
+      if (!url || seenArticleUrls.has(url)) continue;
+      seenArticleUrls.add(url);
+      unique.push(article);
+    }
+    return unique;
+  }
+
+  async function fetchNews(categoryKey, page = 1) {
     const category = categoryMap[categoryKey];
     if (!category) throw new Error("Catégorie inconnue");
 
@@ -605,15 +620,14 @@
       throw new Error("Proxy news non configuré");
     }
 
-    const baseUrl = `${NEWS_PROXY_BASE_URL}/api/news?category=${encodeURIComponent(category.proxyCategory)}`;
+    const baseUrl = `${NEWS_PROXY_BASE_URL}/api/news?category=${encodeURIComponent(category.proxyCategory)}&page=${page}`;
 
     const response = await fetch(baseUrl, { method: "GET" });
     if (!response.ok) throw new Error(`Erreur API (${response.status})`);
 
     const data = await response.json();
 
-    const articles = data.articles;
-    return articles;
+    return Array.isArray(data.articles) ? data.articles : [];
   }
 
   function renderError(message) {
@@ -665,8 +679,17 @@
       return;
     }
 
+    if (isLoadingMore) {
+      scrollStatus.textContent = "Chargement de nouvelles actualités...";
+      return;
+    }
+
     if (gridRenderedCount >= availableGridArticles) {
+      if (hasMoreArticles) {
+        scrollStatus.textContent = "Défilez pour charger de nouvelles actualités...";
+      } else {
       scrollStatus.textContent = `Toutes les actualités sont affichées (${gridRenderedCount}).`;
+      }
       return;
     }
 
@@ -689,12 +712,6 @@
     updateScrollStatus();
   }
 
-  function resetGrid(articles) {
-    currentArticles = articles;
-    gridRenderedCount = 0;
-    renderArticles(articles);
-  }
-
   function renderArticles(articles) {
     const newsContainer = document.getElementById("news-container");
     if (!newsContainer) return;
@@ -703,6 +720,32 @@
     gridRenderedCount = 0;
     newsContainer.innerHTML = "";
     appendNewsBatch(INITIAL_GRID_BATCH_SIZE);
+  }
+
+  async function loadMoreArticles() {
+    if (isLoadingMore || !hasMoreArticles) return;
+
+    isLoadingMore = true;
+    updateScrollStatus();
+
+    try {
+      const nextPage = currentPage + 1;
+      const newArticlesRaw = await fetchNews(currentCategory, nextPage);
+      const newArticles = dedupeByUrl(newArticlesRaw);
+
+      if (newArticles.length === 0) {
+        hasMoreArticles = false;
+      } else {
+        currentPage = nextPage;
+        currentArticles = [...currentArticles, ...newArticles];
+        appendNewsBatch(GRID_BATCH_SIZE);
+      }
+    } catch (error) {
+      console.error("Erreur chargement pagination :", error);
+    } finally {
+      isLoadingMore = false;
+      updateScrollStatus();
+    }
   }
 
 
@@ -745,7 +788,11 @@
       const [entry] = entries;
       if (!entry?.isIntersecting) return;
 
-      appendNewsBatch(GRID_BATCH_SIZE);
+      if (gridRenderedCount >= currentArticles.length) {
+        loadMoreArticles();
+      } else {
+        appendNewsBatch(GRID_BATCH_SIZE);
+      }
     }, {
       root: null,
       rootMargin: "0px 0px 400px 0px",
@@ -757,10 +804,15 @@
 
   async function loadNews(categoryKey = currentCategory) {
     currentCategory = categoryKey;
+    currentPage = 1;
+    isLoadingMore = false;
+    hasMoreArticles = true;
+    seenArticleUrls.clear();
     renderLoadingState();
 
     try {
-      const articles = await fetchNews(categoryKey);
+      const rawArticles = await fetchNews(categoryKey, currentPage);
+      const articles = dedupeByUrl(rawArticles);
 
       if (Array.isArray(articles) && articles.length > 0) {
         updateNewsHeader(articles, categoryKey);

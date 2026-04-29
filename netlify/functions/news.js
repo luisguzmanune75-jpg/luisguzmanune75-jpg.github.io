@@ -18,7 +18,7 @@ const FALLBACK_QUERY_BY_CATEGORY = {
   sports: "sports OR football OR basketball"
 };
 
-function dedupeArticles(articles = []) {
+function dedupeArticles(articles = [], limit = MAX_ARTICLES) {
   const seen = new Set();
   const unique = [];
 
@@ -31,7 +31,7 @@ function dedupeArticles(articles = []) {
     seen.add(key);
     unique.push(article);
 
-    if (unique.length >= MAX_ARTICLES) {
+    if (unique.length >= limit) {
       break;
     }
   }
@@ -39,7 +39,7 @@ function dedupeArticles(articles = []) {
   return unique;
 }
 
-async function fetchNewsPages(buildUrl, apiKey, sourceLabel) {
+async function fetchNewsPages(buildUrl, apiKey, sourceLabel, limit = MAX_ARTICLES) {
   let mergedArticles = [];
   let lastError = null;
 
@@ -79,9 +79,9 @@ async function fetchNewsPages(buildUrl, apiKey, sourceLabel) {
         break;
       }
 
-      mergedArticles = dedupeArticles([...mergedArticles, ...pageArticles]);
+      mergedArticles = dedupeArticles([...mergedArticles, ...pageArticles], limit);
 
-      if (mergedArticles.length >= MAX_ARTICLES) {
+      if (mergedArticles.length >= limit) {
         return { articles: mergedArticles };
       }
 
@@ -99,7 +99,7 @@ async function fetchNewsPages(buildUrl, apiKey, sourceLabel) {
     return { error: lastError };
   }
 
-  return { articles: mergedArticles.slice(0, MAX_ARTICLES) };
+  return { articles: mergedArticles.slice(0, limit) };
 }
 
 export async function handler(event) {
@@ -113,6 +113,9 @@ export async function handler(event) {
 
   const API_KEY = process.env.NEWS_API_KEY;
   const category = event.queryStringParameters?.category || "general";
+  const page = Math.max(Number.parseInt(event.queryStringParameters?.page || "1", 10) || 1, 1);
+  const pageSize = Math.min(Math.max(Number.parseInt(event.queryStringParameters?.pageSize || "100", 10) || 100, 1), 100);
+  const perRequestLimit = pageSize;
   const fallbackQuery = FALLBACK_QUERY_BY_CATEGORY[category] || FALLBACK_QUERY_BY_CATEGORY.general;
 
   console.log("NEWS_API_KEY present:", Boolean(API_KEY));
@@ -125,13 +128,14 @@ export async function handler(event) {
           `https://newsapi.org/v2/top-headlines?country=us&category=${category}&pageSize=${pageSize}&page=${page}&apiKey=${API_KEY}`
       },
       API_KEY,
-      "top-headlines"
+      "top-headlines",
+      perRequestLimit
     );
     let finalArticles = topHeadlinesResult.articles || [];
 
-    if (finalArticles.length < MAX_ARTICLES) {
+    if (finalArticles.length < perRequestLimit) {
       console.log(
-        `Top-headlines insuffisant (${finalArticles.length}/${MAX_ARTICLES}), complément everything`
+        `Top-headlines insuffisant (${finalArticles.length}/${perRequestLimit}), complément everything`
       );
 
       const everythingResult = await fetchNewsPages(
@@ -143,13 +147,14 @@ export async function handler(event) {
             )}&language=fr&sortBy=publishedAt&pageSize=${pageSize}&page=${page}&apiKey=${API_KEY}`
         },
         API_KEY,
-        "everything"
+        "everything",
+        perRequestLimit - finalArticles.length
       );
 
       const everythingArticles = everythingResult.articles || [];
-      finalArticles = dedupeArticles([...finalArticles, ...everythingArticles]).slice(0, MAX_ARTICLES);
+      finalArticles = dedupeArticles([...finalArticles, ...everythingArticles], perRequestLimit).slice(0, perRequestLimit);
     } else {
-      finalArticles = dedupeArticles(finalArticles).slice(0, MAX_ARTICLES);
+      finalArticles = dedupeArticles(finalArticles, perRequestLimit).slice(0, perRequestLimit);
     }
 
     console.log("Final articles count returned:", finalArticles.length);
