@@ -1721,6 +1721,23 @@
         box-shadow:0 12px 20px rgba(255,145,0,.35);
         filter:saturate(1.05);
       }
+      .sng-share-btn{
+        margin-top:8px;
+        border:1px solid #d1d5db;
+        background:#f9fafb;
+        color:#374151;
+        font-size:13px;
+        font-weight:700;
+        border-radius:10px;
+        padding:9px 12px;
+        cursor:pointer;
+        transition:background-color .2s ease, border-color .2s ease, transform .2s ease;
+      }
+      .sng-share-btn:hover{
+        background:#f3f4f6;
+        border-color:#9ca3af;
+        transform:translateY(-1px);
+      }
       .sng-promo-badge{
         position:absolute;
         top:12px;
@@ -2931,6 +2948,14 @@ En tant que Partenaire Amazon, SNG Portal réalise un bénéfice sur les achats 
               >
                 🔥 VOIR L’OFFRE MAINTENANT
               </a>
+              <button
+                type="button"
+                class="sng-share-btn"
+                data-title="${item.title}"
+                data-url="${item.url}"
+              >
+                🔗 Partager
+              </button>
               <p class="sng-stock">⏳ Plus que 7 en stock</p>
             </div>
           </article>
@@ -2980,6 +3005,55 @@ En tant que Partenaire Amazon, SNG Portal réalise un bénéfice sur les achats 
             openCardLink();
           });
         });
+
+        const shareButtons = grid.querySelectorAll(".sng-share-btn");
+        shareButtons.forEach((button) => {
+          button.addEventListener("click", (event) =>
+            shareAmazonProduct(
+              {
+                title: button.dataset.title,
+                url: button.dataset.url
+              },
+              event
+            )
+          );
+        });
+      }
+
+      async function shareAmazonProduct(product, event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const shareUrl = product.url || product.link;
+        const shareText = `Découvre ce bon plan Amazon sur SNG Portal : ${product.title}`;
+        const button = event.currentTarget;
+        const originalLabel = button.textContent;
+
+        try {
+          if (navigator.share) {
+            await navigator.share({
+              title: product.title,
+              text: shareText,
+              url: shareUrl
+            });
+            button.textContent = "✅ Partagé";
+          } else if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(shareUrl);
+            button.textContent = "✅ Lien copié";
+          } else {
+            window.prompt("Copiez ce lien :", shareUrl);
+            button.textContent = "✅ Lien prêt";
+          }
+        } catch (error) {
+          if (error && error.name === "AbortError") {
+            return;
+          }
+          button.textContent = "⚠️ Réessayer";
+        } finally {
+          window.setTimeout(() => {
+            button.textContent = originalLabel;
+          }, 1800);
+        }
       }
 
       function trackClick(product) {
