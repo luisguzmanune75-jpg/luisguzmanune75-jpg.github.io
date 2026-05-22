@@ -1814,6 +1814,55 @@
         #sngSearch{width:100%; min-width:unset}
       }
 
+
+
+      .digistore-shop{
+        max-width:1280px;
+        margin:36px auto 48px;
+        padding:30px;
+        background:linear-gradient(145deg,#0b1738 0%, #102a62 58%, #1d4ed8 100%);
+        border:1px solid rgba(147,197,253,.28);
+        border-radius:24px;
+        box-shadow:0 16px 36px rgba(2,6,23,.4);
+        color:#eff6ff;
+      }
+      .digistore-top{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:22px;}
+      .digistore-kicker{margin:0 0 6px;font-size:12px;font-weight:800;letter-spacing:.18em;color:#93c5fd;text-transform:uppercase;}
+      .digistore-shop h2{margin:0;font-size:33px;line-height:1.12;color:#dbeafe;}
+      .digistore-sub{margin:8px 0 0;color:#bfdbfe;font-size:15px;}
+      .digistore-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;}
+      .digistore-card{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 10px 26px rgba(15,23,42,.22);display:flex;flex-direction:column;transition:transform .22s ease,box-shadow .22s ease;}
+      .digistore-card:hover{transform:translateY(-6px);box-shadow:0 18px 30px rgba(30,64,175,.35);}
+      .digistore-thumb{height:190px;background:linear-gradient(130deg,#eff6ff,#dbeafe);display:flex;align-items:center;justify-content:center;position:relative;}
+      .digistore-thumb img{width:100%;height:100%;object-fit:contain;padding:14px;background:#fff;}
+      .digistore-badge{position:absolute;left:12px;top:12px;background:#1d4ed8;color:#fff;font-size:11px;font-weight:900;padding:7px 10px;border-radius:999px;}
+      .digistore-tag-row{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px;align-items:flex-end;}
+      .digistore-tag{font-size:10px;font-weight:800;padding:5px 8px;border-radius:999px;color:#fff;backdrop-filter:blur(2px);}
+      .digistore-tag.hot{background:rgba(239,68,68,.92);} .digistore-tag.ok{background:rgba(22,163,74,.92);} .digistore-tag.limit{background:rgba(59,130,246,.92);}      
+      .digistore-content{padding:15px;display:flex;flex-direction:column;gap:10px;flex:1;color:#111827;}
+      .digistore-title{margin:0;font-size:15px;line-height:1.35;font-weight:800;min-height:42px;}
+      .digistore-btn{margin-top:auto;text-decoration:none;text-align:center;background:linear-gradient(135deg,#2563eb,#38bdf8);color:#fff;font-weight:900;padding:12px 10px;border-radius:12px;box-shadow:0 10px 16px rgba(37,99,235,.32);transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;}
+      .digistore-btn:hover{transform:translateY(-2px) scale(1.01);box-shadow:0 14px 24px rgba(37,99,235,.38);filter:saturate(1.08);}      
+      .digistore-shop{backdrop-filter:blur(10px)}
+      .digistore-controls{display:grid;grid-template-columns:1fr auto auto;gap:10px;margin-bottom:18px}
+      .digistore-input,.digistore-select{border:1px solid rgba(191,219,254,.45);background:rgba(219,234,254,.14);color:#eff6ff;padding:11px 12px;border-radius:12px;outline:none}
+      .digistore-input::placeholder{color:#dbeafe}.digistore-input:focus,.digistore-select:focus{box-shadow:0 0 0 3px rgba(96,165,250,.3)}
+      .digistore-select option{color:#111827}
+      .digistore-card{opacity:0;transform:translateY(16px);border:1px solid rgba(59,130,246,.16)}
+      .digistore-card.is-visible{opacity:1;transform:translateY(0);transition:opacity .45s ease,transform .45s ease,box-shadow .22s ease}
+      .digistore-card:hover{box-shadow:0 0 0 1px rgba(59,130,246,.25),0 0 22px rgba(59,130,246,.45),0 18px 30px rgba(30,64,175,.35)}
+      .digistore-thumb{background:linear-gradient(130deg,rgba(239,246,255,.94),rgba(219,234,254,.88));backdrop-filter:blur(3px)}
+      .digistore-hot{position:absolute;left:12px;bottom:12px;background:#ef4444;color:#fff;padding:6px 9px;border-radius:999px;font-size:10px;font-weight:900;animation:sngPulse 1.15s ease-in-out infinite}
+      .digistore-stars{color:#f59e0b;letter-spacing:1px;font-size:12px;font-weight:800}
+      .digistore-stock{font-size:12px;color:#1e3a8a;font-weight:700}
+      .digistore-btn{position:relative;overflow:hidden}
+      .digistore-btn::after{content:"";position:absolute;top:0;left:-120%;width:60%;height:100%;background:linear-gradient(110deg,transparent,rgba(255,255,255,.55),transparent);transition:left .45s ease}
+      .digistore-btn:hover::after{left:130%}
+      .digistore-skeleton{background:linear-gradient(90deg,#e2e8f0 25%,#f8fafc 50%,#e2e8f0 75%);background-size:220% 100%;animation:digistoreShimmer 1.3s infinite}
+      .digistore-skeleton-card{background:rgba(255,255,255,.8);border-radius:20px;overflow:hidden;min-height:310px}
+      @keyframes digistoreShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+      @media (max-width:700px){.digistore-shop{padding:20px}.digistore-shop h2{font-size:26px}.digistore-controls{grid-template-columns:1fr}}
+
       .sng-ai-widget{
         position:fixed;
         right:20px;
@@ -2229,7 +2278,7 @@
       }
 
       @media (max-width:700px){
-        .sng-ai-widget{
+      .sng-ai-widget{
           right:12px;
           bottom:12px;
         }
@@ -2818,6 +2867,32 @@
   <div id="sngAmazonGrid" class="sng-grid"></div>
 </section>
 
+<section class="digistore-shop container" aria-labelledby="digistore-title">
+  <div class="digistore-top">
+    <div>
+      <p class="digistore-kicker">DIGISTORE SHOP</p>
+      <h2 id="digistore-title">🔵 DIGISTORE SHOP – OFFRES PREMIUM</h2>
+      <p class="digistore-sub">Marketplace premium: offres vérifiées, tendance et limitées.</p>
+    </div>
+  </div>
+  <div class="digistore-controls" aria-label="Filtres Digistore">
+    <input id="digistoreSearch" class="digistore-input" type="search" placeholder="Rechercher un produit Digistore..." aria-label="Recherche Digistore" />
+    <select id="digistoreCategory" class="digistore-select" aria-label="Filtre catégorie">
+      <option value="all">Toutes catégories</option>
+      <option value="business">Business IA</option>
+      <option value="mindset">Mindset & Bien-être</option>
+      <option value="formation">Formations</option>
+      <option value="sante">Santé</option>
+    </select>
+    <select id="digistoreSort" class="digistore-select" aria-label="Tri produits">
+      <option value="popular">Populaire</option>
+      <option value="new">Nouveau</option>
+      <option value="trend">Tendance</option>
+    </select>
+  </div>
+  <div id="digistoreGrid" class="digistore-grid"></div>
+</section>
+
 
     <footer class="site-footer">
       <div class="container footer-inner footer-grid">
@@ -3072,6 +3147,104 @@ En tant que Partenaire Amazon, SNG Portal réalise un bénéfice sur les achats 
         console.log(`[SNG SHOP][TRACK] Clic ${payload.source.toUpperCase()} -> ${payload.asin} | ${payload.title}`, payload);
       }
 
+
+
+      const digistoreProducts = [
+        { title: "Produit Digistore 01", url: "https://www.digistore24.com/redir/38219/luisguzmanune75e40b/", image: "https://www.digistore24-app.com/pb/img/merchant_2687/image/product/WU6HUINR.png" },
+        { title: "Produit Digistore 02", url: "https://www.digistore24.com/redir/98201/luisguzmanune75e40b/", image: "https://www.digistore24-app.com/pb/img/merchant_103793/image/product/R4SV9CJH.png" },
+        { title: "Produit Digistore 03", url: "https://uswaterrevolution.com/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_1598075/image/product/QDX17G0N.png" },
+        { title: "Produit Digistore 04", url: "https://business-kickstart.de/ki-training-1/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_831468/image/product/KDDUNIJM.png" },
+        { title: "Produit Digistore 05", url: "https://aifluencersystem.de/start#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_831468/image/product/RMJDGC67.png" },
+        { title: "Produit Digistore 06", url: "https://umfragen-system.de/komplettpaket-start-2/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_831468/image/product/1YMSY9MW.png" },
+        { title: "Produit Digistore 07", url: "https://business-kickstart.de/social-media-vorlagen-gratis/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_831468/image/product/WBF7IEG1.png" },
+        { title: "Produit Digistore 08", url: "https://social.business-kickstart.de/tgg/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_831468/image/product/2F2KUJWI.png" },
+        { title: "Produit Digistore 09", url: "https://social.business-kickstart.de/start-1/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_831468/image/product/MFL3Y1BO.png" },
+        { title: "Produit Digistore 10", url: "https://business-kickstart.de/trafficturbo/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_831468/image/product/8W6BH3AG.png" },
+        { title: "Produit Digistore 11", url: "https://app-cash-system.de/social/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_831468/image/product/OVRFRHDU.png" },
+        { title: "Produit Digistore 12", url: "https://business-kickstart.de/socialmedia-vorlagen/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_831468/image/product/W90L7RBL.png" },
+        { title: "Produit Digistore 13", url: "https://app-cash-system.de/start-vsl-1/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_831468/image/product/JF4IUW4P.png" },
+        { title: "Produit Digistore 14", url: "https://www.digistore24.com/redir/589848/luisguzmanune75e40b/", image: "https://www.digistore24-app.com/pb/img/merchant_1052740/image/product/FCC3BYK2.png" },
+        { title: "Produit Digistore 15", url: "https://www.digistore24.com/redir/589848/luisguzmanune75e40b/", image: "https://www.digistore24-app.com/pb/img/merchant_1052740/image/product/FCC3BYK2.png" },
+        { title: "Produit Digistore 16", url: "https://www.digistore24.com/redir/572144/luisguzmanune75e40b/", image: "https://www.digistore24-app.com/pb/img/merchant_1052740/image/product/HE6M9JFE.png" },
+        { title: "Produit Digistore 17", url: "https://www.digistore24.com/redir/572139/luisguzmanune75e40b/", image: "https://www.digistore24-app.com/pb/img/merchant_1052740/image/product/OC4HGROI.png" },
+        { title: "Produit Digistore 18", url: "https://www.digistore24.com/redir/632200/luisguzmanune75e40b/", image: "https://www.digistore24-app.com/pb/img/merchant_1052740/image/product/3PAQQMMM.png" },
+        { title: "Produit Digistore 19", url: "https://www.digistore24.com/redir/572143/luisguzmanune75e40b/", image: "https://www.digistore24-app.com/pb/img/merchant_1052740/image/product/3W9X8LZ8.png" },
+        { title: "Produit Digistore 20", url: "http://energetic-eternity.de/produkt/feminin-bundle/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_119393/image/product/2P0D7FPE.png" },
+        { title: "Produit Digistore 21", url: "https://neowake.de/source-code/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_119393/image/product/VMZFZRP0.png" },
+        { title: "Produit Digistore 22", url: "http://energetic-eternity.de/produkt/season-2-paket/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_119393/image/product/08PCUIL3.png" },
+        { title: "Produit Digistore 23", url: "http://energetic-eternity.de/produkt/diet-bundle/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_119393/image/product/UUX4V739.png" },
+        { title: "Produit Digistore 24", url: "http://energetic-eternity.de/produkt/health-bundle/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_119393/image/product/PVIXGV4Q.png" },
+        { title: "Produit Digistore 25", url: "https://energetic-eternity.de/millionaer-mindset-tripwire/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_119393/image/product/MHU7IJ54.png" },
+        { title: "Produit Digistore 26", url: "http://energetic-eternity.de/produkt/personality-bundle/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_119393/image/product/3H1ZGZ43.png" },
+        { title: "Produit Digistore 27", url: "https://energetic-eternity.de/produkt/silent-subliminals-wunschpartner/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_119393/image/product/ZPST79NU.jpg" },
+        { title: "Produit Digistore 28", url: "https://energetic-eternity.de/produkt/silent-subliminals-geld/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_119393/image/product/SK21U65W.jpg" },
+        { title: "Produit Digistore 29", url: "https://energetic-eternity.de/produkt/silent-subliminals-intelligenz/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_119393/image/product/TQAQHLFI.jpg" },
+        { title: "Produit Digistore 30", url: "https://neowake.de/jetzt-testen#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_119393/image/product/459ZGI53.png" },
+        { title: "Produit Digistore 31", url: "https://energetic-eternity.de/produkt/silent-subliminals-liebe/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_119393/image/product/FS47Q7Y7.jpg" },
+        { title: "Produit Digistore 32", url: "https://onlinekurse-von-experten.com/ytki-fe/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_23847/image/product/UJMSP0KT.png" },
+        { title: "Produit Digistore 33", url: "https://onlinekurse-von-experten.com/shorts-fe/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_23847/image/product/9N37IUPS.png" },
+        { title: "Produit Digistore 34", url: "https://onlinekurse-von-experten.com/akb-fe/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_23847/image/product/DGXHR95L.png" },
+        { title: "Produit Digistore 35", url: "https://onlinekurse-von-experten.com/akb-fe/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_23847/image/product/DGXHR95L.png" },
+        { title: "Produit Digistore 36", url: "https://mein-kurs-business.com#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_23847/image/product/4UDXIB02.png" },
+        { title: "Produit Digistore 37", url: "https://onlinekurse-von-experten.com/bgb-fe/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_23847/image/product/J8QRFUXD.png" },
+        { title: "Produit Digistore 38", url: "https://onlinekurse-von-experten.com/kia-fe/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_23847/image/product/GRLMN7AT.png" },
+        { title: "Produit Digistore 39", url: "https://www.oliverpfeil.de/produkte/wordpress-ebook#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_3509/image/product/2DP8VT81.jpg" },
+        { title: "Produit Digistore 40", url: "https://www.oliverpfeil.de/produkte/buch#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/webinc/images/defaults/product_thumb.png" },
+        { title: "Produit Digistore 41", url: "https://clearvisionbreakthrough.com/tsl.php#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_1742473/image/product/3XSZ013Y.png" },
+        { title: "Produit Digistore 42", url: "https://selbstliebe-onlinekurs.de/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_642460/image/product/F8UP77A5.png" },
+        { title: "Produit Digistore 43", url: "https://www.digistore24.com/redir/402184/luisguzmanune75e40b/", image: "https://www.digistore24-app.com/pb/img/merchant_39683/image/product/0UU9VAN3.jpg" },
+        { title: "Produit Digistore 44", url: "https://www.digistore24.com/redir/482128/luisguzmanune75e40b/", image: "https://www.digistore24-app.com/pb/img/merchant_110927/image/product/4IE54UQ9.png" },
+        { title: "Produit Digistore 45", url: "https://channeling-blog.com/akademie/aktiviere_dein_drittes_auge_mit_tanja_konstantin/#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_642460/image/product/5USOFZQG.png" },
+        { title: "Produit Digistore 46", url: "https://www.digistore24.com/redir/450204/luisguzmanune75e40b/", image: "https://www.digistore24-app.com/pb/img/merchant_1768201/image/product/X66ZEFL0.png" },
+        { title: "Produit Digistore 47", url: "https://partner.janszky.de/membership-lp#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_750228/image/product/6H6M62U4.png" },
+        { title: "Produit Digistore 48", url: "https://bloodsugarblaster.com/index-vsl-ds24#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_907908/image/product/M3TDG9ZG.png" },
+        { title: "Produit Digistore 49", url: "https://endopeak24.com/d/order-now.php#aff=luisguzmanune75e40b", image: "https://www.digistore24-app.com/pb/img/merchant_2291830/image/product/B19BQBZ9.gif" },
+        { title: "Produit Digistore 50", url: "https://www.checkout-ds24.com/redir/688723/luisguzmanune75e40b/", image: "https://www.digistore24-app.com/pb/img/merchant_5504634/image/product/OGGTBOMH.png" }
+      ];
+      const digistoreGrid = document.getElementById("digistoreGrid");
+      const digistoreSearch = document.getElementById("digistoreSearch");
+      const digistoreCategory = document.getElementById("digistoreCategory");
+      const digistoreSort = document.getElementById("digistoreSort");
+      const digistoreCategories = ["business","business","sante","business","business","business","business","business","business","business","business","business","business","formation","formation","formation","formation","formation","formation","mindset","mindset","mindset","mindset","mindset","mindset","mindset","mindset","mindset","mindset","mindset","mindset","formation","formation","formation","formation","formation","formation","formation","formation","formation","sante","mindset","mindset","mindset","mindset","formation","formation","sante","sante","formation"];
+      const digistoreProductsEnhanced = digistoreProducts.map((item,index)=>({
+        ...item,
+        id:index+1,
+        category:digistoreCategories[index]||"formation",
+        popularity:120-index,
+        trendScore:(index%7)+4,
+        stock:Math.max(3,18-(index%13)),
+        rating:(4+(index%2)*0.5).toFixed(1)
+      }));
+      function renderDigistoreSkeleton(count=8){
+        if(!digistoreGrid)return;
+        digistoreGrid.innerHTML=Array.from({length:count}).map(()=>`<article class="digistore-skeleton-card"><div class="digistore-skeleton" style="height:190px"></div><div style="padding:15px"><div class="digistore-skeleton" style="height:14px;border-radius:8px;margin-bottom:10px"></div><div class="digistore-skeleton" style="height:14px;border-radius:8px;margin-bottom:14px;width:74%"></div><div class="digistore-skeleton" style="height:38px;border-radius:10px"></div></div></article>`).join('');
+      }
+      function sortDigistore(items,mode){
+        const copy=[...items];
+        if(mode==='new') return copy.sort((a,b)=>b.id-a.id);
+        if(mode==='trend') return copy.sort((a,b)=>b.trendScore-a.trendScore);
+        return copy.sort((a,b)=>b.popularity-a.popularity);
+      }
+      function renderDigistoreCards(list){
+        if(!digistoreGrid)return;
+        if(!list.length){digistoreGrid.innerHTML='<p class="sng-empty">Aucun produit trouvé.</p>';return;}
+        digistoreGrid.innerHTML=list.map((item)=>`<article class="digistore-card" aria-label="${item.title}"><div class="digistore-thumb"><img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async" width="500" height="500"><span class="digistore-badge">Premium</span><span class="digistore-hot">🔥 HOT</span><div class="digistore-tag-row"><span class="digistore-tag hot">🔥 Tendance</span><span class="digistore-tag ok">✅ Vérifié</span><span class="digistore-tag limit">⚡ Offre limitée</span></div></div><div class="digistore-content"><h3 class="digistore-title">${item.title}</h3><p class="digistore-stars" aria-label="Note ${item.rating} sur 5">★★★★★ <span>${item.rating}</span></p><p class="digistore-stock" data-stock-base="${item.stock}">⏳ Stock restant: ${item.stock}</p><a class="digistore-btn" href="${item.url}" target="_blank" rel="noopener noreferrer sponsored nofollow" title="Voir l'offre ${item.title}">🔥 VOIR L’OFFRE</a></div></article>`).join('');
+        const io = new IntersectionObserver((entries)=>{entries.forEach((e)=>{if(e.isIntersecting){e.target.classList.add('is-visible');io.unobserve(e.target);}})},{threshold:.14});
+        digistoreGrid.querySelectorAll('.digistore-card').forEach((card)=>io.observe(card));
+      }
+      function updateDigistore(){
+        const term=(digistoreSearch?.value||'').toLowerCase().trim();
+        const category=digistoreCategory?.value||'all';
+        const mode=digistoreSort?.value||'popular';
+        const filtered=digistoreProductsEnhanced.filter((p)=>(category==='all'||p.category===category)&&p.title.toLowerCase().includes(term));
+        renderDigistoreCards(sortDigistore(filtered,mode));
+      }
+      if (digistoreGrid) {
+        renderDigistoreSkeleton(10);
+        window.setTimeout(updateDigistore,260);
+        [digistoreSearch,digistoreCategory,digistoreSort].forEach((el)=>el&&el.addEventListener('input',updateDigistore));
+        window.setInterval(()=>{digistoreGrid.querySelectorAll('.digistore-stock').forEach((el)=>{const base=Number(el.dataset.stockBase||'9');const dynamic=Math.max(2,base-(new Date().getSeconds()%4));el.textContent=`⏳ Stock restant: ${dynamic}`;});},4000);
+      }
       if (grid && search) {
         renderProducts(amazonProducts);
 
