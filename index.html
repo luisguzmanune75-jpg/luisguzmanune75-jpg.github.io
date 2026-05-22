@@ -1858,6 +1858,11 @@
       .digistore-btn{position:relative;overflow:hidden}
       .digistore-btn::after{content:"";position:absolute;top:0;left:-120%;width:60%;height:100%;background:linear-gradient(110deg,transparent,rgba(255,255,255,.55),transparent);transition:left .45s ease}
       .digistore-btn:hover::after{left:130%}
+
+      .digistore-share-btn{margin-top:8px;width:100%;border:1px solid #7dd3fc;background:rgba(186,230,253,.12);color:#0f4aa6;font-weight:800;padding:11px 10px;border-radius:12px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:transform .2s ease,box-shadow .2s ease,background-color .2s ease,color .2s ease;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+      .digistore-share-btn:hover{transform:translateY(-2px);background:rgba(125,211,252,.2);box-shadow:0 8px 16px rgba(56,189,248,.25)}
+      .digistore-share-btn:active{transform:translateY(0)}
+      .digistore-share-btn.is-copied{background:#dbeafe;border-color:#60a5fa;color:#1d4ed8}
       .digistore-skeleton{background:linear-gradient(90deg,#e2e8f0 25%,#f8fafc 50%,#e2e8f0 75%);background-size:220% 100%;animation:digistoreShimmer 1.3s infinite}
       .digistore-skeleton-card{background:rgba(255,255,255,.8);border-radius:20px;overflow:hidden;min-height:310px}
       @keyframes digistoreShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -3228,9 +3233,41 @@ En tant que Partenaire Amazon, SNG Portal réalise un bénéfice sur les achats 
       function renderDigistoreCards(list){
         if(!digistoreGrid)return;
         if(!list.length){digistoreGrid.innerHTML='<p class="sng-empty">Aucun produit trouvé.</p>';return;}
-        digistoreGrid.innerHTML=list.map((item)=>`<article class="digistore-card" aria-label="${item.title}"><div class="digistore-thumb"><img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async" width="500" height="500"><span class="digistore-badge">Premium</span><span class="digistore-hot">🔥 HOT</span><div class="digistore-tag-row"><span class="digistore-tag hot">🔥 Tendance</span><span class="digistore-tag ok">✅ Vérifié</span><span class="digistore-tag limit">⚡ Offre limitée</span></div></div><div class="digistore-content"><h3 class="digistore-title">${item.title}</h3><p class="digistore-stars" aria-label="Note ${item.rating} sur 5">★★★★★ <span>${item.rating}</span></p><p class="digistore-stock" data-stock-base="${item.stock}">⏳ Stock restant: ${item.stock}</p><a class="digistore-btn" href="${item.url}" target="_blank" rel="noopener noreferrer sponsored nofollow" title="Voir l'offre ${item.title}">🔥 VOIR L’OFFRE</a></div></article>`).join('');
+        digistoreGrid.innerHTML=list.map((item)=>`<article class="digistore-card" aria-label="${item.title}"><div class="digistore-thumb"><img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async" width="500" height="500"><span class="digistore-badge">Premium</span><span class="digistore-hot">🔥 HOT</span><div class="digistore-tag-row"><span class="digistore-tag hot">🔥 Tendance</span><span class="digistore-tag ok">✅ Vérifié</span><span class="digistore-tag limit">⚡ Offre limitée</span></div></div><div class="digistore-content"><h3 class="digistore-title">${item.title}</h3><p class="digistore-stars" aria-label="Note ${item.rating} sur 5">★★★★★ <span>${item.rating}</span></p><p class="digistore-stock" data-stock-base="${item.stock}">⏳ Stock restant: ${item.stock}</p><a class="digistore-btn" href="${item.url}" target="_blank" rel="noopener noreferrer sponsored nofollow" title="Voir l'offre ${item.title}">🔥 VOIR L’OFFRE</a><button class="digistore-share-btn" type="button" data-share-url="${item.url}" data-share-title="${item.title}" aria-label="Partager ${item.title}">🔗 Partager</button></div></article>`).join('');
         const io = new IntersectionObserver((entries)=>{entries.forEach((e)=>{if(e.isIntersecting){e.target.classList.add('is-visible');io.unobserve(e.target);}})},{threshold:.14});
         digistoreGrid.querySelectorAll('.digistore-card').forEach((card)=>io.observe(card));
+        digistoreGrid.querySelectorAll('.digistore-share-btn').forEach((btn)=>{
+          btn.addEventListener('click', async ()=>{
+            const shareUrl=btn.dataset.shareUrl||window.location.href;
+            const shareTitle=btn.dataset.shareTitle||'Offre Digistore';
+            try {
+              if (navigator.share) {
+                await navigator.share({title:shareTitle,text:`Découvre cette offre: ${shareTitle}`,url:shareUrl});
+              } else if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(shareUrl);
+              } else {
+                const temp=document.createElement('input');
+                temp.value=shareUrl;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                temp.remove();
+              }
+              const original=btn.innerHTML;
+              btn.classList.add('is-copied');
+              btn.innerHTML='🔗 Lien copié ✅';
+              window.setTimeout(()=>{btn.classList.remove('is-copied');btn.innerHTML=original;},1800);
+            } catch (err) {
+              if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(shareUrl);
+                const original=btn.innerHTML;
+                btn.classList.add('is-copied');
+                btn.innerHTML='🔗 Lien copié ✅';
+                window.setTimeout(()=>{btn.classList.remove('is-copied');btn.innerHTML=original;},1800);
+              }
+            }
+          });
+        });
       }
       function updateDigistore(){
         const term=(digistoreSearch?.value||'').toLowerCase().trim();
