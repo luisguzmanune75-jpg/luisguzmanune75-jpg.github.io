@@ -271,6 +271,30 @@
         color: var(--muted);
       }
 
+      .sng-video-card {
+        align-items: center;
+        cursor: default;
+      }
+
+      .sng-video-placeholder {
+        width: 100%;
+        padding: 14px;
+        border: 1px dashed rgba(255, 255, 255, 0.28);
+        border-radius: 18px;
+        background: rgba(0, 0, 0, 0.18);
+        color: #fff;
+      }
+
+      .sng-video-placeholder span,
+      .sng-video-placeholder small {
+        display: block;
+      }
+
+      .sng-video-placeholder small {
+        margin-top: 5px;
+        color: var(--muted);
+      }
+
       .home-search-guidance,
       .home-weather-card,
       .home-news-bubble,
@@ -2605,11 +2629,15 @@
           <a href="horoscope.html" class="card portal-card"><div class="card-icon portal-icon">🔮</div><h3>Horoscope</h3><p>Horoscope du jour, amour, travail, chance et énergie signe par signe.</p></a>
           <a href="voyages.html" class="card portal-card"><div class="card-icon portal-icon">✈️</div><h3>Voyage</h3><p>Compare des vols, découvre des destinations et prépare ton prochain séjour.</p></a>
           <a href="./tech-hub.html" class="card portal-card"><div class="card-icon portal-icon">🚀</div><h3>Tech IA</h3><p>Smartphones, outils IA et gadgets tendance dans un espace dédié.</p></a>
-<a href="./conduite-rd.html" class="card portal-card">
-  <div class="card-icon portal-icon">🚗</div>
-  <h3>Conducción RD</h3>
-  <p>Guía práctica con imágenes y quiz: señales, prioridad, semáforos y seguridad vial en República Dominicana.</p>
-</a>
+<article class="card portal-card sng-video-card" aria-labelledby="sng-tv-title">
+  <div class="card-icon portal-icon">🎥</div>
+  <h3 id="sng-tv-title">🎥 SNG TV – Vidéos Officielles</h3>
+  <p>Espace personnel réservé aux vidéos officielles publiées par SNG Portal. Les visiteurs peuvent regarder les vidéos, sans option pour en ajouter.</p>
+  <div class="sng-video-placeholder" aria-label="Emplacement réservé aux vidéos SNG Portal">
+    <span>Emplacement vidéos SNG</span>
+    <small>Ajouter ici les intégrations officielles SNG Portal.</small>
+  </div>
+</article>
 
         <div class="info-strip">
           <div class="info-box"><strong>+10 rubriques</strong><span>Un portail riche et organise</span></div>
