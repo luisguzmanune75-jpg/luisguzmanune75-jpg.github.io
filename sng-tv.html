@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="SNG TV, la page cinéma officielle de SNG Portal pour regarder les vidéos publiées par le site." />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#07070c" />
+    <title>🎥 SNG TV – Cinéma Officiel</title>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+        --bg: #07070c;
+        --panel: rgba(255, 255, 255, 0.08);
+        --panel-strong: rgba(255, 255, 255, 0.12);
+        --line: rgba(255, 255, 255, 0.14);
+        --text: #fff;
+        --muted: rgba(255, 255, 255, 0.72);
+        --gold: #ffd166;
+        --red: #ff2f6d;
+        --shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+      }
+      body {
+        min-height: 100vh;
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 12% 8%, rgba(255, 47, 109, 0.22), transparent 28%),
+          radial-gradient(circle at 86% 14%, rgba(255, 209, 102, 0.16), transparent 26%),
+          linear-gradient(135deg, #030306 0%, #11111d 48%, #050509 100%);
+      }
+      a { color: inherit; text-decoration: none; }
+      .cinema-shell { width: min(100% - 28px, 1180px); margin: 0 auto; }
+      .topbar { padding: 24px 0; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+      .brand { font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gold); }
+      .home-btn, .watch-btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        border: 1px solid var(--line); border-radius: 999px; padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.08); font-weight: 800;
+      }
+      .home-btn:hover, .watch-btn:hover { transform: translateY(-1px); border-color: rgba(255, 209, 102, 0.65); }
+      .hero { padding: 42px 0 30px; text-align: center; }
+      .eyebrow { color: var(--gold); font-weight: 900; text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.82rem; }
+      h1 { margin-top: 14px; font-size: clamp(2.2rem, 7vw, 5.1rem); line-height: 0.95; text-shadow: 0 18px 48px rgba(0,0,0,.65); }
+      .hero p { max-width: 760px; margin: 18px auto 0; color: var(--muted); font-size: 1.08rem; line-height: 1.7; }
+      .screen-wrap { margin: 28px 0 34px; padding: 16px; border: 1px solid var(--line); border-radius: 30px; background: linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.04)); box-shadow: var(--shadow); }
+      .screen {
+        position: relative; overflow: hidden; border-radius: 22px; min-height: clamp(260px, 52vw, 620px);
+        background: #000; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.12);
+      }
+      .screen iframe, .screen video { width: 100%; height: 100%; min-height: clamp(260px, 52vw, 620px); border: 0; display: block; }
+      .empty-screen { padding: 30px; text-align: center; color: var(--muted); }
+      .empty-screen strong { display: block; color: #fff; font-size: 1.4rem; margin-bottom: 10px; }
+      .section-head { display: flex; justify-content: space-between; align-items: end; gap: 18px; margin: 34px 0 18px; flex-wrap: wrap; }
+      .section-head h2 { font-size: clamp(1.5rem, 4vw, 2.4rem); }
+      .section-head p { color: var(--muted); max-width: 620px; line-height: 1.55; }
+      .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; padding-bottom: 56px; }
+      .video-card { overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: var(--panel); box-shadow: 0 16px 44px rgba(0,0,0,.28); }
+      .thumb { aspect-ratio: 16 / 9; width: 100%; object-fit: cover; display: block; background: linear-gradient(135deg, rgba(255,47,109,.35), rgba(255,209,102,.18)), #151520; }
+      .video-body { padding: 16px; display: grid; gap: 12px; }
+      .video-body h3 { font-size: 1.08rem; line-height: 1.35; }
+      .video-body p { color: var(--muted); line-height: 1.5; }
+      .watch-btn { width: 100%; border: 0; cursor: pointer; background: linear-gradient(135deg, var(--red), var(--gold)); color: #1a050b; font-size: 0.95rem; }
+      .notice { border: 1px dashed rgba(255,255,255,.22); border-radius: 24px; background: rgba(255,255,255,.06); padding: 24px; color: var(--muted); line-height: 1.65; }
+      footer { padding: 18px 0 36px; color: var(--muted); text-align: center; }
+      @media (max-width: 620px) { .topbar { align-items: stretch; flex-direction: column; } .home-btn { width: 100%; } }
+    </style>
+  </head>
+  <body>
+    <main class="cinema-shell">
+      <nav class="topbar" aria-label="Navigation SNG TV">
+        <a class="brand" href="./index.html">SNG Portal</a>
+        <a class="home-btn" href="./index.html">← Retour vers l’accueil</a>
+      </nav>
+
+      <section class="hero">
+        <div class="eyebrow">Cinéma officiel</div>
+        <h1>🎥 SNG TV – Cinéma Officiel</h1>
+        <p>Un espace sombre et premium pour regarder les vidéos officielles de SNG Portal. Les visiteurs peuvent seulement regarder : aucun bouton upload, aucun formulaire, aucune option d’ajout public.</p>
+      </section>
+
+      <section class="screen-wrap" aria-label="Lecteur vidéo principal">
+        <div class="screen" id="featuredPlayer">
+          <div class="empty-screen">
+            <strong>Grande zone vidéo SNG TV</strong>
+            Ajoute tes vidéos dans <code>videos.json</code> ou directement dans le tableau JavaScript de cette page pour les afficher ici.
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="video-grid-title">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Catalogue SNG Portal</p>
+            <h2 id="video-grid-title">Vidéos officielles</h2>
+          </div>
+          <p>Le système est prêt pour recevoir beaucoup de vidéos : chaque entrée génère automatiquement une carte propre avec titre, miniature, bouton regarder et lecteur vidéo.</p>
+        </div>
+        <div class="video-grid" id="videoGrid"></div>
+        <div class="notice" id="emptyNotice">
+          Aucune vidéo n’est publiée pour le moment. Pour ajouter des vidéos plus tard, modifie uniquement le fichier <code>videos.json</code> avec des champs comme <code>title</code>, <code>thumbnail</code>, <code>embedUrl</code> ou <code>videoUrl</code>.
+        </div>
+      </section>
+    </main>
+
+    <footer>© SNG Portal — Vidéos officielles uniquement.</footer>
+
+    <script>
+      const fallbackVideos = [];
+      const grid = document.getElementById("videoGrid");
+      const player = document.getElementById("featuredPlayer");
+      const emptyNotice = document.getElementById("emptyNotice");
+
+      function renderPlayer(video) {
+        if (!video) return;
+        const title = video.title || "Vidéo officielle SNG Portal";
+        if (video.embedUrl) {
+          player.innerHTML = `<iframe src="${video.embedUrl}" title="${title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+          return;
+        }
+        if (video.videoUrl) {
+          player.innerHTML = `<video controls playsinline poster="${video.thumbnail || ""}"><source src="${video.videoUrl}">Votre navigateur ne peut pas lire cette vidéo.</video>`;
+        }
+      }
+
+      function renderVideos(videos) {
+        grid.innerHTML = "";
+        emptyNotice.hidden = videos.length > 0;
+        videos.forEach((video, index) => {
+          const card = document.createElement("article");
+          card.className = "video-card";
+          card.innerHTML = `
+            <img class="thumb" src="${video.thumbnail || "sng-hero.png"}" alt="Miniature de ${video.title || "vidéo SNG"}" loading="lazy">
+            <div class="video-body">
+              <h3>${video.title || "Vidéo officielle SNG Portal"}</h3>
+              <p>${video.description || "Publication officielle SNG Portal."}</p>
+              <button class="watch-btn" type="button">▶ Regarder</button>
+            </div>`;
+          card.querySelector("button").addEventListener("click", () => renderPlayer(video));
+          grid.appendChild(card);
+          if (index === 0) renderPlayer(video);
+        });
+      }
+
+      fetch("./videos.json", { cache: "no-store" })
+        .then((response) => response.ok ? response.json() : fallbackVideos)
+        .then((videos) => renderVideos(Array.isArray(videos) ? videos : fallbackVideos))
+        .catch(() => renderVideos(fallbackVideos));
+    </script>
+  </body>
+</html>
