@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="SNG TV, la page cinéma officielle de SNG Portal pour regarder les vidéos publiées par le site." />
+    <meta name="description" content="SNG TV affiche automatiquement les dernières vidéos de la chaîne YouTube SNG Portal via YouTube Data API v3." />
     <meta name="robots" content="index,follow" />
     <meta name="theme-color" content="#07070c" />
-    <title>🎥 SNG TV – Cinéma Officiel</title>
+    <title>🎥 SNG TV – Dernières vidéos YouTube</title>
     <style>
       * { box-sizing: border-box; margin: 0; padding: 0; }
       :root {
@@ -55,13 +55,18 @@
       .section-head h2 { font-size: clamp(1.5rem, 4vw, 2.4rem); }
       .section-head p { color: var(--muted); max-width: 620px; line-height: 1.55; }
       .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; padding-bottom: 56px; }
-      .video-card { overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: var(--panel); box-shadow: 0 16px 44px rgba(0,0,0,.28); }
-      .thumb { aspect-ratio: 16 / 9; width: 100%; object-fit: cover; display: block; background: linear-gradient(135deg, rgba(255,47,109,.35), rgba(255,209,102,.18)), #151520; }
+      .video-card { overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: var(--panel); box-shadow: 0 16px 44px rgba(0,0,0,.28); transition: transform .18s ease, border-color .18s ease; }
+      .video-card:hover { transform: translateY(-3px); border-color: rgba(255, 209, 102, 0.5); }
+      .thumb { aspect-ratio: 16 / 9; width: 100%; object-fit: cover; display: block; cursor: pointer; background: linear-gradient(135deg, rgba(255,47,109,.35), rgba(255,209,102,.18)), #151520; }
       .video-body { padding: 16px; display: grid; gap: 12px; }
-      .video-body h3 { font-size: 1.08rem; line-height: 1.35; }
-      .video-body p { color: var(--muted); line-height: 1.5; }
+      .video-body h3 { font-size: 1.08rem; line-height: 1.35; cursor: pointer; }
+      .video-date { color: var(--gold); font-size: 0.86rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
       .watch-btn { width: 100%; border: 0; cursor: pointer; background: linear-gradient(135deg, var(--red), var(--gold)); color: #1a050b; font-size: 0.95rem; }
-      .notice { border: 1px dashed rgba(255,255,255,.22); border-radius: 24px; background: rgba(255,255,255,.06); padding: 24px; color: var(--muted); line-height: 1.65; }
+      .status { border: 1px dashed rgba(255,255,255,.22); border-radius: 24px; background: rgba(255,255,255,.06); padding: 18px 20px; color: var(--muted); line-height: 1.65; margin-bottom: 18px; }
+      .status[data-type="success"] { border-color: rgba(77, 255, 166, .45); color: #bfffe0; }
+      .status[data-type="warning"] { border-color: rgba(255, 209, 102, .55); color: #ffe5a8; }
+      .status[data-type="error"] { border-color: rgba(255, 47, 109, .65); color: #ffc4d5; }
+      .reload-btn { border: 1px solid rgba(255, 209, 102, .55); border-radius: 999px; padding: 11px 15px; background: rgba(255, 209, 102, .12); color: #fff; font-weight: 900; cursor: pointer; }
       footer { padding: 18px 0 36px; color: var(--muted); text-align: center; }
       @media (max-width: 620px) { .topbar { align-items: stretch; flex-direction: column; } .home-btn { width: 100%; } }
     </style>
@@ -74,16 +79,16 @@
       </nav>
 
       <section class="hero">
-        <div class="eyebrow">Cinéma officiel</div>
-        <h1>🎥 SNG TV – Cinéma Officiel</h1>
-        <p>Un espace sombre et premium pour regarder les vidéos officielles de SNG Portal. Les visiteurs peuvent seulement regarder : aucun bouton upload, aucun formulaire, aucune option d’ajout public.</p>
+        <div class="eyebrow">YouTube officiel</div>
+        <h1>🎥 SNG TV – Dernières vidéos YouTube</h1>
+        <p>Cette page récupère automatiquement les 12 dernières vidéos publiques de la chaîne configurée avec YouTube Data API v3, puis les affiche dans une grille responsive optimisée pour GitHub Pages.</p>
       </section>
 
       <section class="screen-wrap" aria-label="Lecteur vidéo principal">
         <div class="screen" id="featuredPlayer">
           <div class="empty-screen">
-            <strong>Grande zone vidéo SNG TV</strong>
-            Ajoute tes vidéos dans <code>videos.json</code> ou directement dans le tableau JavaScript de cette page pour les afficher ici.
+            <strong>Chargement de SNG TV…</strong>
+            Le lecteur affichera automatiquement la dernière vidéo publiée sur la chaîne YouTube configurée.
           </div>
         </div>
       </section>
@@ -91,61 +96,20 @@
       <section aria-labelledby="video-grid-title">
         <div class="section-head">
           <div>
-            <p class="eyebrow">Catalogue SNG Portal</p>
-            <h2 id="video-grid-title">Vidéos officielles</h2>
+            <p class="eyebrow">Mise à jour automatique</p>
+            <h2 id="video-grid-title">Les 12 dernières vidéos</h2>
           </div>
-          <p>Le système est prêt pour recevoir beaucoup de vidéos : chaque entrée génère automatiquement une carte propre avec titre, miniature, bouton regarder et lecteur vidéo.</p>
+          <p>Quand une nouvelle vidéo est publiée sur YouTube, elle remonte automatiquement ici au prochain chargement de la page. Modifie seulement <code>sng-tv-config.js</code> pour changer la clé API ou la chaîne.</p>
+          <button class="reload-btn" id="reloadVideos" type="button">↻ Recharger</button>
         </div>
+        <div class="status" id="videoStatus" role="status" aria-live="polite">Chargement des vidéos…</div>
         <div class="video-grid" id="videoGrid"></div>
-        <div class="notice" id="emptyNotice">
-          Aucune vidéo n’est publiée pour le moment. Pour ajouter des vidéos plus tard, modifie uniquement le fichier <code>videos.json</code> avec des champs comme <code>title</code>, <code>thumbnail</code>, <code>embedUrl</code> ou <code>videoUrl</code>.
-        </div>
       </section>
     </main>
 
     <footer>© SNG Portal — Vidéos officielles uniquement.</footer>
 
-    <script>
-      const fallbackVideos = [];
-      const grid = document.getElementById("videoGrid");
-      const player = document.getElementById("featuredPlayer");
-      const emptyNotice = document.getElementById("emptyNotice");
-
-      function renderPlayer(video) {
-        if (!video) return;
-        const title = video.title || "Vidéo officielle SNG Portal";
-        if (video.embedUrl) {
-          player.innerHTML = `<iframe src="${video.embedUrl}" title="${title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
-          return;
-        }
-        if (video.videoUrl) {
-          player.innerHTML = `<video controls playsinline poster="${video.thumbnail || ""}"><source src="${video.videoUrl}">Votre navigateur ne peut pas lire cette vidéo.</video>`;
-        }
-      }
-
-      function renderVideos(videos) {
-        grid.innerHTML = "";
-        emptyNotice.hidden = videos.length > 0;
-        videos.forEach((video, index) => {
-          const card = document.createElement("article");
-          card.className = "video-card";
-          card.innerHTML = `
-            <img class="thumb" src="${video.thumbnail || "sng-hero.png"}" alt="Miniature de ${video.title || "vidéo SNG"}" loading="lazy">
-            <div class="video-body">
-              <h3>${video.title || "Vidéo officielle SNG Portal"}</h3>
-              <p>${video.description || "Publication officielle SNG Portal."}</p>
-              <button class="watch-btn" type="button">▶ Regarder</button>
-            </div>`;
-          card.querySelector("button").addEventListener("click", () => renderPlayer(video));
-          grid.appendChild(card);
-          if (index === 0) renderPlayer(video);
-        });
-      }
-
-      fetch("./videos.json", { cache: "no-store" })
-        .then((response) => response.ok ? response.json() : fallbackVideos)
-        .then((videos) => renderVideos(Array.isArray(videos) ? videos : fallbackVideos))
-        .catch(() => renderVideos(fallbackVideos));
-    </script>
+    <script src="./sng-tv-config.js"></script>
+    <script src="./sng-tv.js"></script>
   </body>
 </html>
