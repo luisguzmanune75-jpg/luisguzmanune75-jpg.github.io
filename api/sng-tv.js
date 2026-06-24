@@ -1,6 +1,6 @@
 const YOUTUBE_API_BASE = 'https://www.googleapis.com/youtube/v3';
 const DEFAULT_MAX_RESULTS = 12;
-const DEFAULT_CHANNEL_ID = 'https://www.youtube.com/@CanalFamilial';
+const FALLBACK_CHANNEL_ID = 'https://www.youtube.com/@CanalFamilial';
 
 const normalizeChannelInput = (input) => {
   const rawValue = String(input || '').trim();
@@ -95,7 +95,9 @@ module.exports = async function handler(req, res) {
   const maxResults = Number.isFinite(maxResultsRaw) && maxResultsRaw > 0
     ? String(Math.min(maxResultsRaw, 50))
     : String(DEFAULT_MAX_RESULTS);
-  const channelInput = typeof req.query?.channelId === 'string' ? req.query.channelId : DEFAULT_CHANNEL_ID;
+  const channelInput = typeof req.query?.channelId === 'string' && req.query.channelId.trim()
+    ? req.query.channelId
+    : process.env.YOUTUBE_CHANNEL_ID || FALLBACK_CHANNEL_ID;
 
   try {
     const playlistId = await resolveUploadsPlaylist(channelInput, apiKey);
