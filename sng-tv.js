@@ -1,8 +1,4 @@
 (() => {
-  const YOUTUBE_API_BASE = "https://www.googleapis.com/youtube/v3";
-  const YOUTUBE_WATCH_BASE = "https://www.youtube.com/watch?v=";
-  const FALLBACK_THUMBNAIL = "sng-hero.png";
-
   const state = {
     grid: document.getElementById("videoGrid"),
     player: document.getElementById("featuredPlayer"),
@@ -37,76 +33,23 @@
     state.status.hidden = !message;
   };
 
-  const getBestThumbnail = (thumbnails = {}) =>
-    thumbnails.maxres?.url || thumbnails.standard?.url || thumbnails.high?.url || thumbnails.medium?.url || thumbnails.default?.url || FALLBACK_THUMBNAIL;
-
-  const extractVideoId = (item) => item?.snippet?.resourceId?.videoId || item?.id?.videoId || item?.id;
-
-  const normalizeChannelInput = (input) => {
-    const rawValue = String(input || "").trim();
-    if (!rawValue) return { type: "empty", value: "" };
-    if (/^UC[a-zA-Z0-9_-]{20,}$/.test(rawValue)) return { type: "id", value: rawValue };
-
-    const handleMatch = rawValue.match(/(?:youtube\.com\/(?:@|c\/|channel\/)?|^@)([a-zA-Z0-9._-]+)/);
-    if (rawValue.includes("/channel/")) {
-      const channelMatch = rawValue.match(/\/channel\/(UC[a-zA-Z0-9_-]+)/);
-      if (channelMatch) return { type: "id", value: channelMatch[1] };
-    }
-    if (handleMatch) return { type: "handle", value: handleMatch[1].startsWith("@") ? handleMatch[1] : `@${handleMatch[1]}` };
-    return { type: "handle", value: rawValue.startsWith("@") ? rawValue : `@${rawValue}` };
-  };
-
-  const youtubeFetch = async (path, params) => {
-    const url = new URL(`${YOUTUBE_API_BASE}/${path}`);
-    Object.entries({ ...params, key: API_KEY }).forEach(([key, value]) => url.searchParams.set(key, value));
-    const response = await fetch(url.toString(), { cache: "no-store" });
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      const detail = data?.error?.message || "Réponse invalide de YouTube Data API v3.";
-      throw new Error(detail);
-    }
-    return data;
-  };
-
-  const resolveUploadsPlaylist = async () => {
-    const channel = normalizeChannelInput(CHANNEL_ID);
-    if (channel.type === "empty") throw new Error("CHANNEL_ID n'est pas configuré.");
-
-    const params = channel.type === "id"
-      ? { part: "contentDetails", id: channel.value, maxResults: "1" }
-      : { part: "contentDetails", forHandle: channel.value, maxResults: "1" };
-
-    let data = await youtubeFetch("channels", params);
-    if (channel.type === "handle" && !data.items?.length && channel.value.startsWith("@")) {
-      data = await youtubeFetch("channels", { ...params, forHandle: channel.value.slice(1) });
-    }
-    const playlistId = data.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
-    if (!playlistId) throw new Error("Chaîne YouTube introuvable. Vérifie le Channel ID ou le handle configuré.");
-    return playlistId;
+  const buildSngTvApiUrl = () => {
+    const endpoint = window.SNG_TV_API_ENDPOINT || "/api/sng-tv";
+    const url = new URL(endpoint, window.location.origin);
+    url.searchParams.set("channelId", CHANNEL_ID || "");
+    url.searchParams.set("maxResults", String(MAX_RESULTS || 12));
+    return url;
   };
 
   const fetchLatestVideos = async () => {
-    const playlistId = await resolveUploadsPlaylist();
-    const data = await youtubeFetch("playlistItems", {
-      part: "snippet,contentDetails",
-      playlistId,
-      maxResults: String(MAX_RESULTS || 12),
-    });
+    const response = await fetch(buildSngTvApiUrl().toString(), { cache: "no-store" });
+    const data = await response.json().catch(() => ({}));
 
-    return (data.items || [])
-      .map((item) => {
-        const snippet = item.snippet || {};
-        const videoId = extractVideoId(item);
-        return {
-          id: videoId,
-          title: snippet.title || "Vidéo SNG TV",
-          publishedAt: snippet.publishedAt || item.contentDetails?.videoPublishedAt,
-          thumbnail: getBestThumbnail(snippet.thumbnails),
-          watchUrl: `${YOUTUBE_WATCH_BASE}${videoId}`,
-          embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}`,
-        };
-      })
-      .filter((video) => video.id && !/private video|deleted video/i.test(video.title));
+    if (!response.ok) {
+      throw new Error(data?.message || "Réponse invalide de l’endpoint SNG TV.");
+    }
+
+    return Array.isArray(data.videos) ? data.videos : [];
   };
 
   const renderPlayer = (video) => {
@@ -156,9 +99,9 @@
       renderVideos(videos);
     } catch (error) {
       console.error("Erreur SNG TV YouTube:", error);
-      state.player.innerHTML = `<div class="empty-screen"><strong>Impossible de charger SNG TV</strong>Vérifie la clé API, le quota YouTube Data API v3 et l'identifiant de chaîne.</div>`;
+      state.player.innerHTML = `<div class="empty-screen"><strong>Impossible de charger SNG TV</strong>Vérifie la variable Vercel YOUTUBE_API_KEY, le quota YouTube Data API v3 et l'identifiant de chaîne.</div>`;
       state.grid.innerHTML = "";
-      setStatus(`Erreur API YouTube : ${error.message}`, "error");
+      setStatus(`Erreur endpoint SNG TV : ${error.message}`, "error");
     }
   };
 
