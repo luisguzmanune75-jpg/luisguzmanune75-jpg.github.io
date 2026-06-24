@@ -1,1 +1,6 @@
 home-ai-config.js
+
+# Local environment secrets
+.env
+.env.local
+.vercel

@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/sng-tv.js": {
+      "maxDuration": 10
+    }
+  }
+}
