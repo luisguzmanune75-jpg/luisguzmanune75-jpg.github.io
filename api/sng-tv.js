@@ -21,6 +21,11 @@ const getBestThumbnail = (thumbnails = {}) =>
 
 const extractVideoId = (item) => item?.snippet?.resourceId?.videoId || item?.id?.videoId || item?.id;
 
+const sendJson = (res, statusCode, payload) => {
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  return res.status(statusCode).json({ videos: [], ...payload });
+};
+
 const youtubeFetch = async (path, params, apiKey) => {
   const url = new URL(`${YOUTUBE_API_BASE}/${path}`);
   Object.entries({ ...params, key: apiKey }).forEach(([key, value]) => {
@@ -32,8 +37,14 @@ const youtubeFetch = async (path, params, apiKey) => {
 
   if (!response.ok) {
     const detail = data?.error?.message || 'Réponse invalide de YouTube Data API v3.';
+    console.error('[SNG TV API] YouTube request failed', {
+      path,
+      status: response.status,
+      message: detail,
+    });
     const error = new Error(detail);
     error.statusCode = response.status;
+    error.code = data?.error?.status || 'YOUTUBE_API_ERROR';
     throw error;
   }
 
@@ -63,11 +74,22 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method === 'OPTIONS') return res.status(204).end();
-  if (req.method !== 'GET') return res.status(405).json({ message: 'Method Not Allowed' });
+  if (req.method === 'OPTIONS') return sendJson(res, 200, { message: 'OK' });
+  if (req.method !== 'GET') {
+    return sendJson(res, 405, {
+      error: 'METHOD_NOT_ALLOWED',
+      message: 'Method Not Allowed',
+    });
+  }
 
   const apiKey = process.env.YOUTUBE_API_KEY;
-  if (!apiKey) return res.status(500).json({ message: 'YOUTUBE_API_KEY is not configured' });
+  if (!apiKey) {
+    console.error('[SNG TV API] Missing YOUTUBE_API_KEY environment variable');
+    return sendJson(res, 500, {
+      error: 'MISSING_YOUTUBE_API_KEY',
+      message: 'YOUTUBE_API_KEY is not configured',
+    });
+  }
 
   const maxResultsRaw = Number.parseInt(req.query?.maxResults, 10);
   const maxResults = Number.isFinite(maxResultsRaw) && maxResultsRaw > 0
@@ -87,22 +109,37 @@ module.exports = async function handler(req, res) {
       .map((item) => {
         const snippet = item.snippet || {};
         const videoId = extractVideoId(item);
+        const url = videoId ? `https://www.youtube.com/watch?v=${videoId}` : '';
         return {
           id: videoId,
           title: snippet.title || 'Vidéo SNG TV',
-          publishedAt: snippet.publishedAt || item.contentDetails?.videoPublishedAt || null,
+          description: snippet.description || '',
           thumbnail: getBestThumbnail(snippet.thumbnails),
-          watchUrl: videoId ? `https://www.youtube.com/watch?v=${videoId}` : '',
+          publishedAt: snippet.publishedAt || item.contentDetails?.videoPublishedAt || null,
+          url,
+          watchUrl: url,
           embedUrl: videoId ? `https://www.youtube-nocookie.com/embed/${videoId}` : '',
         };
       })
       .filter((video) => video.id && !/private video|deleted video/i.test(video.title));
 
+    console.log('[SNG TV API] Videos fetched successfully', {
+      channelInput,
+      playlistId,
+      count: videos.length,
+    });
     res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
-    return res.status(200).json({ videos });
+    return sendJson(res, 200, { videos });
   } catch (error) {
     const statusCode = Number.isInteger(error.statusCode) ? error.statusCode : 502;
-    return res.status(statusCode >= 400 && statusCode < 600 ? statusCode : 502).json({
+    const safeStatusCode = statusCode >= 400 && statusCode < 600 ? statusCode : 502;
+    console.error('[SNG TV API] Failed to build JSON response', {
+      statusCode: safeStatusCode,
+      error: error.code || 'SNG_TV_ENDPOINT_ERROR',
+      message: error.message,
+    });
+    return sendJson(res, safeStatusCode, {
+      error: error.code || 'SNG_TV_ENDPOINT_ERROR',
       message: error.message || 'Failed to fetch data from YouTube Data API v3',
     });
   }
