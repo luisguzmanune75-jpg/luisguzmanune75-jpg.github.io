@@ -36,8 +36,8 @@
   const buildSngTvApiUrl = () => {
     const endpoint = window.SNG_TV_API_ENDPOINT || "/api/sng-tv";
     const url = new URL(endpoint, window.location.origin);
-    url.searchParams.set("channelId", CHANNEL_ID || "");
-    url.searchParams.set("maxResults", String(MAX_RESULTS || 12));
+    url.searchParams.set("channelId", window.CHANNEL_ID || "");
+    url.searchParams.set("maxResults", String(window.MAX_RESULTS || 12));
     return url;
   };
 
@@ -46,10 +46,23 @@
     const data = await response.json().catch(() => ({}));
 
     if (!response.ok) {
+      throw new Error(data?.message || data?.error || "Réponse invalide de l’endpoint SNG TV.");
+    }
+
+    if (!data || !Array.isArray(data.videos)) {
       throw new Error(data?.message || "Réponse invalide de l’endpoint SNG TV.");
     }
 
-    return Array.isArray(data.videos) ? data.videos : [];
+    return data.videos.map((video) => {
+      const id = video.id || "";
+      const url = video.url || video.watchUrl || (id ? `https://www.youtube.com/watch?v=${id}` : "");
+      return {
+        ...video,
+        url,
+        watchUrl: video.watchUrl || url,
+        embedUrl: video.embedUrl || (id ? `https://www.youtube-nocookie.com/embed/${id}` : ""),
+      };
+    });
   };
 
   const renderPlayer = (video) => {
@@ -79,7 +92,7 @@
         <div class="video-body">
           <p class="video-date">${escapeHTML(formatDate(video.publishedAt))}</p>
           <h3>${escapeHTML(video.title)}</h3>
-          <a class="watch-btn" href="${escapeHTML(video.watchUrl)}" target="_blank" rel="noopener noreferrer">▶ Regarder</a>
+          <a class="watch-btn" href="${escapeHTML(video.url || video.watchUrl)}" target="_blank" rel="noopener noreferrer">▶ Regarder</a>
         </div>`;
       card.querySelector(".thumb").addEventListener("click", () => renderPlayer(video));
       card.querySelector("h3").addEventListener("click", () => renderPlayer(video));
