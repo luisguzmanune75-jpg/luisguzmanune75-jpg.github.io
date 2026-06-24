@@ -5,6 +5,6 @@ const API_KEY = "AIzaSyDqun2dmiABDnIwNyiBr5QIhs5PNA4KXBE";
 
 // Tu peux mettre ici un vrai Channel ID YouTube de type "UC...".
 // La valeur actuelle est une URL de handle ; le script la résout automatiquement.
-const CHANNEL_ID = "https://www.youtube.com/@CanalFamilial";
+const CHANNEL_ID = "https://www.youtube.com/@CanalFamilial/shorts";
 
-const MAX_RESULTS = 12;
+const MAX_RESULTS = 20;
