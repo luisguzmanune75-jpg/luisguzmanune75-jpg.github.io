@@ -2,6 +2,7 @@
   const YOUTUBE_API_BASE = "https://www.googleapis.com/youtube/v3";
   const YOUTUBE_WATCH_BASE = "https://www.youtube.com/watch?v=";
   const FALLBACK_THUMBNAIL = "sng-hero.png";
+  const DISPLAY_RESULTS = 12;
 
   const state = {
     grid: document.getElementById("videoGrid"),
@@ -106,7 +107,8 @@
           embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}`,
         };
       })
-      .filter((video) => video.id && !/private video|deleted video/i.test(video.title));
+      .filter((video) => video.id && !/private video|deleted video/i.test(video.title))
+      .slice(0, DISPLAY_RESULTS);
   };
 
   const renderPlayer = (video) => {
