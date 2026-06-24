@@ -273,26 +273,22 @@
 
       .sng-video-card {
         align-items: center;
-        cursor: default;
+        cursor: pointer;
       }
 
-      .sng-video-placeholder {
-        width: 100%;
-        padding: 14px;
-        border: 1px dashed rgba(255, 255, 255, 0.28);
-        border-radius: 18px;
-        background: rgba(0, 0, 0, 0.18);
-        color: #fff;
-      }
-
-      .sng-video-placeholder span,
-      .sng-video-placeholder small {
-        display: block;
-      }
-
-      .sng-video-placeholder small {
-        margin-top: 5px;
-        color: var(--muted);
+      .sng-video-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        margin: 0 auto;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #ff2f6d, #ffd166);
+        color: #18040a;
+        font-size: 0.9rem;
+        font-weight: 900;
+        box-shadow: 0 12px 30px rgba(255, 47, 109, 0.28);
       }
 
       .home-search-guidance,
@@ -2629,15 +2625,12 @@
           <a href="horoscope.html" class="card portal-card"><div class="card-icon portal-icon">🔮</div><h3>Horoscope</h3><p>Horoscope du jour, amour, travail, chance et énergie signe par signe.</p></a>
           <a href="voyages.html" class="card portal-card"><div class="card-icon portal-icon">✈️</div><h3>Voyage</h3><p>Compare des vols, découvre des destinations et prépare ton prochain séjour.</p></a>
           <a href="./tech-hub.html" class="card portal-card"><div class="card-icon portal-icon">🚀</div><h3>Tech IA</h3><p>Smartphones, outils IA et gadgets tendance dans un espace dédié.</p></a>
-<article class="card portal-card sng-video-card" aria-labelledby="sng-tv-title">
+<a href="./sng-tv.html" class="card portal-card sng-video-card" aria-labelledby="sng-tv-title">
   <div class="card-icon portal-icon">🎥</div>
   <h3 id="sng-tv-title">🎥 SNG TV – Vidéos Officielles</h3>
-  <p>Espace personnel réservé aux vidéos officielles publiées par SNG Portal. Les visiteurs peuvent regarder les vidéos, sans option pour en ajouter.</p>
-  <div class="sng-video-placeholder" aria-label="Emplacement réservé aux vidéos SNG Portal">
-    <span>Emplacement vidéos SNG</span>
-    <small>Ajouter ici les intégrations officielles SNG Portal.</small>
-  </div>
-</article>
+  <p>Espace cinéma réservé aux vidéos officielles publiées par SNG Portal. Les visiteurs peuvent seulement regarder.</p>
+  <span class="sng-video-cta">Ouvrir SNG TV</span>
+</a>
 
         <div class="info-strip">
           <div class="info-box"><strong>+10 rubriques</strong><span>Un portail riche et organise</span></div>
