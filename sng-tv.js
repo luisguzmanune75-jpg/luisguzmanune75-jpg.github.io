@@ -1,6 +1,5 @@
 (() => {
   const YOUTUBE_API_BASE = "https://www.googleapis.com/youtube/v3";
-  const YOUTUBE_WATCH_BASE = "https://www.youtube.com/watch?v=";
   const FALLBACK_THUMBNAIL = "sng-hero.png";
   const DISPLAY_RESULTS = 12;
 
@@ -42,6 +41,18 @@
     thumbnails.maxres?.url || thumbnails.standard?.url || thumbnails.high?.url || thumbnails.medium?.url || thumbnails.default?.url || FALLBACK_THUMBNAIL;
 
   const extractVideoId = (item) => item?.snippet?.resourceId?.videoId || item?.id?.videoId || item?.id;
+
+  const getRequestedVideoId = () => {
+    const params = new URLSearchParams(window.location.search);
+    const videoId = params.get("v")?.trim() || "";
+    return /^[a-zA-Z0-9_-]{6,}$/.test(videoId) ? videoId : "";
+  };
+
+  const getPortalShareUrl = (videoId) => {
+    const url = new URL("sng-tv.html", window.location.href);
+    url.searchParams.set("v", videoId);
+    return url.toString();
+  };
 
   const normalizeChannelInput = (input) => {
     const rawValue = String(input || "").trim();
@@ -103,7 +114,7 @@
           title: snippet.title || "Vidéo SNG TV",
           publishedAt: snippet.publishedAt || item.contentDetails?.videoPublishedAt,
           thumbnail: getBestThumbnail(snippet.thumbnails),
-          watchUrl: `${YOUTUBE_WATCH_BASE}${videoId}`,
+          portalUrl: getPortalShareUrl(videoId),
           embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}`,
         };
       })
@@ -119,6 +130,44 @@
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         referrerpolicy="strict-origin-when-cross-origin"
         allowfullscreen></iframe>`;
+  };
+
+  const updateBrowserUrl = (video) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("v", video.id);
+    window.history.replaceState({}, "", url.toString());
+  };
+
+  const selectVideo = (video, { updateUrl = true } = {}) => {
+    renderPlayer(video);
+    if (updateUrl) updateBrowserUrl(video);
+  };
+
+  const shareVideo = async (video, button) => {
+    const shareData = {
+      title: video.title,
+      text: "Regarde cette vidéo sur SNG TV",
+      url: video.portalUrl,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+
+      await navigator.clipboard.writeText(video.portalUrl);
+      if (!button) return;
+      const originalText = button.textContent;
+      button.textContent = "✅ Lien copié";
+      window.setTimeout(() => {
+        button.textContent = originalText;
+      }, 2200);
+    } catch (error) {
+      if (error?.name === "AbortError") return;
+      console.error("Erreur de partage SNG TV:", error);
+      setStatus("Impossible de partager automatiquement. Copie le lien depuis la barre d'adresse.", "warning");
+    }
   };
 
   const renderVideos = (videos) => {
@@ -138,16 +187,33 @@
         <div class="video-body">
           <p class="video-date">${escapeHTML(formatDate(video.publishedAt))}</p>
           <h3>${escapeHTML(video.title)}</h3>
-          <a class="watch-btn" href="${escapeHTML(video.watchUrl)}" target="_blank" rel="noopener noreferrer">▶ Regarder</a>
+          <div class="video-actions">
+            <a class="watch-btn" href="${escapeHTML(video.portalUrl)}">▶ Regarder</a>
+            <button class="share-btn" type="button" data-share-url="${escapeHTML(video.portalUrl)}">↗ Partager</button>
+          </div>
         </div>`;
-      card.querySelector(".thumb").addEventListener("click", () => renderPlayer(video));
-      card.querySelector("h3").addEventListener("click", () => renderPlayer(video));
+      card.querySelector(".thumb").addEventListener("click", () => selectVideo(video));
+      card.querySelector("h3").addEventListener("click", () => selectVideo(video));
+      card.querySelector(".watch-btn").addEventListener("click", (event) => {
+        event.preventDefault();
+        selectVideo(video);
+      });
+      card.querySelector(".share-btn").addEventListener("click", (event) => shareVideo(video, event.currentTarget));
       fragment.appendChild(card);
-      if (index === 0) renderPlayer(video);
     });
 
     state.grid.appendChild(fragment);
-    setStatus(`${videos.length} dernières vidéos chargées automatiquement depuis YouTube.`, "success");
+
+    const requestedVideoId = getRequestedVideoId();
+    const requestedVideo = videos.find((video) => video.id === requestedVideoId);
+    selectVideo(requestedVideo || videos[0], { updateUrl: Boolean(requestedVideo) });
+
+    const shareLinks = videos.map((video) => video.portalUrl);
+    const uniqueShareLinks = new Set(shareLinks);
+    const shareStatus = uniqueShareLinks.size === videos.length
+      ? " Chaque vidéo génère un lien de portail différent."
+      : " Attention : certains liens de partage sont identiques.";
+    setStatus(`${videos.length} dernières vidéos chargées automatiquement depuis YouTube.${shareStatus}`, uniqueShareLinks.size === videos.length ? "success" : "warning");
   };
 
   const loadVideos = async () => {
