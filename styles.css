@@ -2673,3 +2673,123 @@ a { color: #dbe7ff; }
     justify-content: flex-start;
   }
 }
+
+/* =========================================================
+   SÉISMES & ÉCLIPSES
+   ========================================================= */
+body[data-page="seismes-eclipses"] .quake-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 22px 0 12px;
+}
+
+body[data-page="seismes-eclipses"] .field-stack select,
+body[data-page="seismes-eclipses"] .field-stack input {
+  min-height: 48px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 16px;
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  padding: 0 14px;
+}
+
+body[data-page="seismes-eclipses"] .field-stack option { color: #111; }
+
+.quake-map {
+  width: 100%;
+  min-height: 520px;
+  margin: 18px 0 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(0,0,0,.25);
+}
+
+.magnitude-legend,
+.important-quakes,
+.eclipse-list,
+.next-eclipse {
+  display: grid;
+  gap: 12px;
+  margin: 16px 0 22px;
+}
+
+.magnitude-legend {
+  grid-template-columns: repeat(5, max-content);
+  align-items: center;
+}
+
+.magnitude-legend span {
+  padding: 8px 12px;
+  border-radius: 999px;
+  color: #111;
+  font-weight: 900;
+}
+
+.quake-marker.m0, .magnitude-legend .m0 { fill: #75e6a4; background: #75e6a4; }
+.quake-marker.m3, .magnitude-legend .m3 { fill: #ffe082; background: #ffe082; }
+.quake-marker.m4, .magnitude-legend .m4 { fill: #ffb74d; background: #ffb74d; }
+.quake-marker.m5, .magnitude-legend .m5 { fill: #ff7043; background: #ff7043; }
+.quake-marker.m6, .magnitude-legend .m6 { fill: #ef5350; background: #ef5350; color: #fff; }
+.quake-marker.m-unknown { fill: #b0bec5; }
+
+.quake-alert,
+.eclipse-card {
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 22px;
+  background: radial-gradient(circle at top left, rgba(255, 209, 102, .13), transparent 28%), rgba(255,255,255,.055);
+}
+
+.quake-alert h3,
+.eclipse-card h3 { margin: 0 0 10px; }
+.quake-alert p,
+.eclipse-card p { color: rgba(255,255,255,.78); line-height: 1.7; }
+.quake-alert a,
+.eclipse-card a { font-weight: 800; color: #ffe29a; }
+
+.table-wrap { overflow-x: auto; }
+.quake-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 14px;
+}
+.quake-table th,
+.quake-table td {
+  padding: 14px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  text-align: left;
+}
+.quake-table th {
+  color: #ffd98a;
+  font-size: .82rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+
+.countdown {
+  padding: 18px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255, 209, 102, .18), rgba(255,255,255,.06));
+  color: #ffe8aa;
+  font-size: clamp(1.15rem, 3vw, 1.8rem);
+  font-weight: 900;
+}
+
+body[data-page="seismes-eclipses"] .leaflet-popup-content-wrapper,
+body[data-page="seismes-eclipses"] .leaflet-popup-tip {
+  background: #101827;
+  color: #fff;
+}
+
+@media (max-width: 760px) {
+  body[data-page="seismes-eclipses"] .quake-controls,
+  .magnitude-legend { grid-template-columns: 1fr; }
+  .quake-map { min-height: 380px; }
+  .quake-table thead { display: none; }
+  .quake-table, .quake-table tbody, .quake-table tr, .quake-table td { display: block; width: 100%; }
+  .quake-table tr { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.12); }
+  .quake-table td { border: 0; padding: 8px 4px; }
+  .quake-table td::before { content: attr(data-label) " : "; color: #ffd98a; font-weight: 800; }
+}

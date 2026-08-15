@@ -5,3 +5,8 @@
   from = "/api/news"
   to = "/.netlify/functions/news"
   status = 200
+
+[[redirects]]
+  from = "/seismes-eclipses"
+  to = "/seismes-eclipses.html"
+  status = 200
