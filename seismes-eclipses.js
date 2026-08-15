@@ -14,7 +14,7 @@
     { id: 'solar-2027-08-02', family: 'solar', type: 'éclipse solaire totale', dateTime: '2027-08-02T10:07:49Z', visibleFrom: 'Afrique, Europe, Moyen-Orient, ouest et sud de l’Asie; totalité : Maroc, Espagne, Algérie, Libye, Égypte, Arabie saoudite, Yémen, Somalie.', details: 'Plus grande éclipse à 10:07:49 UTC selon le catalogue solaire NASA.', sourceName: 'NASA Solar Eclipses: 2021–2030', sourceUrl: 'https://eclipse.gsfc.nasa.gov/SEdecade/SEdecade2021.html' },
   ];
 
-  const state = { map: null, layer: null, all: [], filtered: [], fetchedAt: null, timer: null };
+  const state = { map: null, layer: null, all: [], filtered: [], fetchedAt: null, timer: null, resizeObserver: null };
   const $ = (id) => document.getElementById(id);
   const fmtDate = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'medium', timeStyle: 'short' });
   const fmtTime = new Intl.DateTimeFormat('fr-FR', { hour: '2-digit', minute: '2-digit' });
@@ -42,6 +42,7 @@
       $('last-updated').textContent = `Dernière mise à jour : ${fmtTime.format(state.fetchedAt)}`;
       $('retrieved-at').textContent = fmtDate.format(state.fetchedAt);
       applyFilters();
+      invalidateMapSize(100);
       setStatus(state.all.length ? `${state.all.length} événement(s) réel(s) récupéré(s) depuis l’USGS.` : 'Aucune donnée disponible actuellement.', state.all.length ? 'live' : 'neutral');
     } catch (e) {
       state.all = []; state.filtered = []; renderAll();
@@ -60,11 +61,27 @@
     return `<strong>Magnitude ${esc(validNumber(q.mag) ? q.mag.toFixed(1) : 'non disponible')}</strong><br>📍 ${esc(q.place || 'Localisation non disponible')}<br>🕐 ${q.time ? esc(fmtDate.format(new Date(q.time))) : 'Date indisponible'}<br>🌐 Profondeur: ${validNumber(q.depth) ? esc(q.depth.toFixed(1)) + ' km' : 'indisponible'}<br>Coordonnées: ${esc(q.lat?.toFixed?.(3) || '--')}, ${esc(q.lon?.toFixed?.(3) || '--')}<br><a href="${esc(q.url)}" target="_blank" rel="noopener noreferrer">Source officielle USGS</a>`;
   }
 
+  function invalidateMapSize(delay = 100) {
+    if (!state.map) return;
+    window.setTimeout(() => state.map.invalidateSize(), delay);
+  }
+
   function initMap() {
-    if (state.map || !window.L) return;
-    state.map = L.map('quake-map', { worldCopyJump: true }).setView([20, 0], 2);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 8, attribution: '&copy; OpenStreetMap contributors' }).addTo(state.map);
+    const container = $('quake-map');
+    if (state.map || !window.L || !container) return;
+    state.map = L.map(container, { worldCopyJump: true }).setView([20, 0], 2);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 8,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
+    }).addTo(state.map);
     state.layer = L.layerGroup().addTo(state.map);
+    if ('ResizeObserver' in window) {
+      state.resizeObserver = new ResizeObserver(() => invalidateMapSize(50));
+      state.resizeObserver.observe(container);
+    }
+    window.addEventListener('resize', () => invalidateMapSize(100));
+    window.addEventListener('orientationchange', () => invalidateMapSize(150));
+    invalidateMapSize(100);
   }
 
   function renderMap() {
@@ -73,6 +90,7 @@
       const s = markerSize(q.mag);
       L.circleMarker([q.lat, q.lon], { radius: s / 2, className: `quake-marker ${magClass(q.mag)}`, color: '#fff', weight: 1, fillOpacity: 0.78 }).bindPopup(popup(q)).addTo(state.layer);
     });
+    invalidateMapSize(100);
   }
 
   function renderImportant() {
