@@ -2697,13 +2697,44 @@ body[data-page="seismes-eclipses"] .field-stack input {
 body[data-page="seismes-eclipses"] .field-stack option { color: #111; }
 
 .quake-map {
+  position: relative;
   width: 100%;
+  height: 520px;
   min-height: 520px;
   margin: 18px 0 14px;
   border: 1px solid rgba(255,255,255,.16);
   border-radius: 24px;
   overflow: hidden;
   background: rgba(0,0,0,.25);
+}
+
+body[data-page="seismes-eclipses"] .leaflet-container {
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  font: inherit;
+  background: #aad3df;
+}
+
+body[data-page="seismes-eclipses"] .leaflet-pane,
+body[data-page="seismes-eclipses"] .leaflet-map-pane,
+body[data-page="seismes-eclipses"] .leaflet-tile,
+body[data-page="seismes-eclipses"] .leaflet-tile-container,
+body[data-page="seismes-eclipses"] .leaflet-marker-icon,
+body[data-page="seismes-eclipses"] .leaflet-marker-pane,
+body[data-page="seismes-eclipses"] .leaflet-overlay-pane svg {
+  max-width: none;
+  max-height: none;
+}
+
+body[data-page="seismes-eclipses"] .leaflet-tile,
+body[data-page="seismes-eclipses"] .leaflet-marker-icon {
+  display: block;
+}
+
+body[data-page="seismes-eclipses"] .quake-marker {
+  background: transparent;
+  transform-origin: center;
 }
 
 .magnitude-legend,
@@ -2786,7 +2817,7 @@ body[data-page="seismes-eclipses"] .leaflet-popup-tip {
 @media (max-width: 760px) {
   body[data-page="seismes-eclipses"] .quake-controls,
   .magnitude-legend { grid-template-columns: 1fr; }
-  .quake-map { min-height: 380px; }
+  .quake-map { height: 380px; min-height: 380px; }
   .quake-table thead { display: none; }
   .quake-table, .quake-table tbody, .quake-table tr, .quake-table td { display: block; width: 100%; }
   .quake-table tr { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.12); }
