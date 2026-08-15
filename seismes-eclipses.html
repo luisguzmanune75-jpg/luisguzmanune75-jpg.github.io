@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Suivez les derniers séismes réels dans le monde et découvrez les prochaines éclipses solaires et lunaires avec SNG Portal." />
+    <meta name="robots" content="index,follow" />
+    <title>Séismes & Éclipses en direct | SNG Portal</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQkL3h6Q9I0g8Ycc0m3nZyoXU+4K7hs=" crossorigin="" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-page="seismes-eclipses">
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="container header-inner">
+          <a class="brand" href="./index.html" aria-label="Accueil SNG Portal"><img class="brand-logo" src="./logo-sng.svg" alt="Logo SNG Portal" /><span class="brand-copy"><span class="brand-kicker">SNG Media</span><span class="brand-title">SNG Portal</span></span></a>
+          <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menu</button>
+          <nav id="main-nav" class="main-nav" aria-label="Navigation principale">
+            <a href="./index.html">Accueil</a><a href="./crypto.html">Crypto</a><a href="./meteo.html">Meteo</a><a href="./marches.html">Marches</a><a href="./blog.html">Blog</a><a class="is-current" href="./seismes-eclipses.html">Séismes & Éclipses</a><a href="./contact.html">Contact</a>
+          </nav>
+        </div>
+      </header>
+      <main>
+        <section class="hero hero-crypto-page">
+          <div class="container hero-grid hero-grid-crypto">
+            <div class="hero-copy reveal">
+              <p class="search-logo-kicker">SNG PORTAL — DU RÉEL, DU VÉRIFIÉ, AUCUNE INVENTION.</p>
+              <h1>🌍 Séismes & Éclipses</h1>
+              <p class="hero-text"><strong>« La Terre bouge. Le ciel change. »</strong></p>
+              <p class="hero-text">Suivez les derniers séismes réels dans le monde et découvrez les prochaines éclipses solaires et lunaires.</p>
+              <div class="hero-actions"><a class="button button-solid" href="#seismes-live">Voir les séismes</a><a class="button button-outline" href="#eclipses">Voir les éclipses</a></div>
+            </div>
+            <aside class="hero-panel reveal reveal-delay" aria-label="Statut des sources">
+              <p class="section-tag">📡 informations provenant de sources officielles</p>
+              <h2>Sources vérifiables</h2>
+              <p>Les séismes sont chargés depuis les flux GeoJSON publics de l’USGS. Les éclipses viennent de calendriers NASA officiels référencés.</p>
+              <span id="quake-status" class="status-pill status-neutral">Chargement...</span>
+            </aside>
+          </div>
+        </section>
+        <section id="seismes-live" class="page-section"><div class="container"><article class="module module-wide reveal"><div class="module-head split-head"><div><p class="section-tag">🔴 données sismiques en direct</p><h2>🌎 SÉISMES EN DIRECT</h2><p>Événements réellement récupérés depuis l’USGS Earthquake Hazards Program.</p></div><div class="toolbar-inline"><span id="last-updated" class="status-pill status-neutral">Dernière mise à jour : --:--</span><button id="refresh-quakes" class="button button-solid" type="button">🔄 Actualiser</button></div></div><div class="quake-controls" aria-label="Filtres des séismes"><label class="field-stack"><span>Période</span><select id="period-filter"><option value="hour">Dernière heure</option><option value="day" selected>Dernières 24 heures</option><option value="week">7 derniers jours</option><option value="month">30 derniers jours</option></select></label><label class="field-stack"><span>Magnitude</span><select id="magnitude-filter"><option value="0">Tous</option><option value="3">M3+</option><option value="4">M4+</option><option value="5">M5+</option><option value="6">M6+</option></select></label><label class="field-stack"><span>Région / pays</span><input id="region-search" type="search" placeholder="Filtrer par texte USGS..." /></label></div><p id="quake-count" class="detail-subline">0 résultat affiché</p><div id="quake-map" class="quake-map" role="application" aria-label="Carte mondiale interactive des séismes réels"></div><div class="magnitude-legend" aria-label="Légende magnitude"><span class="m0">M &lt; 3</span><span class="m3">M3+</span><span class="m4">M4+</span><span class="m5">M5+</span><span class="m6">M6+</span></div><div id="important-quakes" class="important-quakes" aria-live="polite"></div><h3>📋 Liste des derniers séismes</h3><div class="table-wrap"><table class="quake-table"><thead><tr><th>Magnitude</th><th>Localisation</th><th>Profondeur</th><th>Date/heure</th></tr></thead><tbody id="quake-list"><tr><td colspan="4">Chargement des données réelles...</td></tr></tbody></table></div></article></div></section>
+        <section id="eclipses" class="page-section"><div class="container"><article class="module module-wide reveal"><p class="section-tag">🌑 calendrier astronomique • 🔭 prévisions astronomiques</p><h2>🌑 ÉCLIPSES</h2><p>Événements astronomiques réels et vérifiables. Aucune zone de visibilité n’est inventée : seules les informations disponibles dans les sources sont affichées.</p><div id="eclipse-summary" class="briefing-card"></div><h3>🌑 PROCHAINE ÉCLIPSE</h3><div id="next-eclipse" class="next-eclipse"></div><h3>Calendrier vérifiable</h3><div id="eclipse-list" class="eclipse-list"></div></article></div></section>
+        <section class="page-section"><div class="container"><article class="module"><h2>Sources des données</h2><div class="source-stack"><p><strong>USGS</strong> — flux GeoJSON publics : <a href="https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php" target="_blank" rel="noopener noreferrer">USGS Earthquake Hazards Program</a>.</p><p><strong>NASA</strong> — calendriers et informations astronomiques : <a href="https://eclipse.gsfc.nasa.gov/eclipse.html" target="_blank" rel="noopener noreferrer">NASA Eclipse Web Site</a> et <a href="https://science.nasa.gov/moon/eclipses/" target="_blank" rel="noopener noreferrer">NASA Science</a>.</p><p>Date/heure de récupération des séismes : <span id="retrieved-at">--</span>.</p></div></article></div></section>
+      </main>
+      <footer class="site-footer"><div class="container footer-inner"><p>© <span id="year">2026</span> SNG Portal. Données réelles uniquement.</p></div></footer>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="./site.js"></script><script src="./seismes-eclipses.js"></script>
+  </body>
+</html>
