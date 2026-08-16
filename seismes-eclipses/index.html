@@ -6,8 +6,7 @@
     <meta name="description" content="Suivez les derniers séismes réels dans le monde et découvrez les prochaines éclipses solaires et lunaires avec SNG Portal." />
     <meta name="robots" content="index,follow" />
     <title>Séismes & Éclipses en direct | SNG Portal</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <link rel="stylesheet" href="../styles.css?v=seismes-20260816-3" />
+    <link rel="stylesheet" href="../styles.css?v=seismes-20260816-5" />
     <style>
       *, *::before, *::after { box-sizing: border-box; }
       html, body { margin: 0; padding: 0; min-height: 100%; }
@@ -30,19 +29,18 @@
       .page-section { padding: 24px 0; }
       .module-wide { width: 100%; min-width: 0; }
       .quake-controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 20px 0; }
-      /* Carte volontairement petite et placée après toutes les informations importantes. */
-      .quake-map { width: 100% !important; height: 300px !important; min-height: 300px !important; max-height: 300px !important; position: relative !important; display: block !important; overflow: hidden !important; border-radius: 16px; isolation: isolate; background: #d9e9ef; margin-top: 24px; }
-      #quake-map.leaflet-container { width: 100% !important; height: 300px !important; min-height: 300px !important; max-height: 300px !important; }
-      #quake-map .leaflet-control-container { position: absolute; inset: 0; pointer-events: none; }
-      #quake-map .leaflet-control { pointer-events: auto; }
       .top-quake-info { margin: 20px 0 24px; }
       .top-quake-info .section-tag { margin-bottom: 8px; }
       .table-wrap { width: 100%; overflow-x: auto; }
       .quake-table { width: 100%; min-width: 720px; border-collapse: collapse; }
       .important-quakes { display: grid; gap: 12px; margin: 18px 0 22px; }
       .quake-alert, .eclipse-card { border: 1px solid var(--line, rgba(255,255,255,.1)); border-radius: 18px; padding: 18px; background: rgba(255,255,255,.04); }
-      .map-footer-title { margin-top: 28px; margin-bottom: 8px; }
-      .map-note { margin: 0 0 12px; opacity: .8; font-size: .92rem; }
+      .map-section { margin-top: 30px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.10); }
+      .map-section h3 { margin-bottom: 8px; }
+      .map-note { margin: 0 0 14px; opacity: .78; font-size: .92rem; }
+      .external-map-frame { width: 100%; height: 430px; display: block; border: 0; border-radius: 16px; background: #e7edf0; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,.18); }
+      .map-source { margin-top: 10px; font-size: .9rem; opacity: .8; }
+      .map-source a { font-weight: 700; }
       .eclipse-list { display: grid; gap: 16px; margin-top: 16px; }
       .countdown { margin-top: 14px; font-weight: 800; }
       @media (max-width: 900px) {
@@ -50,6 +48,7 @@
         .hero-grid { grid-template-columns: 1fr; }
         .quake-controls { grid-template-columns: 1fr; }
         .main-nav { gap: 7px; }
+        .external-map-frame { height: 380px; }
       }
       @media (max-width: 680px) {
         .container { width: min(100% - 20px, 1200px); }
@@ -58,7 +57,7 @@
         .menu-toggle { display: inline-flex; }
         .main-nav { display: none; width: 100%; }
         .main-nav.is-open { display: flex; }
-        .quake-map, #quake-map.leaflet-container { height: 240px !important; min-height: 240px !important; max-height: 240px !important; }
+        .external-map-frame { height: 320px; border-radius: 12px; }
       }
     </style>
   </head>
@@ -73,6 +72,7 @@
           </nav>
         </div>
       </header>
+
       <main>
         <section class="hero hero-crypto-page">
           <div class="container hero-grid hero-grid-crypto">
@@ -91,6 +91,7 @@
             </aside>
           </div>
         </section>
+
         <section id="seismes-live" class="page-section">
           <div class="container">
             <article class="module module-wide reveal">
@@ -115,10 +116,12 @@
               <h3>📋 Liste des derniers séismes</h3>
               <div class="table-wrap"><table class="quake-table"><thead><tr><th>Magnitude</th><th>Localisation</th><th>Profondeur</th><th>Date/heure</th></tr></thead><tbody id="quake-list"><tr><td colspan="4">Chargement des données réelles...</td></tr></tbody></table></div>
 
-              <h3 class="map-footer-title">🗺️ CARTE DES SÉISMES</h3>
-              <p class="map-note">Carte interactive des séismes réels USGS. Elle est volontairement réduite pour garder les informations importantes visibles en priorité.</p>
-              <div id="quake-map" class="quake-map" role="application" aria-label="Petite carte mondiale interactive des séismes réels"></div>
-              <div class="magnitude-legend" aria-label="Légende magnitude"><span class="m0">M &lt; 3</span><span class="m3">M3+</span><span class="m4">M4+</span><span class="m5">M5+</span><span class="m6">M6+</span></div>
+              <div class="map-section">
+                <h3>🗺️ CARTE DES SÉISMES EN DIRECT</h3>
+                <p class="map-note">Cette carte est directement intégrée depuis le service officiel de l’USGS. Elle est indépendante du code de la carte SNG Portal afin de ne plus provoquer de bugs d’affichage.</p>
+                <iframe class="external-map-frame" src="https://earthquake.usgs.gov/earthquakes/map/?map=true&amp;list=true" title="Carte officielle des séismes USGS en direct" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="fullscreen"></iframe>
+                <p class="map-source">Source : <a href="https://earthquake.usgs.gov/earthquakes/map/" target="_blank" rel="noopener noreferrer">USGS — Latest Earthquakes</a>.</p>
+              </div>
             </article>
           </div>
         </section>
@@ -126,9 +129,12 @@
         <section id="eclipses" class="page-section"><div class="container"><article class="module module-wide reveal"><p class="section-tag">🌑 calendrier astronomique • 🔭 prévisions astronomiques</p><h2>🌑 ÉCLIPSES</h2><p>Événements astronomiques réels et vérifiables. Aucune zone de visibilité n’est inventée : seules les informations disponibles dans les sources sont affichées.</p><div id="eclipse-summary" class="briefing-card"></div><h3>🌑 PROCHAINE ÉCLIPSE</h3><div id="next-eclipse" class="next-eclipse"></div><h3>Calendrier vérifiable</h3><div id="eclipse-list" class="eclipse-list"></div></article></div></section>
         <section class="page-section"><div class="container"><article class="module"><h2>Sources des données</h2><div class="source-stack"><p><strong>USGS</strong> — flux GeoJSON publics : <a href="https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php" target="_blank" rel="noopener noreferrer">USGS Earthquake Hazards Program</a>.</p><p><strong>NASA</strong> — calendriers et informations astronomiques : <a href="https://eclipse.gsfc.nasa.gov/eclipse.html" target="_blank" rel="noopener noreferrer">NASA Eclipse Web Site</a> et <a href="https://science.nasa.gov/moon/eclipses/" target="_blank" rel="noopener noreferrer">NASA Science</a>.</p><p>Date/heure de récupération des séismes : <span id="retrieved-at">--</span>.</p></div></article></div></section>
       </main>
+
       <footer class="site-footer"><div class="container footer-inner"><p>© <span id="year">2026</span> SNG Portal. Données réelles uniquement.</p></div></footer>
     </div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="../site.js?v=seismes-20260816-3"></script><script src="../seismes-eclipses.js?v=seismes-20260816-3"></script>
+
+    <!-- Plus de Leaflet ici : la carte est fournie directement par l'USGS. -->
+    <script src="../site.js?v=seismes-20260816-5"></script>
+    <script src="../seismes-eclipses.js?v=seismes-20260816-5"></script>
   </body>
 </html>
