@@ -1,140 +1,35 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Suivez les derniers séismes réels dans le monde et découvrez les prochaines éclipses solaires et lunaires avec SNG Portal." />
-    <meta name="robots" content="index,follow" />
-    <title>Séismes & Éclipses en direct | SNG Portal</title>
-    <link rel="stylesheet" href="../styles.css?v=seismes-20260816-5" />
-    <style>
-      *, *::before, *::after { box-sizing: border-box; }
-      html, body { margin: 0; padding: 0; min-height: 100%; }
-      body { overflow-x: hidden; }
-      .site-shell { min-height: 100vh; }
-      .container { width: min(1200px, calc(100% - 32px)); margin-inline: auto; }
-      .header-inner { min-height: 92px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-      .brand { display: inline-flex; align-items: center; gap: 14px; min-width: 0; text-decoration: none; }
-      .brand-logo { width: 76px !important; height: 76px !important; max-width: 76px !important; object-fit: contain; display: block; }
-      .brand-copy { display: grid; gap: 2px; min-width: 0; }
-      .brand-kicker, .brand-title { display: block; }
-      .main-nav { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 10px; }
-      .main-nav a { white-space: nowrap; }
-      .menu-toggle { display: none; }
-      .hero { position: relative; padding: 48px 0; }
-      .hero-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(300px, .6fr); gap: 24px; align-items: stretch; }
-      .hero-copy, .hero-panel { min-width: 0; }
-      .hero-copy { min-height: 300px; }
-      .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
-      .page-section { padding: 24px 0; }
-      .module-wide { width: 100%; min-width: 0; }
-      .quake-controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 20px 0; }
-      .top-quake-info { margin: 20px 0 24px; }
-      .top-quake-info .section-tag { margin-bottom: 8px; }
-      .table-wrap { width: 100%; overflow-x: auto; }
-      .quake-table { width: 100%; min-width: 720px; border-collapse: collapse; }
-      .important-quakes { display: grid; gap: 12px; margin: 18px 0 22px; }
-      .quake-alert, .eclipse-card { border: 1px solid var(--line, rgba(255,255,255,.1)); border-radius: 18px; padding: 18px; background: rgba(255,255,255,.04); }
-      .map-section { margin-top: 30px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.10); }
-      .map-section h3 { margin-bottom: 8px; }
-      .map-note { margin: 0 0 14px; opacity: .78; font-size: .92rem; }
-      .external-map-frame { width: 100%; height: 430px; display: block; border: 0; border-radius: 16px; background: #e7edf0; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,.18); }
-      .map-source { margin-top: 10px; font-size: .9rem; opacity: .8; }
-      .map-source a { font-weight: 700; }
-      .eclipse-list { display: grid; gap: 16px; margin-top: 16px; }
-      .countdown { margin-top: 14px; font-weight: 800; }
-      @media (max-width: 900px) {
-        .header-inner { min-height: 82px; }
-        .hero-grid { grid-template-columns: 1fr; }
-        .quake-controls { grid-template-columns: 1fr; }
-        .main-nav { gap: 7px; }
-        .external-map-frame { height: 380px; }
-      }
-      @media (max-width: 680px) {
-        .container { width: min(100% - 20px, 1200px); }
-        .header-inner { align-items: flex-start; padding: 12px 0; flex-wrap: wrap; }
-        .brand-logo { width: 58px !important; height: 58px !important; max-width: 58px !important; }
-        .menu-toggle { display: inline-flex; }
-        .main-nav { display: none; width: 100%; }
-        .main-nav.is-open { display: flex; }
-        .external-map-frame { height: 320px; border-radius: 12px; }
-      }
-    </style>
-  </head>
-  <body data-page="seismes-eclipses">
-    <div class="site-shell">
-      <header class="site-header">
-        <div class="container header-inner">
-          <a class="brand" href="../index.html" aria-label="Accueil SNG Portal"><img class="brand-logo" src="../logo-sng.svg" alt="Logo SNG Portal" /><span class="brand-copy"><span class="brand-kicker">SNG Media</span><span class="brand-title">SNG Portal</span></span></a>
-          <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menu</button>
-          <nav id="main-nav" class="main-nav" aria-label="Navigation principale">
-            <a href="../index.html">Accueil</a><a href="../crypto.html">Crypto</a><a href="../meteo.html">Meteo</a><a href="../marches.html">Marches</a><a href="../blog.html">Blog</a><a class="is-current" href="/seismes-eclipses">Séismes & Éclipses</a><a href="../contact.html">Contact</a>
-          </nav>
-        </div>
-      </header>
-
-      <main>
-        <section class="hero hero-crypto-page">
-          <div class="container hero-grid hero-grid-crypto">
-            <div class="hero-copy reveal">
-              <p class="search-logo-kicker">SNG PORTAL — DU RÉEL, DU VÉRIFIÉ, AUCUNE INVENTION.</p>
-              <h1>🌍 Séismes & Éclipses</h1>
-              <p class="hero-text"><strong>« La Terre bouge. Le ciel change. »</strong></p>
-              <p class="hero-text">Suivez les derniers séismes réels dans le monde et découvrez les prochaines éclipses solaires et lunaires.</p>
-              <div class="hero-actions"><a class="button button-solid" href="#seismes-live">Voir les séismes</a><a class="button button-outline" href="#eclipses">Voir les éclipses</a></div>
-            </div>
-            <aside class="hero-panel reveal reveal-delay" aria-label="Statut des sources">
-              <p class="section-tag">📡 informations provenant de sources officielles</p>
-              <h2>Sources vérifiables</h2>
-              <p>Les séismes sont chargés depuis les flux GeoJSON publics de l’USGS. Les éclipses viennent de calendriers NASA officiels référencés.</p>
-              <span id="quake-status" class="status-pill status-neutral">Chargement...</span>
-            </aside>
-          </div>
-        </section>
-
-        <section id="seismes-live" class="page-section">
-          <div class="container">
-            <article class="module module-wide reveal">
-              <div class="module-head split-head">
-                <div><p class="section-tag">🔴 données sismiques en direct</p><h2>🌎 SÉISMES EN DIRECT</h2><p>Événements réellement récupérés depuis l’USGS Earthquake Hazards Program.</p></div>
-                <div class="toolbar-inline"><span id="last-updated" class="status-pill status-neutral">Dernière mise à jour : --:--</span><button id="refresh-quakes" class="button button-solid" type="button">🔄 Actualiser</button></div>
-              </div>
-
-              <div class="top-quake-info">
-                <p class="section-tag">🚨 INFORMATIONS IMPORTANTES</p>
-                <div id="important-quakes" class="important-quakes" aria-live="polite"></div>
-              </div>
-
-              <div class="quake-controls" aria-label="Filtres des séismes">
-                <label class="field-stack"><span>Période</span><select id="period-filter"><option value="hour">Dernière heure</option><option value="day" selected>Dernières 24 heures</option><option value="week">7 derniers jours</option><option value="month">30 derniers jours</option></select></label>
-                <label class="field-stack"><span>Magnitude</span><select id="magnitude-filter"><option value="0">Tous</option><option value="3">M3+</option><option value="4">M4+</option><option value="5">M5+</option><option value="6">M6+</option></select></label>
-                <label class="field-stack"><span>Région / pays</span><input id="region-search" type="search" placeholder="Filtrer par texte USGS..." /></label>
-              </div>
-
-              <p id="quake-count" class="detail-subline">0 résultat affiché</p>
-
-              <h3>📋 Liste des derniers séismes</h3>
-              <div class="table-wrap"><table class="quake-table"><thead><tr><th>Magnitude</th><th>Localisation</th><th>Profondeur</th><th>Date/heure</th></tr></thead><tbody id="quake-list"><tr><td colspan="4">Chargement des données réelles...</td></tr></tbody></table></div>
-
-              <div class="map-section">
-                <h3>🗺️ CARTE DES SÉISMES EN DIRECT</h3>
-                <p class="map-note">Cette carte est directement intégrée depuis le service officiel de l’USGS. Elle est indépendante du code de la carte SNG Portal afin de ne plus provoquer de bugs d’affichage.</p>
-                <iframe class="external-map-frame" src="https://earthquake.usgs.gov/earthquakes/map/?map=true&amp;list=true" title="Carte officielle des séismes USGS en direct" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="fullscreen"></iframe>
-                <p class="map-source">Source : <a href="https://earthquake.usgs.gov/earthquakes/map/" target="_blank" rel="noopener noreferrer">USGS — Latest Earthquakes</a>.</p>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <section id="eclipses" class="page-section"><div class="container"><article class="module module-wide reveal"><p class="section-tag">🌑 calendrier astronomique • 🔭 prévisions astronomiques</p><h2>🌑 ÉCLIPSES</h2><p>Événements astronomiques réels et vérifiables. Aucune zone de visibilité n’est inventée : seules les informations disponibles dans les sources sont affichées.</p><div id="eclipse-summary" class="briefing-card"></div><h3>🌑 PROCHAINE ÉCLIPSE</h3><div id="next-eclipse" class="next-eclipse"></div><h3>Calendrier vérifiable</h3><div id="eclipse-list" class="eclipse-list"></div></article></div></section>
-        <section class="page-section"><div class="container"><article class="module"><h2>Sources des données</h2><div class="source-stack"><p><strong>USGS</strong> — flux GeoJSON publics : <a href="https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php" target="_blank" rel="noopener noreferrer">USGS Earthquake Hazards Program</a>.</p><p><strong>NASA</strong> — calendriers et informations astronomiques : <a href="https://eclipse.gsfc.nasa.gov/eclipse.html" target="_blank" rel="noopener noreferrer">NASA Eclipse Web Site</a> et <a href="https://science.nasa.gov/moon/eclipses/" target="_blank" rel="noopener noreferrer">NASA Science</a>.</p><p>Date/heure de récupération des séismes : <span id="retrieved-at">--</span>.</p></div></article></div></section>
-      </main>
-
-      <footer class="site-footer"><div class="container footer-inner"><p>© <span id="year">2026</span> SNG Portal. Données réelles uniquement.</p></div></footer>
-    </div>
-
-    <!-- Plus de Leaflet ici : la carte est fournie directement par l'USGS. -->
-    <script src="../site.js?v=seismes-20260816-5"></script>
-    <script src="../seismes-eclipses.js?v=seismes-20260816-5"></script>
-  </body>
-</html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Séismes réels USGS et éclipses NASA — SNG Portal.">
+<title>Séismes & Éclipses | SNG Portal</title>
+<link rel="stylesheet" href="../styles.css?v=seismes-fast-1">
+<style>
+*{box-sizing:border-box}html,body{margin:0;padding:0;overflow-x:hidden}.container{width:min(1200px,calc(100% - 32px));margin:auto}.header-inner{min-height:88px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:12px;text-decoration:none}.brand-logo{width:68px;height:68px;object-fit:contain}.brand-copy{display:grid}.main-nav{display:flex;gap:10px;flex-wrap:wrap}.main-nav a{white-space:nowrap}.menu-toggle{display:none}.hero{padding:42px 0}.hero-grid{display:grid;grid-template-columns:1.4fr .6fr;gap:24px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}.page-section{padding:22px 0}.module-wide{width:100%}.quake-controls{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}.top-quake-info{margin:20px 0}.important-quakes{display:grid;gap:10px}.quake-alert,.eclipse-card{border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:16px;background:rgba(255,255,255,.04)}.table-wrap{overflow:auto}.quake-table{width:100%;min-width:680px;border-collapse:collapse}.quake-table th,.quake-table td{padding:10px;text-align:left}.map-section{margin-top:28px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1)}.map-note{opacity:.75;font-size:.9rem}.fast-map{width:100%;height:360px;display:block;border-radius:16px;background:#07121d;box-shadow:0 8px 25px rgba(0,0,0,.18)}.map-source{font-size:.88rem;opacity:.75}.eclipse-list{display:grid;gap:12px;margin-top:16px}.countdown{font-weight:800;margin-top:12px}@media(max-width:900px){.hero-grid{grid-template-columns:1fr}.quake-controls{grid-template-columns:1fr}}@media(max-width:680px){.container{width:calc(100% - 20px)}.header-inner{flex-wrap:wrap;padding:10px 0}.brand-logo{width:56px;height:56px}.menu-toggle{display:inline-flex}.main-nav{display:none;width:100%}.main-nav.is-open{display:flex}.fast-map{height:260px}}
+</style>
+</head>
+<body data-page="seismes-eclipses">
+<div class="site-shell">
+<header class="site-header"><div class="container header-inner">
+<a class="brand" href="../index.html"><img class="brand-logo" src="../logo-sng.svg" alt="SNG Portal"><span class="brand-copy"><span class="brand-kicker">SNG Media</span><span class="brand-title">SNG Portal</span></span></a>
+<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menu</button>
+<nav id="main-nav" class="main-nav"><a href="../index.html">Accueil</a><a href="../crypto.html">Crypto</a><a href="../meteo.html">Meteo</a><a href="../marches.html">Marches</a><a href="../blog.html">Blog</a><a class="is-current" href="/seismes-eclipses">Séismes & Éclipses</a><a href="../contact.html">Contact</a></nav>
+</div></header>
+<main>
+<section class="hero"><div class="container hero-grid"><div><p class="search-logo-kicker">SNG PORTAL — DU RÉEL, DU VÉRIFIÉ</p><h1>🌍 Séismes & Éclipses</h1><p class="hero-text"><strong>« La Terre bouge. Le ciel change. »</strong></p><p class="hero-text">Les derniers séismes réels dans le monde et les prochaines éclipses vérifiables.</p><div class="hero-actions"><a class="button button-solid" href="#seismes-live">Voir les séismes</a><a class="button button-outline" href="#eclipses">Voir les éclipses</a></div></div><aside class="hero-panel"><p class="section-tag">📡 SOURCE OFFICIELLE</p><h2>USGS + NASA</h2><p>Données sismiques USGS et calendrier astronomique NASA.</p><span id="quake-status" class="status-pill status-neutral">Chargement...</span></aside></div></section>
+<section id="seismes-live" class="page-section"><div class="container"><article class="module module-wide">
+<div class="module-head split-head"><div><p class="section-tag">🔴 DONNÉES EN DIRECT</p><h2>🌎 SÉISMES EN DIRECT</h2><p>Événements récupérés directement depuis l’USGS.</p></div><div class="toolbar-inline"><span id="last-updated" class="status-pill status-neutral">Dernière mise à jour : --:--</span><button id="refresh-quakes" class="button button-solid" type="button">🔄 Actualiser</button></div></div>
+<div class="top-quake-info"><p class="section-tag">🚨 INFORMATIONS IMPORTANTES</p><div id="important-quakes" class="important-quakes"></div></div>
+<div class="quake-controls"><label class="field-stack"><span>Période</span><select id="period-filter"><option value="hour">Dernière heure</option><option value="day" selected>Dernières 24 heures</option><option value="week">7 derniers jours</option><option value="month">30 derniers jours</option></select></label><label class="field-stack"><span>Magnitude</span><select id="magnitude-filter"><option value="0">Tous</option><option value="3">M3+</option><option value="4">M4+</option><option value="5">M5+</option><option value="6">M6+</option></select></label><label class="field-stack"><span>Région / pays</span><input id="region-search" type="search" placeholder="Filtrer par région..."></label></div>
+<p id="quake-count" class="detail-subline">0 résultat</p>
+<h3>📋 Derniers séismes</h3><div class="table-wrap"><table class="quake-table"><thead><tr><th>Magnitude</th><th>Localisation</th><th>Profondeur</th><th>Date/heure</th></tr></thead><tbody id="quake-list"><tr><td colspan="4">Chargement des données réelles...</td></tr></tbody></table></div>
+<div class="map-section"><h3>🗺️ CARTE RAPIDE DES SÉISMES</h3><p class="map-note">Carte légère intégrée à SNG Portal : aucun iframe, aucun Leaflet et aucun fond de carte externe. Les points viennent des mêmes données USGS.</p><canvas id="quake-map" class="fast-map" aria-label="Carte mondiale légère des séismes USGS"></canvas><p class="map-source">Source des données : USGS Earthquake Hazards Program.</p></div>
+</article></div></section>
+<section id="eclipses" class="page-section"><div class="container"><article class="module module-wide"><p class="section-tag">🌑 CALENDRIER ASTRONOMIQUE</p><h2>🌑 ÉCLIPSES</h2><p>Événements astronomiques vérifiables à partir des sources NASA.</p><div id="eclipse-summary" class="briefing-card"></div><h3>🌑 PROCHAINE ÉCLIPSE</h3><div id="next-eclipse"></div><h3>Calendrier</h3><div id="eclipse-list" class="eclipse-list"></div></article></div></section>
+<section class="page-section"><div class="container"><article class="module"><h2>Sources</h2><p><strong>USGS</strong> — flux GeoJSON publics.</p><p><strong>NASA</strong> — calendriers officiels des éclipses.</p><p>Récupération des séismes : <span id="retrieved-at">--</span>.</p></article></div></section>
+</main><footer class="site-footer"><div class="container footer-inner"><p>© 2026 SNG Portal. Données réelles uniquement.</p></div></footer>
+</div>
+<script src="../site.js?v=seismes-fast-1"></script><script src="../seismes-eclipses.js?v=seismes-fast-1"></script>
+</body></html>
