@@ -552,17 +552,7 @@
   </script>
   <script>
   const NEWS_PROXY_BASE_URL = window.SNG_NEWS_PROXY_URL;
-  const NEWS_REQUEST_TIMEOUT_MS = 8000;
-  const RSS2JSON_BASE_URL = "https://api.rss2json.com/v1/api.json";
-  const RSS_FEEDS = {
-    top: "https://news.google.com/rss?hl=fr&gl=FR&ceid=FR:fr",
-    world: "https://news.google.com/rss/headlines/section/topic/WORLD?hl=fr&gl=FR&ceid=FR:fr",
-    business: "https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=fr&gl=FR&ceid=FR:fr",
-    sports: "https://news.google.com/rss/headlines/section/topic/SPORTS?hl=fr&gl=FR&ceid=FR:fr"
-  };
   const REFRESH_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
-  const INITIAL_GRID_BATCH_SIZE = 20;
-  const GRID_BATCH_SIZE = 12;
 
   const categoryMap = {
     top: { label: "À la une", proxyCategory: "general" },
@@ -628,8 +618,8 @@
     const status = document.getElementById("news-status");
     const scrollStatus = document.getElementById("news-scroll-status");
 
-    status.textContent = "Chargement des actualités…";
-    scrollStatus.textContent = "Connexion aux actualités…";
+    status.textContent = "Chargement des actualités...";
+    scrollStatus.textContent = "";
     container.innerHTML = Array.from({ length: 8 })
       .map(() => '<div class="skeleton" style="min-height:250px;"></div>')
       .join("");
@@ -646,76 +636,22 @@
     return unique;
   }
 
-  async function fetchWithTimeout(url, options = {}, timeoutMs = NEWS_REQUEST_TIMEOUT_MS) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-    try {
-      return await fetch(url, { ...options, signal: controller.signal });
-    } finally {
-      clearTimeout(timeoutId);
-    }
-  }
-
-  async function fetchNewsFromRSS(categoryKey) {
-    const feedUrl = RSS_FEEDS[categoryKey] || RSS_FEEDS.top;
-    const apiUrl = `${RSS2JSON_BASE_URL}?rss_url=${encodeURIComponent(feedUrl)}`;
-
-    const response = await fetchWithTimeout(apiUrl);
-    if (!response.ok) throw new Error(`RSS indisponible (${response.status})`);
-
-    const data = await response.json();
-    if (data.status !== "ok" || !Array.isArray(data.items)) {
-      throw new Error("Flux RSS indisponible");
-    }
-
-    return data.items.map(item => ({
-      title: item.title || "Titre indisponible",
-      description: item.description || item.content || "",
-      content: item.description || item.content || "",
-      url: item.link || "",
-      urlToImage: item.thumbnail || "",
-      publishedAt: item.pubDate || "",
-      source: { name: item.author || "Google Actualités" }
-    }));
-  }
-
   async function fetchNews(categoryKey, page = 1) {
     const category = categoryMap[categoryKey];
     if (!category) throw new Error("Catégorie inconnue");
 
-    let proxyError = null;
-
-    if (NEWS_PROXY_BASE_URL) {
-      try {
-        const baseUrl = `${NEWS_PROXY_BASE_URL}/api/news?category=${encodeURIComponent(category.proxyCategory)}&page=${page}`;
-        const response = await fetchWithTimeout(baseUrl);
-        if (!response.ok) throw new Error(`Erreur API (${response.status})`);
-        const data = await response.json();
-        if (Array.isArray(data.articles) && data.articles.length) {
-          return data.articles;
-        }
-        proxyError = new Error("L'API n'a renvoyé aucun article.");
-      } catch (error) {
-        proxyError = error;
-        console.warn("Proxy SNG indisponible, passage au flux RSS :", error);
-      }
+    if (!NEWS_PROXY_BASE_URL) {
+      throw new Error("Proxy news non configuré");
     }
 
-    // Le flux RSS garde la page fonctionnelle même si le proxy Vercel est lent ou indisponible.
-    if (page === 1) {
-      try {
-        return await fetchNewsFromRSS(categoryKey);
-      } catch (rssError) {
-        console.error("Erreur RSS :", rssError);
-        throw new Error("Les actualités sont momentanément indisponibles. Réessaie dans quelques instants.");
-      }
-    }
+    const baseUrl = `${NEWS_PROXY_BASE_URL}/api/news?category=${encodeURIComponent(category.proxyCategory)}&page=${page}`;
 
-    if (proxyError) {
-      return [];
-    }
+    const response = await fetch(baseUrl, { method: "GET" });
+    if (!response.ok) throw new Error(`Erreur API (${response.status})`);
 
-    return [];
+    const data = await response.json();
+
+    return Array.isArray(data.articles) ? data.articles : [];
   }
 
   function renderError(message) {
