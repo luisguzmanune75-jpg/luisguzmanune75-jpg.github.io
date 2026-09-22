@@ -649,7 +649,7 @@
     const articleUrl = getArticleUrl(article);
     return `
       <article class="article-card">
-        <img src="${article.urlToImage || article.image || "https://via.placeholder.com/600x400?text=Actualités"}" alt="${article.title || "Titre indisponible"}">
+        <img src="${article.urlToImage || article.image || "https://via.placeholder.com/600x400?text=Actualités"}" alt="${article.title || "Titre indisponible"}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1f2937/ffffff?text=SNG+Portal';">
         <div class="article-body">
           <span class="article-source">${article.source?.name || article.source || "Source inconnue"} • ${formatDate(article.publishedAt)}</span>
           <h3 class="article-title">${article.title || "Titre indisponible"}</h3>
