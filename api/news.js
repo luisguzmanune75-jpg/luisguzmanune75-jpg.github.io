@@ -3,72 +3,68 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method === 'OPTIONS') {
-    return res.status(204).end();
-  }
+  if (req.method === 'OPTIONS') return res.status(204).end();
+  if (req.method !== 'GET') return res.status(405).json({ message: 'Method Not Allowed' });
 
-  if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
-  }
+  const category = typeof req.query?.category === 'string' ? req.query.category : 'general';
+  const feeds = {
+    general: 'https://news.google.com/rss?hl=fr&gl=FR&ceid=FR:fr',
+    business: 'https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=fr&gl=FR&ceid=FR:fr',
+    sports: 'https://news.google.com/rss/headlines/section/topic/SPORTS?hl=fr&gl=FR&ceid=FR:fr'
+  };
 
-  const apiKey = process.env.NEWS_API_KEY;
-  if (!apiKey) {
-    return res.status(500).json({ message: 'NEWS_API_KEY is not configured' });
-  }
-
-  const category = typeof req.query?.category === 'string' ? req.query.category : '';
-  const requestedPageRaw = Number.parseInt(req.query?.page, 10);
-  const page = Number.isFinite(requestedPageRaw) && requestedPageRaw > 0 ? String(requestedPageRaw) : '1';
-  const pageSizeRaw = Number.parseInt(req.query?.pageSize, 10);
-  const pageSize = Number.isFinite(pageSizeRaw) && pageSizeRaw > 0 ? String(Math.min(pageSizeRaw, 100)) : '100';
-
-  const topHeadlinesParams = new URLSearchParams({ country: 'fr', category, page, pageSize, apiKey });
-  const topHeadlinesUrl = `https://newsapi.org/v2/top-headlines?${topHeadlinesParams.toString()}`;
-
-  const fallbackParams = new URLSearchParams({
-    q: 'actualité OR news',
-    language: 'fr',
-    sortBy: 'publishedAt',
-    page,
-    pageSize,
-    apiKey
-  });
-  const fallbackUrl = `https://newsapi.org/v2/everything?${fallbackParams.toString()}`;
+  const feedUrl = feeds[category] || feeds.general;
 
   try {
-    const topHeadlinesResponse = await fetch(topHeadlinesUrl);
-    const topHeadlinesContentType = topHeadlinesResponse.headers.get('content-type') || 'application/json';
-    const topHeadlinesBody = await topHeadlinesResponse.text();
+    const response = await fetch(feedUrl, {
+      headers: { 'User-Agent': 'SNG-Portal/1.0' }
+    });
 
-    let topHeadlinesData;
-    if (topHeadlinesContentType.includes('application/json')) {
-      try {
-        topHeadlinesData = JSON.parse(topHeadlinesBody);
-      } catch {
-        topHeadlinesData = undefined;
-      }
+    if (!response.ok) {
+      return res.status(502).json({ status: 'error', message: 'Flux actualités indisponible' });
     }
 
-    const shouldFallback = !Array.isArray(topHeadlinesData?.articles) || topHeadlinesData.articles.length === 0;
+    const xml = await response.text();
+    const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(match => match[1]);
 
-    if (!shouldFallback) {
-      res.status(topHeadlinesResponse.status);
-      res.setHeader('Content-Type', topHeadlinesContentType);
-      return res.send(topHeadlinesBody);
-    }
+    const decode = (value = '') => value
+      .replace(/<!\[CDATA\[/g, '')
+      .replace(/\]\]>/g, '')
+      .replace(/&amp;/g, '&')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .trim();
 
-    const fallbackResponse = await fetch(fallbackUrl);
-    const fallbackContentType = fallbackResponse.headers.get('content-type') || 'application/json';
-    const fallbackBody = await fallbackResponse.text();
+    const getTag = (item, tag) => {
+      const m = item.match(new RegExp('<' + tag + '[^>]*>([\\s\\S]*?)<\\/' + tag + '>'));
+      return m ? decode(m[1]) : '';
+    };
 
-    res.status(fallbackResponse.status);
-    res.setHeader('Content-Type', fallbackContentType);
-    return res.send(fallbackBody);
+    const articles = items.map(item => {
+      const title = getTag(item, 'title');
+      const description = getTag(item, 'description').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      const url = getTag(item, 'link');
+      const publishedAt = getTag(item, 'pubDate');
+      const source = getTag(item, 'source');
+
+      return {
+        source: { name: source || 'Google Actualités' },
+        title,
+        description,
+        content: description,
+        url,
+        urlToImage: ''
+      };
+    }).filter(article => article.title && article.url);
+
+    return res.status(200).json({ status: 'ok', totalResults: articles.length, articles });
   } catch (error) {
     return res.status(502).json({
       status: 'error',
       code: 'proxy_error',
-      message: 'Failed to fetch data from NewsAPI'
+      message: 'Impossible de charger les actualités'
     });
   }
 };
