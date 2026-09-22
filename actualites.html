@@ -348,6 +348,19 @@
       #news-container { grid-template-columns: 1fr; }
     }
 
+    /* ARTICLE MODAL */
+    #article-modal { position:fixed; inset:0; z-index:9999; display:none; background:rgba(2,8,23,.82); backdrop-filter:blur(8px); padding:24px; overflow-y:auto; }
+    #article-modal.active { display:flex; align-items:flex-start; justify-content:center; }
+    .article-modal-box { width:min(900px,100%); margin:40px auto; background:#172235; border:1px solid rgba(255,255,255,.14); border-radius:20px; box-shadow:0 25px 80px rgba(0,0,0,.55); overflow:hidden; position:relative; }
+    .article-modal-close { position:absolute; right:14px; top:14px; width:40px; height:40px; border:0; border-radius:50%; background:rgba(0,0,0,.6); color:#fff; font-size:25px; line-height:40px; cursor:pointer; z-index:2; }
+    .article-modal-close:hover { background:rgba(255,255,255,.18); }
+    .article-modal-content { padding:28px; }
+    .article-modal-image { width:100%; max-height:460px; object-fit:cover; display:block; }
+    .article-modal-source { color:#aeb9ca; font-size:13px; font-weight:700; margin:0 0 10px; }
+    .article-modal-title { font-size:clamp(1.7rem,4vw,2.7rem); line-height:1.18; margin:0 0 18px; }
+    .article-modal-text { color:#e8edf5; font-size:1.05rem; line-height:1.8; white-space:pre-line; }
+    body.article-modal-open { overflow:hidden; }
+    
     /* STATUS */
     #news-status {
       color: var(--muted);
@@ -521,6 +534,18 @@
     <div class="container">&copy; 2026 SNG Portal. Tous droits reservés.</div>
   </footer>
 
+    <div id="article-modal" aria-hidden="true">
+      <div class="article-modal-box" role="dialog" aria-modal="true" aria-labelledby="article-modal-title">
+        <button id="article-modal-close" class="article-modal-close" type="button" aria-label="Fermer">×</button>
+        <img id="article-modal-image" class="article-modal-image" alt="" hidden>
+        <div class="article-modal-content">
+          <div id="article-modal-source" class="article-modal-source"></div>
+          <h2 id="article-modal-title" class="article-modal-title"></h2>
+          <div id="article-modal-text" class="article-modal-text"></div>
+          <a id="article-modal-link" class="article-reader-link" target="_blank" rel="noopener noreferrer" hidden>Voir la source originale ↗</a>
+        </div>
+      </div>
+    </div>
   <script>
     window.SNG_NEWS_PROXY_URL = "https://luisguzmanune75-jpg-github-io.vercel.app";
   </script>
@@ -645,7 +670,7 @@
     `;
   }
 
-  function createArticleCard(article) {
+  function createArticleCard(article, index) {
     const articleUrl = getArticleUrl(article);
     return `
       <article class="article-card">
@@ -655,7 +680,7 @@
           <h3 class="article-title">${article.title || "Titre indisponible"}</h3>
           <p class="article-desc">${shortText(article.description || "Pas de description disponible.", 130)}</p>
           <div class="article-actions">
-            <a class="read-more" href="${articleUrl}" target="_blank" rel="noopener noreferrer">Lire plus</a>
+            <button class="read-more" type="button" data-article-index="${index}">Lire plus</button>
             <button class="share-btn" type="button" data-url="${articleUrl}">Partager</button>
             <span class="share-msg" hidden>Lien copié ✅</span>
           </div>
@@ -707,7 +732,7 @@
       return;
     }
 
-    container.insertAdjacentHTML("beforeend", nextArticles.map(createArticleCard).join(""));
+    container.insertAdjacentHTML("beforeend", nextArticles.map((article, index) => createArticleCard(article, start + index)).join(""));
     gridRenderedCount += nextArticles.length;
     updateScrollStatus();
   }
@@ -746,6 +771,49 @@
       isLoadingMore = false;
       updateScrollStatus();
     }
+  }
+
+
+  function openArticleModal(index) {
+    const article = currentArticles[index];
+    if (!article) return;
+    const modal = document.getElementById("article-modal");
+    const image = document.getElementById("article-modal-image");
+    const source = document.getElementById("article-modal-source");
+    const title = document.getElementById("article-modal-title");
+    const text = document.getElementById("article-modal-text");
+    const link = document.getElementById("article-modal-link");
+
+    const imageUrl = article.urlToImage || article.image || "";
+    if (imageUrl) {
+      image.src = imageUrl;
+      image.alt = article.title || "Actualité SNG Portal";
+      image.hidden = false;
+    } else {
+      image.hidden = true;
+      image.removeAttribute("src");
+    }
+
+    source.textContent = `${article.source?.name || article.source || "Source inconnue"} • ${formatDate(article.publishedAt)}`;
+    title.textContent = article.title || "Titre indisponible";
+    text.textContent = (article.content || article.description || "Aucun contenu disponible.").replace(/\[\+\d+ chars\]$/i, "").trim();
+
+    const url = getArticleUrl(article);
+    if (url) { link.href=url; link.hidden=false; } else { link.hidden=true; }
+
+    modal.classList.add("active");
+    modal.setAttribute("aria-hidden","false");
+    document.body.classList.add("article-modal-open");
+    modal.scrollTop = 0;
+    document.getElementById("article-modal-close")?.focus();
+  }
+
+  function closeArticleModal() {
+    const modal=document.getElementById("article-modal");
+    if(!modal) return;
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden","true");
+    document.body.classList.remove("article-modal-open");
   }
 
 
@@ -838,12 +906,26 @@
 
   document.getElementById("news-container")?.addEventListener("click", (event) => {
     const shareButton = event.target.closest(".share-btn");
-    if (!shareButton) return;
+    if (shareButton) {
+      event.preventDefault();
+      event.stopPropagation();
+      shareArticle(shareButton.dataset.url || "", shareButton);
+      return;
+    }
+    const readButton = event.target.closest(".read-more");
+    if (readButton) {
+      event.preventDefault();
+      event.stopPropagation();
+      openArticleModal(Number(readButton.dataset.articleIndex));
+    }
+  });
 
-    event.preventDefault();
-    event.stopPropagation();
-
-    shareArticle(shareButton.dataset.url || "", shareButton);
+  document.getElementById("article-modal-close")?.addEventListener("click", closeArticleModal);
+  document.getElementById("article-modal")?.addEventListener("click", (event) => {
+    if (event.target.id === "article-modal") closeArticleModal();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeArticleModal();
   });
 
   document.querySelectorAll(".news-tab").forEach(button => {
