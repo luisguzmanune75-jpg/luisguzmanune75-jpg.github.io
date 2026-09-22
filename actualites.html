@@ -689,7 +689,7 @@
           <p class="article-desc">${shortText(article.description || "Pas de description disponible.", 130)}</p>
           <div class="article-actions">
             <button class="read-more" type="button" data-article-index="${index}">Lire plus</button>
-            <button class="share-btn" type="button" data-url="${articleUrl}">Partager</button>
+            <button class="share-btn" type="button" data-article-index="${index}">Partager</button>
             <span class="share-msg" hidden>Lien copié ✅</span>
           </div>
         </div>
@@ -825,27 +825,40 @@
   }
 
 
-  async function shareArticle(url, button) {
+  async function shareArticle(index, button) {
+    const article = currentArticles[index];
     const shareMsg = button?.nextElementSibling;
-    if (!url) return;
+    if (!article) return;
+
+    const sourceUrl = getArticleUrl(article);
+    const portalUrl = new URL(window.location.href);
+    portalUrl.searchParams.set("article", sourceUrl);
+    portalUrl.hash = "actualite";
+
+    const shareUrl = portalUrl.toString();
+    const title = article.title || "Actualité SNG Portal";
+    const sourceName = article.source?.name || article.source || "SNG Portal";
+    const shareText = `${title} — ${sourceName} | SNG Portal`;
 
     try {
       if (navigator.share) {
         await navigator.share({
-          title: "Actualités SNG Portal",
-          text: "Découvre cet article sur SNG Portal",
-          url
+          title: `SNG Portal — ${title}`,
+          text: shareText,
+          url: shareUrl
         });
         return;
       }
 
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
       if (shareMsg) {
+        shareMsg.textContent = "Lien SNG Portal copié ✅";
         shareMsg.hidden = false;
         clearTimeout(shareMsg._hideTimeout);
         shareMsg._hideTimeout = setTimeout(() => {
           shareMsg.hidden = true;
-        }, 1600);
+          shareMsg.textContent = "Lien copié ✅";
+        }, 1800);
       }
     } catch (error) {
       console.warn("Partage annulé ou indisponible", error);
@@ -894,6 +907,7 @@
         updateNewsHeader(articles, categoryKey);
         renderArticles(articles);
         setupInfiniteScroll();
+        openSharedArticleFromUrl();
         return;
       } else {
         renderError("Aucune actualité disponible pour le moment.");
@@ -903,6 +917,14 @@
       console.error("Erreur actualités :", error);
       renderError(error.message || "Erreur inconnue");
     }
+  }
+
+  function openSharedArticleFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const sharedUrl = params.get("article");
+    if (!sharedUrl || !currentArticles.length) return;
+    const index = currentArticles.findIndex(article => getArticleUrl(article) === sharedUrl);
+    if (index >= 0) setTimeout(() => openArticleModal(index), 120);
   }
 
   function startAutoRefresh() {
@@ -917,7 +939,7 @@
     if (shareButton) {
       event.preventDefault();
       event.stopPropagation();
-      shareArticle(shareButton.dataset.url || "", shareButton);
+      shareArticle(Number(shareButton.dataset.articleIndex), shareButton);
       return;
     }
     const readButton = event.target.closest(".read-more");
