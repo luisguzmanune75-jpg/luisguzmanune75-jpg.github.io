@@ -315,6 +315,13 @@
       color: #fff;
       font-size: 13px;
       font-weight: 700;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .read-more:hover {
+      background: rgba(255,255,255,.14);
+      transform: translateY(-1px);
     }
 
     .share-btn {
@@ -671,14 +678,14 @@
     const description = article.description || article.content || "Pas de description disponible.";
     const safeTitle = article.title || "Titre indisponible";
     return `
-      <article class="article-card">
-        <img src="${imageUrl}" alt="${safeTitle.replace(/"/g, '&quot;')}">
+      <article class="article-card" data-article-index="${index}" role="button" tabindex="0" aria-label="Lire : ${safeTitle.replace(/"/g, '&quot;')}">
+        <img src="${imageUrl}" alt="">
         <div class="article-body">
           <span class="article-source">${sourceName} • ${formatDate(article.publishedAt)}</span>
           <h3 class="article-title">${safeTitle}</h3>
           <p class="article-desc">${shortText(description, 130)}</p>
           <div class="article-actions">
-            <button class="read-more" type="button" data-article-index="${index}">Lire plus</button>
+            <button class="read-more" type="button" data-article-index="${index}">📖 Lire</button>
             <button class="share-btn" type="button" data-url="${articleUrl}">Partager</button>
             <span class="share-msg" hidden>Lien copié ✅</span>
           </div>
@@ -774,6 +781,9 @@
   function openArticleReader(index) {
     const article = currentArticles[index];
     if (!article) return;
+
+    const reader = document.getElementById("article-reader");
+    if (!reader) return;
     const reader = document.getElementById("article-reader");
     const image = document.getElementById("article-reader-image");
     const source = document.getElementById("article-reader-source");
@@ -896,19 +906,35 @@
   }
 
   document.getElementById("news-container")?.addEventListener("click", (event) => {
-    const readButton = event.target.closest(".read-more");
-    if (readButton) {
+    const shareButton = event.target.closest(".share-btn");
+    if (shareButton) {
       event.preventDefault();
       event.stopPropagation();
-      openArticleReader(Number(readButton.dataset.articleIndex));
+      shareArticle(shareButton.dataset.url || "", shareButton);
       return;
     }
 
-    const shareButton = event.target.closest(".share-btn");
-    if (!shareButton) return;
+    const readButton = event.target.closest(".read-more");
+    const card = event.target.closest(".article-card");
+    const index = readButton
+      ? Number(readButton.dataset.articleIndex)
+      : card
+        ? Number(card.dataset.articleIndex)
+        : -1;
+
+    if (index >= 0) {
+      event.preventDefault();
+      event.stopPropagation();
+      openArticleReader(index);
+    }
+  });
+
+  document.getElementById("news-container")?.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const card = event.target.closest(".article-card");
+    if (!card || event.target.closest(".share-btn")) return;
     event.preventDefault();
-    event.stopPropagation();
-    shareArticle(shareButton.dataset.url || "", shareButton);
+    openArticleReader(Number(card.dataset.articleIndex));
   });
 
   document.getElementById("article-reader-back")?.addEventListener("click", closeArticleReader);
