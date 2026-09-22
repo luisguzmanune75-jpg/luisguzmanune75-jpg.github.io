@@ -549,7 +549,8 @@
           <p id="article-modal-lead" class="article-modal-lead"></p>
           <div id="article-modal-text" class="article-modal-text"></div>
           <div class="article-modal-footer">
-            <a id="article-modal-link" class="article-modal-source-link" target="_blank" rel="noopener noreferrer" hidden>Lire sur la source originale ↗</a>
+            <span id="article-modal-original-source" class="article-modal-source"></span>
+            <a id="article-modal-link" class="article-modal-source-link" target="_blank" rel="noopener noreferrer" hidden>Lire la source originale ↗</a>
           </div>
         </main>
       </div>
@@ -818,6 +819,13 @@
     textBox.innerHTML = paragraphs.map(p => `<p>${escapeHtml(p)}</p>`).join("");
 
     const url = getArticleUrl(article);
+    const originalSource = document.getElementById("article-modal-original-source");
+    const sourceName = article.source?.name || article.source || "Source inconnue";
+
+    if (originalSource) {
+      originalSource.textContent = `Source originale : ${sourceName}`;
+    }
+
     if (url) {
       link.href = url;
       link.hidden = false;
