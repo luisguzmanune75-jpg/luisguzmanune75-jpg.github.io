@@ -315,13 +315,6 @@
       color: #fff;
       font-size: 13px;
       font-weight: 700;
-      cursor: pointer;
-      transition: .2s ease;
-    }
-
-    .read-more:hover {
-      background: rgba(255,255,255,.14);
-      transform: translateY(-1px);
     }
 
     .share-btn {
@@ -354,17 +347,6 @@
     @media (max-width: 640px) {
       #news-container { grid-template-columns: 1fr; }
     }
-
-    /* ARTICLE READER */
-    #article-reader { display:none; margin-top:20px; padding:24px; border-radius:18px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); box-shadow:0 20px 60px rgba(0,0,0,.28); }
-    #article-reader.active { display:block; }
-    .article-reader-image { width:100%; max-height:520px; object-fit:cover; border-radius:16px; display:block; margin-bottom:18px; }
-    .article-reader-source { color:#9ca3af; font-size:13px; font-weight:700; margin-bottom:10px; }
-    .article-reader-title { font-size:clamp(1.8rem,4vw,2.8rem); line-height:1.2; margin-bottom:16px; }
-    .article-reader-text { color:rgba(255,255,255,.88); line-height:1.8; font-size:1.02rem; white-space:pre-line; }
-    .article-reader-link { display:inline-flex; margin-top:18px; color:#7dd3fc; font-weight:700; }
-    .back-button { display:inline-flex; align-items:center; gap:8px; margin-top:20px; padding:9px 14px; border-radius:10px; border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.08); color:#fff; font-size:13px; font-weight:700; cursor:pointer; }
-    .back-button:hover { background:rgba(255,255,255,.13); }
 
     /* STATUS */
     #news-status {
@@ -529,14 +511,6 @@
 
         <div id="news-status">Chargement...</div>
         <div id="news-container"></div>
-        <section id="article-reader" aria-live="polite">
-          <img id="article-reader-image" class="article-reader-image" alt="" hidden>
-          <div id="article-reader-source" class="article-reader-source"></div>
-          <h2 id="article-reader-title" class="article-reader-title"></h2>
-          <div id="article-reader-text" class="article-reader-text"></div>
-          <a id="article-reader-link" class="article-reader-link" href="" target="_blank" rel="noopener noreferrer" hidden>Voir la source originale ↗</a><br>
-          <button id="article-reader-back" class="back-button" type="button">↩ Retour aux actualités</button>
-        </section>
         <div id="news-scroll-status"></div>
         <div id="news-scroll-sentinel" aria-hidden="true"></div>
       </div>
@@ -553,6 +527,8 @@
   <script>
   const NEWS_PROXY_BASE_URL = window.SNG_NEWS_PROXY_URL;
   const REFRESH_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
+  const INITIAL_GRID_BATCH_SIZE = 20;
+  const GRID_BATCH_SIZE = 12;
 
   const categoryMap = {
     top: { label: "À la une", proxyCategory: "general" },
@@ -669,26 +645,23 @@
     `;
   }
 
-  function createArticleCard(article, index) {
+  function createArticleCard(article) {
     const articleUrl = getArticleUrl(article);
-    const imageUrl = article.urlToImage || article.image || "https://via.placeholder.com/600x400?text=Actualités";
-    const sourceName = article.source?.name || article.source || "Source inconnue";
-    const description = article.description || article.content || "Pas de description disponible.";
-    const safeTitle = article.title || "Titre indisponible";
     return `
-      <article class="article-card" data-article-index="${index}" role="button" tabindex="0" aria-label="Lire : ${safeTitle.replace(/"/g, '&quot;')}">
-        <img src="${imageUrl}" alt="">
+      <article class="article-card">
+        <img src="${article.urlToImage || article.image || "https://via.placeholder.com/600x400?text=Actualités"}" alt="${article.title || "Titre indisponible"}">
         <div class="article-body">
-          <span class="article-source">${sourceName} • ${formatDate(article.publishedAt)}</span>
-          <h3 class="article-title">${safeTitle}</h3>
-          <p class="article-desc">${shortText(description, 130)}</p>
+          <span class="article-source">${article.source?.name || article.source || "Source inconnue"} • ${formatDate(article.publishedAt)}</span>
+          <h3 class="article-title">${article.title || "Titre indisponible"}</h3>
+          <p class="article-desc">${shortText(article.description || "Pas de description disponible.", 130)}</p>
           <div class="article-actions">
-            <button class="read-more" type="button" data-article-index="${index}">📖 Lire</button>
+            <a class="read-more" href="${articleUrl}" target="_blank" rel="noopener noreferrer">Lire plus</a>
             <button class="share-btn" type="button" data-url="${articleUrl}">Partager</button>
             <span class="share-msg" hidden>Lien copié ✅</span>
           </div>
         </div>
-      </article>`;
+      </article>
+    `;
   }
 
   function updateNewsHeader(articles, categoryKey) {
@@ -734,7 +707,7 @@
       return;
     }
 
-    container.insertAdjacentHTML("beforeend", nextArticles.map((article, localIndex) => createArticleCard(article, start + localIndex)).join(""));
+    container.insertAdjacentHTML("beforeend", nextArticles.map(createArticleCard).join(""));
     gridRenderedCount += nextArticles.length;
     updateScrollStatus();
   }
@@ -773,45 +746,6 @@
       isLoadingMore = false;
       updateScrollStatus();
     }
-  }
-
-
-  function openArticleReader(index) {
-    const article = currentArticles[index];
-    if (!article) return;
-
-    const reader = document.getElementById("article-reader");
-    if (!reader) return;
-    const reader = document.getElementById("article-reader");
-    const image = document.getElementById("article-reader-image");
-    const source = document.getElementById("article-reader-source");
-    const title = document.getElementById("article-reader-title");
-    const textContent = document.getElementById("article-reader-text");
-    const sourceLink = document.getElementById("article-reader-link");
-
-    const imageUrl = article.urlToImage || article.image || "";
-    const articleUrl = getArticleUrl(article);
-    const sourceName = article.source?.name || article.source || "Source inconnue";
-    const fullText = article.content || article.description || "Le contenu complet de cette actualité n'est pas fourni par la source.";
-
-    if (imageUrl) { image.src=imageUrl; image.alt=article.title||"Actualité SNG Portal"; image.hidden=false; }
-    else { image.hidden=true; image.removeAttribute("src"); }
-
-    source.textContent = `${sourceName} • ${formatDate(article.publishedAt)}`;
-    title.textContent = article.title || "Titre indisponible";
-    textContent.textContent = fullText.replace(/\[\+\d+ chars\]$/i, "").trim();
-
-    if (articleUrl) { sourceLink.href=articleUrl; sourceLink.hidden=false; }
-    else { sourceLink.hidden=true; sourceLink.removeAttribute("href"); }
-
-    reader.classList.add("active");
-    reader.scrollIntoView({behavior:"smooth",block:"start"});
-  }
-
-  function closeArticleReader() {
-    const reader=document.getElementById("article-reader");
-    if(reader) reader.classList.remove("active");
-    document.getElementById("news-container")?.scrollIntoView({behavior:"smooth",block:"start"});
   }
 
 
@@ -874,7 +808,6 @@
     isLoadingMore = false;
     hasMoreArticles = true;
     seenArticleUrls.clear();
-    closeArticleReader();
     renderLoadingState();
 
     try {
@@ -905,37 +838,13 @@
 
   document.getElementById("news-container")?.addEventListener("click", (event) => {
     const shareButton = event.target.closest(".share-btn");
-    if (shareButton) {
-      event.preventDefault();
-      event.stopPropagation();
-      shareArticle(shareButton.dataset.url || "", shareButton);
-      return;
-    }
+    if (!shareButton) return;
 
-    const readButton = event.target.closest(".read-more");
-    const card = event.target.closest(".article-card");
-    const index = readButton
-      ? Number(readButton.dataset.articleIndex)
-      : card
-        ? Number(card.dataset.articleIndex)
-        : -1;
-
-    if (index >= 0) {
-      event.preventDefault();
-      event.stopPropagation();
-      openArticleReader(index);
-    }
-  });
-
-  document.getElementById("news-container")?.addEventListener("keydown", (event) => {
-    if (event.key !== "Enter" && event.key !== " ") return;
-    const card = event.target.closest(".article-card");
-    if (!card || event.target.closest(".share-btn")) return;
     event.preventDefault();
-    openArticleReader(Number(card.dataset.articleIndex));
-  });
+    event.stopPropagation();
 
-  document.getElementById("article-reader-back")?.addEventListener("click", closeArticleReader);
+    shareArticle(shareButton.dataset.url || "", shareButton);
+  });
 
   document.querySelectorAll(".news-tab").forEach(button => {
     button.addEventListener("click", () => {
