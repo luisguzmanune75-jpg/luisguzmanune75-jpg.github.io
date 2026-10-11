@@ -2026,6 +2026,59 @@
       .nav a:hover, .nav a.active, .top-link-button:hover { background:rgba(212,175,55,.13); border-color:rgba(212,175,55,.42); color:#f5df91; }
       .hero-badge { border-color:rgba(212,175,55,.35); background:rgba(212,175,55,.09); color:#f5df91; }
 
+    
+      /* Bloc SNG TV en bas de la page d'accueil */
+      .home-sng-tv {
+        margin: 36px auto 56px;
+        padding: 34px 24px;
+        border: 1px solid rgba(212, 175, 55, 0.35);
+        border-radius: 28px;
+        background:
+          radial-gradient(circle at 0% 0%, rgba(212, 175, 55, 0.16), transparent 38%),
+          linear-gradient(135deg, rgba(18, 18, 30, 0.96), rgba(35, 16, 26, 0.96));
+        box-shadow: var(--shadow);
+        text-align: center;
+      }
+      .home-sng-tv .sng-tv-eyebrow {
+        color: #ffd166;
+        font-size: .82rem;
+        font-weight: 900;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+      }
+      .home-sng-tv h2 {
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        margin-bottom: 12px;
+      }
+      .home-sng-tv p {
+        max-width: 680px;
+        margin: 0 auto 22px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      .home-sng-tv .sng-tv-home-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-height: 50px;
+        padding: 13px 22px;
+        border-radius: 999px;
+        color: #17080b;
+        background: linear-gradient(135deg, #ffd166, #d4af37);
+        font-weight: 900;
+        box-shadow: 0 12px 28px rgba(212, 175, 55, .22);
+        transition: transform .2s ease, box-shadow .2s ease;
+      }
+      .home-sng-tv .sng-tv-home-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 32px rgba(212, 175, 55, .3);
+      }
+      @media (max-width: 600px) {
+        .home-sng-tv { padding: 28px 18px; margin: 28px auto 40px; }
+      }
+
     </style>
   </head>
   <body data-page="home">
@@ -2568,6 +2621,16 @@
   </article>
 
 </section>
+
+
+    <section class="container home-sng-tv" aria-labelledby="home-sng-tv-title">
+      <div class="sng-tv-eyebrow">YouTube officiel</div>
+      <h2 id="home-sng-tv-title">🎬 SNG TV — Les dernières vidéos</h2>
+      <p>Retrouvez les actualités, les reportages et les vidéos de SNG Portal TV. Ouvrez notre espace vidéo pour découvrir les dernières publications de la chaîne.</p>
+      <a class="sng-tv-home-button" href="./sng-tv.html">
+        <span aria-hidden="true">▶</span> Regarder les dernières vidéos
+      </a>
+    </section>
 
     <footer class="site-footer">
       <div class="container footer-inner footer-grid">
