@@ -22,14 +22,14 @@
       }
 
       :root {
-        --bg-1: #07111c;
-        --bg-2: #0f1d33;
-        --panel: rgba(255, 255, 255, 0.08);
-        --line: rgba(255, 255, 255, 0.12);
+        --bg-1: #090a12;
+        --bg-2: #17172a;
+        --panel: rgba(255, 255, 255, 0.065);
+        --line: rgba(212, 175, 55, 0.20);
         --text: #ffffff;
-        --muted: rgba(255, 255, 255, 0.72);
-        --accent: #ff5f8f;
-        --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+        --muted: rgba(239, 235, 224, 0.74);
+        --accent: #d4af37;
+        --shadow: 0 22px 65px rgba(0, 0, 0, 0.42);
         --radius: 24px;
         --max: 1180px;
       }
@@ -38,9 +38,9 @@
         min-height: 100vh;
         color: var(--text);
         background:
-          radial-gradient(circle at top left, rgba(255, 95, 143, 0.18), transparent 30%),
-          radial-gradient(circle at top right, rgba(97, 218, 251, 0.16), transparent 28%),
-          radial-gradient(circle at bottom center, rgba(255, 209, 102, 0.1), transparent 25%),
+          radial-gradient(circle at top left, rgba(212, 175, 55, 0.14), transparent 30%),
+          radial-gradient(circle at top right, rgba(112, 82, 164, 0.20), transparent 28%),
+          radial-gradient(circle at bottom center, rgba(212, 175, 55, 0.08), transparent 25%),
           linear-gradient(135deg, var(--bg-1), var(--bg-2));
       }
 
@@ -59,8 +59,8 @@
         top: 0;
         z-index: 50;
         backdrop-filter: blur(14px);
-        background: rgba(5, 12, 22, 0.55);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(8, 8, 16, 0.88);
+        border-bottom: 1px solid rgba(212, 175, 55, 0.24);
       }
 
       .header-inner {
@@ -82,13 +82,13 @@
         width: 52px;
         height: 52px;
         border-radius: 50%;
-        background: linear-gradient(135deg, rgba(255, 95, 143, 0.9), rgba(97, 218, 251, 0.75));
+        background: radial-gradient(circle at 30% 25%, #f5df91, #b68b20 58%, #15131a 60%, #090a12);
         display: grid;
         place-items: center;
         box-shadow: var(--shadow);
         font-size: 14px;
         font-weight: 900;
-        border: 2px solid rgba(255, 255, 255, 0.15);
+        border: 2px solid rgba(212, 175, 55, 0.75);
       }
 
       .brand-text {
@@ -155,10 +155,10 @@
       }
 
       .hero h1 span:nth-child(1) {
-        color: #70a1ff;
+        color: #d4af37;
       }
       .hero h1 span:nth-child(2) {
-        color: #ff7aa2;
+        color: #f5df91;
       }
 
       .hero p {
@@ -2020,16 +2020,22 @@
         }
       }
 
+    
+      /* Identité visuelle premium SNG Portal */
+      .brand-logo { overflow:hidden; flex:0 0 auto; box-shadow:0 8px 24px rgba(0,0,0,.35),0 0 0 3px rgba(212,175,55,.08); }
+      .nav a:hover, .nav a.active, .top-link-button:hover { background:rgba(212,175,55,.13); border-color:rgba(212,175,55,.42); color:#f5df91; }
+      .hero-badge { border-color:rgba(212,175,55,.35); background:rgba(212,175,55,.09); color:#f5df91; }
+
     </style>
   </head>
   <body data-page="home">
     <header class="header">
       <div class="container header-inner">
         <a href="./index.html" class="brand" aria-label="Accueil">
-          <div class="brand-logo">SNG</div>
+          <div class="brand-logo" aria-label="Logo SNG Portal"><svg viewBox="0 0 64 64" role="img" aria-hidden="true" style="width:100%;height:100%;padding:9px"><circle cx="32" cy="32" r="26" fill="none" stroke="#f5df91" stroke-width="1.8"/><ellipse cx="32" cy="32" rx="12" ry="26" fill="none" stroke="#f5df91" stroke-width="1.4"/><path d="M7 32h50M13 20h38M13 44h38" fill="none" stroke="#f5df91" stroke-width="1.4"/><text x="32" y="36" font-size="13" font-weight="900" text-anchor="middle" fill="#ffffff">SNG</text></svg></div>
           <div class="brand-text">
             <strong>SNG Portal</strong>
-            <span>Media • Infos • Crypto • Monde</span>
+            <span>MÉDIA • INFOS • ACTUALITÉS • MONDE</span>
           </div>
         </a>
 
