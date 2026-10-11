@@ -2085,6 +2085,71 @@
         .home-sng-tv-player iframe { min-height: 210px; }
       }
 
+      
+      /* En-tête mobile compact : reste accessible sans masquer l'accueil */
+      @media (max-width: 700px) {
+        .header {
+          position: sticky !important;
+          top: 0;
+          z-index: 1000;
+          background: rgba(8, 8, 16, 0.96);
+          backdrop-filter: blur(12px);
+        }
+        .header-inner {
+          display: flex;
+          flex-direction: column !important;
+          align-items: stretch;
+          justify-content: center;
+          gap: 7px;
+          min-height: 0;
+          padding: 7px 0 8px;
+        }
+        .header .brand {
+          align-self: flex-start;
+          gap: 8px;
+          min-height: 36px;
+        }
+        .header .brand-logo {
+          width: 34px;
+          height: 34px;
+          font-size: 10px;
+        }
+        .header .brand-text strong {
+          font-size: 0.95rem;
+        }
+        .header .brand-text span {
+          font-size: 0.62rem;
+          line-height: 1.05;
+        }
+        .header .nav {
+          display: flex;
+          flex-wrap: nowrap;
+          justify-content: flex-start;
+          gap: 7px;
+          width: 100%;
+          max-width: 100%;
+          overflow-x: auto;
+          overflow-y: hidden;
+          padding: 0 0 3px;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+        }
+        .header .nav::-webkit-scrollbar {
+          display: none;
+        }
+        .header .nav a,
+        .header .nav .top-link-button {
+          flex: 0 0 auto;
+          white-space: nowrap;
+          padding: 8px 11px;
+          font-size: 0.82rem;
+          line-height: 1.1;
+        }
+        .hero {
+          padding-top: 34px;
+        }
+      }
+
       /* Bloc SNG TV en bas de la page d'accueil */
       .home-sng-tv {
         margin: 36px auto 56px;
