@@ -14,15 +14,15 @@
     }
 
     :root {
-      --bg-1: #07111c;
-      --bg-2: #0f1d33;
-      --panel: rgba(255,255,255,0.07);
-      --line: rgba(255,255,255,0.10);
+      --bg-1: #090a12;
+      --bg-2: #17172a;
+      --panel: rgba(255,255,255,0.065);
+      --line: rgba(212,175,55,0.20);
       --text: #ffffff;
-      --muted: rgba(255,255,255,0.72);
-      --accent: #ff5f8f;
-      --accent-2: #7dd3fc;
-      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+      --muted: rgba(239,235,224,0.74);
+      --accent: #d4af37;
+      --accent-2: #f5df91;
+      --shadow: 0 22px 65px rgba(0,0,0,0.42);
       --max: 1240px;
     }
 
@@ -30,9 +30,9 @@
       min-height: 100vh;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(255,95,143,0.18), transparent 30%),
-        radial-gradient(circle at top right, rgba(97,218,251,0.16), transparent 28%),
-        radial-gradient(circle at bottom center, rgba(255,209,102,0.10), transparent 25%),
+        radial-gradient(circle at top left, rgba(212,175,55,0.14), transparent 30%),
+        radial-gradient(circle at top right, rgba(112,82,164,0.20), transparent 28%),
+        radial-gradient(circle at bottom center, rgba(212,175,55,0.08), transparent 25%),
         linear-gradient(135deg, var(--bg-1), var(--bg-2));
     }
 
@@ -77,12 +77,12 @@
       width: 52px;
       height: 52px;
       border-radius: 50%;
-      background: linear-gradient(135deg, rgba(255,95,143,0.9), rgba(97,218,251,0.75));
+      background: radial-gradient(circle at 30% 25%, #f5df91, #b68b20 58%, #15131a 60%, #090a12);
       display: grid;
       place-items: center;
       font-size: 14px;
       font-weight: 900;
-      border: 2px solid rgba(255,255,255,0.15);
+      border: 2px solid rgba(212,175,55,0.75); box-shadow: 0 0 0 3px rgba(212,175,55,0.08), 0 8px 24px rgba(0,0,0,0.35);
     }
 
     .brand-text {
@@ -441,25 +441,36 @@
         padding-top: 26px;
       }
     }
+  
+    /* Finition premium SNG Portal */
+    .header { background: rgba(8,8,16,.88); border-bottom-color: rgba(212,175,55,.24); }
+    .brand-logo { overflow:hidden; flex:0 0 auto; }
+    .brand-text strong { letter-spacing:.02em; }
+    .nav a:hover, .nav a.active { background:rgba(212,175,55,.13); border-color:rgba(212,175,55,.42); color:#f5df91; }
+    .source-badge { border-color:rgba(212,175,55,.35); background:rgba(212,175,55,.10); color:#f5df91; }
+    .article-card { border-color:rgba(212,175,55,.14); background:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.035)); }
+    .read-more { border-color:rgba(212,175,55,.35); }
+    .news-tab:hover, .news-tab.active { background:linear-gradient(135deg,#b68b20,#f5df91); color:#17120a; }
+
   </style>
 </head>
 <body>
   <header class="header">
     <div class="container header-inner">
       <a href="./index.html" class="brand">
-        <div class="brand-logo">SNG</div>
+        <div class="brand-logo" aria-label="Logo SNG Portal"><svg viewBox="0 0 64 64" role="img" aria-hidden="true" style="width:100%;height:100%;padding:9px"><circle cx="32" cy="32" r="26" fill="none" stroke="#f5df91" stroke-width="1.8"/><ellipse cx="32" cy="32" rx="12" ry="26" fill="none" stroke="#f5df91" stroke-width="1.4"/><path d="M7 32h50M13 20h38M13 44h38" fill="none" stroke="#f5df91" stroke-width="1.4"/><text x="32" y="36" font-size="13" font-weight="900" text-anchor="middle" fill="#ffffff">SNG</text></svg></div>
         <div class="brand-text">
           <strong>SNG Portal</strong>
-          <span>Media • Infos • Crypto • Monde</span>
+          <span>MÉDIA • INFOS • ACTUALITÉS • MONDE</span>
         </div>
       </a>
 
       <nav class="nav">
         <a href="./index.html">Accueil</a>
-        <a href="./actualites.html" class="active">Actualites</a>
+        <a href="./actualites.html" class="active">Actualités</a>
         <a href="./crypto.html">Crypto</a>
-        <a href="./meteo.html">Meteo</a>
-        <a href="./marches.html">Marches</a>
+        <a href="./meteo.html">Météo</a>
+        <a href="./marches.html">Marchés</a>
         <a href="./loterie.html">Loterie</a>
         <a href="./sports.html">Sports</a>
         <a href="./blog.html">Blog</a>
@@ -472,10 +483,10 @@
     <section class="hero">
       <div class="hero-top">
         <div>
-          <h1>Actualites SNG Portal</h1>
-          <p>Les titres se chargent automatiquement depuis News API avec filtrage par catégorie.</p>
+          <h1>Actualités <span style="color:var(--accent)">SNG Portal</span></h1>
+          <p>L’actualité en direct, en France et dans le monde. Une information claire, vérifiée et mise à jour.</p>
         </div>
-        <div class="source-badge">News API • Live</div>
+        <div class="source-badge">SNG INFO • EN DIRECT</div>
       </div>
 
       <img src="sng-news.png" class="hero-news-image" alt="Banniere SNG News" loading="lazy">
@@ -516,14 +527,14 @@
 </div>
 
       <div class="ticker">
-        <span class="ticker-inner" id="ticker-inner">Chargement des actualites en direct...</span>
+        <span class="ticker-inner" id="ticker-inner">Chargement des actualités en direct...</span>
       </div>
     </section>
 
     <section class="layout">
       <div class="main-column">
         <div class="news-tabs">
-          <button class="news-tab active" data-category="top">A la une</button>
+          <button class="news-tab active" data-category="top">À la une</button>
           <button class="news-tab" data-category="world">Monde</button>
           <button class="news-tab" data-category="business">Business</button>
           <button class="news-tab" data-category="sports">Sports</button>
@@ -538,7 +549,7 @@
   </main>
 
   <footer class="footer">
-    <div class="container">&copy; 2026 SNG Portal. Tous droits reservés.</div>
+    <div class="container">&copy; 2026 SNG Portal. Tous droits réservés.</div>
   </footer>
 
     <div id="article-modal" aria-hidden="true">
