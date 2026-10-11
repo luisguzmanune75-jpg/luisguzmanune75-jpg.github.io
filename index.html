@@ -2027,6 +2027,64 @@
       .hero-badge { border-color:rgba(212,175,55,.35); background:rgba(212,175,55,.09); color:#f5df91; }
 
     
+      
+      .home-sng-tv-player {
+        width: 100%;
+        max-width: 980px;
+        margin: 26px auto 30px;
+        overflow: hidden;
+        border-radius: 22px;
+        background: #050509;
+        border: 1px solid rgba(255, 209, 102, .32);
+        box-shadow: 0 18px 48px rgba(0,0,0,.38);
+        aspect-ratio: 16 / 9;
+      }
+      .home-sng-tv-player iframe { width: 100%; height: 100%; min-height: 260px; display: block; border: 0; }
+      .home-sng-tv-loading {
+        min-height: 260px; height: 100%; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 12px; padding: 24px;
+        color: #fff; background: radial-gradient(circle at center, #30222a, #08080d);
+      }
+      .home-sng-tv-loading strong { color: #ffd166; font-size: 1.2rem; }
+      .home-sng-tv-loading span { color: var(--muted); }
+      .home-sng-tv-video-heading {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 14px; flex-wrap: wrap; margin: 28px 0 16px; text-align: left;
+      }
+      .home-sng-tv-video-heading h3 { font-size: clamp(1.2rem, 3vw, 1.65rem); }
+      .home-sng-tv-video-heading a { color: #ffd166; font-weight: 800; }
+      .home-sng-tv-status { margin: 0 auto 16px !important; font-size: .92rem; }
+      .home-sng-tv-grid {
+        display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px; text-align: left;
+      }
+      .home-sng-tv-grid .video-card {
+        overflow: hidden; border-radius: 16px; background: rgba(255,255,255,.06);
+        border: 1px solid rgba(255,255,255,.12); min-width: 0;
+      }
+      .home-sng-tv-grid .thumb { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; cursor: pointer; }
+      .home-sng-tv-grid .video-body { display: grid; gap: 10px; padding: 13px; }
+      .home-sng-tv-grid .video-date { color: #ffd166; font-size: .76rem; font-weight: 800; }
+      .home-sng-tv-grid h3 { font-size: .96rem; line-height: 1.4; cursor: pointer; }
+      .home-sng-tv-grid .video-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .home-sng-tv-grid .watch-btn, .home-sng-tv-grid .share-btn {
+        min-height: 38px; border-radius: 999px; padding: 8px 6px; text-align: center;
+        font-size: .8rem; font-weight: 800; text-decoration: none;
+      }
+      .home-sng-tv-grid .watch-btn { background: linear-gradient(135deg,#ff2f6d,#ffd166); color: #18040a; }
+      .home-sng-tv-grid .share-btn { background: rgba(255,255,255,.08); color: #fff; border: 1px solid rgba(255,209,102,.4); cursor: pointer; }
+      .home-sng-tv-reload {
+        margin-top: 22px; border: 1px solid rgba(255,209,102,.5); border-radius: 999px;
+        padding: 11px 17px; background: rgba(255,209,102,.12); color: #fff;
+        font-weight: 900; cursor: pointer;
+      }
+      @media (max-width: 900px) { .home-sng-tv-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      @media (max-width: 520px) {
+        .home-sng-tv-grid { grid-template-columns: 1fr; }
+        .home-sng-tv-player { border-radius: 14px; }
+        .home-sng-tv-player iframe { min-height: 210px; }
+      }
+
       /* Bloc SNG TV en bas de la page d'accueil */
       .home-sng-tv {
         margin: 36px auto 56px;
@@ -2626,10 +2684,18 @@
     <section class="container home-sng-tv" aria-labelledby="home-sng-tv-title">
       <div class="sng-tv-eyebrow">YouTube officiel</div>
       <h2 id="home-sng-tv-title">🎬 SNG TV — Les dernières vidéos</h2>
-      <p>Retrouvez les actualités, les reportages et les vidéos de SNG Portal TV. Ouvrez notre espace vidéo pour découvrir les dernières publications de la chaîne.</p>
-      <a class="sng-tv-home-button" href="./sng-tv.html">
-        <span aria-hidden="true">▶</span> Regarder les dernières vidéos
-      </a>
+      <p>Regardez directement la dernière vidéo de SNG Portal TV, puis choisissez parmi les publications récentes.</p>
+
+      <div class="home-sng-tv-player" id="featuredPlayer" aria-label="Lecteur vidéo SNG TV">
+        <div class="home-sng-tv-loading"><strong>Chargement de SNG TV…</strong><span>La dernière vidéo apparaîtra ici automatiquement.</span></div>
+      </div>
+      <div class="home-sng-tv-video-heading">
+        <h3>Les dernières publications</h3>
+        <a href="./sng-tv.html">Voir toutes les vidéos →</a>
+      </div>
+      <p class="home-sng-tv-status" id="videoStatus" role="status" aria-live="polite">Chargement des vidéos YouTube…</p>
+      <div class="home-sng-tv-grid" id="videoGrid"></div>
+      <button class="home-sng-tv-reload" id="reloadVideos" type="button">↻ Recharger les vidéos</button>
     </section>
 
     <footer class="site-footer">
@@ -3255,5 +3321,7 @@ ${lastAssistantReply || ""}`;
       })();
     </script>
 
+    <script src="./sng-tv-config.js"></script>
+    <script src="./sng-tv.js"></script>
   </body>
 </html>
