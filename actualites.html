@@ -935,7 +935,7 @@
     const sharedUrl = params.get("article");
     if (!sharedUrl || !currentArticles.length) return;
     const index = currentArticles.findIndex(article => getArticleUrl(article) === sharedUrl);
-    if (index >= 0) setTimeout(() => openArticleModal(index), 120);
+    if (index >= 0) setTimeout(() => startPremiumCheckout(index), 120);
   }
 
   function startAutoRefresh() {
@@ -943,6 +943,140 @@
     refreshTimerId = setInterval(() => {
       loadNews(currentCategory);
     }, REFRESH_INTERVAL_MS);
+  }
+
+  const PREMIUM_API_URL = "https://sng-portal-premium-api.familialcanal.workers.dev";
+  const PREMIUM_VISITOR_KEY = "sngPortalPremiumVisitorId";
+  const PREMIUM_PENDING_KEY = "sngPortalPremiumPendingArticle";
+
+  function getPremiumVisitorId() {
+    let visitorId = localStorage.getItem(PREMIUM_VISITOR_KEY);
+    if (!visitorId || !/^[a-zA-Z0-9_-]{1,100}$/.test(visitorId)) {
+      visitorId = "v_" + (crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "") : Math.random().toString(36).slice(2) + Date.now().toString(36));
+      localStorage.setItem(PREMIUM_VISITOR_KEY, visitorId);
+    }
+    return visitorId;
+  }
+
+  async function getPremiumArticleId(article) {
+    const source = getArticleUrl(article) || article.title || "article-sng";
+    let hash = 2166136261;
+    for (let i = 0; i < source.length; i++) {
+      hash ^= source.charCodeAt(i);
+      hash = Math.imul(hash, 16777619);
+    }
+    return "article_" + (hash >>> 0).toString(36);
+  }
+
+  async function checkPremiumAccess(visitorId, articleId) {
+    const response = await fetch(PREMIUM_API_URL + "/api/access", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ visitorId, articleId })
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || "Impossible de vérifier l’accès Premium.");
+    return data.unlocked === true;
+  }
+
+  async function startPremiumCheckout(index, button) {
+    const article = currentArticles[index];
+    if (!article) return;
+
+    const originalText = button?.textContent || "Lire plus";
+    if (button) {
+      button.disabled = true;
+      button.textContent = "Vérification…";
+    }
+
+    try {
+      const visitorId = getPremiumVisitorId();
+      const articleId = await getPremiumArticleId(article);
+      const articleUrl = getArticleUrl(article);
+      if (await checkPremiumAccess(visitorId, articleId)) {
+        openArticleModal(index);
+        return;
+      }
+
+      const accepted = window.confirm("Cet article Premium coûte 0,60 €. Continuer vers le paiement sécurisé Stripe ?");
+      if (!accepted) return;
+
+      sessionStorage.setItem(PREMIUM_PENDING_KEY, JSON.stringify({
+        visitorId,
+        articleId,
+        articleUrl,
+        title: article.title || "Article SNG Portal"
+      }));
+
+      if (button) button.textContent = "Ouverture du paiement…";
+      const response = await fetch(PREMIUM_API_URL + "/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ visitorId, articleId })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.checkoutUrl) {
+        throw new Error(data.error || "Le paiement n’a pas pu être préparé.");
+      }
+      window.location.href = data.checkoutUrl;
+    } catch (error) {
+      window.alert(error.message || "Une erreur est survenue.");
+    } finally {
+      if (button && document.contains(button)) {
+        button.disabled = false;
+        button.textContent = originalText;
+      }
+    }
+  }
+
+  async function resumePremiumReturn() {
+    const params = new URLSearchParams(window.location.search);
+    const premiumState = params.get("premium");
+    if (!premiumState) return;
+
+    if (premiumState === "cancel") {
+      window.alert("Paiement annulé. Aucun montant n’a été débité par cette tentative.");
+      sessionStorage.removeItem(PREMIUM_PENDING_KEY);
+      history.replaceState({}, "", window.location.pathname);
+      return;
+    }
+
+    if (premiumState !== "success") return;
+    let pending;
+    try {
+      pending = JSON.parse(sessionStorage.getItem(PREMIUM_PENDING_KEY) || "null");
+    } catch {}
+    if (!pending?.visitorId || !pending?.articleId) {
+      window.alert("Paiement revenu sur SNG Portal, mais l’article en attente n’a pas été retrouvé. Contacte SNG Portal si tu as bien été débité.");
+      history.replaceState({}, "", window.location.pathname);
+      return;
+    }
+
+    const status = document.getElementById("news-status");
+    if (status) status.textContent = "Paiement reçu : confirmation de l’accès Premium…";
+
+    for (let attempt = 0; attempt < 12; attempt++) {
+      try {
+        if (await checkPremiumAccess(pending.visitorId, pending.articleId)) {
+          const index = currentArticles.findIndex(article => getArticleUrl(article) === pending.articleUrl);
+          sessionStorage.removeItem(PREMIUM_PENDING_KEY);
+          history.replaceState({}, "", window.location.pathname);
+          if (index >= 0) {
+            openArticleModal(index);
+          } else if (status) {
+            status.textContent = "Article payé et débloqué. Recharge les actualités pour le retrouver.";
+          }
+          return;
+        }
+      } catch (error) {
+        console.warn("Vérification Premium :", error);
+      }
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    if (status) status.textContent = "Le paiement est en cours de confirmation. Actualise la page dans quelques secondes.";
+    window.alert("Stripe est revenu sur SNG Portal, mais la confirmation du serveur prend plus de temps. N’effectue pas un deuxième paiement. Actualise la page dans quelques secondes.");
+    history.replaceState({}, "", window.location.pathname);
   }
 
   document.getElementById("news-container")?.addEventListener("click", (event) => {
@@ -957,7 +1091,7 @@
     if (readButton) {
       event.preventDefault();
       event.stopPropagation();
-      openArticleModal(Number(readButton.dataset.articleIndex));
+      startPremiumCheckout(Number(readButton.dataset.articleIndex), readButton);
     }
   });
 
@@ -978,7 +1112,7 @@
     });
   });
 
-  loadNews();
+  loadNews().then(() => resumePremiumReturn());
   startAutoRefresh();
   </script>
 
