@@ -452,6 +452,22 @@
     .read-more { border-color:rgba(212,175,55,.35); }
     .news-tab:hover, .news-tab.active { background:linear-gradient(135deg,#b68b20,#f5df91); color:#17120a; }
 
+
+    /* Fenêtre de contribution SNG Portal — style intégré au site */
+    #sng-donation-overlay { position:fixed; inset:0; z-index:10050; display:none; align-items:center; justify-content:center; padding:18px; background:rgba(0,0,0,.76); backdrop-filter:blur(7px); }
+    #sng-donation-overlay.active { display:flex; }
+    .sng-donation-box { width:min(620px,100%); background:#080808; color:#f5f5f5; border:1px solid rgba(212,175,55,.28); border-radius:16px; padding:22px 20px 20px; box-shadow:0 24px 80px rgba(0,0,0,.62); font-family:Arial,Helvetica,sans-serif; }
+    .sng-donation-title { margin:0 0 12px; font-size:21px; font-weight:800; color:#fff; }
+    .sng-donation-copy { margin:0 0 18px; font-size:17px; line-height:1.55; color:#ededed; }
+    .sng-donation-question { margin:0 0 18px; color:#dedede; font-size:16px; line-height:1.45; }
+    .sng-donation-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .sng-donation-actions button { min-height:54px; border:0; border-radius:11px; font-size:16px; font-weight:800; cursor:pointer; transition:filter .18s,transform .18s; }
+    .sng-donation-actions button:hover { filter:brightness(1.07); transform:translateY(-1px); }
+    #sng-donation-accept { background:#f6c39f; color:#3a2519; }
+    #sng-donation-cancel { background:#75400a; color:#fff; }
+    #sng-donation-overlay button:focus-visible { outline:3px solid #f5df91; outline-offset:3px; }
+    @media(max-width:480px) { .sng-donation-box { padding:19px 15px 15px; } .sng-donation-title { font-size:19px; } .sng-donation-copy { font-size:16px; } .sng-donation-actions { grid-template-columns:1fr; } }
+
   </style>
 </head>
 <body>
@@ -566,6 +582,19 @@
         </main>
       </div>
     </div>
+
+  <div id="sng-donation-overlay" aria-hidden="true">
+    <section class="sng-donation-box" role="dialog" aria-modal="true" aria-labelledby="sng-donation-title" aria-describedby="sng-donation-copy">
+      <h2 class="sng-donation-title" id="sng-donation-title">🐾 SNG Portal Solidaire</h2>
+      <p class="sng-donation-copy" id="sng-donation-copy">Pour lire cet article, vous pouvez contribuer à hauteur de <strong>0,60 €</strong> afin d’aider les animaux malades et de soutenir leur alimentation.</p>
+      <p class="sng-donation-question">Continuer vers le paiement sécurisé Stripe ?</p>
+      <div class="sng-donation-actions">
+        <button type="button" id="sng-donation-accept">OK — Continuer</button>
+        <button type="button" id="sng-donation-cancel">Annuler</button>
+      </div>
+    </section>
+  </div>
+
   <script>
     window.SNG_NEWS_PROXY_URL = "https://luisguzmanune75-jpg-github-io.vercel.app";
   </script>
@@ -980,6 +1009,42 @@
     return data.unlocked === true;
   }
 
+
+  function showDonationModal() {
+    return new Promise((resolve) => {
+      const overlay = document.getElementById("sng-donation-overlay");
+      const accept = document.getElementById("sng-donation-accept");
+      const cancel = document.getElementById("sng-donation-cancel");
+      if (!overlay || !accept || !cancel) {
+        resolve(window.confirm("Pour lire cet article, vous pouvez contribuer à hauteur de 0,60 € afin d’aider les animaux malades et de soutenir leur alimentation. Continuer vers le paiement sécurisé Stripe ?"));
+        return;
+      }
+      let settled = false;
+      const finish = (value) => {
+        if (settled) return;
+        settled = true;
+        overlay.classList.remove("active");
+        overlay.setAttribute("aria-hidden", "true");
+        accept.removeEventListener("click", onAccept);
+        cancel.removeEventListener("click", onCancel);
+        overlay.removeEventListener("click", onBackdrop);
+        document.removeEventListener("keydown", onKeydown);
+        resolve(value);
+      };
+      const onAccept = () => finish(true);
+      const onCancel = () => finish(false);
+      const onBackdrop = (event) => { if (event.target === overlay) finish(false); };
+      const onKeydown = (event) => { if (event.key === "Escape") finish(false); };
+      accept.addEventListener("click", onAccept);
+      cancel.addEventListener("click", onCancel);
+      overlay.addEventListener("click", onBackdrop);
+      document.addEventListener("keydown", onKeydown);
+      overlay.classList.add("active");
+      overlay.setAttribute("aria-hidden", "false");
+      accept.focus();
+    });
+  }
+
   async function startPremiumCheckout(index, button) {
     const article = currentArticles[index];
     if (!article) return;
@@ -999,7 +1064,7 @@
         return;
       }
 
-      const accepted = window.confirm("Pour lire cet article, vous pouvez contribuer à hauteur de 0,60 € afin d’aider les animaux malades et de soutenir leur alimentation. Continuer vers le paiement sécurisé Stripe ?");
+      const accepted = await showDonationModal();
       if (!accepted) return;
 
       sessionStorage.setItem(PREMIUM_PENDING_KEY, JSON.stringify({
