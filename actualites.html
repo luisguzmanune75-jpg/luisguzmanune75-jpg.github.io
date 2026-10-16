@@ -999,7 +999,7 @@
         return;
       }
 
-      const accepted = window.confirm("Cet article Premium coûte 0,60 €. Continuer vers le paiement sécurisé Stripe ?");
+      const accepted = window.confirm("Pour lire cet article, vous pouvez contribuer à hauteur de 0,60 € afin d’aider les animaux malades et de soutenir leur alimentation. Continuer vers le paiement sécurisé Stripe ?");
       if (!accepted) return;
 
       sessionStorage.setItem(PREMIUM_PENDING_KEY, JSON.stringify({
