@@ -482,7 +482,220 @@
       .search-box button { width: 100%; }
       h1 { font-size: 42px; }
     }
-  </style>
+  
+
+/* SNG PORTAL — Loterie Monde : finition professionnelle noir et or */
+:root {
+  --bg:#080808;
+  --panel:rgba(14,14,14,.96);
+  --line:rgba(201,169,83,.22);
+  --text:#f5f2eb;
+  --muted:#bcb8ae;
+  --accent:#c7a34a;
+  --accent2:#e1c777;
+  --shadow:0 16px 38px rgba(0,0,0,.28);
+  --max:1240px;
+}
+html,body {
+  background:#080808 !important;
+  color:var(--text);
+}
+body::after {
+  opacity:.14;
+  filter:grayscale(1);
+  animation:none !important;
+}
+body::before {
+  background:linear-gradient(180deg,rgba(8,8,8,.86),rgba(8,8,8,.96)) !important;
+}
+.topbar {
+  background:rgba(8,8,8,.94) !important;
+  border-bottom:1px solid rgba(201,169,83,.25) !important;
+  backdrop-filter:blur(16px);
+}
+.topbar-inner { padding-top:13px; padding-bottom:13px; }
+.logo {
+  background:linear-gradient(145deg,#d9bd68,#a9842d) !important;
+  border:1px solid rgba(255,231,164,.65) !important;
+  color:#17130a;
+  box-shadow:0 3px 14px rgba(201,169,83,.12);
+}
+.brand-text small { color:#c9b987 !important; }
+.brand-text span {
+  color:#f5f0e4;
+  font-family:Georgia,"Times New Roman",serif;
+}
+.menu { gap:clamp(10px,1.4vw,18px); }
+.menu a {
+  color:#c9c6be !important;
+  font-size:14px;
+  text-shadow:none !important;
+  transition:color .18s ease;
+}
+.menu a:hover,.menu a.active { color:#e0c16c !important; }
+.page { padding-top:28px; }
+.hero {
+  position:relative;
+  overflow:hidden;
+  padding:clamp(24px,4vw,44px);
+  border:1px solid rgba(201,169,83,.28) !important;
+  border-radius:22px !important;
+  background:
+    radial-gradient(ellipse at 100% 0%,rgba(201,169,83,.08),transparent 48%),
+    linear-gradient(145deg,rgba(20,20,20,.98),rgba(9,9,9,.98)) !important;
+  box-shadow:var(--shadow) !important;
+  backdrop-filter:none !important;
+  animation:none !important;
+}
+.eyebrow {
+  padding:7px 12px;
+  border:1px solid rgba(201,169,83,.32);
+  border-radius:5px !important;
+  background:rgba(201,169,83,.09) !important;
+  color:#dfc574 !important;
+  letter-spacing:.14em;
+}
+h1 {
+  max-width:900px;
+  margin-bottom:16px;
+  color:#f8f5ee !important;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(2.3rem,5vw,4.2rem) !important;
+  line-height:1.02 !important;
+  letter-spacing:-.035em !important;
+  text-shadow:none !important;
+  text-wrap:balance;
+}
+.hero p {
+  max-width:760px;
+  color:#c1bdb4 !important;
+  font-size:clamp(1rem,1.6vw,1.12rem) !important;
+  line-height:1.7 !important;
+  text-shadow:none !important;
+}
+.search-box {
+  gap:10px;
+  margin-top:26px;
+  padding:8px;
+  border:1px solid rgba(201,169,83,.24) !important;
+  border-radius:13px !important;
+  background:#101010 !important;
+}
+.search-box:focus-within {
+  border-color:rgba(201,169,83,.58) !important;
+  box-shadow:0 0 0 3px rgba(201,169,83,.07);
+}
+.search-box input { min-width:0; color:#f5f2eb; }
+.search-box input::placeholder { color:#88867f !important; }
+.search-box button {
+  border:1px solid rgba(244,221,151,.35) !important;
+  border-radius:9px !important;
+  background:linear-gradient(135deg,#e1c777,#bd963b) !important;
+  color:#17130a !important;
+  box-shadow:none !important;
+  transition:filter .18s ease,transform .18s ease;
+}
+.search-box button:hover { filter:brightness(1.06); transform:translateY(-1px); }
+.quick-list { gap:8px; }
+.quick-chip {
+  padding:9px 13px;
+  border:1px solid rgba(255,255,255,.12) !important;
+  border-radius:8px !important;
+  background:#151515 !important;
+  color:#d8d4ca !important;
+  font-size:13px;
+  transition:border-color .18s ease,background .18s ease,color .18s ease;
+}
+.quick-chip:hover,.quick-chip:focus-visible {
+  border-color:rgba(201,169,83,.55) !important;
+  background:rgba(201,169,83,.09) !important;
+  color:#f0d889 !important;
+}
+.section-title {
+  align-items:center;
+  margin:28px 0 16px;
+  padding-bottom:13px;
+  border-bottom:1px solid rgba(201,169,83,.2);
+}
+.section-title h2 {
+  color:#f5f0e4 !important;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(1.5rem,2.5vw,2rem) !important;
+  text-shadow:none !important;
+}
+.section-title > span {
+  color:#bdb8ac !important;
+  font-size:13px;
+  text-shadow:none !important;
+}
+.live-badge {
+  background:rgba(201,169,83,.08) !important;
+  border-color:rgba(201,169,83,.36) !important;
+  color:#e0c777 !important;
+}
+.live-dot {
+  background:#c9a953 !important;
+  box-shadow:none !important;
+  animation:none !important;
+}
+.result-card {
+  min-width:0;
+  border:1px solid rgba(201,169,83,.2) !important;
+  border-radius:16px !important;
+  background:linear-gradient(155deg,#131313,#0b0b0b 78%) !important;
+  box-shadow:0 10px 28px rgba(0,0,0,.2) !important;
+  backdrop-filter:none !important;
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+.result-card:hover {
+  transform:translateY(-3px);
+  border-color:rgba(201,169,83,.48) !important;
+  box-shadow:0 16px 34px rgba(0,0,0,.28) !important;
+}
+.place h3 {
+  color:#f4efe4 !important;
+  font-family:Georgia,"Times New Roman",serif;
+  text-shadow:none !important;
+}
+.mini-tag {
+  background:rgba(201,169,83,.09) !important;
+  border-color:rgba(201,169,83,.23) !important;
+  color:#ddc678 !important;
+}
+.lottery-name { color:#bdb8ae !important; }
+.label { color:#cdb66f !important; }
+.ball {
+  box-shadow:inset 0 -4px 8px rgba(0,0,0,.06),0 5px 12px rgba(0,0,0,.16) !important;
+}
+.ball.special,.number-ball.bonus {
+  background:linear-gradient(135deg,#e6ce82,#bd963b) !important;
+  color:#17130a !important;
+}
+.meta-row,.direct-links {
+  border:1px solid rgba(255,255,255,.08) !important;
+  border-radius:10px !important;
+  background:rgba(255,255,255,.035) !important;
+}
+.meta-row span:first-child { color:#bdb8ae !important; }
+.meta-row strong { color:#f0e9d9 !important; }
+.direct-links { color:#c6c1b6 !important; }
+.footer { color:#918d84 !important; }
+@media(max-width:760px) {
+  .page { padding:18px 14px 40px; }
+  .hero { padding:22px 18px; border-radius:16px !important; }
+  h1 { font-size:clamp(2rem,9vw,3rem) !important; line-height:1.05 !important; }
+  .section-title { align-items:flex-start; flex-direction:column; }
+  .section-title > span { line-height:1.7; }
+  .search-box { gap:6px; }
+  .search-box input { font-size:16px; }
+  .quick-chip { padding:8px 10px; font-size:12px; }
+  .result-card { padding:18px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after { animation:none !important; scroll-behavior:auto !important; transition:none !important; }
+}
+
+</style>
 </head>
 <body>
   <header class="topbar">
