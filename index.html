@@ -2870,6 +2870,49 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .news-home .mini-news-card { min-height:0; padding:20px; }
 }
 
+
+
+/* Fond neutre noir : retirer le halo bleu/violet derrière les actualités */
+.news-home,
+.news-home.container,
+main,
+body {
+  background-color:#080808;
+}
+.news-home.container {
+  background:transparent !important;
+}
+body {
+  background-image:none !important;
+}
+.news-home .news-top,
+.news-home .news-header,
+.news-home .news-grid {
+  position:relative;
+}
+.news-home .news-breaking {
+  background:linear-gradient(100deg,#101010,#090909 75%) !important;
+  border-color:rgba(215,174,56,.3) !important;
+}
+.news-home .headline-card {
+  background:#090909 !important;
+  border-color:rgba(215,174,56,.34) !important;
+  box-shadow:0 12px 32px rgba(0,0,0,.35) !important;
+}
+.news-home .mini-news-card {
+  background:linear-gradient(145deg,#111111,#090909 82%) !important;
+  border-color:rgba(215,174,56,.22) !important;
+}
+.news-home .mini-news-card:hover {
+  background:linear-gradient(145deg,#19160f,#0b0b0b 82%) !important;
+  border-color:rgba(215,174,56,.55) !important;
+}
+@media(prefers-reduced-motion:reduce) {
+  .news-home .headline-image img,
+  .news-home .mini-news-card,
+  .news-home .news-btn { transition:none !important; }
+}
+
 </style>
   </head>
   <body data-page="home">
