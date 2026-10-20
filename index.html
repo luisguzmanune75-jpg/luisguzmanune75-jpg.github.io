@@ -3143,6 +3143,151 @@ body {
   box-shadow:none !important;
 }
 
+
+
+/* SNG PORTAL — bloc Technologie / IA : finition éditoriale noir et or */
+.sng-tech-hub {
+  position:relative;
+  isolation:isolate;
+  padding:clamp(24px,3vw,38px);
+  border:1px solid rgba(200,166,75,.28) !important;
+  border-radius:20px !important;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(200,166,75,.075),transparent 46%),
+    linear-gradient(145deg,#101010 0%,#090909 80%) !important;
+  color:#f4f0e6 !important;
+  box-shadow:0 18px 44px rgba(0,0,0,.22) !important;
+}
+.sng-tech-hub .tech-header { margin-bottom:30px; }
+.sng-tech-hub .tech-header h2 {
+  color:#f7f2e8 !important;
+  font-family:Georgia,"Times New Roman",serif !important;
+  font-size:clamp(1.8rem,3vw,2.45rem) !important;
+  font-weight:600 !important;
+  letter-spacing:-.025em;
+}
+.sng-tech-hub .tech-header h2::first-letter { color:#d1ad58; }
+.sng-tech-hub .tech-header p {
+  color:#bcb8af !important;
+  max-width:780px;
+  line-height:1.75;
+}
+.sng-tech-hub .tech-grid {
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  align-items:stretch;
+}
+.sng-tech-hub .tech-panel {
+  min-width:0;
+  padding:22px;
+  border:1px solid rgba(200,166,75,.2) !important;
+  border-radius:15px !important;
+  background:linear-gradient(155deg,#151515,#0d0d0d 78%) !important;
+  backdrop-filter:none;
+  box-shadow:0 8px 22px rgba(0,0,0,.14);
+}
+.sng-tech-hub .panel-title {
+  align-items:flex-start;
+  gap:12px;
+  margin-bottom:18px;
+}
+.sng-tech-hub .panel-title span {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 42px;
+  width:42px;
+  height:42px;
+  border:1px solid rgba(200,166,75,.28);
+  border-radius:11px;
+  background:rgba(200,166,75,.09);
+  font-size:21px;
+}
+.sng-tech-hub .panel-title h3 {
+  padding-top:7px;
+  color:#f3eee3;
+  font-size:clamp(1.05rem,1.35vw,1.25rem);
+  line-height:1.3;
+  font-weight:700;
+}
+.sng-tech-hub .phone-list,
+.sng-tech-hub .ai-list { gap:11px; }
+.sng-tech-hub .tech-item {
+  padding:16px;
+  border:1px solid rgba(255,255,255,.085) !important;
+  border-radius:12px !important;
+  background:rgba(255,255,255,.035) !important;
+  color:#f4f0e7 !important;
+  transition:transform .2s ease,border-color .2s ease,background .2s ease;
+}
+.sng-tech-hub .tech-item:hover {
+  transform:translateY(-2px);
+  border-color:rgba(200,166,75,.5) !important;
+  background:rgba(200,166,75,.045) !important;
+  box-shadow:0 8px 20px rgba(0,0,0,.17) !important;
+}
+.sng-tech-hub .item-top strong { color:#f4f0e7; }
+.sng-tech-hub .tech-item p {
+  color:#bcb9b1 !important;
+  line-height:1.6;
+}
+.sng-tech-hub .meta { gap:7px; }
+.sng-tech-hub .meta span {
+  padding:6px 10px;
+  border-radius:7px;
+  background:rgba(200,166,75,.08) !important;
+  border:1px solid rgba(200,166,75,.22) !important;
+  color:#e0cc91 !important;
+}
+.sng-tech-hub .tag {
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.06) !important;
+  color:#ddd8cb !important;
+}
+.sng-tech-hub .tag.android,
+.sng-tech-hub .tag.google,
+.sng-tech-hub .tag.xiaomi,
+.sng-tech-hub .tag.oneplus,
+.sng-tech-hub .tag.ai {
+  background:rgba(200,166,75,.09) !important;
+  border-color:rgba(200,166,75,.22);
+  color:#e0cc91 !important;
+}
+.sng-tech-hub .gadget-board { gap:10px; }
+.sng-tech-hub .gadget-card {
+  padding:15px;
+  border:1px solid rgba(200,166,75,.17) !important;
+  border-radius:12px !important;
+  background:rgba(255,255,255,.028) !important;
+}
+.sng-tech-hub .gadget-card strong {
+  color:#f0e9d8;
+  line-height:1.4;
+}
+.sng-tech-hub .gadget-card p {
+  color:#bcb9b1 !important;
+  line-height:1.6;
+}
+.sng-tech-hub .ticker-wrap {
+  border:1px solid rgba(200,166,75,.2) !important;
+  border-radius:10px !important;
+  background:rgba(200,166,75,.035) !important;
+}
+.sng-tech-hub .ticker span { color:#d9bd70 !important; }
+@media(max-width:1000px) {
+  .sng-tech-hub .tech-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:680px) {
+  .sng-tech-hub { padding:20px 14px; border-radius:15px !important; }
+  .sng-tech-hub .tech-grid { grid-template-columns:1fr; gap:13px; }
+  .sng-tech-hub .tech-panel { padding:17px; }
+  .sng-tech-hub .gadget-board { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(prefers-reduced-motion:reduce) {
+  .sng-tech-hub .ticker { animation:none !important; }
+  .sng-tech-hub .tech-item { transition:none !important; }
+}
+
 </style>
   </head>
   <body data-page="home">
