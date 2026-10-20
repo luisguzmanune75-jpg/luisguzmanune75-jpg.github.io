@@ -2913,6 +2913,151 @@ body {
   .news-home .news-btn { transition:none !important; }
 }
 
+
+
+/* SNG PORTAL — Explorer le portail : grille éditoriale plus respirante */
+.section.container:has(> .section-title) {
+  width:min(100% - 48px,1450px);
+  max-width:1450px;
+  margin:0 auto;
+  padding:54px 0 64px;
+}
+.section.container:has(> .section-title) .section-title {
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin:0 0 25px;
+  color:#f7f2e7;
+  font-family:Georgia,"Times New Roman",serif !important;
+  font-size:clamp(2rem,3vw,2.65rem) !important;
+  font-weight:600;
+  letter-spacing:-.035em;
+  text-align:left;
+}
+.section.container:has(> .section-title) .section-title::after {
+  content:"";
+  flex:1;
+  height:1px;
+  margin-top:9px;
+  background:linear-gradient(90deg,rgba(215,174,56,.5),rgba(215,174,56,0));
+}
+.section.container:has(> .section-title) .cards {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:16px;
+  align-items:stretch;
+}
+.section.container:has(> .section-title) .card {
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  min-width:0;
+  min-height:210px;
+  padding:24px 23px 22px;
+  overflow:hidden;
+  text-align:left;
+  border:1px solid rgba(215,174,56,.2) !important;
+  border-radius:15px !important;
+  background:
+    radial-gradient(ellipse at 100% 0%,rgba(215,174,56,.07),transparent 58%),
+    linear-gradient(145deg,#131313,#090909 78%) !important;
+  box-shadow:0 8px 24px rgba(0,0,0,.16) !important;
+  text-decoration:none;
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease,background .22s ease;
+}
+.section.container:has(> .section-title) .card::after {
+  content:"↗";
+  position:absolute;
+  top:18px;
+  right:18px;
+  color:rgba(224,184,72,.0);
+  font-size:1.05rem;
+  transform:translate(-3px,3px);
+  transition:color .2s ease,transform .2s ease;
+}
+.section.container:has(> .section-title) .card:hover {
+  transform:translateY(-5px);
+  border-color:rgba(226,184,66,.65) !important;
+  background:
+    radial-gradient(ellipse at 100% 0%,rgba(215,174,56,.13),transparent 58%),
+    linear-gradient(145deg,#19170f,#0b0b0b 78%) !important;
+  box-shadow:0 16px 34px rgba(0,0,0,.28),0 0 0 1px rgba(215,174,56,.06) !important;
+}
+.section.container:has(> .section-title) .card:hover::after {
+  color:#e7bf4c;
+  transform:translate(0,0);
+}
+.section.container:has(> .section-title) .card-icon {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:54px;
+  height:54px;
+  min-height:54px;
+  margin:0 0 19px;
+  border:1px solid rgba(215,174,56,.28);
+  border-radius:13px !important;
+  background:linear-gradient(145deg,rgba(215,174,56,.16),rgba(215,174,56,.045)) !important;
+  color:#f2ca5c;
+  font-size:1.65rem;
+  box-shadow:inset 0 1px rgba(255,255,255,.04);
+}
+.section.container:has(> .section-title) .card h3 {
+  margin:0 0 9px;
+  color:#f8f3e8;
+  font-family:Georgia,"Times New Roman",serif !important;
+  font-size:1.25rem;
+  font-weight:600;
+  line-height:1.2;
+  letter-spacing:-.015em;
+}
+.section.container:has(> .section-title) .card p {
+  margin:0;
+  color:#aaa9a4;
+  font-size:.91rem;
+  line-height:1.65;
+}
+@media(max-width:1100px) {
+  .section.container:has(> .section-title) .cards {
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:14px;
+  }
+  .section.container:has(> .section-title) .card { min-height:200px; padding:21px; }
+}
+@media(max-width:720px) {
+  .section.container:has(> .section-title) {
+    width:calc(100% - 28px);
+    padding:38px 0 44px;
+  }
+  .section.container:has(> .section-title) .cards {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:11px;
+  }
+  .section.container:has(> .section-title) .card {
+    min-height:190px;
+    padding:17px;
+    border-radius:12px !important;
+  }
+  .section.container:has(> .section-title) .card-icon {
+    width:46px;
+    height:46px;
+    min-height:46px;
+    margin-bottom:15px;
+    font-size:1.4rem;
+  }
+  .section.container:has(> .section-title) .card h3 { font-size:1.08rem; }
+  .section.container:has(> .section-title) .card p { font-size:.84rem; line-height:1.55; }
+}
+@media(max-width:380px) {
+  .section.container:has(> .section-title) .cards { grid-template-columns:1fr; }
+  .section.container:has(> .section-title) .card { min-height:0; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .section.container:has(> .section-title) .card,
+  .section.container:has(> .section-title) .card::after { transition:none !important; }
+}
+
 </style>
   </head>
   <body data-page="home">
