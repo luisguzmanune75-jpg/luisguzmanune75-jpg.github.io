@@ -2415,6 +2415,214 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .cards { grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
 
+
+
+/* SNG PORTAL — accueil centré, élégant et moderne */
+.hero.container {
+  position:relative;
+  isolation:isolate;
+  width:100%;
+  max-width:none;
+  margin:0;
+  padding:clamp(44px,5.5vw,78px) max(24px, calc((100% - 1250px)/2)) 34px;
+  text-align:center;
+  overflow:hidden;
+  border-bottom:1px solid rgba(218,174,55,.24);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(196,145,39,.18), transparent 42%),
+    radial-gradient(ellipse at 50% 60%, rgba(34,65,104,.22), transparent 60%),
+    linear-gradient(180deg,#0a101b 0%,#080b12 78%,#090a0d 100%);
+}
+.hero.container::before {
+  content:"";
+  position:absolute;
+  z-index:-1;
+  width:min(1050px,95vw);
+  height:min(1050px,95vw);
+  left:50%;
+  top:-54%;
+  transform:translateX(-50%);
+  border-radius:50%;
+  border:1px solid rgba(214,169,54,.2);
+  box-shadow:
+    0 0 0 28px rgba(214,169,54,.018),
+    0 0 0 70px rgba(214,169,54,.018),
+    inset 0 0 85px rgba(214,169,54,.07),
+    0 0 100px rgba(214,169,54,.08);
+  pointer-events:none;
+}
+.hero.container::after {
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:0;
+  opacity:.24;
+  background-image:radial-gradient(rgba(222,179,66,.7) .7px, transparent .9px);
+  background-size:23px 23px;
+  mask-image:linear-gradient(to bottom, transparent 0%, black 22%, transparent 86%);
+  pointer-events:none;
+}
+.hero .hero-badge {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 22px;
+  padding:11px 20px;
+  border:1px solid rgba(220,176,57,.58);
+  border-radius:999px;
+  background:rgba(8,11,17,.72);
+  color:#f2c955;
+  font-size:.78rem;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  box-shadow:0 0 28px rgba(220,176,57,.08);
+}
+.hero h1 {
+  width:100%;
+  max-width:1100px;
+  margin:0 auto 18px !important;
+  text-align:center;
+  font-family:Georgia,"Times New Roman",serif !important;
+  font-size:clamp(3.8rem,8.4vw,7rem) !important;
+  font-weight:700 !important;
+  line-height:.98 !important;
+  letter-spacing:-.055em !important;
+  text-shadow:0 5px 34px rgba(0,0,0,.65),0 0 35px rgba(225,174,48,.08);
+}
+.hero h1 span:first-child {
+  color:#e5b83f !important;
+  background:linear-gradient(135deg,#fff0a7 0%,#e4b534 45%,#b88116 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.hero h1 span:nth-child(2) {
+  color:#fffaf0 !important;
+  -webkit-text-fill-color:#fffaf0;
+}
+.hero > p {
+  max-width:900px;
+  margin:0 auto 26px !important;
+  color:#d0d4df !important;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(1.02rem,1.5vw,1.28rem) !important;
+  line-height:1.75 !important;
+  text-align:center;
+}
+.hero .top-links {
+  max-width:1050px;
+  margin:0 auto 24px !important;
+  display:flex;
+  justify-content:center !important;
+  align-items:center;
+  gap:10px !important;
+}
+.hero .top-links a,
+.hero .top-links .top-link-button {
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  min-height:44px;
+  padding:10px 17px;
+  border:1px solid rgba(255,255,255,.1) !important;
+  border-radius:999px !important;
+  background:rgba(7,12,20,.72) !important;
+  color:#f1eee7 !important;
+  font-size:.91rem;
+  font-weight:700;
+  text-decoration:none;
+  transition:transform .2s ease,border-color .2s ease,background .2s ease;
+}
+.hero .top-links a:hover,
+.hero .top-links .top-link-button:hover {
+  transform:translateY(-2px);
+  border-color:rgba(225,181,62,.75) !important;
+  background:rgba(213,166,43,.12) !important;
+  color:#ffdc77 !important;
+  box-shadow:0 5px 22px rgba(217,170,48,.1);
+}
+.hero .search-box {
+  width:min(860px,100%);
+  margin:0 auto;
+  padding:5px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid #cfa63b;
+  border-radius:999px;
+  background:rgba(4,8,14,.9);
+  box-shadow:0 0 0 4px rgba(215,174,56,.045),0 12px 34px rgba(0,0,0,.3);
+}
+.hero .search-box input {
+  min-width:0;
+  height:54px;
+  flex:1;
+  padding:0 20px;
+  border:0 !important;
+  outline:none;
+  background:transparent !important;
+  color:#fff !important;
+  box-shadow:none !important;
+}
+.hero .search-box input::placeholder { color:#858b98; }
+.hero .search-box button {
+  flex:0 0 auto;
+  min-width:150px;
+  height:48px;
+  border:0;
+  border-radius:999px;
+  background:linear-gradient(135deg,#fff0a7,#e3b53c 70%,#c58c1b) !important;
+  color:#171107 !important;
+  font-weight:900;
+  box-shadow:0 3px 16px rgba(224,176,48,.22) !important;
+}
+#home-search-guidance {
+  max-width:860px;
+  margin:18px auto 0;
+  text-align:left;
+}
+.news-home {
+  background:linear-gradient(180deg,#090b12 0%,#0a0d15 100%);
+}
+.news-breaking {
+  max-width:1450px;
+  margin:0 auto 26px;
+  border:1px solid rgba(215,174,56,.35) !important;
+  border-radius:16px !important;
+  background:linear-gradient(100deg,rgba(13,18,29,.98),rgba(16,13,20,.98)) !important;
+  box-shadow:0 10px 30px rgba(0,0,0,.18) !important;
+}
+.news-breaking .breaking-badge {
+  border-radius:999px !important;
+  padding:10px 16px;
+  box-shadow:0 0 18px rgba(235,45,65,.18);
+}
+@media(max-width:800px) {
+  .hero.container {
+    padding:42px 18px 28px;
+  }
+  .hero h1 {
+    font-size:clamp(3rem,12vw,5rem) !important;
+  }
+  .hero .top-links { gap:8px !important; }
+  .hero .top-links a,
+  .hero .top-links .top-link-button {
+    min-height:40px;
+    padding:9px 13px;
+    font-size:.84rem;
+  }
+}
+@media(max-width:520px) {
+  .hero.container { padding:34px 14px 24px; }
+  .hero .hero-badge { font-size:.66rem; letter-spacing:.07em; padding:9px 12px; }
+  .hero h1 { font-size:clamp(2.65rem,13vw,4rem) !important; }
+  .hero .search-box { border-radius:20px; flex-wrap:wrap; padding:7px; }
+  .hero .search-box input { flex-basis:100%; height:48px; }
+  .hero .search-box button { width:100%; min-width:0; }
+  .news-breaking { margin-left:12px; margin-right:12px; }
+}
+
 </style>
   </head>
   <body data-page="home">
