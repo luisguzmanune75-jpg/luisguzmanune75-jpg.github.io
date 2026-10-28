@@ -453,21 +453,6 @@
     .news-tab:hover, .news-tab.active { background:linear-gradient(135deg,#b68b20,#f5df91); color:#17120a; }
 
 
-    /* Fenêtre de contribution SNG Portal — style intégré au site */
-    #sng-donation-overlay { position:fixed; inset:0; z-index:10050; display:none; align-items:center; justify-content:center; padding:18px; background:rgba(0,0,0,.76); backdrop-filter:blur(7px); }
-    #sng-donation-overlay.active { display:flex; }
-    .sng-donation-box { width:min(620px,100%); background:#080808; color:#f5f5f5; border:1px solid rgba(212,175,55,.28); border-radius:16px; padding:22px 20px 20px; box-shadow:0 24px 80px rgba(0,0,0,.62); font-family:Arial,Helvetica,sans-serif; }
-    .sng-donation-title { margin:0 0 12px; font-size:21px; font-weight:800; color:#fff; }
-    .sng-donation-image { display:block; width:100%; height:155px; object-fit:cover; object-position:center 42%; border-radius:11px; margin:0 0 15px; border:1px solid rgba(212,175,55,.24); background:#171717; }
-    .sng-donation-copy { margin:0 0 18px; font-size:17px; line-height:1.55; color:#ededed; }
-    .sng-donation-question { margin:0 0 18px; color:#dedede; font-size:16px; line-height:1.45; }
-    .sng-donation-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-    .sng-donation-actions button { min-height:54px; border:0; border-radius:11px; font-size:16px; font-weight:800; cursor:pointer; transition:filter .18s,transform .18s; }
-    .sng-donation-actions button:hover { filter:brightness(1.07); transform:translateY(-1px); }
-    #sng-donation-accept { background:#f6c39f; color:#3a2519; }
-    #sng-donation-cancel { background:#75400a; color:#fff; }
-    #sng-donation-overlay button:focus-visible { outline:3px solid #f5df91; outline-offset:3px; }
-    @media(max-width:480px) { .sng-donation-box { padding:19px 15px 15px; } .sng-donation-title { font-size:19px; } .sng-donation-copy { font-size:16px; } .sng-donation-actions { grid-template-columns:1fr; } }
 
   </style>
 </head>
@@ -583,19 +568,6 @@
         </main>
       </div>
     </div>
-
-  <div id="sng-donation-overlay" aria-hidden="true">
-    <section class="sng-donation-box" role="dialog" aria-modal="true" aria-labelledby="sng-donation-title" aria-describedby="sng-donation-copy">
-      <h2 class="sng-donation-title" id="sng-donation-title">🐾 SNG Portal Solidaire</h2>
-      <img class="sng-donation-image" src="./animaux-hiver.jpg" alt="Une personne nourrit des chats et des pigeons dans la neige en hiver" loading="lazy">
-      <p class="sng-donation-copy" id="sng-donation-copy">Pour lire cet article, vous pouvez contribuer à hauteur de <strong>0,60 €</strong> afin d’aider les animaux malades et de soutenir leur alimentation.</p>
-      <p class="sng-donation-question">Continuer vers le paiement sécurisé Stripe ?</p>
-      <div class="sng-donation-actions">
-        <button type="button" id="sng-donation-accept">OK — Continuer</button>
-        <button type="button" id="sng-donation-cancel">Annuler</button>
-      </div>
-    </section>
-  </div>
 
   <script>
     window.SNG_NEWS_PROXY_URL = "https://luisguzmanune75-jpg-github-io.vercel.app";
@@ -967,7 +939,7 @@
     const sharedUrl = params.get("article");
     if (!sharedUrl || !currentArticles.length) return;
     const index = currentArticles.findIndex(article => getArticleUrl(article) === sharedUrl);
-    if (index >= 0) setTimeout(() => startPremiumCheckout(index), 120);
+    if (index >= 0) setTimeout(() => openArticleModal(index), 120);
   }
 
   function startAutoRefresh() {
@@ -975,176 +947,6 @@
     refreshTimerId = setInterval(() => {
       loadNews(currentCategory);
     }, REFRESH_INTERVAL_MS);
-  }
-
-  const PREMIUM_API_URL = "https://sng-portal-premium-api.familialcanal.workers.dev";
-  const PREMIUM_VISITOR_KEY = "sngPortalPremiumVisitorId";
-  const PREMIUM_PENDING_KEY = "sngPortalPremiumPendingArticle";
-
-  function getPremiumVisitorId() {
-    let visitorId = localStorage.getItem(PREMIUM_VISITOR_KEY);
-    if (!visitorId || !/^[a-zA-Z0-9_-]{1,100}$/.test(visitorId)) {
-      visitorId = "v_" + (crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "") : Math.random().toString(36).slice(2) + Date.now().toString(36));
-      localStorage.setItem(PREMIUM_VISITOR_KEY, visitorId);
-    }
-    return visitorId;
-  }
-
-  async function getPremiumArticleId(article) {
-    const source = getArticleUrl(article) || article.title || "article-sng";
-    let hash = 2166136261;
-    for (let i = 0; i < source.length; i++) {
-      hash ^= source.charCodeAt(i);
-      hash = Math.imul(hash, 16777619);
-    }
-    return "article_" + (hash >>> 0).toString(36);
-  }
-
-  async function checkPremiumAccess(visitorId, articleId) {
-    const response = await fetch(PREMIUM_API_URL + "/api/access", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ visitorId, articleId })
-    });
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(data.error || "Impossible de vérifier l’accès Premium.");
-    return data.unlocked === true;
-  }
-
-
-  function showDonationModal() {
-    return new Promise((resolve) => {
-      const overlay = document.getElementById("sng-donation-overlay");
-      const accept = document.getElementById("sng-donation-accept");
-      const cancel = document.getElementById("sng-donation-cancel");
-      if (!overlay || !accept || !cancel) {
-        resolve(window.confirm("Pour lire cet article, vous pouvez contribuer à hauteur de 0,60 € afin d’aider les animaux malades et de soutenir leur alimentation. Continuer vers le paiement sécurisé Stripe ?"));
-        return;
-      }
-      let settled = false;
-      const finish = (value) => {
-        if (settled) return;
-        settled = true;
-        overlay.classList.remove("active");
-        overlay.setAttribute("aria-hidden", "true");
-        accept.removeEventListener("click", onAccept);
-        cancel.removeEventListener("click", onCancel);
-        overlay.removeEventListener("click", onBackdrop);
-        document.removeEventListener("keydown", onKeydown);
-        resolve(value);
-      };
-      const onAccept = () => finish(true);
-      const onCancel = () => finish(false);
-      const onBackdrop = (event) => { if (event.target === overlay) finish(false); };
-      const onKeydown = (event) => { if (event.key === "Escape") finish(false); };
-      accept.addEventListener("click", onAccept);
-      cancel.addEventListener("click", onCancel);
-      overlay.addEventListener("click", onBackdrop);
-      document.addEventListener("keydown", onKeydown);
-      overlay.classList.add("active");
-      overlay.setAttribute("aria-hidden", "false");
-      accept.focus();
-    });
-  }
-
-  async function startPremiumCheckout(index, button) {
-    const article = currentArticles[index];
-    if (!article) return;
-
-    const originalText = button?.textContent || "Lire plus";
-    if (button) {
-      button.disabled = true;
-      button.textContent = "Vérification…";
-    }
-
-    try {
-      const visitorId = getPremiumVisitorId();
-      const articleId = await getPremiumArticleId(article);
-      const articleUrl = getArticleUrl(article);
-      if (await checkPremiumAccess(visitorId, articleId)) {
-        openArticleModal(index);
-        return;
-      }
-
-      const accepted = await showDonationModal();
-      if (!accepted) return;
-
-      sessionStorage.setItem(PREMIUM_PENDING_KEY, JSON.stringify({
-        visitorId,
-        articleId,
-        articleUrl,
-        title: article.title || "Article SNG Portal"
-      }));
-
-      if (button) button.textContent = "Ouverture du paiement…";
-      const response = await fetch(PREMIUM_API_URL + "/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ visitorId, articleId })
-      });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok || !data.checkoutUrl) {
-        throw new Error(data.error || "Le paiement n’a pas pu être préparé.");
-      }
-      window.location.href = data.checkoutUrl;
-    } catch (error) {
-      window.alert(error.message || "Une erreur est survenue.");
-    } finally {
-      if (button && document.contains(button)) {
-        button.disabled = false;
-        button.textContent = originalText;
-      }
-    }
-  }
-
-  async function resumePremiumReturn() {
-    const params = new URLSearchParams(window.location.search);
-    const premiumState = params.get("premium");
-    if (!premiumState) return;
-
-    if (premiumState === "cancel") {
-      window.alert("Paiement annulé. Aucun montant n’a été débité par cette tentative.");
-      sessionStorage.removeItem(PREMIUM_PENDING_KEY);
-      history.replaceState({}, "", window.location.pathname);
-      return;
-    }
-
-    if (premiumState !== "success") return;
-    let pending;
-    try {
-      pending = JSON.parse(sessionStorage.getItem(PREMIUM_PENDING_KEY) || "null");
-    } catch {}
-    if (!pending?.visitorId || !pending?.articleId) {
-      window.alert("Paiement revenu sur SNG Portal, mais l’article en attente n’a pas été retrouvé. Contacte SNG Portal si tu as bien été débité.");
-      history.replaceState({}, "", window.location.pathname);
-      return;
-    }
-
-    const status = document.getElementById("news-status");
-    if (status) status.textContent = "Paiement reçu : confirmation de l’accès Premium…";
-
-    for (let attempt = 0; attempt < 12; attempt++) {
-      try {
-        if (await checkPremiumAccess(pending.visitorId, pending.articleId)) {
-          const index = currentArticles.findIndex(article => getArticleUrl(article) === pending.articleUrl);
-          sessionStorage.removeItem(PREMIUM_PENDING_KEY);
-          history.replaceState({}, "", window.location.pathname);
-          if (index >= 0) {
-            openArticleModal(index);
-          } else if (status) {
-            status.textContent = "Article payé et débloqué. Recharge les actualités pour le retrouver.";
-          }
-          return;
-        }
-      } catch (error) {
-        console.warn("Vérification Premium :", error);
-      }
-      await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-
-    if (status) status.textContent = "Le paiement est en cours de confirmation. Actualise la page dans quelques secondes.";
-    window.alert("Stripe est revenu sur SNG Portal, mais la confirmation du serveur prend plus de temps. N’effectue pas un deuxième paiement. Actualise la page dans quelques secondes.");
-    history.replaceState({}, "", window.location.pathname);
   }
 
   document.getElementById("news-container")?.addEventListener("click", (event) => {
@@ -1159,7 +961,7 @@
     if (readButton) {
       event.preventDefault();
       event.stopPropagation();
-      startPremiumCheckout(Number(readButton.dataset.articleIndex), readButton);
+      openArticleModal(Number(readButton.dataset.articleIndex));
     }
   });
 
@@ -1180,7 +982,7 @@
     });
   });
 
-  loadNews().then(() => resumePremiumReturn());
+  loadNews();
   startAutoRefresh();
   </script>
 
