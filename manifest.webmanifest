@@ -1,0 +1,35 @@
+{
+  "id": "/",
+  "name": "SNG Portal",
+  "short_name": "SNG Portal",
+  "description": "SNG Portal — Actualités, météo, crypto, marchés, sports et médias.",
+  "lang": "fr-FR",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait-primary",
+  "background_color": "#090a12",
+  "theme_color": "#090a12",
+  "icons": [
+    {
+      "src": "./logo-sng.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./logo-sng.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": [
+    "news",
+    "information"
+  ]
+}
