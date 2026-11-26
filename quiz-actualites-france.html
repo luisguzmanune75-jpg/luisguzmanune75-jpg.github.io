@@ -63,9 +63,9 @@ function showQuestion(){
  document.getElementById("answers").innerHTML=html;
 }
 function showResult(){
- document.getElementById("game").innerHTML='<h2 style="text-align:center">🏆 Votre résultat</h2><div class="score">'+points+'/5</div><p style="text-align:center">'+(points===5?"Excellent ! Un sans-faute !":points>=3?"Bravo ! Belle participation !":"Merci d'avoir joué ! Continuez à apprendre.")+'</p><button class="btn" type="button" onclick="shareScore()">Partager mon résultat</button><button class="btn secondary" type="button" onclick="restartQuiz()">Rejouer</button>';
+ document.getElementById("game").innerHTML='<h2 style="text-align:center">🏆 Votre résultat</h2><div class="score">'+points+'/5</div><p style="text-align:center">'+(points===5?"Excellent ! Un sans-faute !":points>=3?"Bravo ! Belle participation !":"Merci d'avoir joué ! Continuez à apprendre.")+'</p><button class="btn" type="button" onclick="shareFacebook()">Partager le quiz sur Facebook</button><button class="btn secondary" type="button" onclick="shareScore()">Partager mon résultat</button><button class="btn secondary" type="button" onclick="restartQuiz()">Rejouer</button>';
 }
-function shareScore(){
+function shareFacebook(){var link=encodeURIComponent("https://luisguzmanune75-jpg.github.io/quiz-actualites-france.html");window.open("https://www.facebook.com/sharer/sharer.php?u="+link,"_blank","noopener,noreferrer");}\nfunction shareScore(){
  var msg="J'ai obtenu "+points+"/5 au Quiz SNG PORTAL ! "+location.href;
  if(navigator.share){navigator.share({title:"Mon résultat SNG PORTAL",text:msg}).catch(function(){});}
  else if(navigator.clipboard){navigator.clipboard.writeText(msg).then(function(){alert("Résultat et lien copiés ! Partagez-les sur Facebook.")});}
