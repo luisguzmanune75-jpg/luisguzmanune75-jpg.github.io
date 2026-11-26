@@ -2,73 +2,76 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#090a12"><meta name="description" content="Jouez au quiz SNG PORTAL.">
 <title>SNG PORTAL — Quiz Actualités de France</title>
 <style>
-:root{color-scheme:dark;--gold:#d4af37;--muted:#d8d3c7}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;color:#fff;background:radial-gradient(circle at top right,#24345c 0,transparent 38%),linear-gradient(145deg,#090a12,#17172a)}
-header{padding:22px 16px;text-align:center;border-bottom:1px solid #66521c}header .brand{font-size:clamp(1.5rem,6vw,2.4rem);font-weight:900;color:var(--gold);letter-spacing:1px}header p{margin:8px 0 0;color:var(--muted)}
-main{width:min(680px,calc(100% - 28px));margin:28px auto 50px}.hero{text-align:center;margin-bottom:22px}.flag{font-size:2.5rem}.hero h1{font-size:clamp(1.6rem,6vw,2.4rem);margin:8px 0;color:#f5df91}.hero p{color:var(--muted);line-height:1.5}
-.card{background:rgba(23,23,42,.96);border:1px solid rgba(212,175,55,.4);border-radius:22px;padding:22px;box-shadow:0 18px 55px #0007}
-.row{display:flex;justify-content:space-between;gap:12px;align-items:center;color:var(--muted);font-size:.92rem}.bar{height:8px;background:#35354b;border-radius:20px;overflow:hidden;margin:14px 0 24px}.fill{height:100%;width:20%;background:linear-gradient(90deg,var(--gold),#fff0a8)}
-h2{font-size:1.3rem;line-height:1.4;margin:0 0 18px}.answers{display:grid;gap:11px}.answer{width:100%;text-align:left;padding:15px;border:1px solid #66667c;border-radius:13px;background:#222239;color:white;font-size:1rem;cursor:pointer}.answer:disabled{cursor:default;opacity:1}.answer.good{border-color:#41c98a;background:#123b31}.answer.bad{border-color:#ff7373;background:#48252b}
-.feedback{margin-top:16px;padding:13px;border-radius:12px;background:#292943;color:#eee;line-height:1.5}.btn{display:block;width:100%;margin-top:18px;padding:15px;border:0;border-radius:30px;background:linear-gradient(120deg,#d4af37,#f2d879);color:#17120a;font-size:1rem;font-weight:800;cursor:pointer}.btn.secondary{background:#303047;color:white;border:1px solid #68687d}.result{text-align:center}.score{font-size:3rem;color:#f5df91;font-weight:900}.small{font-size:.9rem;color:var(--muted);line-height:1.5;text-align:center;margin-top:18px}footer{text-align:center;color:var(--muted);padding:20px;font-size:.9rem}footer a{color:#f5df91}[hidden]{display:none!important}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Arial,sans-serif;color:white;background:linear-gradient(135deg,#090a12,#1b2340)}header{text-align:center;padding:20px;color:#d4af37;font-size:30px;font-weight:bold}header p{font-size:14px;color:#ddd;margin:5px}main{max-width:760px;margin:25px auto;padding:0 16px}.hero{text-align:center}.hero h1{color:#f5df91;font-size:34px}.card{background:#19192d;border:1px solid #806b2b;border-radius:22px;padding:24px;margin-top:25px}.row{display:flex;justify-content:space-between}.bar{height:9px;background:#414157;border-radius:10px;margin:18px 0 28px;overflow:hidden}.fill{height:100%;width:20%;background:#e4c34e}.answer{display:block;width:100%;padding:16px;margin:12px 0;border:1px solid #68687c;border-radius:14px;background:#25253b;color:white;text-align:left;font-size:18px;cursor:pointer}.answer.good{background:#14543d;border:2px solid #42d49a}.answer.bad{background:#592c32;border:2px solid #ff8585}.answer:disabled{opacity:1}.feedback{margin-top:18px;padding:14px;background:#292943;border-radius:12px;line-height:1.5}.btn{width:100%;padding:16px;margin-top:18px;border:0;border-radius:28px;background:#e5c44e;color:#17120a;font-size:17px;font-weight:bold;cursor:pointer}.btn.secondary{background:#343449;color:white;border:1px solid #777}footer{text-align:center;padding:25px;color:#ddd}footer a{color:#f5df91}.score{font-size:48px;color:#f5df91;font-weight:bold;text-align:center}[hidden]{display:none!important}
 </style>
 </head>
 <body>
-<header><div class="brand">🌐 SNG PORTAL</div><p>L'information autrement !</p></header>
+<header>🌐 SNG PORTAL<p>L'information autrement !</p></header>
 <main>
-<section class="hero"><div class="flag">🇫🇷</div><h1>Quiz Actualités de France</h1><p>Testez vos connaissances avec 5 questions de culture générale et de vie citoyenne en France.</p></section>
-<section class="card" id="game" aria-live="polite">
+<section class="hero"><div style="font-size:30px">🇫🇷</div><h1>Quiz Actualités de France</h1><p>Testez vos connaissances avec 5 questions de culture générale et de vie citoyenne en France.</p></section>
+<section class="card" id="game">
 <div class="row"><span id="progress">QUESTION 1 SUR 5</span><strong id="points">0 point</strong></div>
 <div class="bar"><div class="fill" id="fill"></div></div>
 <h2 id="question">Quelle est la capitale de la France ?</h2>
-<div class="answers" id="answers">
-<button class="answer" type="button" data-choice="0">A. Lyon</button>
-<button class="answer" type="button" data-choice="1">B. Paris</button>
-<button class="answer" type="button" data-choice="2">C. Bordeaux</button>
+<div id="answers">
+<button class="answer" type="button" onclick="answer(0)">A. Lyon</button>
+<button class="answer" type="button" onclick="answer(1)">B. Paris</button>
+<button class="answer" type="button" onclick="answer(2)">C. Bordeaux</button>
 </div>
-<div id="feedback" aria-live="polite"></div><button class="btn" id="next" type="button" hidden>Question suivante</button>
+<div id="feedback" aria-live="polite"></div>
+<button class="btn" id="next" type="button" onclick="nextQuestion()" hidden>Question suivante</button>
 </section>
-<p class="small">Jeu gratuit • 5 questions • 3 réponses possibles • 1 point par bonne réponse</p>
+<p style="text-align:center;margin-top:22px">Jeu gratuit • 5 questions • 3 réponses possibles • 1 point par bonne réponse</p>
 </main>
 <footer>© SNG PORTAL — <a href="https://luisguzmanune75-jpg.github.io/">Visiter SNG PORTAL</a></footer>
 <script>
-(function(){
-"use strict";
-var questions=[
+var quizQuestions=[
 {q:"Quelle est la capitale de la France ?",a:["Lyon","Paris","Bordeaux"],c:1,e:"Paris est la capitale de la France."},
 {q:"Quel numéro permet d'appeler les pompiers en France ?",a:["18","15","17"],c:0,e:"Le 18 permet de joindre les pompiers. Le 112 est aussi le numéro d'urgence européen."},
 {q:"Quelle monnaie est utilisée en France ?",a:["Le dollar","L'euro","Le franc suisse"],c:1,e:"La France utilise l'euro."},
 {q:"Quel est le rôle principal de l'Assemblée nationale ?",a:["Voter les lois","Diriger les mairies","Organiser les Jeux olympiques"],c:0,e:"Les députés votent les lois et contrôlent l'action du gouvernement."},
-{q:"Quelle est la devise de la République française ?",a:["Liberté, Égalité, Fraternité","Travail, Famille, Patrie","Unité et Progrès"],c:0,e:"La devise officielle de la République française est Liberté, Égalité, Fraternité."}
+{q:"Quelle est la devise de la République française ?",a:["Liberté, Égalité, Fraternité","Travail, Famille, Patrie","Unité et Progrès"],c:0,e:"La devise officielle est Liberté, Égalité, Fraternité."}
 ];
-var index=0,score=0,chosen=false;
-function el(id){return document.getElementById(id)}
-function render(){
- chosen=false;var q=questions[index];
- el("progress").textContent="QUESTION "+(index+1)+" SUR "+questions.length;
- el("points").textContent=score+" point"+(score>1?"s":"");
- el("fill").style.width=((index+1)/questions.length*100)+"%";
- el("question").textContent=q.q;el("feedback").textContent="";el("feedback").className="";
- el("next").hidden=true;el("answers").innerHTML="";
- q.a.forEach(function(label,i){var b=document.createElement("button");b.type="button";b.className="answer";b.textContent=String.fromCharCode(65+i)+". "+label;b.addEventListener("click",function(){choose(i)});el("answers").appendChild(b)});
+var current=0,points=0,answered=false;
+function answer(choice){
+ if(answered)return;
+ answered=true;
+ var q=quizQuestions[current],buttons=document.querySelectorAll("#answers button");
+ if(choice===q.c)points++;
+ for(var i=0;i<buttons.length;i++){buttons[i].disabled=true;if(i===q.c)buttons[i].classList.add("good");else if(i===choice)buttons[i].classList.add("bad");}
+ document.getElementById("points").textContent=points+" point"+(points>1?"s":"");
+ var f=document.getElementById("feedback");f.className="feedback";f.textContent=(choice===q.c?"Bonne réponse ! Bravo. ":"Mauvaise réponse. ")+q.e;
+ var n=document.getElementById("next");n.hidden=false;n.textContent=current===quizQuestions.length-1?"Voir mon résultat":"Question suivante";
 }
-function choose(i){
- if(chosen)return;chosen=true;var q=questions[index];if(i===q.c)score++;
- Array.prototype.forEach.call(el("answers").children,function(b,j){b.disabled=true;if(j===q.c)b.classList.add("good");else if(j===i)b.classList.add("bad")});
- el("points").textContent=score+" point"+(score>1?"s":"");
- el("feedback").className="feedback";el("feedback").textContent=(i===q.c?"Bonne réponse ! ":"Mauvaise réponse. ")+q.e;
- el("next").hidden=false;el("next").textContent=index===questions.length-1?"Voir mon résultat":"Question suivante";
+function nextQuestion(){
+ if(current<quizQuestions.length-1){current++;answered=false;showQuestion();}
+ else showResult();
+}
+function showQuestion(){
+ var q=quizQuestions[current];
+ document.getElementById("progress").textContent="QUESTION "+(current+1)+" SUR 5";
+ document.getElementById("points").textContent=points+" point"+(points>1?"s":"");
+ document.getElementById("fill").style.width=((current+1)*20)+"%";
+ document.getElementById("question").textContent=q.q;
+ document.getElementById("feedback").textContent="";
+ document.getElementById("feedback").className="";
+ document.getElementById("next").hidden=true;
+ var html="";
+ for(var i=0;i<q.a.length;i++){html+='<button class="answer" type="button" onclick="answer('+i+')">'+String.fromCharCode(65+i)+'. '+q.a[i]+'</button>';}
+ document.getElementById("answers").innerHTML=html;
 }
 function showResult(){
- el("game").innerHTML='<div class="result"><div class="flag">🏆</div><h2>Votre résultat</h2><div class="score">'+score+'/5</div><p>'+(score===5?"Excellent ! Un sans-faute !":score>=3?"Bravo ! Belle participation !":"Merci d'avoir joué ! Continuez à apprendre.")+'</p><p>Merci d'avoir participé au quiz SNG PORTAL.</p><button class="btn" id="share" type="button">Partager mon résultat</button><button class="btn secondary" id="again" type="button">Rejouer</button></div>';
- el("share").addEventListener("click",function(){var msg="J'ai obtenu "+score+"/5 au Quiz SNG PORTAL ! "+location.href;if(navigator.share){navigator.share({title:"Mon résultat SNG PORTAL",text:msg}).catch(function(){});}else if(navigator.clipboard){navigator.clipboard.writeText(msg).then(function(){alert("Résultat et lien copiés ! Vous pouvez les partager sur Facebook.")});}else{window.prompt("Copiez ce texte :",msg)}});
- el("again").addEventListener("click",function(){index=0;score=0;el("game").innerHTML='<div class="row"><span id="progress">QUESTION 1 SUR 5</span><strong id="points">0 point</strong></div><div class="bar"><div class="fill" id="fill"></div></div><h2 id="question"></h2><div class="answers" id="answers"></div><div id="feedback"></div><button class="btn" id="next" type="button" hidden>Question suivante</button>';el("next").addEventListener("click",next);render()});
+ document.getElementById("game").innerHTML='<h2 style="text-align:center">🏆 Votre résultat</h2><div class="score">'+points+'/5</div><p style="text-align:center">'+(points===5?"Excellent ! Un sans-faute !":points>=3?"Bravo ! Belle participation !":"Merci d'avoir joué ! Continuez à apprendre.")+'</p><button class="btn" type="button" onclick="shareScore()">Partager mon résultat</button><button class="btn secondary" type="button" onclick="restartQuiz()">Rejouer</button>';
 }
-function next(){if(index<questions.length-1){index++;render()}else{showResult()}}
-el("next").addEventListener("click",next);
-render();
-})();
+function shareScore(){
+ var msg="J'ai obtenu "+points+"/5 au Quiz SNG PORTAL ! "+location.href;
+ if(navigator.share){navigator.share({title:"Mon résultat SNG PORTAL",text:msg}).catch(function(){});}
+ else if(navigator.clipboard){navigator.clipboard.writeText(msg).then(function(){alert("Résultat et lien copiés ! Partagez-les sur Facebook.")});}
+ else{window.prompt("Copiez ce texte :",msg);}
+}
+function restartQuiz(){current=0;points=0;answered=false;document.getElementById("game").innerHTML='<div class="row"><span id="progress">QUESTION 1 SUR 5</span><strong id="points">0 point</strong></div><div class="bar"><div class="fill" id="fill"></div></div><h2 id="question"></h2><div id="answers"></div><div id="feedback"></div><button class="btn" id="next" type="button" onclick="nextQuestion()" hidden>Question suivante</button>';showQuestion();}
 </script>
-</body></html>
+</body>
+</html>
