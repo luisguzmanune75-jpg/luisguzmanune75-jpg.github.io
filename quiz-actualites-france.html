@@ -66,10 +66,10 @@ function showResult(){
  document.getElementById("game").innerHTML='<h2 style="text-align:center">🏆 Votre résultat</h2><div class="score">'+points+'/5</div><p style="text-align:center">'+(points===5?"Excellent ! Un sans-faute !":points>=3?"Bravo ! Belle participation !":"Merci d'avoir joué ! Continuez à apprendre.")+'</p><button class="btn" type="button" onclick="shareFacebook()">Partager le quiz sur Facebook</button><button class="btn secondary" type="button" onclick="shareScore()">Partager mon résultat</button><button class="btn secondary" type="button" onclick="restartQuiz()">Rejouer</button>';
 }
 function shareFacebook(){var link=encodeURIComponent("https://luisguzmanune75-jpg.github.io/quiz-actualites-france.html");window.open("https://www.facebook.com/sharer/sharer.php?u="+link,"_blank","noopener,noreferrer");}\nfunction shareScore(){
- var msg="J'ai obtenu "+points+"/5 au Quiz SNG PORTAL ! "+location.href;
- if(navigator.share){navigator.share({title:"Mon résultat SNG PORTAL",text:msg}).catch(function(){});}
- else if(navigator.clipboard){navigator.clipboard.writeText(msg).then(function(){alert("Résultat et lien copiés ! Partagez-les sur Facebook.")});}
- else{window.prompt("Copiez ce texte :",msg);}
+ var link="https://luisguzmanune75-jpg.github.io/quiz-actualites-france.html";
+ var msg="J'ai obtenu "+points+"/5 au Quiz SNG PORTAL !\n\nEt toi, combien de points peux-tu obtenir ? Joue gratuitement ici : "+link;
+ var facebookUrl="https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(link)+"&quote="+encodeURIComponent(msg);
+ window.open(facebookUrl,"_blank","noopener,noreferrer");
 }
 function restartQuiz(){current=0;points=0;answered=false;document.getElementById("game").innerHTML='<div class="row"><span id="progress">QUESTION 1 SUR 5</span><strong id="points">0 point</strong></div><div class="bar"><div class="fill" id="fill"></div></div><h2 id="question"></h2><div id="answers"></div><div id="feedback"></div><button class="btn" id="next" type="button" onclick="nextQuestion()" hidden>Question suivante</button>';showQuestion();}
 </script>
