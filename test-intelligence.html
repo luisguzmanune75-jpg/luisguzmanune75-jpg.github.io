@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Test de logique et de réflexion SNG Portal : 10 questions pour vous amuser et défier vos amis.">
+<meta name="theme-color" content="#090a12">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SNG Test de logique – Défiez votre cerveau">
+<meta property="og:description" content="10 questions de logique, calcul et observation. Quel sera votre score ? Jouez gratuitement sur SNG Portal.">
+<title>Test de logique – SNG Portal</title>
+<style>
+:root{color-scheme:dark;--bg:#090a12;--panel:#171827;--gold:#d4af37;--text:#fff;--muted:#c7c5bd;--line:#454252}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#27213a,#090a12 58%);color:var(--text);font-family:Arial,sans-serif;padding:22px}.wrap{width:min(760px,100%);margin:auto}.brand{text-align:center;color:#f0d477;font-weight:800;letter-spacing:.2em;font-size:.8rem;margin:10px}.panel{background:rgba(23,24,39,.96);border:1px solid #806c34;border-radius:22px;padding:clamp(20px,5vw,38px);box-shadow:0 20px 60px #0008}.intro{text-align:center}.intro h1{font-size:clamp(2rem,7vw,3.2rem);margin:10px 0;color:#f0d477}.intro p{color:var(--muted);line-height:1.6}.badge{display:inline-block;border:1px solid #8e783d;color:#f0d477;border-radius:99px;padding:7px 13px;font-size:.8rem}.stats{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:.9rem;margin:24px 0 9px}.bar{height:8px;background:#373545;border-radius:99px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#b58b24,#f5df91);transition:width .25s}.category{color:#f0d477;font-weight:800;letter-spacing:.13em;font-size:.75rem;margin-top:24px}.question{font-size:clamp(1.25rem,4vw,1.7rem);line-height:1.35;margin:12px 0 22px}.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}.answer{border:1px solid var(--line);background:#202132;color:white;border-radius:13px;padding:16px;text-align:left;font-size:1rem;min-height:58px;cursor:pointer}.answer:hover{border-color:var(--gold)}.answer:disabled{cursor:default;opacity:1}.answer.good{border-color:#35c982;background:#123a2b}.answer.bad{border-color:#e16b6b;background:#401e28}.feedback{min-height:54px;padding:13px 0;color:#ddd;line-height:1.5}.btn{display:block;width:100%;border:0;border-radius:13px;background:linear-gradient(120deg,#d4af37,#f5df91);color:#17120a;font-size:1rem;font-weight:800;padding:15px;cursor:pointer}.btn:disabled{opacity:.45;cursor:not-allowed}.hidden{display:none}.result{text-align:center}.score{font-size:4rem;color:#f0d477;font-weight:900;margin:12px}.muted{color:var(--muted);line-height:1.6}.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}.secondary{background:#292a3b;color:white;border:1px solid #62583c}.foot{text-align:center;color:#999;font-size:.8rem;margin:18px}.home{display:inline-block;color:#f0d477;text-decoration:none;margin:0 0 16px}@media(max-width:520px){body{padding:12px}.answers,.actions{grid-template-columns:1fr}.panel{padding:20px 16px}}
+</style>
+</head>
+<body><main class="wrap">
+<div class="brand">SNG PORTAL · JEUX</div>
+<a class="home" href="./index.html">← Retour à SNG Portal</a>
+<section class="panel intro" id="start">
+<div style="font-size:3rem">🧠</div><span class="badge">DÉFI GRATUIT · 10 QUESTIONS</span>
+<h1>Test de logique</h1>
+<p>Êtes-vous observateur, rapide en calcul et fort en raisonnement ? Répondez à 10 questions et découvrez votre score. Défiez ensuite vos amis !</p>
+<button class="btn" id="begin">COMMENCER LE TEST</button>
+</section>
+<section class="panel hidden" id="game">
+<div class="stats"><span id="counter">Question 1 / 10</span><span id="points">Score : 0</span></div><div class="bar"><div class="fill" id="progress"></div></div>
+<div class="category" id="category">LOGIQUE</div><h2 class="question" id="question"></h2>
+<div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite"></div>
+<button class="btn" id="next" disabled>QUESTION SUIVANTE →</button>
+</section>
+<section class="panel result hidden" id="result" aria-live="polite">
+<div style="font-size:3rem">🏆</div><span class="badge">VOTRE RÉSULTAT SNG</span><h2>Test terminé !</h2><div class="score" id="final">0/10</div><h3 id="level"></h3><p class="muted" id="message"></p>
+<div class="actions"><button class="btn" id="share">PARTAGER MON SCORE</button><button class="btn secondary" id="again">REJOUER</button></div>
+<p class="muted" style="font-size:.8rem;margin-top:18px">Ce quiz est un jeu de divertissement. Il ne constitue pas un test psychométrique et ne mesure pas le quotient intellectuel officiel.</p>
+</section>
+<div class="foot">© SNG PORTAL · Jouez, apprenez et partagez.</div>
+</main>
+<script>
+(()=>{const qs=[
+['LOGIQUE','Quel nombre complète la série : 2 – 4 – 8 – 16 – 32 – ?', ['40','48','64','72'],2,'Chaque nombre est multiplié par 2.'],
+['CALCUL','Vous avez 3 pommes et on vous en donne 4. Combien en avez-vous ?', ['6','7','8','9'],1,'3 + 4 = 7 pommes.'],
+['OBSERVATION','Quel élément est différent ?', ['🐶','🐶','🐱','🐶'],2,'Le chat est différent des trois chiens.'],
+['SÉRIE','Quelle lettre vient ensuite : A – C – E – G – ?', ['H','I','J','K'],1,'On saute une lettre à chaque fois : A, C, E, G, I.'],
+['ORIENTATION','Vous regardez vers le nord et tournez à droite. Vers où regardez-vous ?', ['Ouest','Est','Sud','Nord'],1,'À droite du nord se trouve l’est.'],
+['CALCUL','Combien font la moitié de 50, puis plus 10 ?', ['25','30','35','40'],2,'La moitié de 50 est 25. 25 + 10 = 35.'],
+['LOGIQUE','Tous les chats sont des animaux. Minou est un chat. Minou est-il un animal ?', ['Oui','Non','Parfois','Impossible à savoir'],0,'Si tous les chats sont des animaux, Minou en est un aussi.'],
+['DEVINETTE','Qu’est-ce qui a des aiguilles mais ne coud pas ?', ['Une horloge','Une chemise','Un coussin','Une chaussure'],0,'Une horloge possède des aiguilles.'],
+['CALCUL','Cinq personnes ont chacune deux mains. Combien y a-t-il de mains ?', ['5','7','10','12'],2,'5 × 2 = 10 mains.'],
+['RAISONNEMENT','Qu’est-ce qui pèse le plus : un kilo de fer ou un kilo de coton ?', ['Le fer','Le coton','Le même poids','Cela dépend'],2,'Un kilo reste un kilo, quel que soit le matériau.']
+];let i=0,score=0,locked=false;const el=id=>document.getElementById(id);function show(id){['start','game','result'].forEach(x=>el(x).classList.toggle('hidden',x!==id))}function render(){locked=false;el('counter').textContent='Question '+(i+1)+' / 10';el('points').textContent='Score : '+score;el('progress').style.width=(i/10*100)+'%';el('category').textContent=qs[i][0];el('question').textContent=qs[i][1];el('feedback').textContent='';el('next').disabled=true;el('next').textContent=i===9?'VOIR MON RÉSULTAT 🏆':'QUESTION SUIVANTE →';el('answers').replaceChildren();qs[i][2].forEach((v,j)=>{const b=document.createElement('button');b.className='answer';b.textContent=String.fromCharCode(65+j)+') '+v;b.addEventListener('click',()=>choose(j));el('answers').append(b)});show('game')}function choose(j){if(locked)return;locked=true;const q=qs[i];if(j===q[3])score++;[...el('answers').children].forEach((b,n)=>{b.disabled=true;if(n===q[3])b.classList.add('good');else if(n===j)b.classList.add('bad')});el('feedback').textContent=(j===q[3]?'✅ Bonne réponse ! ':'❌ Pas tout à fait. ')+q[4];el('points').textContent='Score : '+score;el('next').disabled=false}function finish(){show('result');el('progress').style.width='100%';el('final').textContent=score+'/10';el('level').textContent=score>=9?'🌟 Excellent !':score>=7?'🥇 Très bon résultat !':score>=5?'👏 Bien joué !':'💪 Continuez à vous entraîner !';el('message').textContent=score>=9?'Bravo, vous avez presque tout trouvé !':score>=7?'Vous avez de bons réflexes de logique.':score>=5?'Un joli résultat. Retentez le défi pour progresser !':'Chaque question est une occasion d’apprendre. À vous de rejouer !'}el('begin').addEventListener('click',()=>{i=0;score=0;render()});el('next').addEventListener('click',()=>{if(!locked)return;i++;if(i<qs.length)render();else finish()});el('again').addEventListener('click',()=>{i=0;score=0;render()});el('share').addEventListener('click',async()=>{const text='J’ai obtenu '+score+'/10 au Test de logique SNG Portal ! À votre tour de relever le défi : ';const url=location.href;if(navigator.share){try{await navigator.share({title:'Test de logique SNG Portal',text,url})}catch(e){}}else{window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url)+'&quote='+encodeURIComponent(text),'_blank','noopener,noreferrer')}})})();
+</script></body></html>
