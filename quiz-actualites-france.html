@@ -67,19 +67,28 @@ function showResult(){
 }
 function shareScore(){
  var link="https://luisguzmanune75-jpg.github.io/quiz-actualites-france.html";
- var message="J'ai obtenu "+points+"/5 au Quiz SNG PORTAL !\n\nEt toi, combien de points peux-tu obtenir ? Joue gratuitement ici :";
+ var message="J'ai obtenu "+points+"/5 au Quiz SNG PORTAL !\n\nEt toi, combien de points peux-tu obtenir ? Joue gratuitement ici : "+link;
  if(navigator.share){
-  navigator.share({title:"Mon résultat SNG PORTAL",text:message,url:link}).catch(function(err){if(err&&err.name!=="AbortError"){copyShareMessage(message+" "+link);}});
+  navigator.share({title:"Mon résultat SNG PORTAL",text:message,url:link}).catch(function(){showShareFallback(message,link);});
  }else{
-  copyShareMessage(message+" "+link);
+  showShareFallback(message,link);
  }
 }
-function copyShareMessage(message){
- if(navigator.clipboard&&navigator.clipboard.writeText){
-  navigator.clipboard.writeText(message).then(function(){alert("Résultat et lien copiés ! Collez-les dans Facebook pour partager.")}).catch(function(){window.prompt("Copiez ce message pour Facebook :",message);});
- }else{
-  window.prompt("Copiez ce message pour Facebook :",message);
- }
+function showShareFallback(message,link){
+ var old=document.getElementById("shareFallback");if(old)old.remove();
+ var box=document.createElement("div");box.id="shareFallback";box.className="feedback";
+ var title=document.createElement("strong");title.textContent="Partager votre résultat";box.appendChild(title);
+ var p=document.createElement("p");p.textContent=message;box.appendChild(p);
+ var copy=document.createElement("button");copy.className="btn";copy.type="button";copy.textContent="Copier le message et le lien";
+ copy.onclick=function(){
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(message).then(function(){alert("Message copié ! Collez-le dans Facebook.");}).catch(function(){window.prompt("Copiez ce message :",message);});}
+  else{window.prompt("Copiez ce message :",message);}
+ };
+ box.appendChild(copy);
+ var fb=document.createElement("button");fb.className="btn secondary";fb.type="button";fb.textContent="Ouvrir Facebook";
+ fb.onclick=function(){window.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(link)," _blank".trim());};
+ box.appendChild(fb);
+ var game=document.getElementById("game");game.appendChild(box);
 }
 function restartQuiz(){current=0;points=0;answered=false;document.getElementById("game").innerHTML='<div class="row"><span id="progress">QUESTION 1 SUR 5</span><strong id="points">0 point</strong></div><div class="bar"><div class="fill" id="fill"></div></div><h2 id="question"></h2><div id="answers"></div><div id="feedback"></div><button class="btn" id="next" type="button" onclick="nextQuestion()" hidden>Question suivante</button>';showQuestion();}
 </script>
