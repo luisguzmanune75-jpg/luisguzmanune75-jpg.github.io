@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Les 12 signes du zodiaque ❤️ | SNG PORTAL</title>
+<meta name="description" content="Choisissez votre signe astrologique et découvrez vos compatibilités amoureuses. Jeu gratuit SNG PORTAL.">
+<meta property="og:title" content="Les 12 signes du zodiaque ❤️"><meta property="og:description" content="Quel signe est fait pour vous ? Découvrez vos compatibilités !">
+<style>
+:root{--gold:#e7bd62;--bg:#090b12;--card:#151927;--muted:#aeb5c5}*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#24213a 0,#0b0d16 48%,#07080d 100%);color:#fff;font-family:Arial,sans-serif;min-height:100vh}
+header{text-align:center;padding:24px 15px 10px} .brand{color:var(--gold);font-weight:900;letter-spacing:4px;font-size:14px}
+h1{font-size:clamp(28px,5vw,46px);margin:14px 0 8px}h1 span{color:var(--gold)}.intro{color:var(--muted);max-width:650px;margin:0 auto;line-height:1.6}
+main{max-width:1000px;margin:24px auto;padding:0 16px 50px}.panel{background:#111522;border:1px solid #373044;border-radius:22px;padding:22px;box-shadow:0 15px 50px #0007}
+h2{text-align:center;color:var(--gold);margin:4px 0 18px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:12px}
+.sign{background:linear-gradient(145deg,#20263a,#131725);border:1px solid #41445a;color:white;border-radius:15px;padding:15px 8px;cursor:pointer;transition:.2s;font-size:15px}
+.sign:hover,.sign:focus{transform:translateY(-3px);border-color:var(--gold);outline:none;background:#302943}.symbol{display:block;font-size:32px;margin-bottom:7px}.dates{display:block;color:#aeb5c5;font-size:11px;margin-top:5px}
+#result{display:none;margin-top:22px;background:linear-gradient(135deg,#27213b,#151a29);border:1px solid var(--gold);border-radius:18px;padding:22px;text-align:center}
+#result h3{font-size:25px;margin:5px;color:var(--gold)}.matches{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:18px 0}
+.match{background:#0d1220;border:1px solid #5b4a35;border-radius:14px;padding:14px 20px;min-width:130px}.match b{display:block;font-size:25px}.match small{color:var(--muted)}
+button.action{background:var(--gold);color:#17120a;border:0;border-radius:25px;padding:12px 20px;font-weight:bold;cursor:pointer;margin:5px}
+.note{color:#9da5b7;font-size:12px;line-height:1.5;text-align:center;margin:18px auto 0;max-width:700px}
+footer{text-align:center;color:#858b9b;padding:0 15px 25px;font-size:12px}
+</style></head>
+<body>
+<header><div class="brand">SNG PORTAL</div><h1>❤️ LES 12 SIGNES DU <span>ZODIAQUE</span></h1><p class="intro">Quel signe astrologique est fait pour vous ? Sélectionnez votre signe et découvrez deux compatibilités amoureuses selon l’astrologie traditionnelle.</p></header>
+<main><section class="panel"><h2>✨ Choisissez votre signe</h2><div class="grid" id="signs"></div>
+<div id="result" aria-live="polite"><div style="font-size:42px" id="bigSymbol"></div><h3 id="chosen"></h3><p>Vos deux compatibilités astrologiques :</p><div class="matches" id="matches"></div><p id="message"></p><button class="action" onclick="shareResult()">📲 Partager mon résultat</button><button class="action" onclick="resetGame()">↻ Recommencer</button></div>
+</section><p class="note">ℹ️ L’astrologie propose des interprétations traditionnelles : la compatibilité réelle dépend surtout des personnes, du respect et de la communication.</p></main>
+<footer>© SNG PORTAL — Divertissement</footer>
+<script>
+const data=[
+['♈','Bélier','21 mars – 19 avril',['Lion','Sagittaire']],
+['♉','Taureau','20 avril – 20 mai',['Vierge','Capricorne']],
+['♊','Gémeaux','21 mai – 20 juin',['Balance','Verseau']],
+['♋','Cancer','21 juin – 22 juillet',['Scorpion','Poissons']],
+['♌','Lion','23 juillet – 22 août',['Bélier','Sagittaire']],
+['♍','Vierge','23 août – 22 septembre',['Taureau','Capricorne']],
+['♎','Balance','23 septembre – 22 octobre',['Gémeaux','Verseau']],
+['♏','Scorpion','23 octobre – 21 novembre',['Cancer','Poissons']],
+['♐','Sagittaire','22 novembre – 21 décembre',['Bélier','Lion']],
+['♑','Capricorne','22 décembre – 19 janvier',['Taureau','Vierge']],
+['♒','Verseau','20 janvier – 18 février',['Gémeaux','Balance']],
+['♓','Poissons','19 février – 20 mars',['Cancer','Scorpion']]
+];
+const grid=document.getElementById('signs');
+data.forEach((s,i)=>{const b=document.createElement('button');b.className='sign';b.innerHTML='<span class="symbol">'+s[0]+'</span><strong>'+s[1]+'</strong><span class="dates">'+s[2]+'</span>';b.onclick=()=>show(i);grid.appendChild(b)});
+function show(i){const s=data[i];document.getElementById('bigSymbol').textContent=s[0];document.getElementById('chosen').textContent=s[1];document.getElementById('matches').innerHTML=s[3].map(n=>{const m=data.find(x=>x[1]===n);return '<div class="match"><b>'+m[0]+'</b>'+m[1]+'<small>'+m[2]+'</small></div>'}).join('');document.getElementById('message').textContent='Une belle alchimie pourrait naître… prenez le temps de vous découvrir !';document.getElementById('result').style.display='block';document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'});window.selected=s[1]}
+function resetGame(){document.getElementById('result').style.display='none';window.selected=null;window.scrollTo({top:0,behavior:'smooth'})}
+async function shareResult(){const s=window.selected;if(!s)return;const text='Mon signe est '+s+' ! Découvrez vos compatibilités dans le jeu des 12 signes du zodiaque sur SNG PORTAL : '+location.href;try{if(navigator.share)await navigator.share({title:'Mon signe astrologique',text});else{await navigator.clipboard.writeText(text);alert('Résultat copié ! Vous pouvez le coller sur Facebook ou WhatsApp.')}}catch(e){}}
+</script></body></html>
