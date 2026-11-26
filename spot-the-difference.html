@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spot the Difference | SNG PORTAL</title>
+<meta name="description" content="Trouvez les 5 différences avant la fin du temps ! Jeu gratuit SNG PORTAL.">
+<link rel="canonical" href="https://luisguzmanune75-jpg.github.io/spot-the-difference.html">
+<meta property="og:type" content="website"><meta property="og:site_name" content="SNG PORTAL">
+<meta property="og:url" content="https://luisguzmanune75-jpg.github.io/spot-the-difference.html">
+<meta property="og:title" content="Spot the Difference 🔎 | SNG PORTAL">
+<meta property="og:description" content="Deux images, cinq différences, 60 secondes. Défiez vos amis !">
+<meta property="og:image" content="https://luisguzmanune75-jpg.github.io/sng-hero.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root{--gold:#f3c65e;--navy:#0a1020;--panel:#151d31;--muted:#b8c6df}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#1b2947,#080c16 65%);color:#fff;font-family:Arial,sans-serif;text-align:center;padding:24px 14px 40px}
+header{max-width:1050px;margin:auto}header .brand{letter-spacing:5px;color:var(--gold);font-weight:900;font-size:14px}h1{font-size:clamp(28px,5vw,48px);margin:12px 0 8px}h1 span{color:var(--gold)}header p{color:#c6d3ea;margin:0 auto 22px;line-height:1.5}
+.game{max-width:1050px;margin:auto;background:rgba(18,25,43,.96);border:1px solid #39445d;border-radius:22px;padding:20px;box-shadow:0 18px 55px #0008}
+.stats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}.pill{background:#0a1121;border:1px solid #59647c;border-radius:12px;padding:10px 18px;font-weight:800}.pill b{color:var(--gold)}
+.boards{display:grid;grid-template-columns:1fr 1fr;gap:14px}.board{background:#0b1423;border:2px solid #46526b;border-radius:15px;overflow:hidden;position:relative}.board h2{font-size:14px;margin:0;padding:10px;color:var(--gold);background:#111b2e;letter-spacing:1px}.scene{display:block;width:100%;height:auto;cursor:crosshair;touch-action:manipulation}.scene .hit{fill:transparent;stroke:transparent;stroke-width:3}.scene .hit.found{fill:#32d58333;stroke:#32d583}
+.controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:18px 0 8px}button{border:0;border-radius:30px;padding:12px 22px;font-weight:800;cursor:pointer;background:var(--gold);color:#17120a}button.secondary{background:#27344d;color:#fff;border:1px solid #65718a}button:disabled{opacity:.45;cursor:not-allowed}
+#message{min-height:28px;color:#f5d77f;font-weight:700;margin:10px 0}.progress{height:10px;background:#303b53;border-radius:20px;overflow:hidden;max-width:500px;margin:10px auto}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#d69d36,#ffe28b);transition:width .2s}
+.note{color:var(--muted);font-size:12px;margin-top:16px;line-height:1.5}
+@media(max-width:650px){.game{padding:12px}.boards{grid-template-columns:1fr}.board h2{padding:8px}.pill{padding:8px 12px}}
+</style></head>
+<body>
+<header><div class="brand">SNG PORTAL</div><h1>🔎 SPOT THE <span>DIFFERENCE</span></h1><p>Trouvez les <b>5 différences</b> entre les deux images avant la fin du temps !<br>Observez bien et cliquez sur les détails qui changent.</p></header>
+<main class="game">
+<div class="stats"><div class="pill">⏱ Temps : <b id="time">60</b> s</div><div class="pill">❤️ Vies : <b id="lives">3</b></div><div class="pill">⭐ Différences : <b id="score">0 / 5</b></div></div>
+<div class="boards">
+<section class="board"><h2>IMAGE A</h2><svg id="left" class="scene" viewBox="0 0 500 300" role="img" aria-label="Première image de la ferme"></svg></section>
+<section class="board"><h2>IMAGE B</h2><svg id="right" class="scene" viewBox="0 0 500 300" role="img" aria-label="Deuxième image de la ferme"></svg></section>
+</div>
+<div class="progress"><span id="bar"></span></div><div id="message" aria-live="polite">À vous de jouer ! Trouvez les 5 différences.</div>
+<div class="controls"><button id="hint">💡 Indice</button><button class="secondary" id="restart">↻ Recommencer</button><button class="secondary" id="share">📘 Partager sur Facebook</button></div>
+<div class="note">Jeu de divertissement SNG PORTAL • Compatible mobile et ordinateur.<br>Astuce : les différences sont réparties dans les deux images. Cliquez à l’endroit où vous voyez un changement.</div>
+</main>
+<script>
+const spots=[{x:92,y:73,r:27,label:"Le soleil"},{x:365,y:95,r:25,label:"Le moulin"},{x:160,y:210,r:25,label:"La botte de foin"},{x:280,y:220,r:25,label:"Le mouton"},{x:430,y:235,r:24,label:"Le seau"}];
+let found=new Set(),lives=3,time=60,clock=null,ended=false,hints=0;
+function svgScene(side){const a=side==="A";return `
+<defs><linearGradient id="sky${side}" x2="0" y2="1"><stop stop-color="#7bd6f5"/><stop offset="1" stop-color="#e7f5c2"/></linearGradient></defs>
+<rect width="500" height="300" fill="url(#sky${side})"/><circle cx="${a?92:105}" cy="73" r="${a?25:17}" fill="${a?'#ffd84d':'#fff2a1'}"/>
+<path d="M0 155 Q90 105 180 150 T360 140 T500 145 V300 H0Z" fill="#7bc45a"/><path d="M0 205 Q120 175 230 215 T500 195 V300 H0Z" fill="#54a846"/>
+<path d="M0 110 L500 110" stroke="#f7e5a5" stroke-width="6"/><path d="M0 125 L500 125" stroke="#a56a36" stroke-width="5"/>
+<g stroke="#7b4a28" stroke-width="5"><path d="M20 110v65 M90 110v65 M160 110v65 M230 110v65 M300 110v65 M370 110v65 M440 110v65 M490 110v65"/></g>
+<path d="M0 280 Q110 215 210 270 T500 260" fill="none" stroke="#d8b36b" stroke-width="34"/>
+<rect x="28" y="105" width="86" height="95" fill="#bd392d" stroke="#713026" stroke-width="5"/><path d="M18 108L70 55l65 53Z" fill="#8f2c26"/><rect x="58" y="145" width="28" height="55" fill="#633b27"/>
+<g transform="translate(365 95)"><rect x="-12" y="0" width="24" height="90" fill="#bd392d" stroke="#6d3027" stroke-width="4"/><path d="M-25 0L0 -24 25 0Z" fill="#8f2c26"/><g fill="#e9d6a4" stroke="#78462a" stroke-width="4"><path d="M0 0L${a?0:0} -57l8 0 0 57Z" transform="rotate(0)"/><path d="M0 0L0 -57l8 0 0 57Z" transform="rotate(90)"/><path d="M0 0L0 -57l8 0 0 57Z" transform="rotate(180)"/><path d="M0 0L0 -57l8 0 0 57Z" transform="rotate(270)"/></g><circle r="8" fill="#f5d66f"/></g>
+<g><rect x="${a?135:142}" y="192" width="62" height="38" rx="7" fill="#d7a34c"/><path d="M135 192l31 -18 31 18Z" fill="#f2c66b"/></g>
+<g transform="translate(278 225)"><ellipse cx="0" cy="0" rx="38" ry="24" fill="#fff"/><circle cx="30" cy="-14" r="15" fill="#fff"/><circle cx="34" cy="-17" r="3" fill="#222"/><path d="M-20 18v18 M12 18v18" stroke="#493b2d" stroke-width="6"/><circle cx="-12" cy="-4" r="7" fill="${a?'#8b6b4b':'#fff'}"/><circle cx="10" cy="5" r="6" fill="#8b6b4b"/></g>
+<g transform="translate(430 240)"><path d="M-18 -20h36l-4 40h-28Z" fill="${a?'#5a9cc4':'#db9a35'}" stroke="#754c2a" stroke-width="4"/><path d="M-12 -20q12 -23 24 0" fill="none" stroke="#754c2a" stroke-width="4"/></g>
+<g transform="translate(215 235)"><circle r="16" fill="#e9b37c"/><path d="M-17 -9q17 -22 34 0Z" fill="#e64b32"/><path d="M-10 15v25 M10 15v25" stroke="#293f75" stroke-width="7"/><path d="M-10 0h20" stroke="#fff" stroke-width="7"/></g>
+<g fill="#fff" opacity=".85"><ellipse cx="205" cy="48" rx="28" ry="10"/><ellipse cx="225" cy="43" rx="19" ry="13"/></g>
+<g class="hit" data-id="0" cx="95" cy="73" r="30"/><g class="hit" data-id="1" cx="365" cy="95" r="30"/><g class="hit" data-id="2" cx="165" cy="205" r="30"/><g class="hit" data-id="3" cx="278" cy="225" r="30"/><g class="hit" data-id="4" cx="430" cy="240" r="30"/>
+`;}
+function draw(){document.getElementById("left").innerHTML=svgScene("A");document.getElementById("right").innerHTML=svgScene("B");document.querySelectorAll(".scene").forEach(el=>el.addEventListener("click",onSceneClick));}
+function onSceneClick(e){if(ended)return;const svg=e.currentTarget,pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const p=pt.matrixTransform(svg.getScreenCTM().inverse());let hit=spots.findIndex(s=>Math.hypot(p.x-s.x,p.y-s.y)<s.r);if(hit<0){lives--;document.getElementById("lives").textContent=lives;document.getElementById("message").textContent="Pas tout à fait ! Essayez encore.";if(lives<=0)finish(false);return;}if(found.has(hit)){document.getElementById("message").textContent="Cette différence a déjà été trouvée !";return;}found.add(hit);document.querySelectorAll('[data-id="'+hit+'"]').forEach(n=>n.classList.add("found"));document.getElementById("score").textContent=found.size+" / 5";document.getElementById("bar").style.width=(found.size*20)+"%";document.getElementById("message").textContent="Bravo ! Différence trouvée : "+spots[hit].label+".";if(found.size===5)finish(true);}
+function finish(win){ended=true;clearInterval(clock);document.getElementById("message").textContent=win?"🏆 Bravo ! Vous avez trouvé les 5 différences !":"⏰ Partie terminée ! Réessayez pour trouver les 5 différences.";}
+function start(){clearInterval(clock);found.clear();lives=3;time=60;ended=false;hints=0;document.getElementById("lives").textContent=lives;document.getElementById("time").textContent=time;document.getElementById("score").textContent="0 / 5";document.getElementById("bar").style.width="0%";document.getElementById("message").textContent="À vous de jouer ! Trouvez les 5 différences.";draw();clock=setInterval(()=>{if(ended)return;time--;document.getElementById("time").textContent=time;if(time<=0)finish(false);},1000);}
+document.getElementById("restart").onclick=start;
+document.getElementById("hint").onclick=()=>{if(ended)return;const next=spots.findIndex((s,i)=>!found.has(i));if(next<0)return;hints++;document.getElementById("message").textContent="💡 Indice : cherchez près de « "+spots[next].label+" ».";};
+document.getElementById("share").onclick=()=>{const u=encodeURIComponent(location.href),q=encodeURIComponent("🔎 J’ai joué au Spot the Difference de SNG PORTAL ! À vous de trouver les 5 différences en 60 secondes.");window.open("https://www.facebook.com/sharer/sharer.php?u="+u+"&quote="+q,"_blank","noopener,noreferrer");};
+start();
+</script></body></html>
